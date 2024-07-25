@@ -33,6 +33,13 @@ module.exports = {
     ],
     'react/react-in-jsx-scope': 'off',
     'semi': ['error', 'always'],
+    'react/require-default-props': 'off', // If you don't want to enforce defaultProps
+    'react/function-component-definition': [2, {
+      namedComponents: 'function-declaration',
+      unnamedComponents: 'function-expression',
+    }],
+    'react/button-has-type': 'error',
+    'import/prefer-default-export': 'off', // Turn off if you don't want to enforce default export
   },
   settings: {
     react: {

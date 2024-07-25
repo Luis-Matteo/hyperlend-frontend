@@ -2,7 +2,9 @@ import Router from './router';
 
 function App() {
   return (
-    <Router />
+    <div className="flex">
+      <Router />
+    </div>
   );
 }
 
