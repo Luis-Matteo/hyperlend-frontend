@@ -2,15 +2,19 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import lockIcon from '../assets/icons/lock-icon.svg';
 
 interface NavButtonProps {
-    id: string;
-    title: string;
-    url: string;
-    icon?: string;
-    disabled: boolean;
+  id: string;
+  title: string;
+  url: string;
+  icon?: string;
+  disabled: boolean;
 }
 
 function NavButton({
-  id, title, url, icon, disabled,
+  id,
+  title,
+  url,
+  icon = lockIcon,
+  disabled,
 }: NavButtonProps) {
   const location = useLocation();
   const currentRoute = location.pathname;
@@ -46,9 +50,5 @@ function NavButton({
     </button>
   );
 }
-
-NavButton.defaultProps = {
-  icon: undefined,
-};
 
 export default NavButton;

@@ -15,6 +15,7 @@ export default {
         secondary: '#CAEAE5',
         gray: '#4F4F4F',
         grey: '#1A1D1E',
+        'grey-light': '#E1E1E1',
       },
     },
   },
