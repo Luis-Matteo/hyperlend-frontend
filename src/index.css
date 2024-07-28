@@ -8,3 +8,26 @@
     font-weight: normal;
     font-style: normal;
 }
+
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;    /* Width of the scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+    background: #050F0D;
+    /* Background of the track */
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #4F4F4F;
+    /* Color of the scrollbar thumb */
+    border-radius: 10px;
+    /* Space around the thumb */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* Color when hovered */
+}

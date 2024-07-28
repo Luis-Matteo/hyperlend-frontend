@@ -1,6 +1,70 @@
 const status = {
   level: 23,
   xp: 12988,
+  currentBalance: 27730,
+  currentPrice: -1200.7821,
+  pricePercent: -2.6461,
+  totalPoints: 894561,
+  currentPoints: 161.651,
+  pointsPercent: 89.4651,
 };
 
-export { status };
+const openPositions = [
+  {
+    assets: 'ETH',
+    positionId: '0xCA526199F6ce9A7217B6E249ee9Ff177Fa0dFA00',
+    value: 9856161.15615,
+    tokens: 891.9815651,
+    arp: 2.641,
+    feesEarned: -948561,
+  },
+  {
+    assets: 'ETH',
+    positionId: '0xCA526199F6ce9A7217B6E249ee9Ff177Fa0dFA00',
+    value: 9856161.15615,
+    tokens: 891.9815651,
+    arp: 2.641,
+    feesEarned: -948561,
+  },
+  {
+    assets: 'ETH',
+    positionId: '0xCA526199F6ce9A7217B6E249ee9Ff177Fa0dFA00',
+    value: 9856161.15615,
+    tokens: 891.9815651,
+    arp: 2.641,
+    feesEarned: 948561,
+  },
+  {
+    assets: 'ETH',
+    positionId: '0xCA526199F6ce9A7217B6E249ee9Ff177Fa0dFA00',
+    value: 9856161.15615,
+    tokens: 891.9815651,
+    arp: 2.641,
+    feesEarned: 948561,
+  },
+  {
+    assets: 'ETH',
+    positionId: '0xCA526199F6ce9A7217B6E249ee9Ff177Fa0dFA00',
+    value: 9856161.15615,
+    tokens: 891.9815651,
+    arp: 2.641,
+    feesEarned: 948561,
+  },
+  {
+    assets: 'ETH',
+    positionId: '0xCA526199F6ce9A7217B6E249ee9Ff177Fa0dFA00',
+    value: 9856161.15615,
+    tokens: 891.9815651,
+    arp: 2.641,
+    feesEarned: 948561,
+  },
+  {
+    assets: 'ETH',
+    positionId: '0xCA526199F6ce9A7217B6E249ee9Ff177Fa0dFA00',
+    value: 9856161.15615,
+    tokens: 891.9815651,
+    arp: 2.641,
+    feesEarned: 948561,
+  },
+];
+export { status, openPositions };

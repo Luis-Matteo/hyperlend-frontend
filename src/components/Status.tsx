@@ -18,7 +18,7 @@ function Status() {
         <p className="font-lufga text-gray text-[14px]">
           XP:
           {' '}
-          {formatNumber(status.xp)}
+          {formatNumber(status.xp, 0)}
         </p>
         <div className="pt-2">
           <ProgressBar progress={progress} />
