@@ -2,13 +2,13 @@ import { ReactNode } from 'react';
 
 type CardItemProps = {
     className: string;
-    content: ReactNode
+    children: ReactNode
 }
 
-function CardItem({ className, content }: CardItemProps) {
+function CardItem({ className, children }: CardItemProps) {
   return (
     <div className={`bg-primary rounded-2xl ${className}`}>
-      {content}
+      {children}
     </div>
   );
 }

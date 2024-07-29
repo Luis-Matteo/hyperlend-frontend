@@ -19,7 +19,7 @@ function PageHeader({ pageTitle }: PageHeaderProps) {
             <img src={magnifyIcon} alt="" />
           </div>
           <input
-            className="bg-primary rounded-full text-white font-lufga italic"
+            className="bg-primary rounded-full text-white font-lufga italic focus:outline-0"
             placeholder="Search your coins..."
             onChange={(e) => { setSearchText(e.target.value); console.log(searchText); }}
           />

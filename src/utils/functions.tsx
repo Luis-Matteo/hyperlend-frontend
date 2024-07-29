@@ -11,6 +11,24 @@ function formatNumber(inputNumber: number, decimal: number) {
   });
 }
 
+function formatUnit(num: number) {
+  const sign = Math.sign(num);
+  const numAbs = Math.abs(num);
+
+  let formattedNum;
+  if (numAbs >= 1e9) {
+    formattedNum = `${(numAbs / 1e9).toFixed(2)}B`;
+  } else if (numAbs >= 1e6) {
+    formattedNum = `${(numAbs / 1e6).toFixed(2)}M`;
+  } else if (numAbs >= 1e3) {
+    formattedNum = `${(numAbs / 1e3).toFixed(2)}K`;
+  } else {
+    formattedNum = numAbs.toFixed(2);
+  }
+
+  return sign < 0 ? `-${formattedNum}` : formattedNum;
+}
+
 function formatAddress(inputAddress: string) {
   if (!inputAddress) return '';
   const start = inputAddress.slice(0, 6);
@@ -18,4 +36,4 @@ function formatAddress(inputAddress: string) {
   return `${start}...${end}`;
 }
 
-export { formatNumber, formatAddress };
+export { formatNumber, formatAddress, formatUnit };
