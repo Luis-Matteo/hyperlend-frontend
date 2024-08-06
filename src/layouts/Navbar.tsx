@@ -1,41 +1,45 @@
-import { NavLink } from '../utils/types';
-import { navLinks } from '../utils/constants';
-import NavButton from '../components/NavButton';
-import logo from '../assets/icons/logo-text.svg';
-import Status from '../components/Status';
-import logoutIcon from '../assets/icons/logout-icon.svg';
+import { useState } from 'react';
+import magnifyIcon from '../assets/icons/magnify-icon.svg';
+import downArrowIcon from '../assets/icons/down-arrow.svg';
+import { formatAddress } from '../utils/functions';
 
-function Navbar() {
+type NavbarProps = {
+  pageTitle: string;
+};
+
+function Navbar({ pageTitle }: NavbarProps) {
+  const [searchText, setSearchText] = useState<string>('');
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const walletAddress = '0xCA526199F6ce9A7217B6E249ee9Ff177Fa0dFA00';
   return (
-
-    <div className="w-64 p-10 h-screen bg-primary flex flex-col justify-between">
-      <div className="">
-        <div className="pt-4">
-          <img className="" src={logo} alt="" />
+    <div className="w-full flex justify-between items-center">
+      <h2 className="font-lufga text-3xl text-white">{pageTitle}</h2>
+      <div className="flex items-center gap-4">
+        <div className="p-1 bg-primary rounded-full flex gap-2">
+          <div className="p-2 bg-gray-dark rounded-full">
+            <img src={magnifyIcon} alt="" />
+          </div>
+          <input
+            className="bg-primary rounded-full text-white font-lufga italic focus:outline-0"
+            placeholder="Search your coins..."
+            onChange={(e) => { setSearchText(e.target.value); console.log(searchText); }}
+          />
         </div>
-        <div className="pt-8">
-          <Status />
-        </div>
-        <div className="flex flex-col gap-6 pt-10">
-          {navLinks.map((item: NavLink) => (
-            <NavButton
-              key={item.id}
-              id={item.id}
-              title={item.title}
-              url={item.url}
-              icon={item.icon}
-              disabled={item.disabled}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="">
-        <button className="flex gap-4 items-center" type="button">
-          <img className="" src={logoutIcon} alt="" />
-          <p className="font-lufga text-grey-light">
-            Logout
-          </p>
-        </button>
+        {
+          isConnected ?
+            <div className="flex gap-2">
+              <div className="w-10 h-10 bg-gray-light rounded-full" />
+              <div className="flex items-center gap-1 text-white font-lufga">
+                <p className="">{formatAddress(walletAddress)}</p>
+                <button type="button">
+                  <img src={downArrowIcon} alt="" />
+                </button>
+              </div>
+            </div> :
+            <button className='text-white' onClick={() => setIsConnected(true)}>
+                Connect Wallet
+            </button>
+        }
       </div>
     </div>
   );

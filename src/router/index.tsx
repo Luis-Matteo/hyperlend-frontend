@@ -2,14 +2,14 @@ import {
   BrowserRouter, Navigate, Route, Routes,
 } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
-import Navbar from '../layouts/Navbar';
 import LendBorrow from '../pages/LendBorrow';
 import backgroundImage from '../assets/img/background.svg';
+import Sidebar from '../layouts/Sidebar';
 
 function Router() {
   return (
     <BrowserRouter>
-      <Navbar />
+      <Sidebar />
       <main className="bg-primary-light flex-1 relative">
         <div className="relative h-screen p-14 z-20">
           <Routes>

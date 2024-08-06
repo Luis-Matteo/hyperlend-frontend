@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import CardItem from './CardItem';
 import magnifyIcon from '../assets/icons/magnify-icon.svg';
 
-function LendControl() {
-  const [status, setStatus] = useState<string>('borrow');
+type LendControlProps = {
+  status: string;
+  setStatus: React.Dispatch<React.SetStateAction<string>>;
+  stable: boolean;
+  setStable: React.Dispatch<React.SetStateAction<boolean>>;
+  personal: boolean;
+  setPersonal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+function LendControl({ status, setStatus, stable, setStable, personal , setPersonal}: LendControlProps) {
   const [searchText, setSearchText] = useState<string>('');
-  const [stable, setStable] = useState<boolean>(false);
-  const [personal, setPersonal] = useState<boolean>(false);
 
   return (
     <div className="pt-16">

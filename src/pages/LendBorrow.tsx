@@ -1,16 +1,27 @@
+import { useState } from 'react';
 import LendControl from '../components/LendControl';
-import PageHeader from '../components/PageHeader';
 import CardItem from '../components/CardItem';
 import { assets } from '../utils/mock';
 import { formatNumber, formatUnit } from '../utils/functions';
+import Navbar from '../layouts/Navbar';
 
 function LendBorrow() {
+  const [status, setStatus] = useState<string>('borrow');
+  const [stable, setStable] = useState<boolean>(false);
+  const [personal, setPersonal] = useState<boolean>(false);
   return (
     <div className="w-full">
-      <PageHeader
+      <Navbar
         pageTitle="Lend & Borrow"
       />
-      <LendControl />
+      <LendControl
+        status={status}
+        setStatus={setStatus}
+        stable={stable}
+        setStable={setStable}
+        personal={personal}
+        setPersonal={setPersonal}
+      />
       <CardItem
         className="py-6 px-7 flex-1"
       >
@@ -27,7 +38,7 @@ function LendBorrow() {
             </div>
             <div>
               {
-                (assets || []).map((item) => (
+                (assets || []).filter(item => item.status === status).map((item) => (
                   <div className=" grid grid-cols-6 items-center py-[14px] px-2.5 border-b-[1px] border-[#212325]">
                     <div className="text-white font-lufga">{item.assets}</div>
                     <div className="text-white font-lufga">
