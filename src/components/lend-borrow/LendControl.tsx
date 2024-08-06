@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import CardItem from './CardItem';
-import magnifyIcon from '../assets/icons/magnify-icon.svg';
+import CardItem from '../common/CardItem';
+import magnifyIcon from '../../assets/icons/magnify-icon.svg';
 
 type LendControlProps = {
   status: string;

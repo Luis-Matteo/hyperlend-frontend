@@ -1,8 +1,8 @@
 import { NavLink } from '../utils/types';
 import { navLinks } from '../utils/constants';
-import NavButton from '../components/NavButton';
+import NavButton from '../components/header/NavButton';
 import logo from '../assets/icons/logo-text.svg';
-import Status from '../components/Status';
+import Status from '../components/header/Status';
 import logoutIcon from '../assets/icons/logout-icon.svg';
 
 function Sidebar() {

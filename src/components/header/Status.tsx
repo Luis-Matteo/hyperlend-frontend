@@ -1,6 +1,6 @@
-import { status } from '../utils/mock';
-import { formatNumber } from '../utils/functions';
-import ProgressBar from './PercentBar';
+import { status } from '../../utils/mock';
+import { formatNumber } from '../../utils/functions';
+import ProgressBar from '../common/PercentBar';
 
 function Status() {
   const progress = 50;

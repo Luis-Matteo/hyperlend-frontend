@@ -19,6 +19,7 @@ export default {
         grey: '#1A1D1E',
         'grey-light': '#E1E1E1',
         success: '#2DC24E',
+        warning:'#FFD542',
       },
     },
   },

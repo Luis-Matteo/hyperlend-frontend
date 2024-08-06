@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import lockIcon from '../assets/icons/lock-icon.svg';
+import lockIcon from '../../assets/icons/lock-icon.svg';
 
 interface NavButtonProps {
   id: string;

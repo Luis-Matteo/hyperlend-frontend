@@ -1,5 +1,5 @@
-import CardItem from '../components/CardItem';
-import SetionTitle from '../components/SetionTitle';
+import CardItem from '../components/common/CardItem';
+import SetionTitle from '../components/common/SetionTitle';
 import { formatNumber } from '../utils/functions';
 import { openPositions, status } from '../utils/mock';
 import graphMockImage from '../assets/img/graph-mock.svg';
