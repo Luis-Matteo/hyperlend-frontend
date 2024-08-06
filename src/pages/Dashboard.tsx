@@ -1,14 +1,14 @@
-import CardItem from '../components/CardItem';
-import PageHeader from '../components/PageHeader';
-import SetionTitle from '../components/SetionTitle';
+import CardItem from '../components/common/CardItem';
+import SetionTitle from '../components/common/SetionTitle';
 import { formatNumber } from '../utils/functions';
 import { openPositions, status } from '../utils/mock';
 import graphMockImage from '../assets/img/graph-mock.svg';
+import Navbar from '../layouts/Navbar';
 
 function Dashboard() {
   return (
     <div className="flex flex-col">
-      <PageHeader
+      <Navbar
         pageTitle="Dashboard"
       />
       <div className="pt-12 flex flex-col gap-4">
