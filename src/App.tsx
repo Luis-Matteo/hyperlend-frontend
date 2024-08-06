@@ -1,10 +1,13 @@
 import Router from './router';
+import { AppKitProvider } from './provider/AppKitProvider';
 
 function App() {
   return (
-    <div className="flex">
-      <Router />
-    </div>
+    <AppKitProvider>
+      <div className="flex">
+        <Router />
+      </div>
+    </AppKitProvider>
   );
 }
 
