@@ -5,13 +5,34 @@ import { assets } from '../utils/mock';
 import { formatNumber, formatUnit } from '../utils/functions';
 import Navbar from '../layouts/Navbar';
 import Modal from '../components/lend-borrow/Modal';
+import { useAccount, useReadContract } from 'wagmi'
+import { erc20Abi } from 'viem'
 
 function LendBorrow() {
+  const { address, isConnected } = useAccount();
   const [status, setStatus] = useState<string>('borrow');
   const [stable, setStable] = useState<boolean>(false);
   const [personal, setPersonal] = useState<boolean>(false);
   const [modalStatus, setModalStatus] = useState<boolean>(false);
   const closeModal = () => setModalStatus(false);
+
+  const { data } = useReadContract(
+    isConnected && address
+      ?
+      {
+        abi: erc20Abi,
+        address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+        functionName: 'balanceOf',
+        args: [address],
+      } :
+      undefined
+  );
+
+  // const result = useReadContract({
+  //   abi: erc20Abi,
+  //   address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+  //   functionName: 'totalSupply'
+  // });
 
   return (
     <>
@@ -31,7 +52,7 @@ function LendBorrow() {
           className="py-6 px-7 flex-1"
         >
           <div className="max-h-[600px] overflow-auto">
-            <p className="text-white font-lufga text-2xl pb-4">Open Positions</p>
+            <p className="text-white font-lufga text-2xl pb-4">Open Positions {data?.valueOf().toString()}</p>
             <div className="">
               <div className="py-3 px-2 grid grid-cols-6 border-y-[1px] bg-grey border-[#212325]">
                 <div className="text-white font-lufga text-[11px]">Assets</div>
