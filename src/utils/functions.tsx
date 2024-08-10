@@ -11,19 +11,19 @@ function formatNumber(inputNumber: number, decimal: number) {
   });
 }
 
-function formatUnit(num: number) {
+function formatUnit(num: number, decimal: number = 2) {
   const sign = Math.sign(num);
   const numAbs = Math.abs(num);
 
   let formattedNum;
   if (numAbs >= 1e9) {
-    formattedNum = `${(numAbs / 1e9).toFixed(2)}B`;
+    formattedNum = `${(numAbs / 1e9).toFixed(decimal)}B`;
   } else if (numAbs >= 1e6) {
-    formattedNum = `${(numAbs / 1e6).toFixed(2)}M`;
+    formattedNum = `${(numAbs / 1e6).toFixed(decimal)}M`;
   } else if (numAbs >= 1e3) {
-    formattedNum = `${(numAbs / 1e3).toFixed(2)}K`;
+    formattedNum = `${(numAbs / 1e3).toFixed(decimal)}K`;
   } else {
-    formattedNum = numAbs.toFixed(2);
+    formattedNum = numAbs.toFixed(decimal);
   }
 
   return sign < 0 ? `-${formattedNum}` : formattedNum;

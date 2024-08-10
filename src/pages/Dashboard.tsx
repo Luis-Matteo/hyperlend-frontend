@@ -1,9 +1,11 @@
 import CardItem from '../components/common/CardItem';
 import SetionTitle from '../components/common/SetionTitle';
 import { formatNumber } from '../utils/functions';
-import { openPositions, status } from '../utils/mock';
+import { supplied, borrowed, status, position } from '../utils/mock';
 import graphMockImage from '../assets/img/graph-mock.svg';
 import Navbar from '../layouts/Navbar';
+import ethIcon from '../assets/icons/eth-icon.svg';
+import PositionBar from '../components/dashboard/PositionBar';
 
 function Dashboard() {
   return (
@@ -29,7 +31,20 @@ function Dashboard() {
               <SetionTitle
                 title="Your Position"
               />
+              <div className='flex flex-col gap-5 w-[90%] m-auto'>
+                <div className='h-20'>
+                  <span className='text-white mb-2'>Collateral deposited</span>
+                  <PositionBar
+                    available={position.collateral.available} total={position.collateral.total} />
+                </div>
+                <div className='h-20'>
+                  <span className='text-white mb-2'>Borrow</span>
+                  <PositionBar
+                    available={position.borrow.available} total={position.borrow.total}/>
+                </div>
+              </div>
             </div>
+
           </CardItem>
         </div>
         <CardItem
@@ -79,47 +94,82 @@ function Dashboard() {
             </div>
           </div>
         </CardItem>
-        <CardItem
-          className="py-6 px-7 flex-1"
-        >
-          <div className="max-h-[400px] overflow-auto">
-            <p className="text-white font-lufga text-2xl pb-4">Open Positions</p>
-            <div className="">
-              <div className="py-3 px-2 grid grid-cols-6 border-y-[1px] bg-grey border-[#212325]">
-                <div className="text-white font-lufga text-[11px]">Assets</div>
-                <div className="text-white font-lufga text-[11px]">Position ID</div>
-                <div className="text-white font-lufga text-[11px]">Value (USD)</div>
-                <div className="text-white font-lufga text-[11px]">Tokens</div>
-                <div className="text-white font-lufga text-[11px]">ARP</div>
-                <div className="text-white font-lufga text-[11px]">Fees Earned</div>
-              </div>
-              <div>
-                {
-                  (openPositions || []).map((item) => (
-                    <div className=" grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325]" key={`position${item.positionId}`}>
-                      <div className="text-white font-lufga">{item.assets}</div>
-                      <div className="text-white font-lufga">
-                        {item.positionId.slice(0, 8)}
-                        ...
-                      </div>
-                      <div className="text-white font-lufga">{formatNumber(item.value, 2)}</div>
-                      <div className="text-white font-lufga">{formatNumber(item.tokens, 4)}</div>
-                      <div className="text-success font-lufga">
-                        {formatNumber(item.arp, 2)}
-                        %
-                      </div>
-                      <div className="text-success font-lufga">
-                        {`${item.feesEarned >= 0 ? '+' : '-'}`}
+        <div className='flex gap-5 justify-between'>
+          <CardItem
+            className="py-6 px-7 flex-1"
+          >
+            <div className="max-h-[250px]">
+              <p className="text-white font-lufga text-2xl pb-4">Supplied</p>
+              <div className="text-center">
+                <div className="py-3 px-2 grid grid-cols-6 border-y-[1px] bg-grey border-[#212325]">
+                  <div className="text-white font-lufga text-[11px]">Assets</div>
+                  <div className="text-white font-lufga text-[11px]">Balance</div>
+                  <div className="text-white font-lufga text-[11px]">Value</div>
+                  <div className="text-white font-lufga text-[11px]">APR</div>
+                  <div className="text-white font-lufga text-[11px]">Collateral</div>
+                  <div className="text-white font-lufga text-[11px]"></div>
+                </div>
+                <div className='overflow-auto max-h-[170px]'>
+                  {
+                    (supplied || []).map((item, index) => (
+                      <div className=" grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325]"
+                        key={index}
+                      >
+                        <div className="text-white font-lufga flex justify-center"><img src={ethIcon} alt="" />ETH</div>
+                        <div className="text-white font-lufga">{formatNumber(item.balance, 3)}</div>
+                        <div className="text-white font-lufga">${formatNumber(item.value, 2)}</div>
+                        <div className="text-success font-lufga">
+                          {formatNumber(item.arp, 2)}
+                          %
+                        </div>
+                        <div className="text-success font-lufga">
+                          {/* {`${item.feesEarned >= 0 ? '+' : '-'}`}
                         $
-                        {formatNumber(Math.abs(item.feesEarned), 4)}
+                        {formatNumber(Math.abs(item.feesEarned), 4)} */}
+                        </div>
+                        <div className="text-success font-lufga">Supply</div>
                       </div>
-                    </div>
-                  ))
-                }
+                    ))
+                  }
+                </div>
               </div>
             </div>
-          </div>
-        </CardItem>
+          </CardItem>
+          <CardItem className='py-6 px-7 flex-1'>
+            <div className="max-h-[250px]">
+              <p className="text-white font-lufga text-2xl pb-4">Borrowed</p>
+              <div className="text-center">
+                <div className="py-3 px-2 grid grid-cols-6 border-y-[1px] bg-grey border-[#212325]">
+                  <div className="text-white font-lufga text-[11px]">Assets</div>
+                  <div className="text-white font-lufga text-[11px]">Balance</div>
+                  <div className="text-white font-lufga text-[11px]">Value</div>
+                  <div className="text-white font-lufga text-[11px]">APR</div>
+                  <div className="text-white font-lufga text-[11px]">Pool</div>
+                  <div className="text-white font-lufga text-[11px]"></div>
+                </div>
+                <div className='overflow-auto max-h-[170px]'>
+                  {
+                    (borrowed || []).map((item, index) => (
+                      <div className=" grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325]"
+                        key={index}
+                      >
+                        <div className="text-white font-lufga flex justify-center"><img src={ethIcon} alt="" />ETH</div>
+                        <div className="text-white font-lufga">{formatNumber(item.balance, 3)}</div>
+                        <div className="text-white font-lufga">${formatNumber(item.value, 2)}</div>
+                        <div className="text-success font-lufga">
+                          {formatNumber(item.arp, 2)}
+                          %
+                        </div>
+                        <div className="text-success font-lufga">{item.pool}</div>
+                        <div className="text-success font-lufga">Repay</div>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+            </div>
+          </CardItem>
+        </div>
       </div>
     </div>
   );

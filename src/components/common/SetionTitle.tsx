@@ -4,7 +4,7 @@ type SetionTitleProps = {
 
 function SetionTitle({ title }: SetionTitleProps) {
   return (
-    <p className="italic text-grey-light font-lufga font-light text-xs">{title}</p>
+    <p className="italic text-grey-light font-lufga font-light text-xs mb-2">{title}</p>
   );
 }
 
