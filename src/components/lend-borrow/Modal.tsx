@@ -4,15 +4,77 @@ import gearIcon from '../../assets/icons/gear-icon.svg'
 import { formatNumber } from '../../utils/functions';
 import ProgressBar from '../common/PercentBar';
 
+import { useAccount, useReadContract, useWriteContract } from 'wagmi'
+import { erc20Abi } from 'viem'
+
 interface ModalProps {
+    token: string,
     onClose: () => void;
 }
 
-function Modal({ onClose }: ModalProps) {
+import ethIcon from '../../assets/icons/coins/eth-icon.svg';
+import usdcIcon from '../../assets/icons/coins/usdc-icon.svg';
+import usdtIcon from '../../assets/icons/coins/usdt-icon.svg';
+import wbtcIcon from '../../assets/icons/coins/wbtc-icon.svg';
+
+import PoolAbi from "../../abis/PoolAbi.json"
+const pool = "0xAd3AAC48C09f955a8053804D8a272285Dfba4dD2"
+
+const tokenNameMap: any = {
+  "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1": "ETH",
+  "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9": "USDT",
+  "0xaf88d065e77c8cC2239327C5EDb3A432268e5831": "USDC",
+  "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f": "WBTC"
+}
+
+const tokenDecimalsMap: any = {
+  "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1": 18,
+  "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9": 6,
+  "0xaf88d065e77c8cC2239327C5EDb3A432268e5831": 6,
+  "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f": 8
+}
+
+const iconsMap: any = {
+  "ETH": ethIcon,
+  "USDT": usdtIcon,
+  "USDC": usdcIcon,
+  "WBTC": wbtcIcon
+}
+
+import { getInterestRate } from '../../utils/protocolState';
+
+function Modal({ token, onClose }: ModalProps) {
     const [count, setCount] = useState<number>(0);
     const [progress, setProgress] = useState<number>(0);
     const percentList = [25, 50, 75, 100]
-    const availableCount = 19484.92;
+
+    const { data: hash, writeContractAsync } = useWriteContract()
+    const { address, isConnected } = useAccount();
+    const { data: userWalletBalance } = useReadContract(
+      isConnected && address
+      ?
+      {
+        abi: erc20Abi,
+        address: token,
+        functionName: 'balanceOf',
+        args: [address],
+      } as any : undefined
+    );
+    const availableCount = Number(userWalletBalance as any) / Math.pow(10, tokenDecimalsMap[token]);
+
+    const { data: userAllowance } = useReadContract(
+      isConnected && address
+      ?
+      {
+        abi: erc20Abi,
+        address: token,
+        functionName: 'allowance',
+        args: [address, pool],
+      } as any : undefined
+    );
+    let normalizedAllowance = Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]);
+
+    const { supplyInterest } = getInterestRate()
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setProgress(Number(event.target.value));
@@ -24,6 +86,27 @@ function Modal({ onClose }: ModalProps) {
             onClose();
         }
     };
+
+    const supplyTransaction = () => {
+      const amount = parseFloat((count * Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0).toString() as any as bigint
+
+      if (normalizedAllowance < count){
+        writeContractAsync({
+          address: token as any,
+          abi: erc20Abi,
+          functionName: 'approve',
+          args: [pool, amount],
+        })
+        normalizedAllowance = Number(amount) / Math.pow(10, tokenDecimalsMap[token])
+      }
+
+      writeContractAsync({
+        address: pool,
+        abi: PoolAbi,
+        functionName: 'supply',
+        args: [token,amount, address, 0],
+      })
+    }
 
     return (
         <div
@@ -40,10 +123,10 @@ function Modal({ onClose }: ModalProps) {
                 <div className='px-6 py-4 bg-[#050F0D] rounded-2xl flex flex-col gap-4 mb-5'>
                     <div className='flex justify-between items-center'>
                         <div className='flex gap-2 items-center'>
-                            <div className="w-9 h-9 bg-gray-light rounded-full"></div>
+                            <img src={iconsMap[tokenNameMap[token]]} width="30px" height="30px" alt=""/>
                             <div className=''>
-                                <p className='text-white font-lufga'>JitoSOL</p>
-                                <p className='text-success text-xs font-lufga'>1.93%APY</p>
+                                <p className='text-white font-lufga'>{tokenNameMap[token]}</p>
+                                <p className='text-success text-xs font-lufga'>{supplyInterest[token]}% APY</p>
                             </div>
                         </div>
                         <p className='text-xl text-secondary'>
@@ -51,7 +134,7 @@ function Modal({ onClose }: ModalProps) {
                         </p>
                     </div>
                     <div className='flex gap-14'>
-                        <p className='text-[#797979] text-xs font-lufga'>Wallet: 1,5M JitoSOL</p>
+                        <p className='text-[#797979] text-xs font-lufga'>Wallet: {formatNumber(availableCount, 2)} {tokenNameMap[token]}</p>
                         <ul className='flex gap-2 items-center'>
                             {
                                 percentList.map((item) => (
@@ -83,8 +166,13 @@ function Modal({ onClose }: ModalProps) {
                         />
                     </div>
                 </div>
-                <button className='w-full py-4 bg-secondary font-lufga rounded-xl font-bold mb-3'>
-                    Swap
+                <button className='w-full py-4 bg-secondary font-lufga rounded-xl font-bold mb-3'
+                onClick={
+                () => {
+                   supplyTransaction()
+                }
+                }>
+                    {normalizedAllowance >= count ? "Supply" : "Approve"}
                 </button>
                 <div className='flex justify-end mb-6'>
                     <button className='px-3 py-1.5 flex gap-2 items-center bg-[#050F0D] rounded-full'>
@@ -95,7 +183,7 @@ function Modal({ onClose }: ModalProps) {
                 <div className='flex flex-col gap-3'>
                     <div className='flex justify-between'>
                         <p className='font-lufga text-[#797979] text-xs'>Your amount</p>
-                        <p className='font-lufga text-white text-xs'>0 JitoSOL</p>
+                        <p className='font-lufga text-white text-xs'>0 {tokenNameMap[token]}</p>
                     </div>
                     <div className='flex justify-between'>
                         <p className='font-lufga text-[#797979] text-xs'>Health</p>

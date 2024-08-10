@@ -1,14 +1,29 @@
 import CardItem from '../components/common/CardItem';
 import SetionTitle from '../components/common/SetionTitle';
 import { formatNumber } from '../utils/functions';
-import { supplied, borrowed, status, position } from '../utils/mock';
+import { status, position } from '../utils/mock';
 import graphMockImage from '../assets/img/graph-mock.svg';
 import Navbar from '../layouts/Navbar';
-import ethIcon from '../assets/icons/eth-icon.svg';
 import PositionBar from '../components/dashboard/PositionBar';
+import { useState } from 'react';
+import Modal from '../components/lend-borrow/Modal';
+
+import { getUserReserves, getUserWalletBalance } from '../utils/userState';
+import { getUserPoints } from '../utils/userPoints';
 
 function Dashboard() {
+
+  const { supplied, borrowed, totalBalance, totalSupply, totalBorrow, totalBorrowLimit, totalBalanceChange, totalBalanceChangePercentage } = getUserReserves()
+  const { totalPoints, currentPoints, pointsPercent } = getUserPoints()
+
+  const { walletBalanceValue } = getUserWalletBalance()
+
+  const [modalStatus, setModalStatus] = useState<boolean>(false);
+  const [modalToken, setModalToken] = useState<string>("")
+  const closeModal = () => setModalStatus(false);
+
   return (
+    <>
     <div className="flex flex-col">
       <Navbar
         pageTitle="Dashboard"
@@ -35,12 +50,12 @@ function Dashboard() {
                 <div className='h-20'>
                   <span className='text-white mb-2'>Collateral deposited</span>
                   <PositionBar
-                    available={position.collateral.available} total={position.collateral.total} />
+                    available={totalSupply} total={totalSupply + walletBalanceValue} />
                 </div>
                 <div className='h-20'>
                   <span className='text-white mb-2'>Borrow</span>
                   <PositionBar
-                    available={position.borrow.available} total={position.borrow.total}/>
+                    available={totalBorrow} total={totalBorrowLimit}/>
                 </div>
               </div>
             </div>
@@ -58,16 +73,16 @@ function Dashboard() {
               />
               <p className="text-white text-[28px] font-medium font-lufga">
                 $
-                {formatNumber(status.currentBalance, 2)}
+                {formatNumber(totalBalance, 2)}
               </p>
               <p className="text-success text-sm font-lufga">
-                {`${status.currentPrice >= 0 ? '+' : '-'}`}
+                {`${totalBalanceChange >= 0 ? '+' : '-'}`}
                 $
-                {formatNumber(Math.abs(status.currentPrice), 2)}
+                {formatNumber(Math.abs(totalBalanceChange), 2)}
                 {' '}
                 (
-                {`${status.pricePercent >= 0 ? '+' : '-'}`}
-                {formatNumber(Math.abs(status.pricePercent), 2)}
+                {`${totalBalanceChangePercentage >= 0 ? '+' : '-'}`}
+                {formatNumber(Math.abs(totalBalanceChangePercentage), 2)}
                 %)
               </p>
             </div>
@@ -76,16 +91,15 @@ function Dashboard() {
                 title="Total Points"
               />
               <p className="text-white text-[28px] font-medium font-lufga">
-                $
-                {formatNumber(status.totalPoints, 2)}
+                {formatNumber(totalPoints, 2)}
               </p>
               <p className="text-success text-sm font-lufga">
-                {`${status.currentPoints >= 0 ? '+' : '-'}`}
-                {formatNumber(Math.abs(status.currentPoints), 2)}
+                {`${currentPoints >= 0 ? '+' : '-'}`}
+                {formatNumber(Math.abs(currentPoints), 2)}
                 {' '}
                 (
-                {`${status.pointsPercent >= 0 ? '+' : '-'}`}
-                {formatNumber(Math.abs(status.pointsPercent), 2)}
+                {`${pointsPercent >= 0 ? '+' : '-'}`}
+                {formatNumber(Math.abs(pointsPercent), 2)}
                 %)
               </p>
             </div>
@@ -111,15 +125,15 @@ function Dashboard() {
                 </div>
                 <div className='overflow-auto max-h-[170px]'>
                   {
-                    (supplied || []).map((item, index) => (
+                    (supplied || []).map((item: any, index: any) => ( 
                       <div className=" grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325]"
                         key={index}
                       >
-                        <div className="text-white font-lufga flex justify-center"><img src={ethIcon} alt="" />ETH</div>
+                        <div className="text-white font-lufga flex justify-center"><img src={item.icon} alt="" /> &nbsp; {item.assetName}</div>
                         <div className="text-white font-lufga">{formatNumber(item.balance, 3)}</div>
                         <div className="text-white font-lufga">${formatNumber(item.value, 2)}</div>
                         <div className="text-success font-lufga">
-                          {formatNumber(item.arp, 2)}
+                          {formatNumber(item.apr, 2)}
                           %
                         </div>
                         <div className="text-success font-lufga">
@@ -127,7 +141,15 @@ function Dashboard() {
                         $
                         {formatNumber(Math.abs(item.feesEarned), 4)} */}
                         </div>
-                        <div className="text-success font-lufga">Supply</div>
+                        <button className="text-success font-lufga"
+                        onClick={
+                          () => {
+                            setModalStatus(true)
+                            setModalToken(item.underlyingAsset)
+                          }
+                        }>
+                        Supply
+                      </button>
                       </div>
                     ))
                   }
@@ -149,18 +171,18 @@ function Dashboard() {
                 </div>
                 <div className='overflow-auto max-h-[170px]'>
                   {
-                    (borrowed || []).map((item, index) => (
+                    (borrowed || []).map((item: any, index: any) => (
                       <div className=" grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325]"
                         key={index}
                       >
-                        <div className="text-white font-lufga flex justify-center"><img src={ethIcon} alt="" />ETH</div>
+                        <div className="text-white font-lufga flex justify-center"><img src={item.icon} alt="" /> &nbsp; {item.assetName}</div>
                         <div className="text-white font-lufga">{formatNumber(item.balance, 3)}</div>
                         <div className="text-white font-lufga">${formatNumber(item.value, 2)}</div>
                         <div className="text-success font-lufga">
-                          {formatNumber(item.arp, 2)}
+                          {formatNumber(item.apr, 2)}
                           %
                         </div>
-                        <div className="text-success font-lufga">{item.pool}</div>
+                        <div className="text-success font-lufga">{item.pool || "Core"}</div>
                         <div className="text-success font-lufga">Repay</div>
                       </div>
                     ))
@@ -172,6 +194,14 @@ function Dashboard() {
         </div>
       </div>
     </div>
+    {
+      modalStatus &&
+      <Modal 
+        token={modalToken} 
+        onClose={closeModal} 
+      />
+    }
+    </>
   );
 }
 
