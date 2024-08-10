@@ -6,7 +6,7 @@ function Status() {
   const progress = 50;
   return (
     <div className="flex gap-4 pr-3">
-      <p className="text-grey-light font-lufga p-3 border-2 rounded-full text-lg aspect-square border-secondary">
+      <p className="text-grey-light font-lufga p-3 border-2 rounded-full text-lg h-14 aspect-square border-secondary text-center">
         {status.level}
       </p>
       <div className="w-full">
@@ -21,7 +21,7 @@ function Status() {
           {formatNumber(status.xp, 0)}
         </p>
         <div className="pt-2">
-          <ProgressBar progress={progress} />
+          <ProgressBar progress={progress} className='h-1.5'/>
         </div>
       </div>
     </div>
