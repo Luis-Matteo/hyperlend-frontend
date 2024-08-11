@@ -1,7 +1,6 @@
 import CardItem from '../components/common/CardItem';
 import SetionTitle from '../components/common/SetionTitle';
 import { formatNumber } from '../utils/functions';
-import { status, position } from '../utils/mock';
 import graphMockImage from '../assets/img/graph-mock.svg';
 import Navbar from '../layouts/Navbar';
 import PositionBar from '../components/dashboard/PositionBar';
@@ -12,7 +11,6 @@ import { getUserReserves, getUserWalletBalance } from '../utils/userState';
 import { getUserPoints } from '../utils/userPoints';
 
 function Dashboard() {
-
   const { supplied, borrowed, totalBalance, totalSupply, totalBorrow, totalBorrowLimit, totalBalanceChange, totalBalanceChangePercentage } = getUserReserves()
   const { totalPoints, currentPoints, pointsPercent } = getUserPoints()
 

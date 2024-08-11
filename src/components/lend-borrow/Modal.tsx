@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import xmarkIcon from '../../assets/icons/xmark-icon.svg'
 import gearIcon from '../../assets/icons/gear-icon.svg'
 import { formatNumber } from '../../utils/functions';
 import ProgressBar from '../common/PercentBar';
+
+import PoolAbi from "../../abis/PoolAbi.json"
 
 import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { erc20Abi } from 'viem'
@@ -12,41 +14,18 @@ interface ModalProps {
     onClose: () => void;
 }
 
-import ethIcon from '../../assets/icons/coins/eth-icon.svg';
-import usdcIcon from '../../assets/icons/coins/usdc-icon.svg';
-import usdtIcon from '../../assets/icons/coins/usdt-icon.svg';
-import wbtcIcon from '../../assets/icons/coins/wbtc-icon.svg';
-
-import PoolAbi from "../../abis/PoolAbi.json"
-const pool = "0xAd3AAC48C09f955a8053804D8a272285Dfba4dD2"
-
-const tokenNameMap: any = {
-  "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1": "ETH",
-  "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9": "USDT",
-  "0xaf88d065e77c8cC2239327C5EDb3A432268e5831": "USDC",
-  "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f": "WBTC"
-}
-
-const tokenDecimalsMap: any = {
-  "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1": 18,
-  "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9": 6,
-  "0xaf88d065e77c8cC2239327C5EDb3A432268e5831": 6,
-  "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f": 8
-}
-
-const iconsMap: any = {
-  "ETH": ethIcon,
-  "USDT": usdtIcon,
-  "USDC": usdcIcon,
-  "WBTC": wbtcIcon
-}
-
+import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap } from '../../utils/tokens';
 import { getInterestRate } from '../../utils/protocolState';
 
 function Modal({ token, onClose }: ModalProps) {
-    const [count, setCount] = useState<number>(0);
+    const [amount, setAmount] = useState<number>(0);
     const [progress, setProgress] = useState<number>(0);
     const percentList = [25, 50, 75, 100]
+
+    const [availableBalance, setAvailableBalance] = useState<number>(0)
+    const [allowance, setAllowance] = useState<number>(0)
+
+    const { supplyInterest } = getInterestRate()
 
     const { data: hash, writeContractAsync } = useWriteContract()
     const { address, isConnected } = useAccount();
@@ -60,7 +39,6 @@ function Modal({ token, onClose }: ModalProps) {
         args: [address],
       } as any : undefined
     );
-    const availableCount = Number(userWalletBalance as any) / Math.pow(10, tokenDecimalsMap[token]);
 
     const { data: userAllowance } = useReadContract(
       isConnected && address
@@ -69,16 +47,21 @@ function Modal({ token, onClose }: ModalProps) {
         abi: erc20Abi,
         address: token,
         functionName: 'allowance',
-        args: [address, pool],
+        args: [address, contracts.pool],
       } as any : undefined
     );
-    let normalizedAllowance = Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]);
 
-    const { supplyInterest } = getInterestRate()
+    useEffect(() => {
+        if (userWalletBalance) {
+          setAvailableBalance(Number(userWalletBalance as any) / Math.pow(10, tokenDecimalsMap[token]));
+        }
+    }, []);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setProgress(Number(event.target.value));
-        setCount(availableCount / 100 * Number(event.target.value))
+        setAmount(availableBalance / 100 * Number(event.target.value))
+        setAvailableBalance(Number(userWalletBalance as any) / Math.pow(10, tokenDecimalsMap[token]));
+        setAllowance(Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]))
     };
 
     const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -88,20 +71,20 @@ function Modal({ token, onClose }: ModalProps) {
     };
 
     const supplyTransaction = () => {
-      const amount = parseFloat((count * Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0).toString() as any as bigint
+      const bgIntAmount = parseFloat((amount * Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0).toString() as any as bigint
 
-      if (normalizedAllowance < count){
+      if (allowance < amount){
         writeContractAsync({
           address: token as any,
           abi: erc20Abi,
           functionName: 'approve',
-          args: [pool, amount],
+          args: [contracts.pool, bgIntAmount],
         })
-        normalizedAllowance = Number(amount) / Math.pow(10, tokenDecimalsMap[token])
+        setAllowance(Number(amount) / Math.pow(10, tokenDecimalsMap[token]))
       }
 
       writeContractAsync({
-        address: pool,
+        address: contracts.pool,
         abi: PoolAbi,
         functionName: 'supply',
         args: [token,amount, address, 0],
@@ -130,17 +113,17 @@ function Modal({ token, onClose }: ModalProps) {
                             </div>
                         </div>
                         <p className='text-xl text-secondary'>
-                            {formatNumber(count, 2)}
+                            {formatNumber(amount, 2)}
                         </p>
                     </div>
                     <div className='flex gap-14'>
-                        <p className='text-[#797979] text-xs font-lufga'>Wallet: {formatNumber(availableCount, 2)} {tokenNameMap[token]}</p>
+                        <p className='text-[#797979] text-xs font-lufga'>Wallet: {formatNumber(availableBalance, 2)} {tokenNameMap[token]}</p>
                         <ul className='flex gap-2 items-center'>
                             {
                                 percentList.map((item) => (
                                     <button className='px-2 py-0.5 bg-[#081916] rounded-full'
                                         key={item}
-                                        onClick={() => setCount(availableCount / 100 * item)}>
+                                        onClick={() => setAmount(availableBalance / 100 * item)}>
                                         <p className='text-[#797979] text-xs font-lufga'>{item === 100 ? "MAX" : `${item}%`}</p>
                                     </button>
                                 ))
@@ -151,7 +134,7 @@ function Modal({ token, onClose }: ModalProps) {
                 <div className='mb-6'>
                     <div className='flex justify-between mb-2'>
                         <p className="font-lufga font-light text-[#797979]">Available collateral</p>
-                        <p className="font-lufga font-light text-[#797979]">${formatNumber(availableCount, 2)}</p>
+                        <p className="font-lufga font-light text-[#797979]">${formatNumber(availableBalance, 2)}</p>
                     </div>
                     <div className='relative '>
                         <ProgressBar
@@ -172,7 +155,7 @@ function Modal({ token, onClose }: ModalProps) {
                    supplyTransaction()
                 }
                 }>
-                    {normalizedAllowance >= count ? "Supply" : "Approve"}
+                    {allowance >= amount ? "Supply" : "Approve"}
                 </button>
                 <div className='flex justify-end mb-6'>
                     <button className='px-3 py-1.5 flex gap-2 items-center bg-[#050F0D] rounded-full'>
