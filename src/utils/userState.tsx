@@ -1,112 +1,89 @@
+import { useState, useEffect, useMemo, useCallback } from 'react';
+
 import { useAccount, useReadContract } from 'wagmi'
 import { erc20Abi } from 'viem'
 
-import UiPoolDataProviderV3Abi from "../abis/UiPoolDataProviderV3Abi.json"
-import PoolAbi from "../abis/PoolAbi.json"
-import OracleAbi from "../abis/OracleAbi.json"
+import { Reserve, UserReserveData, UserPositionData, UserPositionsData } from '../utils/types'
+import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap, abis } from './tokens';
 
-import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap } from './tokens';
+import { useProtocolReservesData, useProtocolPriceData, useProtocolInterestRate } from './protocolState';
 
-function getUserReserves(){
-    const { address, isConnected } = useAccount();
-    const { data } = useReadContract(
-      isConnected && address
-      ?
-      {
-        abi: UiPoolDataProviderV3Abi,
-        address: "0x0b3bF4D76C035E1CcedE18F9195De98c41c5dDf0",
-        functionName: 'getUserReservesData',
-        args: [contracts.provider, address],
-      } : undefined
-    );
+export function useUserPositionsData(): UserPositionsData | null {
+  const { reserveDataMap } = useProtocolReservesData()
+  const { priceDataMap } = useProtocolPriceData()
 
-    const reserveDataResults = assetAddresses.map(asset => 
-      useReadContract(
-        isConnected && address
-        ?
-        {
-          abi: PoolAbi,
-          address: contracts.pool,
-          functionName: 'getReserveData',
-          args: [asset],
-        } : undefined
-      )
-    )
+  const userReservesData = useUserReservesData()
 
-    const priceDataResults = assetAddresses.map(asset => 
-      useReadContract(
-        isConnected && address
-        ?
-        {
-          abi: OracleAbi,
-          address: contracts.oracle,
-          functionName: 'getAssetPrice',
-          args: [asset],
-        } : undefined
-      )
-    )
-
-    const reserveDataMap = assetAddresses.reduce((acc, asset, index) => {
-      acc[asset] = reserveDataResults[index].data;
-      return acc;
-    }, {} as Record<string, any>);
-
-    const priceDataMap = assetAddresses.reduce((acc, asset, index) => {
-      acc[asset] = priceDataResults[index].data;
-      return acc;
-    }, {} as Record<string, any>);
-
-    let supply = data ? (data as any)['0'].map((e: any) => {
-      return {
-        underlyingAsset: e.underlyingAsset,
-        assetName: tokenNameMap[e.underlyingAsset],
-        balance: Number(e.scaledATokenBalance) / Math.pow(10, 6),
-        value: (Number(priceDataMap[e.underlyingAsset]) / Math.pow(10, 8)) * (Number(e.scaledATokenBalance) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset])),
-        apr: (Math.pow((Number((reserveDataMap[e.underlyingAsset] as any).currentLiquidityRate) / 1e27) + 1, 365) - 1) * 100,
-        collateral: -948561,
-        icon: iconsMap[tokenNameMap[e.underlyingAsset]],
-        isCollateralEnabled: e.usageAsCollateralEnabledOnUser
-      }
-    }) : []
-
-    supply = supply.filter((e: any) => {
-      return e.balance > 0;
-    });
-
-    let borrow = data ? (data as any)['0'].map((e: any) => {
-      return {
-        underlyingAsset: e.underlyingAsset,
-        assetName: tokenNameMap[e.underlyingAsset],
-        balance: Number(e.scaledVariableDebt) / Math.pow(10, 6),
-        value: (Number(priceDataMap[e.underlyingAsset]) / Math.pow(10, 8)) * (Number(e.scaledVariableDebt) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset])),
-        apr: (Math.pow((Number((reserveDataMap[e.underlyingAsset] as any).currentVariableBorrowRate) / 1e27) + 1, 365) - 1) * 100,
-        collateral: -948561,
-        icon: iconsMap[tokenNameMap[e.underlyingAsset]]
-      }
-    }) : []
-
-    borrow = borrow.filter((e: any) => {
-      return e.balance > 0;
-    });
-
-    const totalSupply = supply.reduce((partialSum: number, a: any) => partialSum + a.value, 0);
-    const totalBorrow = borrow.reduce((partialSum: number, a: any) => partialSum + a.value, 0);
-
-    const totalBorrowLimit = supply.reduce((partialSum: number, a: any) => partialSum + (a.value * ltvMap[a.underlyingAsset]), 0);
+  const supplied: UserPositionData[] = userReservesData ? (userReservesData as any)['0'].map((e: UserReserveData) => {
+    const balanceNormalized = Number(e.scaledATokenBalance) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
+    const priceUsd = Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
+    const valueUsd = priceUsd * balanceNormalized;
+    const apr =(Math.pow(Number(reserveDataMap[e.underlyingAsset].currentLiquidityRate) / 1e27 + 1, 365) - 1) *100;
 
     return {
-      supplied: supply,
-      borrowed: borrow,
-      totalSupply: totalSupply,
-      totalBorrow: totalBorrow,
-      totalBalance: totalSupply - totalBorrow,
-      totalBalanceChange: 89,
-      totalBalanceChangePercentage: 77.12,
-      totalBorrowLimit: totalBorrowLimit
+      underlyingAsset: e.underlyingAsset,
+      assetName: tokenNameMap[e.underlyingAsset],
+      balance: balanceNormalized,
+      value: valueUsd,
+      price: priceUsd, 
+      apr: apr,
+      icon: iconsMap[tokenNameMap[e.underlyingAsset]],
+      isCollateralEnabled: e.usageAsCollateralEnabledOnUser,
+    };
+  }).filter((item: UserPositionData) => item.balance > 0) : [];
+
+  const borrowed: UserPositionData[] = userReservesData ? (userReservesData as any)['0'].map((e: UserReserveData) => {
+    const balanceNormalized = Number(e.scaledVariableDebt) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
+    const priceUsd = Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
+    const valueUsd = priceUsd * balanceNormalized;
+    const apr =(Math.pow(Number(reserveDataMap[e.underlyingAsset].currentVariableBorrowRate) / 1e27 + 1, 365) - 1) *100;
+
+    return {
+      underlyingAsset: e.underlyingAsset,
+      assetName: tokenNameMap[e.underlyingAsset],
+      balance: Number(e.scaledVariableDebt) / Math.pow(10, 6),
+      value: valueUsd,
+      apr: apr,
+      icon: iconsMap[tokenNameMap[e.underlyingAsset]],
+      isCollateralEnabled: null
     }
+  }).filter((item: UserPositionData) => item.balance > 0) : []
+
+  const totalSupply = supplied.reduce((partialSum: number, a: any) => partialSum + a.value, 0);
+  const totalBorrow = borrowed.reduce((partialSum: number, a: any) => partialSum + a.value, 0);
+  const totalBorrowLimit = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * ltvMap[a.underlyingAsset]), 0);
+
+  return  {
+    supplied: supplied,
+    borrowed: borrowed,
+
+    totalSupplyUsd: totalSupply,
+    totalBorrowUsd: totalBorrow,
+    totalBalanceUsd: totalSupply - totalBorrow,
+
+    totalBalanceChange: 0,
+    totalBalanceChangePercentage: 0,
+    totalBorrowLimit: totalBorrowLimit,
+
+    healthFactor: totalBorrow / totalBorrowLimit
+  }
 }
 
-function getUserWalletBalance(){
+export function useUserReservesData(){
+  const { address, isConnected } = useAccount();
+  const { data } = useReadContract(
+    isConnected && address ?
+    {
+      abi: abis.uiPoolDataProvider,
+      address: contracts.uiPoolDataProvider,
+      functionName: 'getUserReservesData',
+      args: [contracts.dataProvider, address],
+    } : undefined
+  )
+  return data;
+}
+
+export function useUserWalletBalance(){
   const { address, isConnected } = useAccount();
 
   const balanceDataResults = assetAddresses.map(asset => 
@@ -127,7 +104,7 @@ function getUserWalletBalance(){
       isConnected && address
       ?
       {
-        abi: OracleAbi,
+        abi: abis.oracle,
         address: contracts.oracle,
         functionName: 'getAssetPrice',
         args: [asset],
@@ -151,5 +128,3 @@ function getUserWalletBalance(){
     walletBalanceValue: walletBalanceValue
   }
 }
-
-export { getUserWalletBalance, getUserReserves };

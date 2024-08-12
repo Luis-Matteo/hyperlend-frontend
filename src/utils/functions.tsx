@@ -36,4 +36,8 @@ function formatAddress(inputAddress: string) {
   return `${start}...${end}`;
 }
 
+export function capitalizeString(s: string){
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 export { formatNumber, formatAddress, formatUnit };

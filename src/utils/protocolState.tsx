@@ -1,49 +1,97 @@
-import { useAccount, useReadContract } from 'wagmi'
-import PoolAbi from "../abis/PoolAbi.json"
+import { useMemo, useCallback } from 'react';
+import { useAccount, useReadContract, useReadContracts } from 'wagmi'
 
-const tokenNameMap: any = {
-  "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1": "ETH",
-  "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9": "USDT",
-  "0xaf88d065e77c8cC2239327C5EDb3A432268e5831": "USDC",
-  "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f": "WBTC"
-}
-const pool = "0xAd3AAC48C09f955a8053804D8a272285Dfba4dD2"
+import { Reserve, ReservesData } from '../utils/types'
 
-const assetAddresses = Object.keys(tokenNameMap);
+import { contracts, assetAddresses, abis } from './tokens';
 
-function getInterestRate(){
-  const { address, isConnected } = useAccount();
-  const reserveDataResults = assetAddresses.map(asset => 
-    useReadContract(
-      isConnected && address
-      ?
-      {
-        abi: PoolAbi,
-        address: pool,
-        functionName: 'getReserveData',
-        args: [asset],
-      } : undefined
-    )
-  )
+export function useProtocolReservesData(): ReservesData {
+  const { data: reserveDataResults, isLoading, isError } = useReadContracts({
+    contracts: assetAddresses.map(asset => ({
+      abi: abis.pool,
+      address: contracts.pool,
+      functionName: 'getReserveData',
+      args: [asset],
+    }))
+  })
 
-  const reserveDataMap = assetAddresses.reduce((acc, asset, index) => {
-    acc[asset] = reserveDataResults[index].data;
-    return acc;
-  }, {} as Record<string, any>);
+  const getReservesData = useCallback(() => {
+    if (!reserveDataResults) return {}
 
+    return assetAddresses.reduce((acc, asset, index) => {
+      const result = reserveDataResults[index]
+      if (result && result.status === 'success') {
+        acc[asset] = result.result as Reserve
+      } else {
+        console.error(`Failed to get reserve data for asset: ${asset}`)
+      }
+      return acc
+    }, {} as Record<string, Reserve>)
+  }, [reserveDataResults, assetAddresses])
 
+  const reserveDataMap = useMemo(() => getReservesData(), [getReservesData])
 
-  let supplyInterest: any = {}
-  let borrowInterest: any = {}
-  for (let address of assetAddresses){
-    supplyInterest[address] = (Math.pow((Number((reserveDataMap[address] as any).currentLiquidityRate) / 1e27) + 1, 365) - 1) * 100
-    borrowInterest[address] = (Math.pow((Number((reserveDataMap[address] as any).currentVariableBorrowRate) / 1e27) + 1, 365) - 1) * 100
-  }
-
-  return {
-    supplyInterest: supplyInterest,
-    borrowInterest: borrowInterest
-  }
+  return { reserveDataMap, isLoading, isError }
 }
 
-export { getInterestRate }
+export function useProtocolPriceData() {
+  const { data: priceDataResults, isLoading, isError } = useReadContracts({
+    contracts: assetAddresses.map(asset => ({
+      abi: abis.oracle,
+      address: contracts.oracle,
+      functionName: 'getAssetPrice',
+      args: [asset],
+    }))
+  })
+
+  const getPricesData = useCallback(() => {
+    if (!priceDataResults) return {}
+
+    return assetAddresses.reduce((acc, asset, index) => {
+      const result = priceDataResults[index]
+      if (result && result.status === 'success') {
+        acc[asset] = result.result as bigint
+      } else {
+        console.error(`Failed to get price data for asset: ${asset}`);
+      }
+      return acc
+    }, {} as Record<string, bigint>)
+  }, [priceDataResults])
+
+  const priceDataMap = useMemo(() => getPricesData(), [getPricesData])
+
+  return { priceDataMap, isLoading, isError }
+}
+
+export function useProtocolInterestRate(){
+  const { reserveDataMap } = useProtocolReservesData(); 
+  const { data: interestRateDataResults, isLoading, isError } = useReadContracts({
+    contracts: assetAddresses.map(asset => ({
+      abi: abis.pool,
+      address: contracts.pool,
+      functionName: 'getReserveData',
+      args: [asset],
+    }))
+  })
+
+  const getInterestRateData = useCallback(() => {
+    if (!interestRateDataResults) return {}
+
+    return assetAddresses.reduce((acc, asset, index) => {
+      const result = interestRateDataResults[index]
+      if (result && result.status === 'success') {
+        acc[asset] = {
+          supplyInterest: (Math.pow((Number((reserveDataMap[asset] as any).currentLiquidityRate) / 1e27) + 1, 365) - 1) * 100,
+          borrowInterest: (Math.pow((Number((reserveDataMap[asset] as any).currentVariableBorrowRate) / 1e27) + 1, 365) - 1) * 100
+        }
+      } else {
+        console.error(`Failed to get interest rate data for asset: ${asset}`);
+      }
+      return acc
+    }, {} as Record<string, any>)
+  }, [interestRateDataResults])
+
+  const interestRateDataMap = useMemo(() => getInterestRateData(), [getInterestRateData])
+
+  return { interestRateDataMap, isLoading, isError }
+}

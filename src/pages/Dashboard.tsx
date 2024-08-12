@@ -1,26 +1,35 @@
+import { useEffect, useState } from 'react';
 import CardItem from '../components/common/CardItem';
 import SetionTitle from '../components/common/SetionTitle';
 import { formatNumber } from '../utils/functions';
 import graphMockImage from '../assets/img/graph-mock.svg';
 import Navbar from '../layouts/Navbar';
 import PositionBar from '../components/dashboard/PositionBar';
-import { useState } from 'react';
-import Modal from '../components/lend-borrow/Modal';
+import Modal from '../components/common/Modal';
 
-import { getUserReserves, getUserWalletBalance } from '../utils/userState';
+import { ModalType, UserPositionsData } from '../utils/types';
+
+import { useUserPositionsData, useUserWalletBalance } from '../utils/userState';
 import { getUserPoints } from '../utils/userPoints';
 
 function Dashboard() {
-  const { 
-    supplied, borrowed, totalBalance, totalSupply, totalBorrow, totalBorrowLimit, totalBalanceChange, totalBalanceChangePercentage 
-  } = getUserReserves()
-  const { totalPoints, currentPoints, pointsPercent } = getUserPoints()
+  const positions = useUserPositionsData()
+  if (!positions){
+    return <div>Loading</div>
+  }
 
-  const { walletBalanceValue } = getUserWalletBalance()
+  const {
+    supplied, borrowed, 
+    totalBalanceUsd, totalSupplyUsd, totalBorrowUsd, 
+    totalBorrowLimit, totalBalanceChange, totalBalanceChangePercentage 
+  } = positions
+
+  const { totalPoints, currentPoints, pointsPercent } = getUserPoints()
+  const { walletBalanceValue } = useUserWalletBalance()
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
   const [modalToken, setModalToken] = useState<string>("")
-  const [modalSide, setModalSide] = useState<boolean>(true)
+  const [modalType, setModalType] = useState<ModalType>('supply')
   const closeModal = () => setModalStatus(false);
 
   return (
@@ -51,12 +60,12 @@ function Dashboard() {
                 <div className='h-20'>
                   <span className='text-white mb-2'>Collateral deposited</span>
                   <PositionBar
-                    available={totalSupply} total={totalSupply + walletBalanceValue} />
+                    available={totalSupplyUsd} total={totalSupplyUsd + walletBalanceValue} />
                 </div>
                 <div className='h-20'>
                   <span className='text-white mb-2'>Borrow</span>
                   <PositionBar
-                    available={totalBorrow} total={totalBorrowLimit}/>
+                    available={totalBorrowUsd} total={totalBorrowLimit}/>
                 </div>
               </div>
             </div>
@@ -74,7 +83,7 @@ function Dashboard() {
               />
               <p className="text-white text-[28px] font-medium font-lufga">
                 $
-                {formatNumber(totalBalance, 2)}
+                {formatNumber(totalBalanceUsd, 2)}
               </p>
               <p className="text-success text-sm font-lufga">
                 {`${totalBalanceChange >= 0 ? '+' : '-'}`}
@@ -145,7 +154,7 @@ function Dashboard() {
                           () => {
                             setModalStatus(true)
                             setModalToken(item.underlyingAsset)
-                            setModalSide(true)
+                            setModalType('supply')
                           }
                         }>
                         Supply
@@ -189,7 +198,7 @@ function Dashboard() {
                             () => {
                               setModalStatus(true)
                               setModalToken(item.underlyingAsset)
-                              setModalSide(false)
+                              setModalType("repay")
                             }
                           }>
                           Repay
@@ -209,7 +218,7 @@ function Dashboard() {
       modalStatus &&
       <Modal 
         token={modalToken}
-        isSupply={modalSide}
+        modalType={modalType}
         onClose={closeModal}
       />
     }

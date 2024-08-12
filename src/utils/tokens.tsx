@@ -3,12 +3,24 @@ import usdcIcon from '../assets/icons/coins/usdc-icon.svg';
 import usdtIcon from '../assets/icons/coins/usdt-icon.svg';
 import wbtcIcon from '../assets/icons/coins/wbtc-icon.svg';
 
+import UiPoolDataProviderV3Abi from "../abis/UiPoolDataProviderV3Abi.json"
+import PoolAbi from "../abis/PoolAbi.json"
+import OracleAbi from "../abis/OracleAbi.json"
+import DataProviderAbi from "../abis/DataProviderAbi.json"
+
 const contracts: any = {
-  "provider": "0xE65D4B4E740Ad55a04B7dc5Ba2f458215350cc32",
+  "dataProvider": "0xE65D4B4E740Ad55a04B7dc5Ba2f458215350cc32",
   "pool": "0xAd3AAC48C09f955a8053804D8a272285Dfba4dD2",
-  "oracle": "0x8033AD4F1613253566aD11C66A51eF09Ac8166Cf"
+  "oracle": "0x8033AD4F1613253566aD11C66A51eF09Ac8166Cf",
+  "uiPoolDataProvider": "0x0b3bF4D76C035E1CcedE18F9195De98c41c5dDf0"
 }
 
+const abis: Record<string, any> = {
+  "dataProvider": DataProviderAbi,
+  "uiPoolDataProvider": UiPoolDataProviderV3Abi,
+  "pool": PoolAbi,
+  "oracle": OracleAbi
+}
 
 const tokenNameMap: any = {
   "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1": "ETH",
@@ -40,4 +52,4 @@ const ltvMap: any = {
   "0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f": 0.75
 }
 
-export { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap  }
+export { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap, abis  }
