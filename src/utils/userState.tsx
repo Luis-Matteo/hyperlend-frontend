@@ -8,9 +8,21 @@ import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, lt
 
 import { useProtocolReservesData, useProtocolPriceData } from './protocolState';
 
-export function useUserPositionsData(): UserPositionsData | null {
+export function useUserPositionsData(): UserPositionsData {
   const { address, isConnected } = useAccount()
-  if (!isConnected) return null
+  if (!isConnected){
+    return {
+      supplied: [],
+      borrowed: [],
+      totalSupplyUsd: 0,
+      totalBorrowUsd: 0,
+      totalBalanceUsd: 0,
+      totalBorrowLimit: 0,
+      healthFactor: 0,
+      totalBalanceChange: 0,
+      totalBalanceChangePercentage: 0
+    }
+  }
 
   const { reserveDataMap } = useProtocolReservesData()
   const { priceDataMap } = useProtocolPriceData()
@@ -75,7 +87,7 @@ export function useUserPositionsData(): UserPositionsData | null {
 
 export function useUserReservesData(){
   const { address, isConnected } = useAccount();
-  if (!isConnected) return null;
+  if (!isConnected) return {};
 
   const { data } = useReadContract(
     isConnected && address ?

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import CardItem from '../components/common/CardItem';
-import SetionTitle from '../components/common/SetionTitle';
+import SectionTitle from '../components/common/SectionTitle';
 import { formatNumber } from '../utils/functions';
 import graphMockImage from '../assets/img/graph-mock.svg';
 import Navbar from '../layouts/Navbar';
@@ -18,28 +18,14 @@ function Dashboard() {
   const { data: hash, writeContractAsync } = useWriteContract()
   const { switchChain } = useSwitchChain()
   const account = useAccount()
-
+  
   useEffect(() => {
-    if (account.isConnected && account.chainId !== 42161) {
+    if (account.isConnected && account.chainId != 42161) {
       switchChain({ chainId: 42161 });
     }
-  }, [account.isConnected, account.chainId, switchChain]);
+  }, [])
 
   let positions = useUserPositionsData()
-  if (!positions){
-    positions = {
-      supplied: [],
-      borrowed: [],
-      totalSupplyUsd: 0,
-      totalBorrowUsd: 0,
-      totalBalanceUsd: 0,
-      totalBorrowLimit: 0,
-      healthFactor: 0,
-      totalBalanceChange: 0,
-      totalBalanceChangePercentage: 0,
-    }
-  }
-
   const {
     supplied, borrowed, 
     totalBalanceUsd, totalSupplyUsd, totalBorrowUsd, 
@@ -76,7 +62,7 @@ function Dashboard() {
             className="py-4 px-5 w-2/5"
           >
             <div className="">
-              <SetionTitle
+              <SectionTitle
                 title="Health Factor"
               />
             </div>
@@ -85,7 +71,7 @@ function Dashboard() {
             className="py-4 px-5 w-3/5"
           >
             <div className="">
-              <SetionTitle
+              <SectionTitle
                 title="Your Positions"
               />
               <div className='flex flex-col gap-5 w-[90%] m-auto'>
@@ -110,7 +96,7 @@ function Dashboard() {
 
           <div className="flex gap-32 justify-between">
             <div className="flex flex-col gap-4">
-              <SetionTitle
+              <SectionTitle
                 title="Current Net Worth"
               />
               <p className="text-white text-[28px] font-medium font-lufga">
@@ -129,7 +115,7 @@ function Dashboard() {
               </p>
             </div>
             <div className="flex flex-col gap-4">
-              <SetionTitle
+              <SectionTitle
                 title="Total Points"
               />
               <p className="text-white text-[28px] font-medium font-lufga">
