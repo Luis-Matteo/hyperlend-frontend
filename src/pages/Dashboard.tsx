@@ -18,13 +18,12 @@ function Dashboard() {
   const { data: hash, writeContractAsync } = useWriteContract()
   const { switchChain } = useSwitchChain()
   const account = useAccount()
-  if (account.chainId != 42161){
+  if (account.isConnected && account.chainId != 42161){
     switchChain({chainId: 42161})
   }
 
   const positions = useUserPositionsData()
   if (!positions) return <div></div>
-
 
   const {
     supplied, borrowed, 
@@ -72,11 +71,11 @@ function Dashboard() {
           >
             <div className="">
               <SetionTitle
-                title="Your Position"
+                title="Your Positions"
               />
               <div className='flex flex-col gap-5 w-[90%] m-auto'>
                 <div className='h-20'>
-                  <span className='text-white mb-2'>Collateral deposited</span>
+                  <span className='text-white mb-2'>Collateral</span>
                   <PositionBar
                     available={totalSupplyUsd} total={totalSupplyUsd + walletBalanceValue} />
                 </div>

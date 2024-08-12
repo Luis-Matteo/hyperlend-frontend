@@ -88,6 +88,10 @@ export function useUserReservesData(){
 export function useUserWalletBalance(){
   const { address, isConnected } = useAccount();
 
+  if (!isConnected){
+    return { walletBalanceValue: 0 }
+  }
+
   const balanceDataResults = assetAddresses.map(asset => 
     useReadContract(
       isConnected && address
