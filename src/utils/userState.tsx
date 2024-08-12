@@ -33,7 +33,7 @@ export function useUserPositionsData(): UserPositionsData {
     const balanceNormalized = Number(e.scaledATokenBalance) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
     const priceUsd = Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
     const valueUsd = priceUsd * balanceNormalized;
-    const apr = calculateApy(Number(reserveDataMap[e.underlyingAsset].currentLiquidityRate));
+    const apr = calculateApy(Number(reserveDataMap[e.underlyingAsset]?.currentLiquidityRate || 0));
 
     return {
       underlyingAsset: e.underlyingAsset,
@@ -51,7 +51,7 @@ export function useUserPositionsData(): UserPositionsData {
     const balanceNormalized = Number(e.scaledVariableDebt) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
     const priceUsd = Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
     const valueUsd = priceUsd * balanceNormalized;
-    const apr = calculateApy(Number(reserveDataMap[e.underlyingAsset].currentVariableBorrowRate))
+    const apr = calculateApy(Number(reserveDataMap[e.underlyingAsset]?.currentVariableBorrowRate || 0))
 
     return {
       underlyingAsset: e.underlyingAsset,
@@ -155,15 +155,17 @@ export function useGetUserBalanceHistory(address: `0x${string}` | undefined){
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    // fetch('https://api.hyperlend.finance.com/userBalanceHistory?address=' + address)
-    //   .then(response => response.json())
-    //   .then(json => setData(json))
-    //   .catch(error => console.error(error));
-    setData({
-      address: address,
-      totalBalanceChange: 0,
-      totalBalanceChangePercentage: 0
-    })
+    fetch('http://localhost:3000/data/user/valueChange?address=' + address)
+      .then(response => response.json())
+      .then(json => {
+        console.log(json)
+        setData({
+          address: address,
+          totalBalanceChange: json.totalBalanceChange,
+          totalBalanceChangePercentage: json.totalBalanceChangePercentage
+        })
+      })
+      .catch(error => console.error(error));
   }, []);
 
   return {

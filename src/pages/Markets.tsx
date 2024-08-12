@@ -12,7 +12,6 @@ import { tokenNameMap, tokenFullNameMap, iconsMap, tokenDecimalsMap, stablecoins
 import { useProtocolReservesData, useProtocolAssetReserveData, useProtocolPriceData, useProtocolInterestRate } from '../utils/protocolState';
 
 function Markets() {
-  // const { address, isConnected } = useAccount();
   const [status, setStatus] = useState<string>('core');
   const [stable, setStable] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>('');
@@ -95,7 +94,10 @@ function Markets() {
                 {
                   (getAssets() || []).map((item, key) => (
                     <div className="grid grid-cols-11 items-center py-[14px] px-2.5 border-b-[1px] border-[#212325]" key={key}>
-                      <div className="text-white font-lufga flex col-span-2"><img src={item.icon} alt="" width="30px" height="30px" /> &nbsp; {item.name} | {item.symbol}</div>
+                      <div className="text-white font-lufga flex col-span-2">
+                        <img src={item.icon} alt="" width="30px" height="30px" /> &nbsp; 
+                        {item.name} | {item.symbol}
+                      </div>
                       <div className="text-white font-lufga">
                         <p className="">
                           {formatUnit(item.totalSupplied)}

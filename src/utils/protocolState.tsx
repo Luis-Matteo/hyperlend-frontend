@@ -6,9 +6,6 @@ import { Reserve, ReservesData } from '../utils/types'
 import { contracts, assetAddresses, abis } from './tokens';
 
 export function useProtocolReservesData(): ReservesData {
-  const { isConnected, address } = useAccount();
-  if (!isConnected || !address) return { reserveDataMap: {}, isLoading: false, isError: false };
-
   const { data: reserveDataResults, isLoading, isError } = useReadContracts({
     contracts: assetAddresses.map(asset => ({
       abi: abis.pool,
@@ -38,9 +35,6 @@ export function useProtocolReservesData(): ReservesData {
 }
 
 export function useProtocolPriceData() {
-  const { isConnected } = useAccount();
-  if (!isConnected) return { priceDataMap: {}, isLoading: false, isError: false };
-  
   const { data: priceDataResults, isLoading, isError } = useReadContracts({
     contracts: assetAddresses.map(asset => ({
       abi: abis.oracle,
@@ -70,9 +64,6 @@ export function useProtocolPriceData() {
 }
 
 export function useProtocolInterestRate(){
-  const { isConnected } = useAccount();
-  if (!isConnected) return { interestRateDataMap: {}, isLoading: false, isError: false };
-
   const { reserveDataMap } = useProtocolReservesData(); 
   const { data: interestRateDataResults, isLoading, isError } = useReadContracts({
     contracts: assetAddresses.map(asset => ({
@@ -107,15 +98,13 @@ export function useProtocolInterestRate(){
 }
 
 export function useProtocolAssetReserveData(asset: string){
-  const { isConnected, address } = useAccount();
   const { data } = useReadContract(
-    isConnected && address ?
     {
       abi: abis.protocolDataProvider,
       address: contracts.protocolDataProvider,
       functionName: 'getReserveData',
       args: [asset],
-    } : undefined
+    } 
   )
 
   const dataAny = (data as any) || []
