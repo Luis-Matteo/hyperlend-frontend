@@ -67,6 +67,12 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     return borrowAvailableTokens;
   }
 
+  const getPrecision = () => {
+    const minAmountStr = (1 / (Number(priceDataMap[token]) / Math.pow(10, 8)) / 100).toFixed(20).toString() //amount of token, with $0.01
+    const match = minAmountStr.replace(".", "").match(/^0+/)
+    return match ? match[0].length : 2
+  }
+
   const updateAvailableAmount = () => {
     const userTokenSuppliedPosition = userPositionsData?.supplied.find(e => e.underlyingAsset == token);
     const userTokenBorrowedPosition = userPositionsData?.borrowed.find(e => e.underlyingAsset == token);
@@ -81,6 +87,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         setAvailableBalance(userTokenSuppliedPosition?.balance || 0)
         break;
       case "borrow":
+        console.log(userBorrowLimitToken)
         setAvailableBalance(userBorrowLimitToken)
         break;
       case "repay":
@@ -112,8 +119,9 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
     setAmount(availableBalance / 100 * Number(event.target.value))
-    setAvailableBalance(Number(userWalletBalance as any) / Math.pow(10, tokenDecimalsMap[token]));
     setAllowance(Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]))
+
+    updateAvailableAmount();
   };
 
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -171,12 +179,12 @@ function Modal({ token, modalType, onClose }: ModalProps) {
               <div className=''>
                 <p className='text-white font-lufga'>{tokenNameMap[token]}</p>
                 <p className='text-success text-xs font-lufga'>{
-                  modalType == "supply" || modalType == "withdraw" ? formatNumber(interestRateDataMap[token].supply, 2) : formatNumber(interestRateDataMap[token].borrow, 2)
+                  modalType == "supply" || modalType == "withdraw" ? formatNumber(interestRateDataMap[token].supply, getPrecision()) : formatNumber(interestRateDataMap[token].borrow, getPrecision())
                 }% APY</p>
               </div>
             </div>
             <p className='text-xl text-secondary'>
-              {formatNumber(amount, 2)}
+              {formatNumber(amount, getPrecision())}
             </p>
           </div>
           <div className='flex gap-14'>
@@ -185,7 +193,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
               modalType == "borrow" ? "Available" :
               modalType == "repay" ? "Position" : 
               modalType == "withdraw" ? "Position" : ""
-            }: {formatNumber(availableBalance, 2)} {tokenNameMap[token]}</p>
+            }: {formatNumber(availableBalance, getPrecision())} {tokenNameMap[token]}</p>
             <ul className='flex gap-2 items-center'>
               {
                 percentList.map((item) => (
@@ -205,7 +213,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         <div className='mb-6'>
           <div className='flex justify-between mb-2'>
             <p className="font-lufga font-light text-[#797979]">Available</p>
-            <p className="font-lufga font-light text-[#797979]">${formatNumber(availableBalance, 2)}</p>
+            <p className="font-lufga font-light text-[#797979]">${formatNumber(availableBalance, getPrecision())}</p>
           </div>
           <div className='relative '>
             <ProgressBar
@@ -253,7 +261,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
           </div>
           <div className='flex justify-between'>
             <p className='font-lufga text-[#797979] text-xs'>Pool size</p>
-            <p className='font-lufga text-white text-xs'>{formatNumber(Number(assetReserveData.totalAToken) / Math.pow(10, tokenDecimalsMap[token]), 2)}</p>
+            <p className='font-lufga text-white text-xs'>{formatNumber(Number(assetReserveData.totalAToken) / Math.pow(10, tokenDecimalsMap[token]), getPrecision())}</p>
           </div>
           <div className='flex justify-between'>
             <p className='font-lufga text-[#797979] text-xs'>Type</p>
