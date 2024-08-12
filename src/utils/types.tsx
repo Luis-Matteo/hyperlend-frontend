@@ -27,7 +27,6 @@ export interface Reserve {
   unbacked: bigint;
   variableBorrowIndex: bigint;
   variableDebtTokenAddress: string;
-  availableLiquidityUSD: number
 }
 
 export interface UserReserveData {

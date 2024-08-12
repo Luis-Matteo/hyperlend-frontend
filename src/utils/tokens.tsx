@@ -9,7 +9,8 @@ import OracleAbi from "../abis/OracleAbi.json"
 import DataProviderAbi from "../abis/DataProviderAbi.json"
 
 const contracts: any = {
-  "dataProvider": "0xE65D4B4E740Ad55a04B7dc5Ba2f458215350cc32",
+  "protocolDataProvider": "0x824A4309686C74C3369Ab2273A6f2ced629422e2",
+  "poolAddressesProvider": "0xE65D4B4E740Ad55a04B7dc5Ba2f458215350cc32",
   "pool": "0xAd3AAC48C09f955a8053804D8a272285Dfba4dD2",
   "oracle": "0x8033AD4F1613253566aD11C66A51eF09Ac8166Cf",
   "uiPoolDataProvider": "0x0b3bF4D76C035E1CcedE18F9195De98c41c5dDf0"
@@ -19,7 +20,8 @@ const abis: Record<string, any> = {
   "dataProvider": DataProviderAbi,
   "uiPoolDataProvider": UiPoolDataProviderV3Abi,
   "pool": PoolAbi,
-  "oracle": OracleAbi
+  "oracle": OracleAbi,
+  "protocolDataProvider": DataProviderAbi
 }
 
 const tokenNameMap: any = {

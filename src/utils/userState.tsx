@@ -18,7 +18,7 @@ export function useUserPositionsData(): UserPositionsData | null {
     const priceUsd = Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
     const valueUsd = priceUsd * balanceNormalized;
     const apr = calculateApy(Number(reserveDataMap[e.underlyingAsset].currentLiquidityRate));
-    
+
     return {
       underlyingAsset: e.underlyingAsset,
       assetName: tokenNameMap[e.underlyingAsset],
@@ -64,7 +64,7 @@ export function useUserPositionsData(): UserPositionsData | null {
     totalBalanceChangePercentage: 0,
     totalBorrowLimit: totalBorrowLimit,
 
-    healthFactor: totalBorrow / totalBorrowLimit
+    healthFactor: totalBorrowLimit / totalBorrow
   }
 }
 
@@ -76,7 +76,7 @@ export function useUserReservesData(){
       abi: abis.uiPoolDataProvider,
       address: contracts.uiPoolDataProvider,
       functionName: 'getUserReservesData',
-      args: [contracts.dataProvider, address],
+      args: [contracts.poolAddressesProvider, address],
     } : undefined
   )
   return data;

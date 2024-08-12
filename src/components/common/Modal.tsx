@@ -9,7 +9,7 @@ import { erc20Abi } from 'viem'
 import { ModalProps, UserPositionsData } from '../../utils/types';
 import { contracts, tokenNameMap, tokenDecimalsMap, iconsMap, abis, ltvMap } from '../../utils/tokens';
 
-import { useProtocolReservesData, useProtocolInterestRate, useProtocolPriceData } from '../../utils/protocolState';
+import { useProtocolReservesData, useProtocolInterestRate, useProtocolPriceData, useProtocolAssetReserveData } from '../../utils/protocolState';
 import { useUserPositionsData } from '../../utils/userState' 
 
 function Modal({ token, modalType, onClose }: ModalProps) {
@@ -50,7 +50,9 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const { reserveDataMap } = useProtocolReservesData()
   const { priceDataMap } = useProtocolPriceData()
   const { interestRateDataMap } = useProtocolInterestRate();
+
   const userPositionsData = useUserPositionsData();
+  const assetReserveData  = useProtocolAssetReserveData(token)
 
   const [amount, setAmount] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
@@ -103,7 +105,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
       const newTotalBorrowLimit = modalType == "supply" || modalType == "withdraw" 
       ? ((userPositionsData?.totalBorrowLimit || 0) + (amountUsd * ltvMap[token])) : (userPositionsData?.totalBorrowLimit || 0)
 
-      const newHealth = newTotalBorrow / newTotalBorrowLimit
+      const newHealth = newTotalBorrowLimit / newTotalBorrow
       setPredictedHealth(newHealth)
     }
   }, [amount])
@@ -124,24 +126,30 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const sendTransaction = () => {
     const bgIntAmount = parseFloat((amount * Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0).toString() as any as bigint
 
-    if (allowance < amount){
-      writeContractAsync({
-        address: token as any,
-        abi: erc20Abi,
-        functionName: 'approve',
-        args: [contracts.pool, bgIntAmount],
-      })
-      setAllowance(Number(amount) / Math.pow(10, tokenDecimalsMap[token]))
+    if (modalType == "supply"){
+      if (allowance < amount){
+        writeContractAsync({
+          address: token as any,
+          abi: erc20Abi,
+          functionName: 'approve',
+          args: [contracts.pool, bgIntAmount],
+        })
+        setAllowance(amount)
+      }
     }
 
-    const functionName = modalType == "supply" ? "supply" : "repay"
-    const functionParams: any =  modalType == "supply" ? [token, bgIntAmount, address, 0] : [token, bgIntAmount, 2, address]
+    const functionParams: any = {
+      "supply": [token, bgIntAmount, address, 0], //asset, amount, onBehalfOf, refCode
+      "withdraw": [token, bgIntAmount, address], //asset, amount, to
+      "borrow": [token, bgIntAmount, 2, 0, address], //asset, amount, interestRateMode (2 = variable), refCode, onBehalfOf
+      "repay": [token, bgIntAmount, 2, address] //asset, amount, interestRateMode, onBehalfOf
+    }
 
     writeContractAsync({
       address: contracts.pool,
       abi: abis.pool,
-      functionName: functionName,
-      args: functionParams
+      functionName: modalType,
+      args: functionParams[modalType]
     })
   }
 
@@ -230,17 +238,17 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             <p className='font-lufga text-white text-xs'>{modalType == "supply" ? formatNumber(interestRateDataMap[token].supply, 2) : formatNumber(interestRateDataMap[token].borrow, 2)}%</p>
           </div>
           <div className='flex justify-between'>
-            <p className='font-lufga text-[#797979] text-xs'>Health</p>
+            <p className='font-lufga text-[#797979] text-xs'>Health Factor</p>
             <p className='font-lufga text-warning text-xs'>{
               predictedHealth ? 
-              formatNumber(userPositionsData?.healthFactor || 0, 2) + "% → " + formatNumber(predictedHealth, 2) + "%"
+              formatNumber(userPositionsData?.healthFactor || 0, 2) + " → " + formatNumber(predictedHealth, 2)
               :
-              formatNumber(userPositionsData?.healthFactor || 0, 2) + "%"
+              formatNumber(userPositionsData?.healthFactor || 0, 2) 
             }</p>
           </div>
           <div className='flex justify-between'>
             <p className='font-lufga text-[#797979] text-xs'>Pool size</p>
-            <p className='font-lufga text-white text-xs'>738.89K</p>
+            <p className='font-lufga text-white text-xs'>{formatNumber(Number(assetReserveData.totalAToken) / Math.pow(10, tokenDecimalsMap[token]), 2)}</p>
           </div>
           <div className='flex justify-between'>
             <p className='font-lufga text-[#797979] text-xs'>Type</p>

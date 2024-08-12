@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react';
-import { useReadContracts } from 'wagmi'
+import { useReadContracts, useAccount, useReadContract } from 'wagmi'
 
 import { calculateApy } from './functions';
 import { Reserve, ReservesData } from '../utils/types'
@@ -95,4 +95,34 @@ export function useProtocolInterestRate(){
   const interestRateDataMap = useMemo(() => getInterestRateData(), [getInterestRateData])
 
   return { interestRateDataMap, isLoading, isError }
+}
+
+export function useProtocolAssetReserveData(asset: string){
+  const { address, isConnected } = useAccount();
+  const { data } = useReadContract(
+    isConnected && address ?
+    {
+      abi: abis.protocolDataProvider,
+      address: contracts.protocolDataProvider,
+      functionName: 'getReserveData',
+      args: [asset],
+    } : undefined
+  )
+
+  const dataAny = (data as any) || []
+
+  return {
+    unbacked: dataAny[0],
+    accruedToTreasuryScaled: dataAny[1],
+    totalAToken: dataAny[2],
+    totalStableDebt: dataAny[3],
+    totalVariableDebt: dataAny[4],
+    liquidityRate: dataAny[5],
+    variableBorrowRate: dataAny[6],
+    stableBorrowRate: dataAny[7],
+    averageStableBorrowRate: dataAny[8],
+    liquidityIndex: dataAny[9],
+    variableBorrowIndex: dataAny[10],
+    lastUpdateTimestamp: dataAny[11]
+  };
 }
