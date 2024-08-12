@@ -115,5 +115,8 @@ function extractBits(number: any, offset: any, size: any) {
   return (number >> BigInt(offset)) & mask;
 }
 
+export function filterString(inputString: string, searchPhrase: string) {
+  return inputString.toLowerCase().includes(searchPhrase.toLowerCase())
+}
 
 export { formatNumber, formatAddress, formatUnit, calculateApy };

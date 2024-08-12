@@ -4,10 +4,8 @@ import CardItem from '../components/common/CardItem';
 import { formatNumber, formatUnit } from '../utils/functions';
 import Navbar from '../layouts/Navbar';
 import Modal from '../components/common/Modal';
-import { useAccount, useReadContract } from 'wagmi'
-import { erc20Abi } from 'viem'
 
-import { decodeConfig } from '../utils/functions';
+import { decodeConfig, filterString } from '../utils/functions';
 import { AssetDetail, ModalType } from '../utils/types';
 import { tokenNameMap, tokenFullNameMap, iconsMap, tokenDecimalsMap, stablecoinsList } from '../utils/tokens';
 
@@ -17,6 +15,7 @@ function Markets() {
   // const { address, isConnected } = useAccount();
   const [status, setStatus] = useState<string>('core');
   const [stable, setStable] = useState<boolean>(false);
+  const [searchText, setSearchText] = useState<string>('');
   const [modalStatus, setModalStatus] = useState<boolean>(false);
   const closeModal = () => setModalStatus(false);
 
@@ -27,13 +26,14 @@ function Markets() {
   const { priceDataMap } = useProtocolPriceData()
   const { interestRateDataMap } = useProtocolInterestRate()
 
-
   const getAssets = () => {
     let assets: AssetDetail[] = []
     for (let token of Object.keys(reserveDataMap)){
       const protocolAssetReserveData = useProtocolAssetReserveData(token);
 
       if (stable && !stablecoinsList.includes(tokenNameMap[token])) continue;
+      if (searchText.length > 0 && !(filterString(tokenNameMap[token], searchText) || filterString(tokenFullNameMap[token], searchText))) continue;
+
       const configuration = decodeConfig(reserveDataMap[token].configuration.data);
       const tokenPrice = Number(priceDataMap[token]) / Math.pow(10, 8)
       const totalSuppliedTokens = Number(protocolAssetReserveData.totalAToken) / Math.pow(10, tokenDecimalsMap[token])
@@ -70,6 +70,8 @@ function Markets() {
           setStatus={setStatus}
           stable={stable}
           setStable={setStable}
+          searchText={searchText}
+          setSearchText={setSearchText}
         />
         <CardItem
           className="py-6 px-7 flex-1"

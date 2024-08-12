@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CardItem from '../common/CardItem';
 import magnifyIcon from '../../assets/icons/magnify-icon.svg';
 
@@ -7,10 +7,10 @@ type MarketControlProps = {
   setStatus: React.Dispatch<React.SetStateAction<string>>;
   stable: boolean;
   setStable: React.Dispatch<React.SetStateAction<boolean>>;
+  searchText: string,
+  setSearchText: React.Dispatch<React.SetStateAction<string>>;
 }
-function MarketControl({ status, setStatus, stable, setStable}: MarketControlProps) {
-  const [searchText, setSearchText] = useState<string>('');
-
+function MarketControl({ status, setStatus, stable, setStable, setSearchText }: MarketControlProps) {
   return (
     <div className="pt-16">
       <CardItem
@@ -38,7 +38,7 @@ function MarketControl({ status, setStatus, stable, setStable}: MarketControlPro
           <input
             className="bg-[#081916] rounded-full text-white font-lufga italic focus:outline-0"
             placeholder="Search your coins..."
-            onChange={(e) => { setSearchText(e.target.value); console.log(searchText); }}
+            onChange={(e) => { setSearchText(e.target.value); }}
           />
         </div>
         <div className="flex gap-5">
