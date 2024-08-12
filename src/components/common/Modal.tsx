@@ -74,7 +74,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
 
     switch(modalType){
       case "supply":
-        const normalizedWalletBalance = (Number(userWalletBalance) / Math.pow(10, tokenDecimalsMap[token]))
+        const normalizedWalletBalance = ((Number(userWalletBalance) || 0)  / Math.pow(10, tokenDecimalsMap[token]))
         setAvailableBalance(normalizedWalletBalance)
         break;
       case "withdraw":
@@ -91,7 +91,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
 
   useEffect(() => {
     updateAvailableAmount();
-  }, []);
+  }, [userWalletBalance]);
 
   useEffect(() => {
     if (amount != 0){
@@ -181,8 +181,10 @@ function Modal({ token, modalType, onClose }: ModalProps) {
           </div>
           <div className='flex gap-14'>
             <p className='text-[#797979] text-xs font-lufga'>{
-              modalType == "supply" ? "Wallet" : 
-              modalType == "repay" ? "Position" : ""
+              modalType == "supply" ? "Wallet" :
+              modalType == "borrow" ? "Available" :
+              modalType == "repay" ? "Position" : 
+              modalType == "withdraw" ? "Position" : ""
             }: {formatNumber(availableBalance, 2)} {tokenNameMap[token]}</p>
             <ul className='flex gap-2 items-center'>
               {
@@ -202,7 +204,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         </div>
         <div className='mb-6'>
           <div className='flex justify-between mb-2'>
-            <p className="font-lufga font-light text-[#797979]">Available collateral</p>
+            <p className="font-lufga font-light text-[#797979]">Available</p>
             <p className="font-lufga font-light text-[#797979]">${formatNumber(availableBalance, 2)}</p>
           </div>
           <div className='relative '>

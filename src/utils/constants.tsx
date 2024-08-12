@@ -18,9 +18,9 @@ const navLinks: NavLinkProps[] = [
     disabled: false,
   },
   {
-    id: 'lend-and-borrow',
-    title: 'Lend & Borrow',
-    url: '/lend-and-borrow',
+    id: 'markets',
+    title: 'Markets',
+    url: '/markets',
     icon: lendborrowIcon,
     disabled: false,
   },

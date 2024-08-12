@@ -75,3 +75,20 @@ export interface ReservesData {
   isLoading: boolean;
   isError: boolean;
 }
+
+export interface AssetDetail {
+  name: string;
+  symbol: string,
+  underlyingAsset: string;
+  icon: string;
+  totalSupplied: number;
+  totalSuppliedUsd: number;
+  totalBorrowed: number;
+  totalBorrowedUsd: number;
+  totalLiquidtyUsd: number;
+  supplyApy: number;
+  borrowApy: number;
+  isCollateral: boolean;
+  ltv: number;
+  isStable: boolean;
+} 

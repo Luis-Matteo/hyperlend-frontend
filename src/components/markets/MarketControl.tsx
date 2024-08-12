@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import CardItem from '../common/CardItem';
 import magnifyIcon from '../../assets/icons/magnify-icon.svg';
 
-type LendControlProps = {
+type MarketControlProps = {
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
   stable: boolean;
   setStable: React.Dispatch<React.SetStateAction<boolean>>;
-  personal: boolean;
-  setPersonal: React.Dispatch<React.SetStateAction<boolean>>;
 }
-function LendControl({ status, setStatus, stable, setStable, personal , setPersonal}: LendControlProps) {
+function MarketControl({ status, setStatus, stable, setStable}: MarketControlProps) {
   const [searchText, setSearchText] = useState<string>('');
 
   return (
@@ -21,17 +19,16 @@ function LendControl({ status, setStatus, stable, setStable, personal , setPerso
         <div className="bg-[#081916] rounded-full">
           <button
             type="button"
-            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold ${status === 'lend' ? 'bg-secondary' : 'text-white'}`}
-            onClick={() => setStatus('lend')}
+            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold ${status === 'core' ? 'bg-secondary' : 'text-white'}`}
+            onClick={() => setStatus('core')}
           >
-            Lend
+            Core
           </button>
           <button
             type="button"
-            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold ${status === 'borrow' ? 'bg-secondary' : 'text-white'}`}
-            onClick={() => setStatus('borrow')}
+            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold ${status === 'isolated' ? 'bg-secondary' : 'text-white'}`}
           >
-            Borrow
+            Isolated
           </button>
         </div>
         <div className="bg-[#081916] rounded-full flex gap-2">
@@ -56,21 +53,10 @@ function LendControl({ status, setStatus, stable, setStable, personal , setPerso
             </button>
             <p className="text-bold text-white font-bold">Stablecoins</p>
           </div>
-          <div className="flex gap-3">
-            <button
-              type="button"
-              className="p-0.5 bg-[#081916] rounded-full flex items-center"
-              onClick={() => setPersonal((prev) => !prev)}
-            >
-              <div className={`p-2 rounded-full ${personal && 'bg-secondary'}`} />
-              <div className={`p-2 rounded-full ${!personal && 'bg-secondary'}`} />
-            </button>
-            <p className="text-bold text-white font-bold">Personal Positions</p>
-          </div>
         </div>
       </CardItem>
     </div>
   );
 }
 
-export default LendControl;
+export default MarketControl;

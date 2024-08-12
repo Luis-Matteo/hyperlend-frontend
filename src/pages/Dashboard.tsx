@@ -170,7 +170,7 @@ function Dashboard() {
                               sendToggleCollateralTx(item.underlyingAsset, item.isCollateralEnabled)
                             }
                           }>
-                            { item.isCollateralEnabled ? "✓" : "─"}
+                            { item.isCollateralEnabled ? "✓" : "─" }
                           </button>
                         </div>
                         <button className="text-success font-lufga"
