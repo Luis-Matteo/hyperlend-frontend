@@ -224,7 +224,10 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             sendTransaction()
           }
         }>
-          {allowance >= amount ? (modalType == "supply" ? "Supply" : "Repay") : "Approve"}
+          {
+            modalType == "supply" ? 
+            (allowance >= amount ? "Supply" : "Approve") : capitalizeString(modalType)
+          }
         </button>
         <div className='flex justify-end mb-6'>
           <button className='px-3 py-1.5 flex gap-2 items-center bg-[#050F0D] rounded-full'>

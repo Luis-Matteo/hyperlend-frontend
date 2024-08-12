@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useAccount, useReadContract } from 'wagmi'
 import { erc20Abi } from 'viem'
 
@@ -8,6 +9,7 @@ import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, lt
 import { useProtocolReservesData, useProtocolPriceData } from './protocolState';
 
 export function useUserPositionsData(): UserPositionsData | null {
+  const { address } = useAccount()
   const { reserveDataMap } = useProtocolReservesData()
   const { priceDataMap } = useProtocolPriceData()
 
@@ -52,6 +54,8 @@ export function useUserPositionsData(): UserPositionsData | null {
   const totalBorrow = borrowed.reduce((partialSum: number, a: any) => partialSum + a.value, 0);
   const totalBorrowLimit = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * ltvMap[a.underlyingAsset]), 0);
 
+  const { totalBalanceChange, totalBalanceChangePercentage } = useGetUserBalanceHistory(address)
+
   return  {
     supplied: supplied,
     borrowed: borrowed,
@@ -59,12 +63,11 @@ export function useUserPositionsData(): UserPositionsData | null {
     totalSupplyUsd: totalSupply,
     totalBorrowUsd: totalBorrow,
     totalBalanceUsd: totalSupply - totalBorrow,
-
-    totalBalanceChange: 0,
-    totalBalanceChangePercentage: 0,
     totalBorrowLimit: totalBorrowLimit,
+    healthFactor: totalBorrowLimit / totalBorrow,
 
-    healthFactor: totalBorrowLimit / totalBorrow
+    totalBalanceChange: totalBalanceChange,
+    totalBalanceChangePercentage: totalBalanceChangePercentage,
   }
 }
 
@@ -125,5 +128,25 @@ export function useUserWalletBalance(){
 
   return {
     walletBalanceValue: walletBalanceValue
+  }
+}
+
+export function useGetUserBalanceHistory(address: `0x${string}` | undefined){
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    // fetch('https://api.hyperlend.finance.com/userBalanceHistory?address=' + address)
+    //   .then(response => response.json())
+    //   .then(json => setData(json))
+    //   .catch(error => console.error(error));
+    setData({
+      totalBalanceChange: 0,
+      totalBalanceChangePercentage: 0
+    })
+  }, []);
+
+  return {
+    totalBalanceChange: data?.totalBalanceChange || 0,
+    totalBalanceChangePercentage: data?.totalBalanceChangePercentage || 0
   }
 }

@@ -6,17 +6,25 @@ import graphMockImage from '../assets/img/graph-mock.svg';
 import Navbar from '../layouts/Navbar';
 import PositionBar from '../components/dashboard/PositionBar';
 import Modal from '../components/common/Modal';
+import { useSwitchChain, useAccount, useWriteContract } from 'wagmi'
 
 import { ModalType } from '../utils/types';
 
+import { contracts, tokenDecimalsMap, abis } from '../utils/tokens';
 import { useUserPositionsData, useUserWalletBalance } from '../utils/userState';
 import { getUserPoints } from '../utils/userPoints';
 
 function Dashboard() {
-  const positions = useUserPositionsData()
-  if (!positions){
-    return <div>Loading</div>
+  const { data: hash, writeContractAsync } = useWriteContract()
+  const { switchChain } = useSwitchChain()
+  const account = useAccount()
+  if (account.chainId != 42161){
+    switchChain({chainId: 42161})
   }
+
+  const positions = useUserPositionsData()
+  if (!positions) return <div></div>
+
 
   const {
     supplied, borrowed, 
@@ -24,13 +32,23 @@ function Dashboard() {
     totalBorrowLimit, totalBalanceChange, totalBalanceChangePercentage 
   } = positions
 
-  const { totalPoints, currentPoints, pointsPercent } = getUserPoints()
+  const { totalPoints, pointsIncrease, pointsPercentIncrease } = getUserPoints()
   const { walletBalanceValue } = useUserWalletBalance()
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
   const [modalToken, setModalToken] = useState<string>("")
   const [modalType, setModalType] = useState<ModalType>('supply')
   const closeModal = () => setModalStatus(false);
+
+  const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {
+    writeContractAsync({
+      address: contracts.pool,
+      abi: abis.pool,
+      functionName: "setUserUseReserveAsCollateral",
+      args: [asset, !isEnabled]
+    })
+    console.log(hash)
+  }
 
   return (
     <>
@@ -79,7 +97,7 @@ function Dashboard() {
           <div className="flex gap-32 justify-between">
             <div className="flex flex-col gap-4">
               <SetionTitle
-                title="Current Balance"
+                title="Current Net Worth"
               />
               <p className="text-white text-[28px] font-medium font-lufga">
                 $
@@ -104,12 +122,12 @@ function Dashboard() {
                 {formatNumber(totalPoints, 2)}
               </p>
               <p className="text-success text-sm font-lufga">
-                {`${currentPoints >= 0 ? '+' : '-'}`}
-                {formatNumber(Math.abs(currentPoints), 2)}
+                {`${pointsIncrease >= 0 ? '+' : '-'}`}
+                {formatNumber(Math.abs(pointsIncrease), 2)}
                 {' '}
                 (
-                {`${pointsPercent >= 0 ? '+' : '-'}`}
-                {formatNumber(Math.abs(pointsPercent), 2)}
+                {`${pointsPercentIncrease >= 0 ? '+' : '-'}`}
+                {formatNumber(Math.abs(pointsPercentIncrease), 2)}
                 %)
               </p>
             </div>
@@ -147,7 +165,13 @@ function Dashboard() {
                           %
                         </div>
                         <div className={item.isCollateralEnabled ? "text-success font-lufga" : "text-secondary font-lufga"}>
-                          { item.isCollateralEnabled ? "✓" : "─"}
+                          <button onClick={
+                            () => {
+                              sendToggleCollateralTx(item.underlyingAsset, item.isCollateralEnabled)
+                            }
+                          }>
+                            { item.isCollateralEnabled ? "✓" : "─"}
+                          </button>
                         </div>
                         <button className="text-success font-lufga"
                         onClick={
@@ -158,7 +182,7 @@ function Dashboard() {
                           }
                         }>
                         Supply
-                      </button>
+                        </button>
                       </div>
                     ))
                   }

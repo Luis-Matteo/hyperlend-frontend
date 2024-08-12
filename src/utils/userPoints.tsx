@@ -1,9 +1,7 @@
-function getUserPoints(){
+export function getUserPoints(){
     return {
-      totalPoints: 0,
-      currentPoints: 0,
-      pointsPercent: 0
+      totalPoints: 10,
+      pointsIncrease: 1,
+      pointsPercentIncrease: 10
     }
 }
-
-export { getUserPoints };
