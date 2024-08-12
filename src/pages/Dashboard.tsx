@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CardItem from '../components/common/CardItem';
 import SetionTitle from '../components/common/SetionTitle';
 import { formatNumber } from '../utils/functions';
@@ -7,7 +7,7 @@ import Navbar from '../layouts/Navbar';
 import PositionBar from '../components/dashboard/PositionBar';
 import Modal from '../components/common/Modal';
 
-import { ModalType, UserPositionsData } from '../utils/types';
+import { ModalType } from '../utils/types';
 
 import { useUserPositionsData, useUserWalletBalance } from '../utils/userState';
 import { getUserPoints } from '../utils/userPoints';

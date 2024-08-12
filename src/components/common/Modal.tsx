@@ -6,10 +6,10 @@ import ProgressBar from '../common/PercentBar';
 import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { erc20Abi } from 'viem'
 
-import { ModalProps, UserPositionsData } from '../../utils/types';
+import { ModalProps } from '../../utils/types';
 import { contracts, tokenNameMap, tokenDecimalsMap, iconsMap, abis, ltvMap } from '../../utils/tokens';
 
-import { useProtocolReservesData, useProtocolInterestRate, useProtocolPriceData, useProtocolAssetReserveData } from '../../utils/protocolState';
+import { useProtocolInterestRate, useProtocolPriceData, useProtocolAssetReserveData } from '../../utils/protocolState';
 import { useUserPositionsData } from '../../utils/userState' 
 
 function Modal({ token, modalType, onClose }: ModalProps) {
@@ -47,7 +47,6 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     - selecting amount from borrow position
   */
 
-  const { reserveDataMap } = useProtocolReservesData()
   const { priceDataMap } = useProtocolPriceData()
   const { interestRateDataMap } = useProtocolInterestRate();
 
@@ -151,6 +150,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
       functionName: modalType,
       args: functionParams[modalType]
     })
+    console.log(hash)
   }
 
   return (
