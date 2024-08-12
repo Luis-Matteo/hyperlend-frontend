@@ -6,10 +6,10 @@ import ProgressBar from '../common/PercentBar';
 import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { erc20Abi } from 'viem'
 
-import { ModalProps, UserPositionData } from '../../utils/types';
-import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap, abis } from '../../utils/tokens';
+import { ModalProps, UserPositionsData } from '../../utils/types';
+import { contracts, tokenNameMap, tokenDecimalsMap, iconsMap, abis, ltvMap } from '../../utils/tokens';
 
-import { useProtocolReservesData, useProtocolPriceData, useProtocolInterestRate } from '../../utils/protocolState';
+import { useProtocolReservesData, useProtocolInterestRate, useProtocolPriceData } from '../../utils/protocolState';
 import { useUserPositionsData } from '../../utils/userState' 
 
 function Modal({ token, modalType, onClose }: ModalProps) {
@@ -39,40 +39,19 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   /*
   supply:
     - selecting amount from wallet
-    
   withdraw:
     - selecting amount from supply position
-
   borrow:
     - selecting amount from max available to borrow
-
   repay:
     - selecting amount from borrow position
   */
 
   const { reserveDataMap } = useProtocolReservesData()
+  const { priceDataMap } = useProtocolPriceData()
   const { interestRateDataMap } = useProtocolInterestRate();
   const userPositionsData = useUserPositionsData();
 
-  const getAmount = () => {
-    const userTokenSuppliedPosition = userPositionsData?.supplied.find(e => e.underlyingAsset == token);
-    const userBorrowLimit = 0;
-
-    switch(modalType){
-      case "supply":
-        const normalizedWalletBalance = (userWalletBalance as any / Math.pow(10, tokenDecimalsMap[token]))
-        setAvailableBalance(normalizedWalletBalance)
-        break;
-      case "withdraw":
-        setAvailableBalance(userTokenSuppliedPosition ? userTokenSuppliedPosition.balance : 0)
-        break;
-      case "borrow":
-        setAvailableBalance(userBorrowLimit)
-        break;
-      case "repay":
-        break;
-    }
-  }
   const [amount, setAmount] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
   const percentList = [25, 50, 75, 100]
@@ -81,17 +60,51 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const [allowance, setAllowance] = useState<number>(0)
   const [predictedHealth, setPredictedHealth] = useState<number>(0)
 
-  const healthFactor = userPositionsData ? userPositionsData.healthFactor : 0
+  const getBorrowLimit = () => {
+    const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8)
+    const borrowAvailableTokens = (userPositionsData?.totalBorrowLimit || 0) / tokenPriceUsd
+    return borrowAvailableTokens;
+  }
+
+  const updateAvailableAmount = () => {
+    const userTokenSuppliedPosition = userPositionsData?.supplied.find(e => e.underlyingAsset == token);
+    const userTokenBorrowedPosition = userPositionsData?.borrowed.find(e => e.underlyingAsset == token);
+    const userBorrowLimitToken = getBorrowLimit();
+
+    switch(modalType){
+      case "supply":
+        const normalizedWalletBalance = (Number(userWalletBalance) / Math.pow(10, tokenDecimalsMap[token]))
+        setAvailableBalance(normalizedWalletBalance)
+        break;
+      case "withdraw":
+        setAvailableBalance(userTokenSuppliedPosition?.balance || 0)
+        break;
+      case "borrow":
+        setAvailableBalance(userBorrowLimitToken)
+        break;
+      case "repay":
+        setAvailableBalance(userTokenBorrowedPosition?.balance || 0)
+        break;
+    }
+  }
 
   useEffect(() => {
-    if (userWalletBalance) {
-      setAvailableBalance(Number(userWalletBalance as any) / Math.pow(10, tokenDecimalsMap[token]));
-    }
+    updateAvailableAmount();
   }, []);
 
   useEffect(() => {
     if (amount != 0){
-        setPredictedHealth(1)
+      const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8)
+      const amountUsd = amount * tokenPriceUsd
+      //if we are borrowing/repaying, total borrow will change
+      const newTotalBorrow = modalType == "borrow" || modalType == "repay" 
+      ? ((userPositionsData?.totalBorrowUsd || 0) + amountUsd) : (userPositionsData?.totalBorrowUsd || 0)
+      //if we are supplying/withdrawing, total borrow limit will change
+      const newTotalBorrowLimit = modalType == "supply" || modalType == "withdraw" 
+      ? ((userPositionsData?.totalBorrowLimit || 0) + (amountUsd * ltvMap[token])) : (userPositionsData?.totalBorrowLimit || 0)
+
+      const newHealth = newTotalBorrow / newTotalBorrowLimit
+      setPredictedHealth(newHealth)
     }
   }, [amount])
 
@@ -100,8 +113,6 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     setAmount(availableBalance / 100 * Number(event.target.value))
     setAvailableBalance(Number(userWalletBalance as any) / Math.pow(10, tokenDecimalsMap[token]));
     setAllowance(Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]))
-
-    setPredictedHealth(1)
   };
 
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -110,7 +121,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     }
   };
 
-  const supplyTransaction = () => {
+  const sendTransaction = () => {
     const bgIntAmount = parseFloat((amount * Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0).toString() as any as bigint
 
     if (allowance < amount){
@@ -202,7 +213,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         <button className='w-full py-4 bg-secondary font-lufga rounded-xl font-bold mb-3'
           onClick={
           () => {
-            supplyTransaction()
+            sendTransaction()
           }
         }>
           {allowance >= amount ? (modalType == "supply" ? "Supply" : "Repay") : "Approve"}
@@ -222,9 +233,9 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             <p className='font-lufga text-[#797979] text-xs'>Health</p>
             <p className='font-lufga text-warning text-xs'>{
               predictedHealth ? 
-              formatNumber(healthFactor, 2) + "% → " + formatNumber(predictedHealth, 2) + "%"
+              formatNumber(userPositionsData?.healthFactor || 0, 2) + "% → " + formatNumber(predictedHealth, 2) + "%"
               :
-              formatNumber(healthFactor, 2) + "%"
+              formatNumber(userPositionsData?.healthFactor || 0, 2) + "%"
             }</p>
           </div>
           <div className='flex justify-between'>

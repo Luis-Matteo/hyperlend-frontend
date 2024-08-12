@@ -4,7 +4,7 @@ import CardItem from '../components/common/CardItem';
 import { assets } from '../utils/mock';
 import { formatNumber, formatUnit } from '../utils/functions';
 import Navbar from '../layouts/Navbar';
-import Modal from '../components/lend-borrow/Modal';
+import Modal from '../components/common/Modal';
 import { useAccount, useReadContract } from 'wagmi'
 import { erc20Abi } from 'viem'
 
@@ -106,7 +106,10 @@ function LendBorrow() {
       </div>
       {
         modalStatus &&
-        <Modal onClose={closeModal} />
+        <Modal 
+        token={"0xdac17f958d2ee523a2206206994597c13d831ec7"}
+        modalType={"supply"}
+        onClose={closeModal} />
       }
     </>
   );

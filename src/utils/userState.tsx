@@ -1,12 +1,11 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
-
 import { useAccount, useReadContract } from 'wagmi'
 import { erc20Abi } from 'viem'
 
-import { Reserve, UserReserveData, UserPositionData, UserPositionsData } from '../utils/types'
+import { calculateApy } from './functions';
+import { UserReserveData, UserPositionData, UserPositionsData } from '../utils/types'
 import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap, abis } from './tokens';
 
-import { useProtocolReservesData, useProtocolPriceData, useProtocolInterestRate } from './protocolState';
+import { useProtocolReservesData, useProtocolPriceData } from './protocolState';
 
 export function useUserPositionsData(): UserPositionsData | null {
   const { reserveDataMap } = useProtocolReservesData()
@@ -18,8 +17,8 @@ export function useUserPositionsData(): UserPositionsData | null {
     const balanceNormalized = Number(e.scaledATokenBalance) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
     const priceUsd = Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
     const valueUsd = priceUsd * balanceNormalized;
-    const apr =(Math.pow(Number(reserveDataMap[e.underlyingAsset].currentLiquidityRate) / 1e27 + 1, 365) - 1) *100;
-
+    const apr = calculateApy(Number(reserveDataMap[e.underlyingAsset].currentLiquidityRate));
+    
     return {
       underlyingAsset: e.underlyingAsset,
       assetName: tokenNameMap[e.underlyingAsset],
@@ -36,7 +35,7 @@ export function useUserPositionsData(): UserPositionsData | null {
     const balanceNormalized = Number(e.scaledVariableDebt) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
     const priceUsd = Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
     const valueUsd = priceUsd * balanceNormalized;
-    const apr =(Math.pow(Number(reserveDataMap[e.underlyingAsset].currentVariableBorrowRate) / 1e27 + 1, 365) - 1) *100;
+    const apr = calculateApy(Number(reserveDataMap[e.underlyingAsset].currentVariableBorrowRate))
 
     return {
       underlyingAsset: e.underlyingAsset,

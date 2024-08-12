@@ -40,4 +40,13 @@ export function capitalizeString(s: string){
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-export { formatNumber, formatAddress, formatUnit };
+function calculateApy(currentRate: number){
+  const secondsPerYear = 31556926
+  const borrowPatePerSecond = currentRate / 1e27
+  const borrowRatePerYear = borrowPatePerSecond * secondsPerYear
+  const apy = (1 + borrowRatePerYear)**(1/365) - 1
+  const apyPercentage = apy * 100
+  return apyPercentage
+}
+
+export { formatNumber, formatAddress, formatUnit, calculateApy };

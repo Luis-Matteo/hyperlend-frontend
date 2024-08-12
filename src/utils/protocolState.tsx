@@ -1,8 +1,8 @@
 import { useMemo, useCallback } from 'react';
-import { useAccount, useReadContract, useReadContracts } from 'wagmi'
+import { useReadContracts } from 'wagmi'
 
+import { calculateApy } from './functions';
 import { Reserve, ReservesData } from '../utils/types'
-
 import { contracts, assetAddresses, abis } from './tokens';
 
 export function useProtocolReservesData(): ReservesData {
@@ -80,9 +80,10 @@ export function useProtocolInterestRate(){
     return assetAddresses.reduce((acc, asset, index) => {
       const result = interestRateDataResults[index]
       if (result && result.status === 'success') {
+
         acc[asset] = {
-          supplyInterest: (Math.pow((Number((reserveDataMap[asset] as any).currentLiquidityRate) / 1e27) + 1, 365) - 1) * 100,
-          borrowInterest: (Math.pow((Number((reserveDataMap[asset] as any).currentVariableBorrowRate) / 1e27) + 1, 365) - 1) * 100
+          supply: calculateApy(Number((reserveDataMap[asset] as any).currentLiquidityRate)),
+          borrow: calculateApy(Number((reserveDataMap[asset] as any).currentVariableBorrowRate))
         }
       } else {
         console.error(`Failed to get interest rate data for asset: ${asset}`);
