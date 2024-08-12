@@ -64,7 +64,8 @@ function getUserReserves(){
         value: (Number(priceDataMap[e.underlyingAsset]) / Math.pow(10, 8)) * (Number(e.scaledATokenBalance) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset])),
         apr: (Math.pow((Number((reserveDataMap[e.underlyingAsset] as any).currentLiquidityRate) / 1e27) + 1, 365) - 1) * 100,
         collateral: -948561,
-        icon: iconsMap[tokenNameMap[e.underlyingAsset]]
+        icon: iconsMap[tokenNameMap[e.underlyingAsset]],
+        isCollateralEnabled: e.usageAsCollateralEnabledOnUser
       }
     }) : []
 

@@ -11,13 +11,16 @@ import { getUserReserves, getUserWalletBalance } from '../utils/userState';
 import { getUserPoints } from '../utils/userPoints';
 
 function Dashboard() {
-  const { supplied, borrowed, totalBalance, totalSupply, totalBorrow, totalBorrowLimit, totalBalanceChange, totalBalanceChangePercentage } = getUserReserves()
+  const { 
+    supplied, borrowed, totalBalance, totalSupply, totalBorrow, totalBorrowLimit, totalBalanceChange, totalBalanceChangePercentage 
+  } = getUserReserves()
   const { totalPoints, currentPoints, pointsPercent } = getUserPoints()
 
   const { walletBalanceValue } = getUserWalletBalance()
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
   const [modalToken, setModalToken] = useState<string>("")
+  const [modalSide, setModalSide] = useState<boolean>(true)
   const closeModal = () => setModalStatus(false);
 
   return (
@@ -134,16 +137,15 @@ function Dashboard() {
                           {formatNumber(item.apr, 2)}
                           %
                         </div>
-                        <div className="text-success font-lufga">
-                          {/* {`${item.feesEarned >= 0 ? '+' : '-'}`}
-                        $
-                        {formatNumber(Math.abs(item.feesEarned), 4)} */}
+                        <div className={item.isCollateralEnabled ? "text-success font-lufga" : "text-secondary font-lufga"}>
+                          { item.isCollateralEnabled ? "✓" : "─"}
                         </div>
                         <button className="text-success font-lufga"
                         onClick={
                           () => {
                             setModalStatus(true)
                             setModalToken(item.underlyingAsset)
+                            setModalSide(true)
                           }
                         }>
                         Supply
@@ -181,7 +183,18 @@ function Dashboard() {
                           %
                         </div>
                         <div className="text-success font-lufga">{item.pool || "Core"}</div>
-                        <div className="text-success font-lufga">Repay</div>
+                        <div>
+                        <button className="text-success font-lufga"
+                          onClick={
+                            () => {
+                              setModalStatus(true)
+                              setModalToken(item.underlyingAsset)
+                              setModalSide(false)
+                            }
+                          }>
+                          Repay
+                        </button>
+                        </div>
                       </div>
                     ))
                   }
@@ -195,8 +208,9 @@ function Dashboard() {
     {
       modalStatus &&
       <Modal 
-        token={modalToken} 
-        onClose={closeModal} 
+        token={modalToken}
+        isSupply={modalSide}
+        onClose={closeModal}
       />
     }
     </>

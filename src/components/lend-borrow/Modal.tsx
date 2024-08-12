@@ -11,21 +11,25 @@ import { erc20Abi } from 'viem'
 
 interface ModalProps {
     token: string,
+    isSupply: boolean,
     onClose: () => void;
 }
 
 import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap } from '../../utils/tokens';
 import { getInterestRate } from '../../utils/protocolState';
+import { getUserReserves } from '../../utils/userState' 
 
-function Modal({ token, onClose }: ModalProps) {
+function Modal({ token, isSupply, onClose }: ModalProps) {
     const [amount, setAmount] = useState<number>(0);
     const [progress, setProgress] = useState<number>(0);
     const percentList = [25, 50, 75, 100]
 
     const [availableBalance, setAvailableBalance] = useState<number>(0)
     const [allowance, setAllowance] = useState<number>(0)
+    const [predictedHealth, setPredictedHealth] = useState<number>(0)
 
-    const { supplyInterest } = getInterestRate()
+    const { supplyInterest, borrowInterest } = getInterestRate()
+    const { healthFactor } = getUserReserves()
 
     const { data: hash, writeContractAsync } = useWriteContract()
     const { address, isConnected } = useAccount();
@@ -57,11 +61,19 @@ function Modal({ token, onClose }: ModalProps) {
         }
     }, []);
 
+    useEffect(() => {
+        if (amount != 0){
+            setPredictedHealth(1)
+        }
+    }, [amount])
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setProgress(Number(event.target.value));
         setAmount(availableBalance / 100 * Number(event.target.value))
         setAvailableBalance(Number(userWalletBalance as any) / Math.pow(10, tokenDecimalsMap[token]));
         setAllowance(Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]))
+
+        setPredictedHealth(1)
     };
 
     const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -83,11 +95,14 @@ function Modal({ token, onClose }: ModalProps) {
         setAllowance(Number(amount) / Math.pow(10, tokenDecimalsMap[token]))
       }
 
+      const functionName = isSupply ? "supply" : "repay"
+      const functionParams =  isSupply ? [token, bgIntAmount, address, 0] : [token, bgIntAmount, 2, address]
+
       writeContractAsync({
         address: contracts.pool,
         abi: PoolAbi,
-        functionName: 'supply',
-        args: [token,amount, address, 0],
+        functionName: functionName,
+        args: functionParams
       })
     }
 
@@ -98,7 +113,7 @@ function Modal({ token, onClose }: ModalProps) {
             <div
                 className="px-6 py-4 bg-primary-light rounded-2xl">
                 <div className="flex justify-between items-center mb-6">
-                    <p className="font-lufga font-light text-[#797979]">You Supply</p>
+                    <p className="font-lufga font-light text-[#797979]">You {isSupply ? "Supply" : "Repay"}</p>
                     <button className="" onClick={onClose}>
                         <img src={xmarkIcon} alt="" />
                     </button>
@@ -109,7 +124,7 @@ function Modal({ token, onClose }: ModalProps) {
                             <img src={iconsMap[tokenNameMap[token]]} width="30px" height="30px" alt=""/>
                             <div className=''>
                                 <p className='text-white font-lufga'>{tokenNameMap[token]}</p>
-                                <p className='text-success text-xs font-lufga'>{supplyInterest[token]}% APY</p>
+                                <p className='text-success text-xs font-lufga'>{isSupply ? formatNumber(supplyInterest[token], 2) : formatNumber(borrowInterest[token], 2)}% APY</p>
                             </div>
                         </div>
                         <p className='text-xl text-secondary'>
@@ -123,7 +138,10 @@ function Modal({ token, onClose }: ModalProps) {
                                 percentList.map((item) => (
                                     <button className='px-2 py-0.5 bg-[#081916] rounded-full'
                                         key={item}
-                                        onClick={() => setAmount(availableBalance / 100 * item)}>
+                                        onClick={() => {
+                                            setAmount(availableBalance / 100 * item)
+                                            setProgress(item)
+                                        }}>
                                         <p className='text-[#797979] text-xs font-lufga'>{item === 100 ? "MAX" : `${item}%`}</p>
                                     </button>
                                 ))
@@ -155,7 +173,7 @@ function Modal({ token, onClose }: ModalProps) {
                    supplyTransaction()
                 }
                 }>
-                    {allowance >= amount ? "Supply" : "Approve"}
+                    {allowance >= amount ? (isSupply ? "Supply" : "Repay") : "Approve"}
                 </button>
                 <div className='flex justify-end mb-6'>
                     <button className='px-3 py-1.5 flex gap-2 items-center bg-[#050F0D] rounded-full'>
@@ -165,12 +183,17 @@ function Modal({ token, onClose }: ModalProps) {
                 </div>
                 <div className='flex flex-col gap-3'>
                     <div className='flex justify-between'>
-                        <p className='font-lufga text-[#797979] text-xs'>Your amount</p>
-                        <p className='font-lufga text-white text-xs'>0 {tokenNameMap[token]}</p>
+                        <p className='font-lufga text-[#797979] text-xs'>{isSupply ? "Supply" : "Borrow"} APY</p>
+                        <p className='font-lufga text-white text-xs'>{isSupply ? formatNumber(supplyInterest[token], 2) : formatNumber(borrowInterest[token], 2)}%</p>
                     </div>
                     <div className='flex justify-between'>
                         <p className='font-lufga text-[#797979] text-xs'>Health</p>
-                        <p className='font-lufga text-warning text-xs'>38.11%</p>
+                        <p className='font-lufga text-warning text-xs'>{
+                          predictedHealth ? 
+                          formatNumber(healthFactor, 2) + "% → " + formatNumber(predictedHealth, 2) + "%"
+                          :
+                          formatNumber(healthFactor, 2) + "%"
+                        }</p>
                     </div>
                     <div className='flex justify-between'>
                         <p className='font-lufga text-[#797979] text-xs'>Pool size</p>
