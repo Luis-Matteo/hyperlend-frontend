@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CardItem from '../components/common/CardItem';
 import SetionTitle from '../components/common/SetionTitle';
 import { formatNumber } from '../utils/functions';
@@ -10,7 +10,7 @@ import { useSwitchChain, useAccount, useWriteContract } from 'wagmi'
 
 import { ModalType } from '../utils/types';
 
-import { contracts, tokenDecimalsMap, abis } from '../utils/tokens';
+import { contracts, abis } from '../utils/tokens';
 import { useUserPositionsData, useUserWalletBalance } from '../utils/userState';
 import { getUserPoints } from '../utils/userPoints';
 
@@ -18,12 +18,27 @@ function Dashboard() {
   const { data: hash, writeContractAsync } = useWriteContract()
   const { switchChain } = useSwitchChain()
   const account = useAccount()
-  if (account.isConnected && account.chainId != 42161){
-    switchChain({chainId: 42161})
-  }
 
-  const positions = useUserPositionsData()
-  if (!positions) return <div></div>
+  useEffect(() => {
+    if (account.isConnected && account.chainId !== 42161) {
+      switchChain({ chainId: 42161 });
+    }
+  }, [account.isConnected, account.chainId, switchChain]);
+
+  let positions = useUserPositionsData()
+  if (!positions){
+    positions = {
+      supplied: [],
+      borrowed: [],
+      totalSupplyUsd: 0,
+      totalBorrowUsd: 0,
+      totalBalanceUsd: 0,
+      totalBorrowLimit: 0,
+      healthFactor: 0,
+      totalBalanceChange: 0,
+      totalBalanceChangePercentage: 0,
+    }
+  }
 
   const {
     supplied, borrowed, 

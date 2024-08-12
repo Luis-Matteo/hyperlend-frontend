@@ -15,7 +15,7 @@ import { useUserPositionsData } from '../../utils/userState'
 function Modal({ token, modalType, onClose }: ModalProps) {
   const { address, isConnected } = useAccount();
   const { data: hash, writeContractAsync } = useWriteContract()
-
+  
   const { data: userWalletBalance } = useReadContract(
     isConnected && address?
     {
