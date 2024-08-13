@@ -67,7 +67,8 @@ export function decodeConfig(configNumber: bigint){
   // bit 152-167: liquidation protocol fee
   // bit 168-175: eMode category
   // bit 176-211: unbacked mint cap in whole tokens, 0 ⇒ no cap
-  // bit 212-251: debt ceiling for isolation mode with decimals bit 252-255: unused
+  // bit 212-251: debt ceiling for isolation mode with decimals 
+  // bit 252-255: unused
 
   const ltv = Number(extractBits(configNumber, 0, 16));
   const liquidationThreshold = Number(extractBits(configNumber, 16, 16));

@@ -68,8 +68,8 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   }
 
   const getPrecision = () => {
-    const minAmountStr = (1 / (Number(priceDataMap[token]) / Math.pow(10, 8)) / 100).toFixed(20).toString() //amount of token, with $0.01
-    const match = minAmountStr.replace(".", "").match(/^0+/)
+    const minAmountStr = (1 / (Number(priceDataMap[token]) / Math.pow(10, 8)) / 100).toFixed(20).toString() //amount of token, worth $0.01
+    const match = minAmountStr.replace(".", "").match(/^0+/) 
     return match ? match[0].length : 2
   }
 
@@ -103,7 +103,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   useEffect(() => {
     if (amount != 0){
       const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8)
-      const amountUsd = amount * tokenPriceUsd
+      const amountUsd = amount * tokenPriceUsd * (modalType == "repay" ? -1 : 1)
       //if we are borrowing/repaying, total borrow will change
       const newTotalBorrow = modalType == "borrow" || modalType == "repay" 
       ? ((userPositionsData?.totalBorrowUsd || 0) + amountUsd) : (userPositionsData?.totalBorrowUsd || 0)
@@ -213,7 +213,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         <div className='mb-6'>
           <div className='flex justify-between mb-2'>
             <p className="font-lufga font-light text-[#797979]">Available</p>
-            <p className="font-lufga font-light text-[#797979]">${formatNumber(availableBalance, getPrecision())}</p>
+            <p className="font-lufga font-light text-[#797979]">{formatNumber(availableBalance, getPrecision())}</p>
           </div>
           <div className='relative '>
             <ProgressBar
