@@ -2,7 +2,7 @@ import {
   BrowserRouter, Navigate, Route, Routes,
 } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
-import LendBorrow from '../pages/LendBorrow';
+import Markets from '../pages/Markets';
 import backgroundImage from '../assets/img/background.svg';
 import Sidebar from '../layouts/Sidebar';
 
@@ -11,11 +11,11 @@ function Router() {
     <BrowserRouter>
       <Sidebar />
       <main className="bg-primary-light flex-1 relative">
-        <div className="relative h-screen p-14 z-20">
+        <div className="relative px-4 py-12 sm:p-14 z-20 ">
           <Routes>
             <Route path="/" element={<Navigate to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="lend-and-borrow" element={<LendBorrow />} />
+            <Route path="markets" element={<Markets />} />
           </Routes>
         </div>
         <div className="absolute top-0 right-0 h-full z-10">
