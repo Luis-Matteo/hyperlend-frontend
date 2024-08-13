@@ -11,7 +11,7 @@ function Router() {
     <BrowserRouter>
       <Sidebar />
       <main className="bg-primary-light flex-1 relative">
-        <div className="relative h-screen p-14 z-20">
+        <div className="relative px-4 py-12 sm:p-14 z-20 ">
           <Routes>
             <Route path="/" element={<Navigate to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />

@@ -115,10 +115,10 @@ const borrowed = [
 
 const assets = [
   {
-    assets: 'Bitcoin | BTC',
+    assets: 'Bitcoin | BTC',  
     totalSupplied: 94561616,
     supplyApy: 15615,
-    totalBorrowed: 891.9815651,
+    totalBorrowed: 891.9815651, 
     variable: 2.641,
     status: 'borrow',
   },

@@ -12,7 +12,7 @@ type MarketControlProps = {
 }
 function MarketControl({ status, setStatus, stable, setStable, setSearchText }: MarketControlProps) {
   return (
-    <div className="pt-16">
+    <div className="pt-16 pb-4">
       <CardItem
         className="py-3 px-6 flex justify-between items-center"
       >
@@ -31,7 +31,7 @@ function MarketControl({ status, setStatus, stable, setStable, setSearchText }: 
             Isolated
           </button>
         </div>
-        <div className="bg-[#081916] rounded-full flex gap-2">
+        <div className="bg-[#081916] rounded-full hidden md:flex gap-2">
           <div className="p-2 rounded-full">
             <img src={magnifyIcon} alt="" />
           </div>
@@ -53,6 +53,17 @@ function MarketControl({ status, setStatus, stable, setStable, setSearchText }: 
             </button>
             <p className="text-bold text-white font-bold">Stablecoins</p>
           </div>
+          {/* <div className="flex gap-3">
+            <button
+              type="button"
+              className="p-0.5 bg-[#081916] rounded-full flex items-center"
+              onClick={() => setPersonal((prev) => !prev)}
+            >
+              <div className={`p-2 rounded-full ${personal && 'bg-secondary'}`} />
+              <div className={`p-2 rounded-full ${!personal && 'bg-secondary'}`} />
+            </button>
+            <p className="text-bold text-white font-bold">Personal Positions</p>
+          </div> */}
         </div>
       </CardItem>
     </div>
