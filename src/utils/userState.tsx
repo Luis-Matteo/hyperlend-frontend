@@ -158,11 +158,10 @@ export function useGetUserBalanceHistory(address: `0x${string}` | undefined){
     fetch('http://localhost:3000/data/user/valueChange?address=' + address)
       .then(response => response.json())
       .then(json => {
-        console.log(json)
         setData({
           address: address,
-          totalBalanceChange: json.totalBalanceChange,
-          totalBalanceChangePercentage: json.totalBalanceChangePercentage
+          totalBalanceChange: json?.totalBalanceChange,
+          totalBalanceChangePercentage: json?.totalBalanceChangePercentage
         })
       })
       .catch(error => console.error(error));

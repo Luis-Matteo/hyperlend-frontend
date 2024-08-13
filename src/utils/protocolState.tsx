@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react';
-import { useReadContracts, useAccount, useReadContract } from 'wagmi'
+import { useReadContracts, useReadContract } from 'wagmi'
 
 import { calculateApy } from './functions';
 import { Reserve, ReservesData } from '../utils/types'
