@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAccount, useReadContract } from 'wagmi'
 import { erc20Abi } from 'viem'
 
-import { calculateApy } from './functions';
+import { calculateApy, padArray } from './functions';
 import { UserReserveData, UserPositionData, UserPositionsData } from '../utils/types'
 import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap, abis } from './tokens';
 
@@ -175,6 +175,6 @@ export function useUserPortfolioHistory(address: `0x${string}` | undefined, isCo
   }, [address, isConnected]);
 
   return {
-    historicalNetWorth: data || [],
+    historicalNetWorth: padArray(data, 168, {usdValue: 0}) || [],
   }
 }

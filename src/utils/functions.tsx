@@ -120,4 +120,14 @@ export function filterString(inputString: string, searchPhrase: string) {
   return inputString.toLowerCase().includes(searchPhrase.toLowerCase())
 }
 
+export function padArray(arr: any, x: any, defaultValue: any) {
+  const paddingNeeded = x - arr.length;
+  
+  if (paddingNeeded > 0) {
+      const paddingArray = new Array(paddingNeeded).fill(defaultValue);
+      return arr.concat(paddingArray);
+  }
+  return arr;
+}
+
 export { formatNumber, formatAddress, formatUnit, calculateApy };
