@@ -18,25 +18,23 @@ import Gauge from '../components/dashboard/Gauge';
 function Dashboard() {
   const { data: hash, writeContractAsync } = useWriteContract()
   const { switchChain } = useSwitchChain()
-  const account = useAccount()
+  const { address, chainId, isConnected } = useAccount()
 
   useEffect(() => {
-    if (account.isConnected && account.chainId != 42161) {
+    if (isConnected && chainId != 42161) {
       switchChain({ chainId: 42161 });
     }
-  }, [account])
-
-  const positions = useUserPositionsData()
-  const { historicalNetWorth } = useUserPortfolioHistory(account.address)
+  }, [isConnected, chainId])
 
   const {
     supplied, borrowed,
     totalBalanceUsd, totalSupplyUsd, totalBorrowUsd,
     totalBorrowLimit, totalBalanceChange, totalBalanceChangePercentage
-  } = positions
+  } = useUserPositionsData(isConnected, address)
 
   const { totalPoints, pointsIncrease, pointsPercentIncrease } = getUserPoints()
   const { walletBalanceValue } = useUserWalletBalance()
+  const { historicalNetWorth } = useUserPortfolioHistory(address, isConnected)
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
   const [modalToken, setModalToken] = useState<string>("")

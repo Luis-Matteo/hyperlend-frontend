@@ -8,8 +8,7 @@ import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, lt
 
 import { useProtocolReservesData, useProtocolPriceData } from './protocolState';
 
-export function useUserPositionsData(): UserPositionsData {
-  const { address, isConnected } = useAccount()
+export function useUserPositionsData(isConnected: boolean, address: `0x${string}` | undefined): UserPositionsData {
   const { reserveDataMap } = useProtocolReservesData()
   const { priceDataMap } = useProtocolPriceData()
   const { totalBalanceChange, totalBalanceChangePercentage } = useGetUserBalanceHistory(address)
@@ -163,7 +162,7 @@ export function useGetUserBalanceHistory(address: `0x${string}` | undefined) {
   }
 }
 
-export function useUserPortfolioHistory(address: `0x${string}` | undefined){
+export function useUserPortfolioHistory(address: `0x${string}` | undefined, isConnected: boolean){
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
@@ -173,7 +172,7 @@ export function useUserPortfolioHistory(address: `0x${string}` | undefined){
         setData(json ? json.map((e: any) => e.usdValue) : [])
       })
       .catch(error => console.error(error));
-  }, []);
+  }, [address, isConnected]);
 
   return {
     historicalNetWorth: data || [],
