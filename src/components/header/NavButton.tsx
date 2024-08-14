@@ -38,15 +38,24 @@ function NavButton({
 
   return (
     <button
-      className={`flex items-center gap-2 ${currentRoute === url ? 'bg-secondary p-1 rounded-full' : ''}`}
+      className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform ${currentRoute === url ? 'bg-secondary p-1 rounded-full' : ''
+        }`}
       onClick={() => navigate(url)}
       key={id}
       type="button"
     >
-      <div className={`${currentRoute === url ? 'p-2 bg-grey rounded-full' : 'px-3'}`}>
+      <div
+        className={`transition-all duration-300 ease-in-out transform ${currentRoute === url ? 'p-2 bg-grey rounded-full' : 'px-3'
+          }`}
+      >
         <img src={icon} className="w-5" alt={title} />
       </div>
-      <p className={`font-lufga font-medium ${currentRoute === url ? '' : 'text-secondary'}`}>{title}</p>
+      <p
+        className={`font-lufga font-medium transition-colors duration-300 ease-in-out ${currentRoute === url ? '' : 'text-secondary'
+          }`}
+      >
+        {title}
+      </p>
     </button>
   );
 }

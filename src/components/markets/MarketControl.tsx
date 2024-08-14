@@ -16,20 +16,24 @@ function MarketControl({ status, setStatus, stable, setStable, setSearchText }: 
       <CardItem
         className="py-3 px-6 flex justify-between items-center"
       >
-        <div className="bg-[#081916] rounded-full">
+        <div className="bg-[#081916] rounded-full p-1">
           <button
             type="button"
-            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold ${status === 'core' ? 'bg-secondary' : 'text-white'}`}
+            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold transition-all duration-500 ${status === 'core'
+              ? 'bg-secondary'
+              : ' text-white'
+              }`}
             onClick={() => setStatus('core')}
           >
             Core
           </button>
           <button
             type="button"
-            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold ${status === 'isolated' ? 'bg-secondary' : 'text-white'}`}
-            style={{
-              color: "#36454F"
-            }}
+            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold transition-all duration-500 ${status === 'isolated'
+              ? 'bg-secondary'
+              : ' text-white'
+              }`}
+            onClick={() => setStatus('isolated')}
           >
             Isolated
           </button>
@@ -51,8 +55,14 @@ function MarketControl({ status, setStatus, stable, setStable, setSearchText }: 
               className="p-0.5 bg-[#081916] rounded-full flex items-center"
               onClick={() => setStable((prev) => !prev)}
             >
-              <div className={`p-2 rounded-full ${stable && 'bg-secondary'}`} />
-              <div className={`p-2 rounded-full ${!stable && 'bg-secondary'}`} />
+              <div
+                className={`p-2 rounded-full transition-all duration-500 ${stable ? 'bg-secondary translate-x-0' : 'bg-transparent translate-x-full'
+                  }`}
+              />
+              <div
+                className={`p-2 rounded-full transition-all duration-500 ${!stable ? 'bg-secondary translate-x-0' : 'bg-transparent -translate-x-full'
+                  }`}
+              />
             </button>
             <p className="text-bold text-white font-bold">Stablecoins</p>
           </div>

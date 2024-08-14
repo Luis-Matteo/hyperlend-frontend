@@ -12,7 +12,9 @@ import { ModalType } from '../utils/types';
 
 import { contracts, abis } from '../utils/tokens';
 import { useUserPositionsData, useUserWalletBalance } from '../utils/userState';
-import { getUserPoints } from '../utils/userPoints';
+import { getUserPoints, getUserPortfolio } from '../utils/userPoints';
+import MyChart from '../components/dashboard/Chart';
+import Gauge from '../components/dashboard/Gauge';
 
 function Dashboard() {
   const { data: hash, writeContractAsync } = useWriteContract()
@@ -25,7 +27,9 @@ function Dashboard() {
     }
   }, [])
 
-  let positions = useUserPositionsData() 
+  let positions = useUserPositionsData()
+  const mockPortfolio = getUserPortfolio()
+
   const {
     supplied, borrowed,
     totalBalanceUsd, totalSupplyUsd, totalBorrowUsd,
@@ -49,6 +53,7 @@ function Dashboard() {
     })
     console.log(hash)
   }
+  console.log(mockPortfolio)
 
   return (
     <>
@@ -65,6 +70,9 @@ function Dashboard() {
                 <SectionTitle
                   title="Health Factor"
                 />
+                <div className='flex text-center justify-center items-center'>
+                  <Gauge value={1.2} maxValue={10} size={300} strokeWidth={15} />
+                </div>
               </div>
             </CardItem>
             <CardItem
@@ -93,7 +101,7 @@ function Dashboard() {
             className="py-6 px-7"
           >
 
-            <div className="flex gap-32 justify-between">
+            <div className="flex gap-4 justify-between items-center">
               <div className="flex flex-col gap-4">
                 <SectionTitle
                   title="Current Net Worth"
@@ -130,8 +138,8 @@ function Dashboard() {
                   %)
                 </p>
               </div>
-              <div className="pt-12 ">
-                <img src={graphMockImage} alt="" />
+              <div className=''>
+                <MyChart />
               </div>
             </div>
           </CardItem>
