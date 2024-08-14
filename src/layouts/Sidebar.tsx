@@ -36,9 +36,9 @@ function Sidebar() {
         <div className="">
           <button className="flex gap-4 items-center" type="button">
             <img className="" src={logoutIcon} alt="" />
-            <p className="font-lufga text-grey-light">
-              Logout
-            </p>
+            <a href='https://docs.hyperlend.finance' target="_blank"><p className="font-lufga text-grey-light">
+              Docs
+            </p></a>
           </button>
         </div>
       </div>
