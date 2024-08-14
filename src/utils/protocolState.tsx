@@ -17,7 +17,7 @@ export function useProtocolReservesData(): ReservesData {
 
   const getReservesData = useCallback(() => {
     if (!reserveDataResults) {
-      return assetAddresses.reduce((acc, asset, index) => {
+      return assetAddresses.reduce((acc, asset) => {
         acc[asset] = {
           aTokenAddress: "",
           accruedToTreasury: 0n,
@@ -67,7 +67,7 @@ export function useProtocolPriceData() {
 
   const getPricesData = useCallback(() => {
     if (!priceDataResults) {
-      return assetAddresses.reduce((acc, asset, index) => {
+      return assetAddresses.reduce((acc, asset) => {
         acc[asset] = 0n;
         return acc
       }, {} as Record<string, bigint>)
@@ -102,7 +102,7 @@ export function useProtocolInterestRate(){
 
   const getInterestRateData = useCallback(() => {
     if (!interestRateDataResults){
-      return assetAddresses.reduce((acc, asset, index) => {
+      return assetAddresses.reduce((acc, asset) => {
         acc[asset] = {
           supply: 0,
           borrow: 0
