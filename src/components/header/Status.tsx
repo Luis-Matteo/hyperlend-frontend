@@ -3,9 +3,8 @@ import { formatNumber } from '../../utils/functions';
 import ProgressBar from '../common/PercentBar';
 
 function Status() {
-  const progress = 50;
   return (
-    <div className="flex gap-4 pr-3">
+    <div className="flex gap-4 pr-3 blur-xs">
       <p className="text-grey-light font-lufga p-3 border-2 rounded-full text-lg h-14 aspect-square border-secondary text-center">
         {status.level}
       </p>
@@ -21,7 +20,7 @@ function Status() {
           {formatNumber(status.xp, 0)}
         </p>
         <div className="pt-2">
-          <ProgressBar progress={progress} className='h-1.5'/>
+          <ProgressBar progress={status.progress} className='h-1.5'/>
         </div>
       </div>
     </div>

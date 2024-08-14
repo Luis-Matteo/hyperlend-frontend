@@ -21,6 +21,9 @@ export default {
         success: '#2DC24E',
         warning:'#FFD542',
       },
+      blur: {
+        xs: '2px'
+      },
     },
   },
   plugins: [],

@@ -36,8 +36,6 @@ function Dashboard() {
   const { walletBalanceValue } = useUserWalletBalance()
   const { historicalNetWorth } = useUserPortfolioHistory(address, isConnected)
 
-  console.log(historicalNetWorth)
-
   const [modalStatus, setModalStatus] = useState<boolean>(false);
   const [modalToken, setModalToken] = useState<string>("")
   const [modalType, setModalType] = useState<ModalType>('supply')

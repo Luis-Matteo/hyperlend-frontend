@@ -1,12 +1,8 @@
 const status = {
-  level: 23,
-  xp: 12988,
-  currentPrice: -1200.7821,
-  pricePercent: -2.6461,
-  totalPoints: 894561,
-  currentPoints: 161.651,
-  pointsPercent: 89.4651,
-  currentBalance: 277308.00,
+  level: 0,
+  xp: 0,
+  totalPoints: 0,
+  progress: 0
 };
 
 const supplied = [
