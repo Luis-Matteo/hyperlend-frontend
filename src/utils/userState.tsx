@@ -19,11 +19,11 @@ export function useUserPositionsData(): UserPositionsData {
       address: contracts.uiPoolDataProvider,
       functionName: 'getUserReservesData',
       //use null address if wallet is not connected (fixes the white screen errror when connecting/disconnecting caused by "Rendered fewer hooks than expected")
-      args: [contracts.poolAddressesProvider, address || "0x0000000000000000000000000000000000000000"], 
-    } 
+      args: [contracts.poolAddressesProvider, address || "0x0000000000000000000000000000000000000000"],
+    }
   )
 
-  if (!isConnected || !address){
+  if (!isConnected || !address) {
     return {
       supplied: [],
       borrowed: [],
@@ -48,7 +48,7 @@ export function useUserPositionsData(): UserPositionsData {
       assetName: tokenNameMap[e.underlyingAsset],
       balance: balanceNormalized,
       value: valueUsd,
-      price: priceUsd, 
+      price: priceUsd,
       apr: apr,
       icon: iconsMap[tokenNameMap[e.underlyingAsset]],
       isCollateralEnabled: e.usageAsCollateralEnabledOnUser,
@@ -76,7 +76,7 @@ export function useUserPositionsData(): UserPositionsData {
   const totalBorrow = borrowed.reduce((partialSum: number, a: any) => partialSum + a.value, 0);
   const totalBorrowLimit = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * ltvMap[a.underlyingAsset]), 0);
 
-  return  {
+  return {
     supplied: supplied,
     borrowed: borrowed,
 
@@ -91,36 +91,36 @@ export function useUserPositionsData(): UserPositionsData {
   }
 }
 
-export function useUserWalletBalance(){
+export function useUserWalletBalance() {
   const { address, isConnected } = useAccount();
 
-  const balanceDataResults = assetAddresses.map(asset => 
+  const balanceDataResults = assetAddresses.map(asset =>
     useReadContract(
       isConnected && address
-      ?
-      {
-        abi: erc20Abi,
-        address: asset,
-        functionName: 'balanceOf',
-        args: [address],
-      } as any: undefined
+        ?
+        {
+          abi: erc20Abi,
+          address: asset,
+          functionName: 'balanceOf',
+          args: [address],
+        } as any : undefined
     )
   )
 
-  const priceDataResults = assetAddresses.map(asset => 
+  const priceDataResults = assetAddresses.map(asset =>
     useReadContract(
       isConnected && address
-      ?
-      {
-        abi: abis.oracle,
-        address: contracts.oracle,
-        functionName: 'getAssetPrice',
-        args: [asset],
-      } : undefined
+        ?
+        {
+          abi: abis.oracle,
+          address: contracts.oracle,
+          functionName: 'getAssetPrice',
+          args: [asset],
+        } : undefined
     )
   )
 
-  if (!isConnected || !address){
+  if (!isConnected || !address) {
     return { walletBalanceValue: 0 }
   }
 
@@ -141,7 +141,7 @@ export function useUserWalletBalance(){
   }
 }
 
-export function useGetUserBalanceHistory(address: `0x${string}` | undefined){
+export function useGetUserBalanceHistory(address: `0x${string}` | undefined) {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
