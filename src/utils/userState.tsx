@@ -175,6 +175,6 @@ export function useUserPortfolioHistory(address: `0x${string}` | undefined, isCo
   }, [address, isConnected]);
 
   return {
-    historicalNetWorth: padArray(data, 168, {usdValue: 0}) || [],
+    historicalNetWorth: padArray(data || [], 168, 0),
   }
 }
