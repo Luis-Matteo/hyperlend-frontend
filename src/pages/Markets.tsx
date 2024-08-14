@@ -94,9 +94,10 @@ function Markets() {
                 {
                   (getAssets() || []).map((item, key) => (
                     <div className="grid grid-cols-11 items-center py-[14px] px-2.5 border-b-[1px] border-[#212325]" key={key}>
-                      <div className="text-white font-lufga flex col-span-2">
-                        <img src={item.icon} alt="" width="30px" height="30px" /> &nbsp; 
-                        {item.name} | {item.symbol}
+                      <div className="text-white font-lufga flex items-center col-span-2 h-full">
+                        <div className="flex items-center h-full">
+                          <img src={item.icon} alt="" className="w-6 h-6 mr-2"/> {item.name} | {item.symbol}
+                        </div>
                       </div>
                       <div className="text-white font-lufga">
                         <p className="">
