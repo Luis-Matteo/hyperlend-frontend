@@ -4,7 +4,7 @@ import CardItem from '../components/common/CardItem';
 import { formatNumber, formatUnit } from '../utils/functions';
 import Navbar from '../layouts/Navbar';
 import Modal from '../components/common/Modal';
-import { useSwitchChain, useAccount, useWriteContract } from 'wagmi'
+import { useSwitchChain, useAccount } from 'wagmi'
 
 import { decodeConfig, filterString } from '../utils/functions';
 import { AssetDetail, ModalType } from '../utils/types';
