@@ -64,7 +64,8 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const getBorrowLimit = () => {
     const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8)
     const borrowAvailableTokens = (userPositionsData?.totalBorrowLimit || 0) / tokenPriceUsd
-    return borrowAvailableTokens;
+    const availableInPool = Number(assetReserveData.totalAToken) / Math.pow(10, tokenDecimalsMap[token])
+    return borrowAvailableTokens > availableInPool ? availableInPool : borrowAvailableTokens;
   }
 
   const getPrecision = () => {
@@ -279,7 +280,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             }</p>
           </div>
           <div className='flex justify-between'>
-            <p className='font-lufga text-[#797979] text-xs'>Pool size</p>
+            <p className='font-lufga text-[#797979] text-xs'>Liquidity</p>
             <p className='font-lufga text-white text-xs'>{formatNumber(Number(assetReserveData.totalAToken) / Math.pow(10, tokenDecimalsMap[token]), getPrecision())}</p>
           </div>
           <div className='flex justify-between'>
