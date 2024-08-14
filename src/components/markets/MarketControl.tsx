@@ -27,6 +27,9 @@ function MarketControl({ status, setStatus, stable, setStable, setSearchText }: 
           <button
             type="button"
             className={`py-2 px-4 font-lufga rounded-full text-xs font-bold ${status === 'isolated' ? 'bg-secondary' : 'text-white'}`}
+            style={{
+              color: "#36454F"
+            }}
           >
             Isolated
           </button>
