@@ -106,7 +106,7 @@ function Dashboard() {
                   $
                   {formatNumber(totalBalanceUsd, 2)}
                 </p>
-                <p className="text-success text-sm font-lufga">
+                <p className={totalBalanceChange >= 0 ? "text-success text-sm font-lufga" : "text-red-500 text-sm font-lufga"}>
                   {`${totalBalanceChange >= 0 ? '+' : '-'}`}
                   $
                   {formatNumber(Math.abs(totalBalanceChange), 2)}
@@ -124,7 +124,7 @@ function Dashboard() {
                 <p className="text-white text-[28px] font-medium font-lufga">
                   {formatNumber(totalPoints, 2)}
                 </p>
-                <p className="text-success text-sm font-lufga">
+                <p className={pointsIncrease >= 0 ? "text-success text-sm font-lufga" : "text-red-500 text-sm font-lufga"}>
                   {`${pointsIncrease >= 0 ? '+' : '-'}`}
                   {formatNumber(Math.abs(pointsIncrease), 2)}
                   {' '}

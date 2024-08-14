@@ -144,7 +144,7 @@ export function useGetUserBalanceHistory(address: `0x${string}` | undefined) {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/data/user/valueChange?chain=arbitrum&address=' + address)
+    fetch('https://api.hyperlend.finance/data/user/valueChange?chain=arbitrum&address=' + address)
       .then(response => response.json())
       .then(json => {
         setData({
@@ -166,7 +166,7 @@ export function useUserPortfolioHistory(address: `0x${string}` | undefined, isCo
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/data/user/historicalNetWorth?chain=arbitrum&address=' + address)
+    fetch('https://api.hyperlend.finance/data/user/historicalNetWorth?chain=arbitrum&address=' + address)
       .then(response => response.json())
       .then(json => {
         setData(json ? json.map((e: any) => e.usdValue) : [])
