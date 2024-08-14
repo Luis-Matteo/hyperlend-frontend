@@ -87,7 +87,6 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         setAvailableBalance(userTokenSuppliedPosition?.balance || 0)
         break;
       case "borrow":
-        console.log(userBorrowLimitToken)
         setAvailableBalance(userBorrowLimitToken)
         break;
       case "repay":
@@ -119,10 +118,18 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
     setAmount(availableBalance / 100 * Number(event.target.value))
-    setAllowance(Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]))
 
+    setAllowance(Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]))
     updateAvailableAmount();
   };
+
+  const handleDirectInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(Number(event.target.value) <= availableBalance ? Number(event.target.value) : availableBalance)
+    setProgress(Number(event.target.value) >= availableBalance ? 100 : ((Number(event.target.value) / availableBalance) * 100));
+
+    setAllowance(Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]))
+    updateAvailableAmount();
+  }
 
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
@@ -183,9 +190,21 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                 }% APY</p>
               </div>
             </div>
-            <p className='text-xl text-secondary'>
-              {formatNumber(amount, getPrecision())}
-            </p>
+            <input
+              type="text"
+              className="form-control-plaintext text-xl text-secondary border-0 p-0 text-right"
+              value={amount}
+              onChange={(e) => {
+                handleDirectInputChange(e)
+              }}
+              style={{
+                background: 'transparent',
+                outline: 'none',
+                boxShadow: 'none',
+                width: 'auto',
+                minWidth: '50px',
+              }}
+            />
           </div>
           <div className='flex gap-14'>
             <p className='text-[#797979] text-xs font-lufga'>{
