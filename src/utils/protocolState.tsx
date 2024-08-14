@@ -16,7 +16,28 @@ export function useProtocolReservesData(): ReservesData {
   })
 
   const getReservesData = useCallback(() => {
-    if (!reserveDataResults) return {}
+    if (!reserveDataResults) {
+      return assetAddresses.reduce((acc, asset, index) => {
+        acc[asset] = {
+          aTokenAddress: "",
+          accruedToTreasury: 0n,
+          configuration: { data: 0n },
+          currentLiquidityRate: 0n,
+          currentStableBorrowRate: 0n,
+          currentVariableBorrowRate: 0n,
+          id: 0,
+          interestRateStrategyAddress: "",
+          isolationModeTotalDebt: 0n,
+          lastUpdateTimestamp: 0,
+          liquidityIndex: 0n,
+          stableDebtTokenAddress: "",
+          unbacked: 0n,
+          variableBorrowIndex: 0n,
+          variableDebtTokenAddress: ""
+        }
+        return acc
+      }, {} as Record<string, Reserve>)
+    }
 
     return assetAddresses.reduce((acc, asset, index) => {
       const result = reserveDataResults[index]
@@ -45,7 +66,12 @@ export function useProtocolPriceData() {
   })
 
   const getPricesData = useCallback(() => {
-    if (!priceDataResults) return {}
+    if (!priceDataResults) {
+      return assetAddresses.reduce((acc, asset, index) => {
+        acc[asset] = 0n;
+        return acc
+      }, {} as Record<string, bigint>)
+    }
 
     return assetAddresses.reduce((acc, asset, index) => {
       const result = priceDataResults[index]
@@ -75,7 +101,15 @@ export function useProtocolInterestRate(){
   })
 
   const getInterestRateData = useCallback(() => {
-    if (!interestRateDataResults) return {}
+    if (!interestRateDataResults){
+      return assetAddresses.reduce((acc, asset, index) => {
+        acc[asset] = {
+          supply: 0,
+          borrow: 0
+        }
+        return acc
+      }, {} as Record<string, any>)
+    }
 
     return assetAddresses.reduce((acc, asset, index) => {
       const result = interestRateDataResults[index]
