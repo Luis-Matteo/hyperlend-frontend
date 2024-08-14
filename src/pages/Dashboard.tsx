@@ -25,7 +25,7 @@ function Dashboard() {
     }
   }, [])
 
-  let positions = useUserPositionsData()
+  let positions = useUserPositionsData() 
   const {
     supplied, borrowed,
     totalBalanceUsd, totalSupplyUsd, totalBorrowUsd,
@@ -87,7 +87,6 @@ function Dashboard() {
                   </div>
                 </div>
               </div>
-
             </CardItem>
           </div>
           <CardItem

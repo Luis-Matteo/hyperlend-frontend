@@ -10,7 +10,20 @@ import { useProtocolReservesData, useProtocolPriceData } from './protocolState';
 
 export function useUserPositionsData(): UserPositionsData {
   const { address, isConnected } = useAccount()
-  if (!isConnected){
+  const { reserveDataMap } = useProtocolReservesData()
+  const { priceDataMap } = useProtocolPriceData()
+  const { totalBalanceChange, totalBalanceChangePercentage } = useGetUserBalanceHistory(address)
+  const { data: userReservesData } = useReadContract(
+    {
+      abi: abis.uiPoolDataProvider,
+      address: contracts.uiPoolDataProvider,
+      functionName: 'getUserReservesData',
+      //use null address if wallet is not connected (fixes the white screen errror when connecting/disconnecting caused by "Rendered fewer hooks than expected")
+      args: [contracts.poolAddressesProvider, address || "0x0000000000000000000000000000000000000000"], 
+    } 
+  )
+
+  if (!isConnected || !address){
     return {
       supplied: [],
       borrowed: [],
@@ -23,11 +36,6 @@ export function useUserPositionsData(): UserPositionsData {
       totalBalanceChangePercentage: 0
     }
   }
-
-  const { reserveDataMap } = useProtocolReservesData()
-  const { priceDataMap } = useProtocolPriceData()
-
-  const userReservesData = useUserReservesData()
 
   const supplied: UserPositionData[] = userReservesData ? (userReservesData as any)['0'].map((e: UserReserveData) => {
     const balanceNormalized = Number(e.scaledATokenBalance) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
@@ -68,8 +76,6 @@ export function useUserPositionsData(): UserPositionsData {
   const totalBorrow = borrowed.reduce((partialSum: number, a: any) => partialSum + a.value, 0);
   const totalBorrowLimit = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * ltvMap[a.underlyingAsset]), 0);
 
-  const { totalBalanceChange, totalBalanceChangePercentage } = useGetUserBalanceHistory(address)
-
   return  {
     supplied: supplied,
     borrowed: borrowed,
@@ -85,28 +91,8 @@ export function useUserPositionsData(): UserPositionsData {
   }
 }
 
-export function useUserReservesData(){
-  const { address, isConnected } = useAccount();
-  if (!isConnected) return {};
-
-  const { data } = useReadContract(
-    isConnected && address ?
-    {
-      abi: abis.uiPoolDataProvider,
-      address: contracts.uiPoolDataProvider,
-      functionName: 'getUserReservesData',
-      args: [contracts.poolAddressesProvider, address],
-    } : undefined
-  )
-  return data;
-}
-
 export function useUserWalletBalance(){
   const { address, isConnected } = useAccount();
-
-  if (!isConnected){
-    return { walletBalanceValue: 0 }
-  }
 
   const balanceDataResults = assetAddresses.map(asset => 
     useReadContract(
@@ -133,6 +119,10 @@ export function useUserWalletBalance(){
       } : undefined
     )
   )
+
+  if (!isConnected || !address){
+    return { walletBalanceValue: 0 }
+  }
 
   const balanceDataMap = assetAddresses.reduce((acc, asset, index) => {
     acc[asset] = balanceDataResults[index].data;
