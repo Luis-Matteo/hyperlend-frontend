@@ -52,7 +52,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const { priceDataMap } = useProtocolPriceData()
   const { interestRateDataMap } = useProtocolInterestRate();
 
-  const userPositionsData = useUserPositionsData();
+  const userPositionsData = useUserPositionsData(isConnected, address);
   const assetReserveData = useProtocolAssetReserveData(token)
 
   const [amount, setAmount] = useState<number>(0);
