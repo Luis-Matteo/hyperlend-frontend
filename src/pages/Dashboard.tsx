@@ -10,8 +10,8 @@ import { useSwitchChain, useAccount, useWriteContract } from 'wagmi'
 import { ModalType } from '../utils/types';
 
 import { contracts, abis } from '../utils/tokens';
-import { useUserPositionsData, useUserWalletBalance } from '../utils/userState';
-import { getUserPoints, getUserPortfolio } from '../utils/userPoints';
+import { useUserPositionsData, useUserWalletBalance, useUserPortfolioHistory } from '../utils/userState';
+import { getUserPoints } from '../utils/userPoints';
 import MyChart from '../components/dashboard/Chart';
 import Gauge from '../components/dashboard/Gauge';
 
@@ -26,8 +26,8 @@ function Dashboard() {
     }
   }, [account])
 
-  let positions = useUserPositionsData()
-  const mockPortfolio = getUserPortfolio()
+  const positions = useUserPositionsData()
+  const { historicalNetWorth } = useUserPortfolioHistory(account.address)
 
   const {
     supplied, borrowed,
@@ -52,7 +52,6 @@ function Dashboard() {
     })
     console.log(hash)
   }
-  console.log(mockPortfolio)
 
   return (
     <>
@@ -138,7 +137,7 @@ function Dashboard() {
                 </p>
               </div>
               <div className=''>
-                <MyChart />
+                <MyChart data={historicalNetWorth} />
               </div>
             </div>
           </CardItem>

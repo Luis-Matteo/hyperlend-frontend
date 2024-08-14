@@ -145,7 +145,7 @@ export function useGetUserBalanceHistory(address: `0x${string}` | undefined) {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/data/user/valueChange?address=' + address)
+    fetch('http://localhost:3000/data/user/valueChange?chain=arbitrum&address=' + address)
       .then(response => response.json())
       .then(json => {
         setData({
@@ -160,5 +160,22 @@ export function useGetUserBalanceHistory(address: `0x${string}` | undefined) {
   return {
     totalBalanceChange: data?.totalBalanceChange || 0,
     totalBalanceChangePercentage: data?.totalBalanceChangePercentage || 0
+  }
+}
+
+export function useUserPortfolioHistory(address: `0x${string}` | undefined){
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/data/user/historicalNetWorth?chain=arbitrum&address=' + address)
+      .then(response => response.json())
+      .then(json => {
+        setData(json ? json.map((e: any) => e.usdValue) : [])
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+  return {
+    historicalNetWorth: data || [],
   }
 }

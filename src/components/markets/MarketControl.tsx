@@ -33,7 +33,10 @@ function MarketControl({ status, setStatus, stable, setStable, setSearchText }: 
               ? 'bg-secondary'
               : ' text-white'
               }`}
-            onClick={() => setStatus('isolated')}
+            // onClick={() => setStatus('isolated')}
+            style={{
+              color: "#36454F"
+            }}
           >
             Isolated
           </button>

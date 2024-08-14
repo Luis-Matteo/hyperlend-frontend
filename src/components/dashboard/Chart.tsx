@@ -1,9 +1,10 @@
 import Chart from 'react-apexcharts';
-import { getUserPortfolio } from '../../utils/userPoints';
 
-const MyChart = () => {
+interface ChartProps {
+  data: number[];
+}
 
-    const data = getUserPortfolio();
+const MyChart = ({ data }: ChartProps) => {
     const options = {
         chart: {
             id: "basic-line",
