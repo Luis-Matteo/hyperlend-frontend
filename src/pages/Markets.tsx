@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MarketControl from '../components/markets/MarketControl';
 import CardItem from '../components/common/CardItem';
 import { formatNumber, formatUnit } from '../utils/functions';
 import Navbar from '../layouts/Navbar';
 import Modal from '../components/common/Modal';
+import { useSwitchChain, useAccount, useWriteContract } from 'wagmi'
 
 import { decodeConfig, filterString } from '../utils/functions';
 import { AssetDetail, ModalType } from '../utils/types';
@@ -12,6 +13,15 @@ import { tokenNameMap, tokenFullNameMap, iconsMap, tokenDecimalsMap, stablecoins
 import { useProtocolReservesData, useProtocolAssetReserveData, useProtocolPriceData, useProtocolInterestRate } from '../utils/protocolState';
 
 function Markets() {
+  const { switchChain } = useSwitchChain()
+  const account = useAccount()
+
+  useEffect(() => {
+    if (account.isConnected && account.chainId != 42161) {
+      switchChain({ chainId: 42161 });
+    }
+  }, [account])
+
   const [status, setStatus] = useState<string>('core');
   const [stable, setStable] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>('');

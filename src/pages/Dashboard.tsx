@@ -24,7 +24,7 @@ function Dashboard() {
     if (account.isConnected && account.chainId != 42161) {
       switchChain({ chainId: 42161 });
     }
-  }, [])
+  }, [account])
 
   let positions = useUserPositionsData()
   const mockPortfolio = getUserPortfolio()
