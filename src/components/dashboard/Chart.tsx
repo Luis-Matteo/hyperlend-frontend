@@ -122,7 +122,7 @@ const MyChart = () => {
 
     return (
         <Chart
-            options={options}
+            options={options as any}
             series={series}
             type="area"
             width="800"

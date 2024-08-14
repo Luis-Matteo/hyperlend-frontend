@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import CardItem from '../components/common/CardItem';
 import SectionTitle from '../components/common/SectionTitle';
 import { formatNumber } from '../utils/functions';
-import graphMockImage from '../assets/img/graph-mock.svg';
 import Navbar from '../layouts/Navbar';
 import PositionBar from '../components/dashboard/PositionBar';
 import Modal from '../components/common/Modal';
