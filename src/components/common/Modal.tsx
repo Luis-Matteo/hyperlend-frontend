@@ -143,7 +143,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const sendTransaction = () => {
     const bgIntAmount = parseFloat((amount * Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0).toString() as any as bigint
 
-    if (modalType == "supply") {
+    if (modalType == "supply" || modalType == "repay") {
       if (allowance < amount) {
         writeContractAsync({
           address: token as any,
@@ -265,7 +265,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
               }
             }>
             {
-              modalType == "supply" ?
+              modalType == "supply" || modalType == "repay" ?
                 (allowance >= amount ? "Supply" : "Approve") : capitalizeString(modalType)
             }
           </button>

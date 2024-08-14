@@ -29,7 +29,7 @@ function Dashboard() {
   const {
     supplied, borrowed,
     totalBalanceUsd, totalSupplyUsd, totalBorrowUsd,
-    totalBorrowLimit, totalBalanceChange, totalBalanceChangePercentage
+    totalBorrowLimit, totalBalanceChange, totalBalanceChangePercentage, netApy
   } = useUserPositionsData(isConnected, address)
 
   const { totalPoints, pointsIncrease, pointsPercentIncrease } = getUserPoints()
@@ -118,6 +118,17 @@ function Dashboard() {
                 </p>
               </div>
               <div className="flex flex-col gap-4">
+                <SectionTitle
+                  title="Total APY"
+                />
+                <p className="text-white text-[28px] font-medium font-lufga">
+                  {formatNumber(netApy, 1)}%
+                </p>
+                <p className="text-success text-sm font-lufga">
+                &nbsp;
+                </p>
+              </div>
+              <div className="flex flex-col gap-4 blur-xs">
                 <SectionTitle
                   title="Total Points"
                 />

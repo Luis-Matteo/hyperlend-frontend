@@ -32,7 +32,8 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
       totalBorrowLimit: 0,
       healthFactor: 0,
       totalBalanceChange: 0,
-      totalBalanceChangePercentage: 0
+      totalBalanceChangePercentage: 0,
+      netApy: 0
     }
   }
 
@@ -75,6 +76,15 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
   const totalBorrow = borrowed.reduce((partialSum: number, a: any) => partialSum + a.value, 0);
   const totalBorrowLimit = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * ltvMap[a.underlyingAsset]), 0);
 
+  const supplyInterestEarned = supplied.reduce((partialSum: number, a: any) => partialSum + (a.apr * a.value), 0);
+  const borrowInterestEarned = borrowed.reduce((partialSum: number, a: any) => partialSum + (a.apr * a.value), 0);
+
+  const earnedApy = supplyInterestEarned / totalSupply;
+  const debtApy = borrowInterestEarned / totalBorrow;
+
+  const smb = (totalSupply - totalBorrow) != 0 ? (totalSupply - totalBorrow) : 1 //supply minus borrow
+  const netApy =  earnedApy * (totalSupply / smb) - debtApy * (totalBorrow / smb);
+
   return {
     supplied: supplied,
     borrowed: borrowed,
@@ -84,6 +94,7 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
     totalBalanceUsd: totalSupply - totalBorrow,
     totalBorrowLimit: totalBorrowLimit,
     healthFactor: totalBorrowLimit / totalBorrow,
+    netApy: netApy,
 
     totalBalanceChange: totalBalanceChange,
     totalBalanceChangePercentage: totalBalanceChangePercentage,
