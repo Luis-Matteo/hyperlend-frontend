@@ -100,7 +100,7 @@ function Dashboard() {
             <div className="flex gap-4 justify-between items-center">
               <div className="flex flex-col gap-4">
                 <SectionTitle
-                  title="Current Net Worth"
+                  title=" "
                 />
                 <p className="text-white text-[28px] font-medium font-lufga">
                   $
