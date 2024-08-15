@@ -137,6 +137,9 @@ function Overview() {
                         </div>
                         <div className="text-white font-lufga">{formatNumber(item.borrowApy, 2)}%</div>
                         <div className="text-white font-lufga">
+                        <p className="">
+                            {formatUnit(item.totalLiquidityToken)}
+                          </p>
                           <p className="">
                             ${formatUnit(item.totalLiquidtyUsd)}
                           </p>
