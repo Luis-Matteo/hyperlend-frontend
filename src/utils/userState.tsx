@@ -94,7 +94,7 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
     totalBalanceUsd: totalSupply - totalBorrow,
     totalBorrowLimit: totalBorrowLimit,
     healthFactor: totalBorrowLimit / totalBorrow,
-    netApy: netApy,
+    netApy: isNaN(netApy) ? 0 : netApy,
 
     totalBalanceChange: totalBalanceChange,
     totalBalanceChangePercentage: totalBalanceChangePercentage,

@@ -58,6 +58,7 @@ function Overview() {
         totalSuppliedUsd: tokenPrice * totalSuppliedTokens,
         totalBorrowed: totalBorrowedTokens,
         totalBorrowedUsd: tokenPrice * totalBorrowedTokens,
+        totalLiquidityToken: totalSuppliedTokens - totalBorrowedTokens,
         totalLiquidtyUsd: (tokenPrice * totalSuppliedTokens) - (tokenPrice * totalBorrowedTokens),
         supplyApy: interestRateDataMap[token].supply,
         borrowApy: interestRateDataMap[token].borrow,
@@ -104,42 +105,47 @@ function Overview() {
               <div>
                 {
                   (getAssets() || []).map((item, key) => (
-                    <Link className="grid grid-cols-11 items-center py-[14px] px-2.5 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer" 
-                    to={`${item.name}`}
-                    key={key}
+                    <div 
+                      className="grid grid-cols-11 items-center py-[14px] px-2.5 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer" 
+                      key={key}
                     >
-                      <div className="text-white font-lufga flex items-center col-span-2 h-full">
-                        <div className="flex items-center h-full">
-                          <img src={item.icon} alt="" className="w-6 h-6 mr-2"/> {item.name} | {item.symbol}
+                      <Link 
+                        className="col-span-9 grid grid-cols-9 items-center"
+                        to={`${item.name}`}
+                      >
+                        <div className="text-white font-lufga flex items-center col-span-2 h-full">
+                          <div className="flex items-center h-full">
+                            <img src={item.icon} alt="" className="w-6 h-6 mr-2"/> {item.name} | {item.symbol}
+                          </div>
                         </div>
-                      </div>
-                      <div className="text-white font-lufga">
-                        <p className="">
-                          {formatUnit(item.totalSupplied)}
-                        </p>
-                        <p className="">
-                          ${formatUnit(item.totalSuppliedUsd)}
-                        </p>
-                      </div>
-                      <div className="text-white font-lufga">{formatNumber(item.supplyApy, 2)}%</div>
-                      <div className="text-white font-lufga">
-                        <p className="">
-                          {formatUnit(item.totalBorrowed)}
-                        </p>
-                        <p className="">
-                          ${formatUnit(item.totalBorrowedUsd)}
-                        </p>
-                      </div>
-                      <div className="text-white font-lufga">{formatNumber(item.borrowApy, 2)}%</div>
-                      <div className="text-white font-lufga">
-                        <p className="">
-                          ${formatUnit(item.totalLiquidtyUsd)}
-                        </p>
-                      </div>
-                      <div className="text-white font-lufga">{
-                        item.isCollateral ? <div className="text-success">✓</div> : "─"
-                      }</div> 
-                      <div className="text-white font-lufga">{formatNumber(item.ltv, 2)}%</div>
+                        <div className="text-white font-lufga">
+                          <p className="">
+                            {formatUnit(item.totalSupplied)}
+                          </p>
+                          <p className="">
+                            ${formatUnit(item.totalSuppliedUsd)}
+                          </p>
+                        </div>
+                        <div className="text-white font-lufga">{formatNumber(item.supplyApy, 2)}%</div>
+                        <div className="text-white font-lufga">
+                          <p className="">
+                            {formatUnit(item.totalBorrowed)}
+                          </p>
+                          <p className="">
+                            ${formatUnit(item.totalBorrowedUsd)}
+                          </p>
+                        </div>
+                        <div className="text-white font-lufga">{formatNumber(item.borrowApy, 2)}%</div>
+                        <div className="text-white font-lufga">
+                          <p className="">
+                            ${formatUnit(item.totalLiquidtyUsd)}
+                          </p>
+                        </div>
+                        <div className="text-white font-lufga">{
+                          item.isCollateral ? <div className="text-success">✓</div> : "─"
+                        }</div> 
+                        <div className="text-white font-lufga">{formatNumber(item.ltv, 2)}%</div>
+                      </Link>
 
                       <div className="grid grid-cols-2 gap-4 col-span-2">
                         <button 
@@ -167,7 +173,7 @@ function Overview() {
                           Borrow
                         </button>
                       </div>
-                    </Link>
+                    </div>
                   ))
                 }
               </div>

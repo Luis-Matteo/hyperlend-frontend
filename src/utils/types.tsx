@@ -86,6 +86,7 @@ export interface AssetDetail {
   totalSuppliedUsd: number;
   totalBorrowed: number;
   totalBorrowedUsd: number;
+  totalLiquidityToken: number;
   totalLiquidtyUsd: number;
   supplyApy: number;
   borrowApy: number;
