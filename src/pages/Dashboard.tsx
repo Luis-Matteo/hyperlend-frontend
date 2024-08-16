@@ -13,7 +13,7 @@ import { contracts, abis } from '../utils/tokens';
 import { useUserPositionsData, useUserWalletBalance, useUserPortfolioHistory } from '../utils/userState';
 import { getUserPoints } from '../utils/userPoints';
 import MyChart from '../components/dashboard/Chart';
-import Gauge from '../components/dashboard/Gauge';
+import Factor from '../components/dashboard/Factor';
 
 function Dashboard() {
   const { data: hash, writeContractAsync } = useWriteContract()
@@ -27,9 +27,15 @@ function Dashboard() {
   }, [isConnected, chainId])
 
   const {
-    supplied, borrowed,
-    totalBalanceUsd, totalSupplyUsd, totalBorrowUsd,
-    totalBorrowLimit, totalBalanceChange, totalBalanceChangePercentage, netApy
+    supplied,
+    borrowed,
+    totalBalanceUsd,
+    totalSupplyUsd,
+    totalBorrowUsd,
+    totalBorrowLimit,
+    totalBalanceChange,
+    totalBalanceChangePercentage,
+    netApy
   } = useUserPositionsData(isConnected, address)
 
   const { totalPoints, pointsIncrease, pointsPercentIncrease } = getUserPoints()
@@ -60,14 +66,15 @@ function Dashboard() {
         <div className="pt-8 flex flex-col gap-4">
           <div className="md:flex gap-4 justify-between">
             <CardItem
-              className="py-4 px-5 md:w-2/5 mb-4 md:mb-0"
+              className="px-9 p h-72 w-full overflow-hidden md:mb-0"
             >
-              <div className="">
+              <div className="mt-9">
                 <SectionTitle
                   title="Health Factor"
+                  className='relative top-5 left-2 '
                 />
-                <div className='flex text-center justify-center items-center'>
-                  <Gauge value={1.2} maxValue={10} size={300} strokeWidth={15} />
+                <div className='flex mt-12 text-center justify-center items-end'>
+                  <Factor />
                 </div>
               </div>
             </CardItem>
@@ -125,7 +132,7 @@ function Dashboard() {
                   {formatNumber(netApy, 1)}%
                 </p>
                 <p className="text-success text-sm font-lufga">
-                &nbsp;
+                  &nbsp;
                 </p>
               </div>
               <div className="flex flex-col gap-4 blur-xs">

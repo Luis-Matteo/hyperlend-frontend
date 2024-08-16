@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        'custom': '0 0 15px #252525',
+      },
       fontFamily: {
         lufga: ['Lufga', 'sans-serif'],
       },
