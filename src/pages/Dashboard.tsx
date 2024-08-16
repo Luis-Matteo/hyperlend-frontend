@@ -13,7 +13,6 @@ import { contracts, abis } from '../utils/tokens';
 import { useUserPositionsData, useUserWalletBalance, useUserPortfolioHistory } from '../utils/userState';
 import { getUserPoints } from '../utils/userPoints';
 import MyChart from '../components/dashboard/Chart';
-import Gauge from '../components/dashboard/Gauge';
 import Factor from '../components/dashboard/Factor';
 
 function Dashboard() {
@@ -72,9 +71,9 @@ function Dashboard() {
               <div className="mt-9">
                 <SectionTitle
                   title="Health Factor"
-                  className='relative top-0 left-0 '
+                  className='relative top-5 left-2 '
                 />
-                <div className='flex text-center justify-center items-end'>
+                <div className='flex mt-12 text-center justify-center items-end'>
                   <Factor />
                 </div>
               </div>

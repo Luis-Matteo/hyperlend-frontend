@@ -2,7 +2,7 @@ const Factor = () => {
     const dots = Array.from({ length: 25 }); // Adjust the number of dots
   
     return (
-      <div className="relative border-2 shadow-custom border-[#252525] w-80 h-80 rounded-full bg-transparent">
+      <div className="relative border-2 shadow-custom border-[#252525] w-72 h-72 rounded-full bg-transparent">
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full flex justify-center items-center">
           {dots.map((_, index) => {
             const angle = (index / dots.length) * 180 - 90; // Half circle angle calculation
