@@ -9,7 +9,7 @@ import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { erc20Abi } from 'viem'
 
 import { ModalProps } from '../../utils/types';
-import { contracts, tokenNameMap, tokenDecimalsMap, iconsMap, abis, ltvMap } from '../../utils/tokens';
+import { contracts, tokenNameMap, tokenDecimalsMap, iconsMap, abis, ltvMap, liqMap } from '../../utils/tokens';
 
 import { useProtocolInterestRate, useProtocolPriceData, useProtocolAssetReserveData } from '../../utils/protocolState';
 import { useUserPositionsData } from '../../utils/userState'
@@ -105,15 +105,18 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   useEffect(() => {
     if (amount != 0) {
       const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8)
-      const amountUsd = amount * tokenPriceUsd * (modalType == "repay" ? -1 : 1)
-      //if we are borrowing/repaying, total borrow will change
-      const newTotalBorrow = modalType == "borrow" || modalType == "repay"
-        ? ((userPositionsData?.totalBorrowUsd || 0) + amountUsd) : (userPositionsData?.totalBorrowUsd || 0)
-      //if we are supplying/withdrawing, total borrow limit will change
-      const newTotalBorrowLimit = modalType == "supply" || modalType == "withdraw"
-        ? ((userPositionsData?.totalBorrowLimit || 0) + (amountUsd * ltvMap[token])) : (userPositionsData?.totalBorrowLimit || 0)
+      const amountUsd = amount * tokenPriceUsd * (modalType == "repay" || modalType == "withdraw" ? -1 : 1)
 
-      const newHealth = newTotalBorrowLimit / newTotalBorrow
+      const newTotalBorrow = modalType == "borrow" || modalType == "repay"
+        ? ((userPositionsData?.totalBorrowUsd || 0) + amountUsd)
+        : (userPositionsData?.totalBorrowUsd || 0)
+
+      const newTotalThreshold = modalType == "supply" || modalType == "withdraw"
+        ? ((userPositionsData?.totalLiquidationThreshold || 0) + (amountUsd * liqMap[token]))
+        : (userPositionsData?.totalLiquidationThreshold || 0)
+
+      const newHealth = newTotalBorrow > 0 ? newTotalThreshold / newTotalBorrow : Infinity
+
       setPredictedHealth(newHealth)
     }
   }, [amount])

@@ -4,7 +4,7 @@ import { erc20Abi } from 'viem'
 
 import { calculateApy, padArray } from './functions';
 import { UserReserveData, UserPositionData, UserPositionsData } from '../utils/types'
-import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap, abis } from './tokens';
+import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap, abis, liqMap } from './tokens';
 
 import { useProtocolReservesData, useProtocolPriceData } from './protocolState';
 
@@ -33,7 +33,8 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
       healthFactor: 0,
       totalBalanceChange: 0,
       totalBalanceChangePercentage: 0,
-      netApy: 0
+      netApy: 0,
+      totalLiquidationThreshold: 0
     }
   }
 
@@ -74,7 +75,8 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
 
   const totalSupply = supplied.reduce((partialSum: number, a: any) => partialSum + a.value, 0);
   const totalBorrow = borrowed.reduce((partialSum: number, a: any) => partialSum + a.value, 0);
-  const totalBorrowLimit = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * ltvMap[a.underlyingAsset]), 0);
+  const totalBorrowAvailable = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * ltvMap[a.underlyingAsset]), 0);
+  const totalLiquidationThreshold = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * liqMap[a.underlyingAsset]), 0);
 
   const supplyInterestEarned = supplied.reduce((partialSum: number, a: any) => partialSum + (a.apr * a.value), 0);
   const borrowInterestEarned = borrowed.reduce((partialSum: number, a: any) => partialSum + (a.apr * a.value), 0);
@@ -92,9 +94,10 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
     totalSupplyUsd: totalSupply,
     totalBorrowUsd: totalBorrow,
     totalBalanceUsd: totalSupply - totalBorrow,
-    totalBorrowLimit: totalBorrowLimit,
-    healthFactor: totalBorrowLimit / totalBorrow,
+    totalBorrowLimit: totalBorrowAvailable - totalBorrow,
+    healthFactor: totalLiquidationThreshold / totalBorrow,
     netApy: isNaN(netApy) ? 0 : netApy,
+    totalLiquidationThreshold: totalLiquidationThreshold,
 
     totalBalanceChange: totalBalanceChange,
     totalBalanceChangePercentage: totalBalanceChangePercentage,

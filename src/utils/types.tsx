@@ -61,6 +61,7 @@ export interface UserPositionsData {
   totalBorrowLimit: number;
   healthFactor: number;
   netApy: number;
+  totalLiquidationThreshold: number;
 }
 
 export type ModalType = "supply" | "withdraw" | "borrow" | "repay";
