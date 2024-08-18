@@ -3,15 +3,15 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import xmarkIcon from '../../assets/icons/xmark-icon.svg'
 import gearIcon from '../../assets/icons/gear-icon.svg'
-import { formatNumber, capitalizeString } from '../../utils/functions';
+import { formatNumber, capitalizeString, decodeConfig } from '../../utils/functions';
 import ProgressBar from '../common/PercentBar';
 import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { erc20Abi } from 'viem'
 
 import { ModalProps } from '../../utils/types';
-import { contracts, tokenNameMap, tokenDecimalsMap, iconsMap, abis, ltvMap, liqMap } from '../../utils/tokens';
+import { contracts, tokenNameMap, tokenDecimalsMap, iconsMap, abis, liqMap } from '../../utils/tokens';
 
-import { useProtocolInterestRate, useProtocolPriceData, useProtocolAssetReserveData } from '../../utils/protocolState';
+import { useProtocolInterestRate, useProtocolPriceData, useProtocolAssetReserveData, useProtocolReservesData } from '../../utils/protocolState';
 import { useUserPositionsData } from '../../utils/userState'
 
 function Modal({ token, modalType, onClose }: ModalProps) {
@@ -51,6 +51,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
 
   const { priceDataMap } = useProtocolPriceData()
   const { interestRateDataMap } = useProtocolInterestRate();
+  const { reserveDataMap } = useProtocolReservesData();
 
   const userPositionsData = useUserPositionsData(isConnected, address);
   const assetReserveData = useProtocolAssetReserveData(token)
@@ -64,6 +65,9 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const [predictedHealth, setPredictedHealth] = useState<number>(0)
 
   const getBorrowLimit = () => {
+    // TODO: enforce protocol borrow cap
+    const borrowCap = decodeConfig(reserveDataMap[token].configuration.data).borrowCap
+    console.log(borrowCap)
     const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8)
     const borrowAvailableTokens = (userPositionsData?.totalBorrowLimit || 0) / tokenPriceUsd
     const availableInPool = Number(assetReserveData.totalAToken) / Math.pow(10, tokenDecimalsMap[token])
@@ -83,6 +87,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
 
     switch (modalType) {
       case "supply":
+        // TODO: enforce protocol supply cap
         const normalizedWalletBalance = ((Number(userWalletBalance) || 0) / Math.pow(10, tokenDecimalsMap[token]))
         setAvailableBalance(normalizedWalletBalance)
         break;

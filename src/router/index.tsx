@@ -3,7 +3,7 @@ import {
 } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Markets from '../pages/Markets';
-import Supply from '../pages/TokenDetail'
+import TokenDetails from '../pages/TokenDetail'
 import backgroundImage from '../assets/img/background.svg';
 import Sidebar from '../layouts/Sidebar';
 import Overview from '../pages/Overview';
@@ -19,7 +19,7 @@ function Router() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="markets" element={<Markets />} >
               <Route path="" element={<Overview />} />
-              <Route path=":address" element={<Supply />} />
+              <Route path=":token" element={<TokenDetails />} />
             </Route>
           </Routes>
         </div>

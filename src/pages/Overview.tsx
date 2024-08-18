@@ -111,7 +111,7 @@ function Overview() {
                     >
                       <Link 
                         className="col-span-9 grid grid-cols-9 items-center"
-                        to={`${item.name}`}
+                        to={`${item.underlyingAsset}`}
                       >
                         <div className="text-white font-lufga flex items-center col-span-2 h-full">
                           <div className="flex items-center h-full">

@@ -6,9 +6,10 @@ import dashboardIcon from '../assets/icons/dashboard-icon.svg';
 
 type NavbarProps = {
   pageTitle: string;
+  pageIcon?: string;
 };
 
-function Navbar({ pageTitle }: NavbarProps) {
+function Navbar({ pageTitle, pageIcon }: NavbarProps) {
   const dispatch = useDispatch();
   
   const [searchText, setSearchText] = useState<string>('');
@@ -20,8 +21,11 @@ function Navbar({ pageTitle }: NavbarProps) {
           >
             <img src={dashboardIcon} alt=''/>
           </button>
+          {
+            pageIcon ? <img src={pageIcon} height="30px" width="30px" alt=''/> : ""
+          }
           <h2 className="font-lufga text-3xl text-white">
-            {pageTitle}
+          {pageTitle}
           </h2>
         </div>
         <div className="flex items-center gap-4">
