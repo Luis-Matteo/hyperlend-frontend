@@ -6,6 +6,9 @@ interface FactorProps {
 
 const Factor = ({ healthFactor }: FactorProps) => {
     const dots = Array.from({ length: 25 }); // Adjust the number of dots
+
+    const maxHealthFactor = 5;
+    const normalizedHealthFactor = isNaN(healthFactor) ? 0 : healthFactor
   
     return (
       <div className="relative border-2 shadow-custom border-[#252525] w-72 h-72 rounded-full bg-transparent">
@@ -13,27 +16,20 @@ const Factor = ({ healthFactor }: FactorProps) => {
           {dots.map((_, index) => {
             const angle = (index / dots.length) * 180 - 90; // Half circle angle calculation
             const rotation = `rotate(${angle}deg)`;
-            // Calculate opacity for background
-            const middleIndex = Math.floor(dots.length * 0.66);
-            const opacity =
-              index < middleIndex
-                ? (index / middleIndex) * 0.8 // Fade from 0 to 0.8
-                : 1; // Fade from 0.8 to 0
-  
-            let color;
-  
-            if (index < 9) color = `rgba(255, 2555, 2555, ${opacity * 1.8})`;
-            else if (index < 17)
-              color = `rgba(220, 38, 38, ${opacity})`; // Apply dynamic opacity
-            else color = "bg-[#282829]";
-    
+            const opacity = index * (dots.length / maxHealthFactor) / (dots.length * normalizedHealthFactor) //from 0 to 1 at currentHealthFactor
+            
+            // Calculate color
+            const hue = Math.floor((index / dots.length) * 120); // 0 to 120 (red to green)
+            let color = `hsla(${hue}, 100%, 50%, ${opacity})`;
+
+            if (index > normalizedHealthFactor * (dots.length / maxHealthFactor)) color = `bg-[#282829]`
+
             return (
               <div
                 key={index}
                 className={`absolute w-1 h-3  rounded-full ${color}`}
                 style={{
                   transform: `${rotation} translate(0, -99px)`, // Adjust this value for spacing
-  
                   backgroundColor: color, // Apply dynamic color
                 }}
               ></div>
