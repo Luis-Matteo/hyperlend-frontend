@@ -35,7 +35,8 @@ function Dashboard() {
     totalBorrowLimit,
     totalBalanceChange,
     totalBalanceChangePercentage,
-    netApy
+    netApy,
+    healthFactor
   } = useUserPositionsData(isConnected, address)
 
   const { totalPoints, pointsIncrease, pointsPercentIncrease } = getUserPoints()
@@ -74,7 +75,7 @@ function Dashboard() {
                   className='relative'
                 />
                 <div className='flex mt-12 text-center justify-center items-end'>
-                  <Factor />
+                  <Factor healthFactor={healthFactor} />
                 </div>
               </div>
             </CardItem>

@@ -1,4 +1,10 @@
-const Factor = () => {
+import { formatNumber } from '../../utils/functions';
+
+interface FactorProps {
+  healthFactor: number;
+}
+
+const Factor = ({ healthFactor }: FactorProps) => {
     const dots = Array.from({ length: 25 }); // Adjust the number of dots
   
     return (
@@ -35,7 +41,7 @@ const Factor = () => {
           })}
         </div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <span className="text-white font-bold text-3xl">1.2</span>
+          <span className="text-white font-bold text-3xl">{isNaN(healthFactor) ? 0 : formatNumber(healthFactor, 2)}</span>
         </div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full flex justify-center items-center">
           {/* Dots with gradient background opacity */}
