@@ -39,7 +39,7 @@ const InterestRateModelChart: React.FC = () => {
           axisLine={false} 
           tickLine={false} 
           padding={{ left: 30 }} // Add padding to create an empty space at the start
-          tick={{ angle: -45, dy: 15 }} // Rotate the X-axis labels
+          tick={{ /*angle: -45, dy: 15*/ }} // Rotate the X-axis labels
         />
         <YAxis 
           axisLine={false} 
