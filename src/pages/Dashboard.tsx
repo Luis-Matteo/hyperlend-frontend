@@ -66,12 +66,12 @@ function Dashboard() {
         <div className="pt-8 flex flex-col gap-4">
           <div className="md:flex gap-4 justify-between">
             <CardItem
-              className="px-9 p h-72 w-full overflow-hidden md:mb-0"
+              className="px-8 p h-72 max-w-[480px] w-full overflow-hidden md:mb-0"
             >
               <div className="mt-9">
                 <SectionTitle
                   title="Health Factor"
-                  className='relative top-5 left-2 '
+                  className='relative'
                 />
                 <div className='flex mt-12 text-center justify-center items-end'>
                   <Factor />
@@ -79,7 +79,7 @@ function Dashboard() {
               </div>
             </CardItem>
             <CardItem
-              className="py-4 px-5 md:w-3/5"
+              className="py-4 px-5 md:w-full"
             >
               <div className="">
                 <SectionTitle
