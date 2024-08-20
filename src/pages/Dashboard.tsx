@@ -67,9 +67,9 @@ function Dashboard() {
         <div className="pt-8 flex flex-col gap-4">
           <div className="md:flex gap-4 justify-between">
             <CardItem
-              className="px-8 p h-72 max-w-[480px] w-full overflow-hidden md:mb-0"
+              className="px-8 py-4 p h-72 max-w-[480px] w-full overflow-hidden md:mb-0"
             >
-              <div className="mt-9">
+              <div className="">
                 <SectionTitle
                   title="Health Factor"
                   className='relative'
@@ -80,23 +80,22 @@ function Dashboard() {
               </div>
             </CardItem>
             <CardItem
-              className="py-4 px-5 md:w-full"
+              className="py-4 px-6 md:w-full"
             >
-              <div className="">
-                <SectionTitle
-                  title="Your Positions"
-                />
-                <div className='flex flex-col gap-5 w-[90%] m-auto'>
-                  <div className='h-20'>
-                    <span className='text-white mb-2'>Collateral</span>
-                    <PositionBar
-                      available={totalSupplyUsd} total={totalSupplyUsd + walletBalanceValue} />
-                  </div>
-                  <div className='h-20'>
-                    <span className='text-white mb-2'>Borrow</span>
-                    <PositionBar
-                      available={totalBorrowUsd} total={totalBorrowLimit} />
-                  </div>
+              <SectionTitle
+                title="Your Positions"
+                className='mb-8'
+              />
+              <div className='flex flex-col justify-between gap-5 px-5 w-full'>
+                <div className='h-20'>
+                  <span className='text-white mb-2'>Collateral deposited</span>
+                  <PositionBar
+                    available={totalSupplyUsd} total={totalSupplyUsd + walletBalanceValue} />
+                </div>
+                <div className='h-20'>
+                  <span className='text-white mb-2'>Borrow</span>
+                  <PositionBar
+                    available={totalBorrowUsd} total={totalBorrowLimit} />
                 </div>
               </div>
             </CardItem>
