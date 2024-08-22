@@ -41,12 +41,9 @@ export function capitalizeString(s: string){
 }
 
 function calculateApy(currentRate: number){
-  const secondsPerYear = 31556926
-  const borrowPatePerSecond = currentRate / 1e27
-  const borrowRatePerYear = borrowPatePerSecond * secondsPerYear
-  const apy = (1 + borrowRatePerYear)**(1/365) - 1
-  const apyPercentage = apy * 100
-  return apyPercentage
+  let rateDecimal = currentRate / 1e27
+  let apy = Math.pow(Math.E, rateDecimal) - 1
+  return apy * 100
 }
 
 export function decodeConfig(configNumber: bigint){
