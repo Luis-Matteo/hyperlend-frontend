@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ProgressBar from "../common/PercentBar";
-import CustomButton from "./CustomButton";
-import img from "../../assets/img";
+// import CustomButton from "./CustomButton";
+import { catImage } from "../../assets/img";
 
 interface ActionProps {
   amountTitle: string;
@@ -18,7 +18,7 @@ const Actions: React.FC<ActionProps> = ({
   inputDeal,
   noteUnderInput,
   noteAboveInput,
-  btnTitle
+  // btnTitle
 }) => {
   const [progress, setProgress] = useState<number>(80);
 
@@ -31,7 +31,7 @@ const Actions: React.FC<ActionProps> = ({
       {noteAboveInput}
       <div className="flex items-center justify-between bg-[#071311] rounded-md p-4 mt-4 mb-4">
         <div className="flex gap-3 items-center w-fit p-3">
-            <img src={img.cat} alt="cat" />
+            <img src={catImage} alt="cat" />
         <p className="text-base text-[#CAEAE566]">0.00</p>
         </div>  
         <div className="bg-[#081916] p-4 rounded">
@@ -86,7 +86,7 @@ const Actions: React.FC<ActionProps> = ({
           <p className="text-xs text-lufga text-[#2DC24E]">$687</p>
         </div>
       </div>
-      <CustomButton title={btnTitle} />
+      {/* <CustomButton title={btnTitle} /> */}
     </div>
   );
 };
