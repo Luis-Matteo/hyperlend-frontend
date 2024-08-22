@@ -14,6 +14,7 @@ import { useUserPositionsData, useUserWalletBalance, useUserPortfolioHistory } f
 import { getUserPoints } from '../utils/userPoints';
 import MyChart from '../components/dashboard/Chart';
 import Factor from '../components/dashboard/Factor';
+import InfoItem from '../components/common/InfoItem';
 
 function Dashboard() {
   const { data: hash, writeContractAsync } = useWriteContract()
@@ -70,10 +71,17 @@ function Dashboard() {
               className="px-8 py-4 p h-72 max-w-[480px] w-full overflow-hidden md:mb-0"
             >
               <div className="">
-                <SectionTitle
-                  title="Health Factor"
-                  className='relative'
-                />
+                <div className='flex gap-2 items-center'>
+                  <SectionTitle
+                    title="Health Factor"
+                  />
+                  <InfoItem
+                    title={
+                      <span>Health factor is a numerical value that represents the ratio of the value of a user's collateral to the value of their borrowed assets. <br />It is designed to give borrowers a clear understanding of the risk associated with their current loan.</span>
+                    }
+                    className='w-[340px]' />
+
+                </div>
                 <div className='flex mt-12 text-center justify-center items-end'>
                   <Factor healthFactor={healthFactor} />
                 </div>

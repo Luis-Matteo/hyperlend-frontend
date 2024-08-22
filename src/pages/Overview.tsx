@@ -96,10 +96,11 @@ function Overview() {
                 <div className="text-white font-lufga text-[11px] col-span-2">Asset</div>
                 {
                   (assetsInfos || []).map((item, key) => (
-                    <div className="flex gap-2" key={key}>
+                    <div className="flex gap-2 items-center" key={key}>
                       <p className='text-white font-lufga text-[11px] whitespace-nowrap'>{item.title}</p>
                       <InfoItem
-                        title={item.tooltip} />
+                        title={<span>{item.tooltip}</span>}
+                        className='w-[300px]' />
                     </div>
                   ))
                 }
