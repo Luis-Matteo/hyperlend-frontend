@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../layouts/Navbar';
 import CardItem from '../components/common/CardItem';
-import ProgressBar from '../components/common/PercentBar'
 import { useParams } from 'react-router-dom';
 import { useSwitchChain, useAccount } from 'wagmi'
 import { formatNumber, decodeConfig } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../components/charts/InterestRateModelChart';
+import { TokenActionsProps } from '../utils/interfaces';
 
 import {
     tokenNameMap,
@@ -20,6 +20,7 @@ import {
     useProtocolPriceData,
     useProtocolInterestRate
 } from '../utils/protocolState';
+import TokenActions from '../components/markets/TokenActions';
 
 function TokenDetail() {
     let { token } = useParams();
@@ -38,17 +39,84 @@ function TokenDetail() {
     const { priceDataMap } = useProtocolPriceData()
     const { interestRateDataMap } = useProtocolInterestRate()
     const protocolAssetReserveData = useProtocolAssetReserveData(token);
-
     const [activeButton, setActiveButton] = useState(1);
-    const [stable, setStable] = useState(true);
-    const [progress, setProgress] = useState<number>(80);
+
+    const [actionData, setActionData] = useState<TokenActionsProps>({
+        amountTitle: "Suppliable",
+        amount: 9291,
+        totalApy: 9.92,
+        percentBtn: 100,
+        balanceTitle: "Supply balance (PURR)",
+        balance: 0,
+        limitTitle: "Borrow limit",
+        limit: 1000,
+        dailyEarning: 687,
+        btnTitle: "Supply",
+    });
 
     const handleButtonClick = (button: number) => {
         setActiveButton(button);
-    };
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setProgress(Number(event.target.value));
+        switch (button) {
+            case 1:
+                setActionData({
+                    amountTitle: "Suppliable",
+                    amount: 9291,
+                    totalApy: 9.92,
+                    percentBtn: 100,
+                    balanceTitle: "Supply balance (PURR)",
+                    balance: 0,
+                    limitTitle: "Borrow limit",
+                    limit: 1000,
+                    dailyEarning: 687,
+                    btnTitle: "Supply",
+                });
+                break;
+            case 2:
+                setActionData({
+                    amountTitle: "Withdrawable",
+                    amount: 929,
+                    totalApy: 9.92,
+                    percentBtn: 100,
+                    balanceTitle: "Supply balance (PURR)",
+                    balance: 0,
+                    limitTitle: "Borrow limit",
+                    limit: 1000,
+                    dailyEarning: 687,
+                    btnTitle: "Withdraw",
+                });
+                break;
+            case 3:
+                setActionData({
+                    amountTitle: "Borrow",
+                    amount: 9291,
+                    totalApy: 9.92,
+                    percentBtn: 80,
+                    balanceTitle: "Borrow balance (PURR)",
+                    balance: 0,
+                    limitTitle: "Borrow limit used",
+                    limit: 1000,
+                    dailyEarning: 687,
+                    btnTitle: "Borrow",
+                });
+                break;
+            case 4:
+                setActionData({
+                    amountTitle: "Repayable",
+                    amount: 9291,
+                    totalApy: 9.92,
+                    percentBtn: 100,
+                    balanceTitle: "Borrow balance (PURR)",
+                    balance: 0,
+                    limitTitle: "Borrow limit used",
+                    limit: 1000,
+                    dailyEarning: 687,
+                    btnTitle: "Repay",
+                });
+                break;
+            default:
+                break;
+        }
     };
 
     const buttons = [
@@ -274,85 +342,15 @@ function TokenDetail() {
                         <div className="w-full grid grid-cols-4 text-center">
                             {buttons.map((button) => (
                                 <button key={button.id} onClick={() => handleButtonClick(button.id)}>
-                                    <p className={`text-base ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566]'}`}>{button.label}</p>
+                                    <p className={`text-base transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}>{button.label}</p>
                                     <hr
-                                        className={`mt-4 mb-4 border ${activeButton === button.id ? 'text-white' : 'text-[#546764]'}`}
+                                        className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#546764]'}`}
                                     />
                                 </button>
                             ))}
                         </div>
-                        <div className="flex justify-between items-center mt-4">
-                            <p className="text-base text-[#CAEAE566]">Collateral</p>
-                            <button
-                                type="button"
-                                className="p-0.5 bg-[#081916] rounded-full flex items-center"
-                                onClick={() => setStable((prev) => !prev)}
-                            >
-                                <div
-                                    className={`p-2 rounded-full transition-all duration-500 ${stable ? 'bg-secondary translate-x-0' : 'bg-transparent translate-x-full'
-                                        }`}
-                                />
-                                <div
-                                    className={`p-2 rounded-full transition-all duration-500 ${!stable ? 'bg-secondary translate-x-0' : 'bg-transparent -translate-x-full'
-                                        }`}
-                                />
-                            </button>
-                        </div>
-                        <div className="flex items-center justify-between bg-[#071311] rounded-md p-4 mt-4 mb-4">
-                            <p className="text-base text-[#CAEAE566]">0.00</p>
-                            <div className="bg-[#081916] p-4 rounded">
-                                <p className="text-base text-[#CAEAE566]">MAX</p>
-                            </div>
-                        </div>
-                        <div className="mt-4">
-                            <div className="flex justify-between items-center">
-                                <p className="text-base text-lufga text-[#CAEAE5B2]">Suppliable amount</p>
-                                <p className="text-base text-lufga text-[#CAEAE5]">9281 PURR</p>
-                            </div>
-                            <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
-                        </div>
-                        <div className="mt-4">
-                            <div className="flex justify-between items-center">
-                                <p className="text-base text-lufga text-[#CAEAE5B2]">Total APY</p>
-                                <p className="text-base text-lufga text-[#CAEAE5]">9.92%</p>
-                            </div>
-                            <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
-                        </div>
-                        <div className="mt-4">
-                            <div className="flex justify-between items-center">
-                                <p className="text-base text-lufga text-[#CAEAE5B2]">Current: $918</p>
-                                <p className="text-base text-lufga text-[#CAEAE5]">Max: $1505</p>
-                            </div>
-                        </div>
-                        <div>
-                            <div className="flex justify-between items-center mt-2 mb-2">
-                                <p className="text-xs text-lufga text-[#CAEAE5B2]">Current: $918</p>
-                                <p className="text-xs text-lufga text-[#CAEAE5]">Max: $1505</p>
-                            </div>
-                            <div className="flex justify-between items-center mt-2 mb-2">
-                                <p className="text-xs text-lufga text-[#CAEAE5B2]">Borrow limit</p>
-                                <p className="text-xs text-lufga text-[#CAEAE5]">$1505</p>
-                            </div>
-                            <div className='relative '>
-                                <ProgressBar
-                                    progress={progress} className='h-1.5' />
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max="100"
-                                    value={progress}
-                                    onChange={handleInputChange}
-                                    className="w-full top-0 left-0 absolute opacity-0 cursor-pointer"
-                                />
-                            </div>
-                            <div className="flex justify-between items-center mt-2 mb-2">
-                                <p className="text-xs text-lufga text-[#CAEAE5B2]">Daily earnings</p>
-                                <p className="text-xs text-lufga text-[#2DC24E]">$687</p>
-                            </div>
-                        </div>
-                        <button className="bg-[#CAEAE5] w-full p-4 rounded-md mt-4">
-                            <p className="text-base text-black font-bold">Supply</p>
-                        </button>
+                        <TokenActions
+                            {...actionData} />
                     </CardItem>
                 </div>
             </div>

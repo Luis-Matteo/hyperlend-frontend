@@ -14,6 +14,7 @@ import { useUserPositionsData, useUserWalletBalance, useUserPortfolioHistory } f
 import { getUserPoints } from '../utils/userPoints';
 import MyChart from '../components/dashboard/Chart';
 import Factor from '../components/dashboard/Factor';
+import InfoItem from '../components/common/InfoItem';
 
 function Dashboard() {
   const { data: hash, writeContractAsync } = useWriteContract()
@@ -67,36 +68,42 @@ function Dashboard() {
         <div className="pt-8 flex flex-col gap-4">
           <div className="md:flex gap-4 justify-between">
             <CardItem
-              className="px-8 p h-72 max-w-[480px] w-full overflow-hidden md:mb-0"
+              className="px-8 py-4 p h-72 max-w-[480px] w-full overflow-hidden md:mb-0"
             >
-              <div className="mt-9">
-                <SectionTitle
-                  title="Health Factor"
-                  className='relative'
-                />
+              <div className="">
+                <div className='flex gap-2 items-center'>
+                  <SectionTitle
+                    title="Health Factor"
+                  />
+                  <InfoItem
+                    title={
+                      <span>Health factor is a numerical value that represents the ratio of the value of a user's collateral to the value of their borrowed assets. <br />It is designed to give borrowers a clear understanding of the risk associated with their current loan.</span>
+                    }
+                    className='w-[340px]' />
+
+                </div>
                 <div className='flex mt-12 text-center justify-center items-end'>
                   <Factor healthFactor={healthFactor} />
                 </div>
               </div>
             </CardItem>
             <CardItem
-              className="py-4 px-5 md:w-full"
+              className="py-4 px-6 md:w-full"
             >
-              <div className="">
-                <SectionTitle
-                  title="Your Positions"
-                />
-                <div className='flex flex-col gap-5 w-[90%] m-auto'>
-                  <div className='h-20'>
-                    <span className='text-white mb-2'>Collateral</span>
-                    <PositionBar
-                      available={totalSupplyUsd} total={totalSupplyUsd + walletBalanceValue} />
-                  </div>
-                  <div className='h-20'>
-                    <span className='text-white mb-2'>Borrow</span>
-                    <PositionBar
-                      available={totalBorrowUsd} total={totalBorrowLimit} />
-                  </div>
+              <SectionTitle
+                title="Your Positions"
+                className='mb-8'
+              />
+              <div className='flex flex-col justify-between gap-5 px-5 w-full'>
+                <div className='h-20'>
+                  <span className='text-white mb-2'>Collateral deposited</span>
+                  <PositionBar
+                    available={totalSupplyUsd} total={totalSupplyUsd + walletBalanceValue} />
+                </div>
+                <div className='h-20'>
+                  <span className='text-white mb-2'>Borrow</span>
+                  <PositionBar
+                    available={totalBorrowUsd} total={totalBorrowLimit} />
                 </div>
               </div>
             </CardItem>

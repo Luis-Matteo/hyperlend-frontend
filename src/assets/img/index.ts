@@ -1,4 +1,4 @@
-import cat from './cat.png'
+import catImage from './cat.png'
 
 
-export default {cat}
+export { catImage }

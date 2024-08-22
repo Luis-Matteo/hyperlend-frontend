@@ -5,7 +5,7 @@ type ToggleButtonPropsProps = {
     setStatus: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ToggleButtonProps({ status, setStatus }: ToggleButtonPropsProps) {
+function ToggleButton({ status, setStatus }: ToggleButtonPropsProps) {
     return (
         <button
             type="button"
@@ -28,4 +28,4 @@ function ToggleButtonProps({ status, setStatus }: ToggleButtonPropsProps) {
     );
 }
 
-export default ToggleButtonProps;
+export default ToggleButton;

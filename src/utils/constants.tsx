@@ -38,4 +38,37 @@ const navLinks: NavLinkProps[] = [
   },
 ];
 
-export { navLinks };
+
+const assetsInfos = [
+  {
+    title: "Total Supplied",
+    tooltip: "Total hyperlend deposits for each assests."
+  },
+  {
+    title: "Supply APY",
+    tooltip: "A percentage you will earn on deposits over a year."
+  },
+  {
+    title: "Total Borrowed",
+    tooltip: "Total hyperlend borrows for each assests."
+  },
+  {
+    title: "Borrow APY",
+    tooltip: "A percentage you will pay on borrows over a year."
+  },
+  {
+    title: "Available Liquidity",
+    tooltip: "The amount of tokens available to borrow for each asset."
+  },
+  {
+    title: "Collateral",
+    tooltip: "Signals if you can borrow using this asset as a collateral."
+  },
+  {
+    title: "LTV",
+    tooltip: "The amount you can borrow against your collateral. The higher the LTV, the higher amount you can borrow against your collateral."
+  },
+]
+export { navLinks, assetsInfos };
+
+
