@@ -12,6 +12,8 @@ import { tokenNameMap, tokenFullNameMap, iconsMap, tokenDecimalsMap, stablecoins
 
 import { useProtocolReservesData, useProtocolAssetReserveData, useProtocolPriceData, useProtocolInterestRate } from '../utils/protocolState';
 import { Link } from 'react-router-dom';
+import InfoItem from '../components/common/InfoItem';
+import { assetsInfos } from '../utils/constants';
 
 function Overview() {
   const { switchChain } = useSwitchChain()
@@ -38,7 +40,7 @@ function Overview() {
 
   const getAssets = () => {
     let assets: AssetDetail[] = []
-    for (let token of Object.keys(reserveDataMap)){
+    for (let token of Object.keys(reserveDataMap)) {
       const protocolAssetReserveData = useProtocolAssetReserveData(token);
 
       if (stable && !stablecoinsList.includes(tokenNameMap[token])) continue;
@@ -92,30 +94,32 @@ function Overview() {
             <div className="">
               <div className="py-3 px-2 grid grid-cols-11 border-y-[1px] bg-grey border-[#212325]">
                 <div className="text-white font-lufga text-[11px] col-span-2">Asset</div>
-                <div className="text-white font-lufga text-[11px] flex">Total Supplied</div>
-                <div className="text-white font-lufga text-[11px] flex">Supply APY</div>
-                <div className="text-white font-lufga text-[11px] flex">Total Borrowed</div>
-                <div className="text-white font-lufga text-[11px] flex">Borrow APY</div>
-                <div className="text-white font-lufga text-[11px] flex">Available Liquidity</div>
-                <div className="text-white font-lufga text-[11px] flex">Collateral</div>
-                <div className="text-white font-lufga text-[11px] flex">LTV</div>
+                {
+                  (assetsInfos || []).map((item, key) => (
+                    <div className="flex gap-2" key={key}>
+                      <p className='text-white font-lufga text-[11px] whitespace-nowrap'>{item.title}</p>
+                      <InfoItem
+                        title={item.tooltip} />
+                    </div>
+                  ))
+                }
                 <div></div>
                 <div></div>
               </div>
               <div>
                 {
                   (getAssets() || []).map((item, key) => (
-                    <div 
-                      className="grid grid-cols-11 items-center py-[14px] px-2.5 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer" 
+                    <div
+                      className="grid grid-cols-11 items-center py-[14px] px-2.5 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer"
                       key={key}
                     >
-                      <Link 
+                      <Link
                         className="col-span-9 grid grid-cols-9 items-center"
                         to={`${item.underlyingAsset}`}
                       >
                         <div className="text-white font-lufga flex items-center col-span-2 h-full">
                           <div className="flex items-center h-full">
-                            <img src={item.icon} alt="" className="w-6 h-6 mr-2"/> {item.name} | {item.symbol}
+                            <img src={item.icon} alt="" className="w-6 h-6 mr-2" /> {item.symbol}
                           </div>
                         </div>
                         <div className="text-white font-lufga">
@@ -137,7 +141,7 @@ function Overview() {
                         </div>
                         <div className="text-white font-lufga">{formatNumber(item.borrowApy, 2)}%</div>
                         <div className="text-white font-lufga">
-                        <p className="">
+                          <p className="">
                             {formatUnit(item.totalLiquidityToken)}
                           </p>
                           <p className="">
@@ -146,13 +150,13 @@ function Overview() {
                         </div>
                         <div className="text-white font-lufga">{
                           item.isCollateral ? <div className="text-success">✓</div> : "─"
-                        }</div> 
+                        }</div>
                         <div className="text-white font-lufga">{formatNumber(item.ltv, 2)}%</div>
                       </Link>
 
                       <div className="grid grid-cols-2 gap-4 col-span-2">
-                        <button 
-                          className="w-full py-4 bg-secondary font-lufga rounded-xl font-bold"
+                        <button
+                          className="w-full py-2 bg-secondary font-lufga rounded-xl font-bold hover:"
                           onClick={
                             () => {
                               setModalStatus(true)
@@ -163,8 +167,8 @@ function Overview() {
                         >
                           Supply
                         </button>
-                        <button 
-                          className="w-full py-4 bg-secondary font-lufga rounded-xl font-bold"
+                        <button
+                          className="w-full py-2 bg-secondary font-lufga rounded-xl font-bold"
                           onClick={
                             () => {
                               setModalStatus(true)
@@ -186,10 +190,10 @@ function Overview() {
       </div>
       {
         modalStatus &&
-        <Modal 
-        token={selectedToken || ""}
-        modalType={modalType}
-        onClose={closeModal} />
+        <Modal
+          token={selectedToken || ""}
+          modalType={modalType}
+          onClose={closeModal} />
       }
     </>
   );
