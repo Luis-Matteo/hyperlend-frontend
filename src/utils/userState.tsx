@@ -80,12 +80,7 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
 
   const supplyInterestEarned = supplied.reduce((partialSum: number, a: any) => partialSum + (a.apr * a.value), 0);
   const borrowInterestEarned = borrowed.reduce((partialSum: number, a: any) => partialSum + (a.apr * a.value), 0);
-
-  const earnedApy = supplyInterestEarned / totalSupply;
-  const debtApy = borrowInterestEarned / totalBorrow;
-
-  const smb = (totalSupply - totalBorrow) != 0 ? (totalSupply - totalBorrow) : 1 //supply minus borrow
-  const netApy =  earnedApy * (totalSupply / smb) - debtApy * (totalBorrow / smb);
+  const netApy = (supplyInterestEarned - borrowInterestEarned) / 100;
 
   return {
     supplied: supplied,
