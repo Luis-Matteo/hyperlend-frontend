@@ -1,16 +1,19 @@
 import { NavLink } from '../utils/types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { navLinks } from '../utils/constants';
 import NavButton from '../components/header/NavButton';
 import logo from '../assets/icons/logo-text.svg';
 import Status from '../components/header/Status';
 import logoutIcon from '../assets/icons/logout-icon.svg';
+import referralsIcon from '../assets/icons/referralsIcon.svg'
+import { toggleModalOpen } from '../store/sidebarSlice';
 
 function Sidebar() {
+  const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state: RootState) => state.sidebar.isOpen);
-  console.log(isSidebarOpen)
-  return (  
+
+  return (
     <div className={`bg-primary ${isSidebarOpen ? 'hidden' : 'block'}`}>
       <div className="w-64 p-10 flex-col justify-between flex h-screen ">
         <div className="">
@@ -31,6 +34,23 @@ function Sidebar() {
                 disabled={item.disabled}
               />
             ))}
+            <button
+              className="flex items-center gap-2 rounded-full hover:bg-[#1F2A29]"
+              type="button"
+              onClick={() => dispatch(toggleModalOpen())}
+              
+            >
+              <div
+                className="p-3 "
+              >
+                <img src={referralsIcon} className="w-5" alt="referrals"/>
+              </div>
+              <p
+                className="font-lufga font-medium text-secondary"
+              >
+                Referrals
+              </p>
+            </button>
           </div>
         </div>
         <div className="">

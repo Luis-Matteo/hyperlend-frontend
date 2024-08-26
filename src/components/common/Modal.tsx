@@ -195,7 +195,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
           <div className="flex justify-between items-center mb-6">
             <p className="font-lufga font-light text-[#797979]">You {capitalizeString(modalType)}</p>
             <button className="" onClick={onClose}>
-              <img src={xmarkIcon} alt="" />
+              <img src={xmarkIcon} alt="close" />
             </button>
           </div>
           <div className='px-6 py-4 bg-[#050F0D] rounded-2xl flex flex-col gap-4 mb-5'>
