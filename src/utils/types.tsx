@@ -95,14 +95,3 @@ export interface AssetDetail {
   ltv: number;
   isStable: boolean;
 } 
-
-export interface InterestRateParams {
-  OPTIMAL_USAGE_RATIO: bigint;
-  baseVariableBorrowRate: bigint;
-  variableRateSlope1: bigint;
-  variableRateSlope2: bigint;
-  totalVariableDebt: bigint;
-  availableLiquidity: bigint;
-  unbacked: bigint;
-  reserveFactor: bigint;
-}
