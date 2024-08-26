@@ -59,7 +59,7 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ color }) => {
             stroke={color || "#4c51bf"}
             strokeWidth={2}
             dot={false}
-            name="Borrow API"
+            name="Borrow APY"
           />
         </LineChart>
       </ResponsiveContainer>

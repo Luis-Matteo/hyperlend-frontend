@@ -257,7 +257,7 @@ function TokenDetail() {
                         </div>
                         <div className='flex items-center mt-8 mb-8'>
                             <span className="w-2 h-2 bg-[#2DC24E] rounded-full mr-2"></span>
-                            <p className="text-xs text-[#797979] font-lufga">Supply API</p>
+                            <p className="text-xs text-[#797979] font-lufga">Supply APY</p>
                         </div>
                         <div className="flex gap-12">
                             {(supplyInfos || []).map((supplyInfo, index) => (
@@ -308,15 +308,15 @@ function TokenDetail() {
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <span className="w-2 h-2 bg-[#2DC296] rounded-full"></span>
-                                    <p className="text-xs text-[#797979]">Borrow API</p>
+                                    <p className="text-xs text-[#797979]">Borrow APY</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <span className="w-2 h-2 bg-[#BFC22D] rounded-full"></span>
-                                    <p className="text-xs text-[#797979]">Supply API</p>
+                                    <p className="text-xs text-[#797979]">Supply APY</p>
                                 </div>
                             </ul>
                         </div>
-                        <InterestRateModelChart />
+                        <InterestRateModelChart token={token} currentUtilization={(totalBorrowedTokens / totalSuppliedTokens) * 100} />
                     </CardItem>
                     <CardItem className="p-8 mb-6">
                         <div className="flex justify-between items-center mb-8">

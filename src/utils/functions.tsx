@@ -1,3 +1,5 @@
+import { InterestRateParams } from '../utils/types';
+
 function formatNumber(inputNumber: number, decimal: number) {
   const num = Number(inputNumber);
   if (inputNumber % 1 === 0) {

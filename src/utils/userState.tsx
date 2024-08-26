@@ -8,7 +8,7 @@ import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, lt
 
 import { useProtocolReservesData, useProtocolPriceData } from './protocolState';
 
-export function useUserPositionsData(isConnected: boolean, address: `0x${string}` | undefined): UserPositionsData {
+export function useUserPositionsData(isConnected: boolean, address: `0x${string}` | undefined): UserPositionsData {  
   const { reserveDataMap } = useProtocolReservesData()
   const { priceDataMap } = useProtocolPriceData()
   const { totalBalanceChange, totalBalanceChangePercentage } = useGetUserBalanceHistory(address)
