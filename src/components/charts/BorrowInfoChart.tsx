@@ -8,33 +8,25 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// Define the data type
-interface DataPoint {
-  month: string;
-  borrow: number;
-}
-
-// Sample data
-const data: DataPoint[] = [
-  { month: "JAN", borrow: 20 },
-  { month: "FEB", borrow: 15 },
-  { month: "MAR", borrow: 10 },
-  { month: "APR", borrow: 35 },
-  { month: "MAY", borrow: 70 },
-  { month: "JUN", borrow: 40 },
-  { month: "JUL", borrow: 80 },
-  { month: "AUG", borrow: 50 },
-  { month: "SEP", borrow: 60 },
-  { month: "OCT", borrow: 40 },
-  { month: "NOV", borrow: 50 },
-  { month: "DEC", borrow: 55 },
-];
+import { calculateApy, formatNumber } from '../../utils/functions'
+import { useInterestRateHistory } from '../../utils/protocolState';
 
 interface BorrowInfoChartType {
-  color?: string;
+  type: string;
+  token: string;
 }
 
-const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ color }) => {
+const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type }) => {
+  const rawData = useInterestRateHistory(token)
+  
+  const data = rawData.map((e: any) => {
+    const rate = type == "supply" ? e.liquidityRate : e.borrowRate;
+    return {
+      time: new Date(e.timestamp),
+      rate: formatNumber(calculateApy(Number(rate)), 2)
+    }
+  })
+
   return (
     <div style={{ padding: "20px" }}>
       <ResponsiveContainer width="100%" height={300}>
@@ -43,23 +35,23 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ color }) => {
           margin={{ left: 20, right: 20, top: 20, bottom: 0 }}
         >
           <XAxis
-            dataKey="month"
+            dataKey="time"
             fontSize={15}
             padding={{ left: 30, right: 0 }} // Add padding to the left
           />
           <YAxis
             tickFormatter={(value) => (value === 0 ? "" : value)} // Skip displaying the '0' value
-            domain={[10, 100]} // Set the Y-axis domain from 10 to 100
-            ticks={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} // Define ticks manually
+            // domain={[10, 100]} // Set the Y-axis domain from 10 to 100
+            // ticks={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} // Define ticks manually
           />
           <Tooltip />
           <Line
             type="monotone"
-            dataKey="borrow"
-            stroke={color || "#4c51bf"}
+            dataKey="rate"
+            stroke={type == "supply" ? "#2DC24E" : "#4c51bf"}
             strokeWidth={2}
             dot={false}
-            name="Borrow APY"
+            name={type == "supply" ? "Supply APY" : "Borrow APY"}
           />
         </LineChart>
       </ResponsiveContainer>

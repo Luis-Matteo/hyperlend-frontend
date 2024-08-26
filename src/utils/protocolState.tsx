@@ -1,9 +1,9 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState, useEffect } from 'react';
 import { useReadContracts, useReadContract } from 'wagmi'
 import { normalizeBN, RAY, rayDiv, rayMul } from '@aave/math-utils';
 import { BigNumber } from 'bignumber.js';
 
-import { calculateApy } from './functions';
+import { calculateApy, padArray } from './functions';
 import { Reserve, ReservesData } from '../utils/types'
 import { contracts, assetAddresses, abis, tokenToRateStrategyMap } from './tokens';
 
@@ -242,4 +242,24 @@ export function useProtocolInterestRateModel(token: string){
   }
   
   return rates;
+}
+
+export function useInterestRateHistory(token: string){
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch('https://api.hyperlend.finance/data/interestRateHistory?chain=arbitrum&token=' + token)
+      .then(response => response.json())
+      .then(json => {
+        const values = json ? json.map((e: any) => ({
+          timestamp: e.timestamp,
+          liquidityRate: e[token].currentLiquidityRate,
+          borrowRate: e[token].currentVariableBorrowRate
+        })) : []
+        setData(values)
+      })
+      .catch(error => console.error(error));
+  }, []);
+  
+  return data || []
 }

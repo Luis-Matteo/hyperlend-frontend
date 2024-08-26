@@ -267,7 +267,7 @@ function TokenDetail() {
                                 </div>
                             ))}
                         </div>
-                        <BorrowInfoChart color="#2DC24E" />
+                        <BorrowInfoChart type="supply" token={token} />
                     </CardItem>
                     <CardItem className="p-8 mb-6">
                         <div className="flex justify-between items-center">
@@ -296,7 +296,7 @@ function TokenDetail() {
                                 </div>
                             ))}
                         </div>
-                        <BorrowInfoChart />
+                        <BorrowInfoChart type="borrow" token={token} />
                     </CardItem>
                     <CardItem className="p-8 mb-6">
                         <div className="flex justify-between items-center">
