@@ -187,3 +187,18 @@ export function useUserPortfolioHistory(address: `0x${string}` | undefined, isCo
     historicalNetWorth: padArray(data || [], 168, 0),
   }
 }
+
+export function useUserAllowance(contract: string, owner: string, spender: string){
+  const { address, isConnected } = useAccount();
+  const { data } = useReadContract(
+    isConnected && address
+    ?
+    {
+      abi: erc20Abi,
+      address: contract,
+      functionName: 'allowance',
+      args: [owner, spender],
+    } as any : undefined
+  );
+  return data
+}

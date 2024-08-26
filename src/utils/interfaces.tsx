@@ -8,4 +8,5 @@ export interface TokenActionsProps {
     dailyEarning: number;
     btnTitle: string;
     token: string;
+    isCollateralEnabled: boolean;
 }

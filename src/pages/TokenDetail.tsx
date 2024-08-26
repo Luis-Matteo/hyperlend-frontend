@@ -41,6 +41,10 @@ function TokenDetail() {
         }
     }, [account])
 
+    const normalizeDecimalsAmount = (x: number) => {
+      return Number(x) / Math.pow(10, tokenDecimalsMap[token])
+    }
+
     const { data: userWalletBalance } = useReadContract(
       account.isConnected && account.address ?
         {
@@ -58,25 +62,25 @@ function TokenDetail() {
     const [activeButton, setActiveButton] = useState(1);
 
     const userPositionsData = useUserPositionsData(account.isConnected, account.address);
-    const supplied = userPositionsData.supplied.find(e => e.underlyingAsset == token);
-    const borrowed = userPositionsData.borrowed.find(e => e.underlyingAsset == token);
-
-    useEffect(() => {
-      handleButtonClick(activeButton) //refresh TokenAction page when data updates
-      console.log(userPositionsData)
-    }, [userPositionsData, userWalletBalance])
+    const supplied = userPositionsData.supplied.find(e => e.underlyingAsset == token)
+    const borrowed = userPositionsData.borrowed.find(e => e.underlyingAsset == token)
 
     const [actionData, setActionData] = useState<TokenActionsProps>({
         availableAmountTitle: "Suppliable",
-        availableAmount: Number(userWalletBalance) / Math.pow(10, tokenDecimalsMap[token]),
+        availableAmount: normalizeDecimalsAmount(Number(userWalletBalance)),
         totalApy: interestRateDataMap[token].supply,
         percentBtn: 100,
         protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
         protocolBalance: (supplied?.balance || 0),
         dailyEarning: (supplied?.value || 0) * (interestRateDataMap[token].supply / 100) / 365,
         btnTitle: "Supply",
-        token: token
+        token: token,
+        isCollateralEnabled: supplied?.isCollateralEnabled || false
     });
+
+    useEffect(() => {
+      handleButtonClick(activeButton)
+    }, [userWalletBalance])
 
     const handleButtonClick = (button: number) => {
         setActiveButton(button);
@@ -85,53 +89,57 @@ function TokenDetail() {
             case 1:
                 setActionData({
                     availableAmountTitle: "Suppliable",
-                    availableAmount: Number(userWalletBalance) / Math.pow(10, tokenDecimalsMap[token]),
+                    availableAmount: normalizeDecimalsAmount(Number(userWalletBalance)),
                     totalApy: interestRateDataMap[token].supply,
                     percentBtn: 100,
                     protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
                     protocolBalance: (supplied?.balance || 0),
                     dailyEarning: (supplied?.value || 0) * (interestRateDataMap[token].supply / 100) / 365,
                     btnTitle: "Supply",
-                    token: token
+                    token: token,
+                    isCollateralEnabled: supplied?.isCollateralEnabled || false
                 });
                 break;
             case 2:
                 setActionData({
-                    availableAmountTitle: "N/A",
-                    availableAmount: 0, //amount supplied - used collateral
+                    availableAmountTitle: "Withdrawable",
+                    availableAmount: userPositionsData.totalBorrowLimit / (Number(priceDataMap[token]) / Math.pow(10, 8)),
                     totalApy: interestRateDataMap[token].supply,
                     percentBtn: 100,
-                    protocolBalanceTitle: `Withdrawable balance (${tokenNameMap[token]})`,
+                    protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
                     protocolBalance: (supplied?.balance || 0),
                     dailyEarning: (supplied?.value || 0) * (interestRateDataMap[token].supply / 100) / 365,
                     btnTitle: "Withdraw",
-                    token: token
+                    token: token,
+                    isCollateralEnabled: false
                 });
                 break;
             case 3:
                 setActionData({
                   availableAmountTitle: "Borrowable",
-                  availableAmount: 0, //amount supplied
+                  availableAmount: userPositionsData.totalBorrowLimit / (Number(priceDataMap[token]) / Math.pow(10, 8)),
                   totalApy: interestRateDataMap[token].borrow,
                   percentBtn: 100,
                   protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
                   protocolBalance: (borrowed?.balance || 0),
                   dailyEarning: -1 * (borrowed?.value || 0) * (interestRateDataMap[token].borrow / 100) / 365,
                   btnTitle: "Borrow",
-                  token: token
+                  token: token,
+                  isCollateralEnabled: false
                 });
                 break;
             case 4:
                 setActionData({
                   availableAmountTitle: "Repayable",
-                  availableAmount: Number(userWalletBalance) / Math.pow(10, tokenDecimalsMap[token]),
+                  availableAmount: (borrowed?.balance || 0) > normalizeDecimalsAmount(Number(userWalletBalance)) ? normalizeDecimalsAmount(Number(userWalletBalance)) : (borrowed?.balance || 0),
                   totalApy: interestRateDataMap[token].borrow,
                   percentBtn: 100,
                   protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
                   protocolBalance: (borrowed?.balance || 0),
                   dailyEarning: -1 * (borrowed?.value || 0) * (interestRateDataMap[token].borrow / 100) / 365,
-                  btnTitle: "Borrow",
-                  token: token
+                  btnTitle: "Repay",
+                  token: token,
+                  isCollateralEnabled: false
                 });
                 break;
             default:

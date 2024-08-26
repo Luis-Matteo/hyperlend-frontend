@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProgressBar from "../common/PercentBar";
 import Button from "../common/Button";
 import { TokenActionsProps } from "../../utils/interfaces";
 import ToggleButton from "../common/ToggleButton";
+import { useAccount, useWriteContract } from 'wagmi'
+import { erc20Abi } from 'viem'
 
 import { formatNumber } from "../../utils/functions";
-import { iconsMap, tokenNameMap } from "../../utils/tokens";
+import { iconsMap, tokenNameMap, tokenDecimalsMap, contracts, abis } from "../../utils/tokens";
+import { useUserAllowance } from '../../utils/userState';
 
 const TokenActions: React.FC<TokenActionsProps> = ({
     availableAmountTitle,
@@ -16,15 +19,92 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     protocolBalance,
     dailyEarning,
     btnTitle,
-    token
+    token,
+    isCollateralEnabled
 }) => {
-    const [progress, setProgress] = useState<number>(80);
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const [progress, setProgress] = useState<number>(0);
+    const handleProgessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setProgress(Number(event.target.value));
+        setAmount(availableAmount * Number(event.target.value) / 100)
     };
 
-    const [collateral, setCollateral] = useState(false);
+    const actionType = btnTitle.toLowerCase()
+
+    const [buttonText, setButtonText] = useState(btnTitle)
+    const [collateral, setCollateral] = useState(isCollateralEnabled);
+    const [amount, setAmount] = useState(0)
+
+    useEffect(() => {
+      setButtonText(btnTitle)
+    }, [btnTitle])
+
+    const handleDirectInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setAmount(Number(event.target.value) >= availableAmount ? availableAmount : Number(event.target.value))
+    }
+
+    useEffect(() => {
+      if (actionType == "supply" || actionType == "repay"){
+        const allowance = parseFloat((Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0)
+        if (amount > Number(allowance)){
+          setButtonText("Approve")
+        } else {
+          setButtonText(btnTitle)
+        }
+      }
+
+      setProgress(Number(amount) >= availableAmount ? 100 : ((Number(amount) / availableAmount) * 100));
+    }, [amount, btnTitle])
+
+    const { address } = useAccount();
+    const { data: hash, writeContract, error } = useWriteContract()
+    const userAllowance = useUserAllowance(token, address || '0x', contracts.pool)
+
+    const triggerAction = () => {
+      const bgIntAmount = parseFloat((amount * Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0).toString() as any as bigint
+
+      if (actionType == "supply" || actionType == "repay") {
+        const allowance = parseFloat((Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0)
+        if (Number(allowance) < amount) {
+          writeContract({
+            address: token as any,
+            abi: erc20Abi,
+            functionName: 'approve',
+            args: [contracts.pool, bgIntAmount],
+          })
+        }
+      }
+
+      const functionParams: any = {
+        "supply": [token, bgIntAmount, address, 0], //asset, amount, onBehalfOf, refCode
+        "withdraw": [token, bgIntAmount, address], //asset, amount, to
+        "borrow": [token, bgIntAmount, 2, 0, address], //asset, amount, interestRateMode (2 = variable), refCode, onBehalfOf
+        "repay": [token, bgIntAmount, 2, address] //asset, amount, interestRateMode, onBehalfOf
+      }
+  
+      writeContract({
+        address: contracts.pool,
+        abi: abis.pool,
+        functionName: actionType,
+        args: functionParams[actionType]
+      })
+      console.log(hash)
+    }
+
+    const updateCollateral = () => {
+      writeContract({
+        address: contracts.pool,
+        abi: abis.pool,
+        functionName: "setUserUseReserveAsCollateral",
+        args: [token, !collateral]
+      })
+      if (hash) setCollateral(!collateral)
+      console.log(hash)
+    }
+
+    const setMaxAmount = () => {
+      setAmount(availableAmount)
+      setProgress(100)
+    }    
 
     return (
         <>
@@ -34,7 +114,8 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                     <p className="text-base text-[#CAEAE566]">Collateral</p>
                     <ToggleButton
                         status={collateral}
-                        setStatus={setCollateral} />
+                        setStatus={setCollateral}
+                        onClick={updateCollateral} />
                 </div>
             }
             <div className="flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4">
@@ -44,10 +125,9 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                       <input
                         type="text"
                         className="form-control-plaintext text-xl text-secondary border-0 p-0 text-right"
-                        value={availableAmount}
+                        value={amount}
                         onChange={(e) => {
-                          console.log(e)
-                          // handleDirectInputChange(e)
+                          handleDirectInputChange(e)
                         }}
                         style={{
                           background: 'transparent',
@@ -60,42 +140,22 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                     </p>
                 </div>
                 <div className="bg-[#081916] px-4 py-3 rounded">
-                    <p className="text-base text-[#CAEAE566]">{percentBtn === 100 ? 'MAX' : `${percentBtn}% LIMIT`} </p>
+                    <button className="text-base text-[#CAEAE566]" onClick={() => {
+                      setMaxAmount()
+                    }}>
+                      {percentBtn === 100 ? 'MAX' : `${percentBtn}% LIMIT`}
+                    </button>
                 </div>
             </div>
             {
-                btnTitle === 'Borrow' &&
-                <p className="text-xs text-[#FF0000] mt-2">
-                    You need to supply tokens and enable them as collateral before you
-                    can borrow PURR from this pool
-                </p>
+                error ? <p className="text-xs text-[#FF0000] mt-2">
+                    {
+                      error?.message.includes("Contract Call") ? error?.message.split("Contract Call")[0] 
+                      : error?.message.split("Request Arguments")[0]
+                    }
+                </p> : ''
             }
-            {btnTitle != "Withdraw" ? <div className="mt-4">
-                <div className="flex justify-between items-center">
-                    <p className="text-base text-lufga text-[#4B5E5B]">
-                        {availableAmountTitle} amount
-                    </p>
-                    <p className="text-base text-lufga text-[#CAEAE5]">{availableAmount}</p>
-                </div>
-                <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
-            </div> : ''}
-            <div className="mt-4">
-                <div className="flex justify-between items-center">
-                    <p className="text-base text-lufga text-[#4B5E5B]">
-                        {protocolBalanceTitle}
-                    </p>
-                    <p className="text-base text-lufga text-[#CAEAE5]">{protocolBalance}</p>
-                </div>
-                <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
-            </div>
-            <div className="mt-4">
-                <div className="flex justify-between items-center">
-                    <p className="text-base text-lufga text-[#4B5E5B]">Total APY</p>
-                    <p className="text-base text-lufga text-[#CAEAE5]">{formatNumber(totalApy, 3)}%</p>
-                </div>
-                <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
-            </div>
-            <div className="mt-4">
+            {/* <div className="mt-4">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <p className="text-base text-lufga text-[#4B5E5B]">
@@ -115,7 +175,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                         </p>
                     </div>
                 </div>
-            </div>
+            </div> */}
             <div className="relative my-2 ">
                 <ProgressBar progress={progress} className="h-1.5" />
                 <input
@@ -123,27 +183,45 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                     min="0"
                     max="100"
                     value={progress}
-                    onChange={handleInputChange}
+                    onChange={handleProgessChange}
                     className="w-full top-0 left-0 absolute opacity-0 cursor-pointer"
                 />
             </div>
-            <div>
-                {/* <div className="flex justify-between items-center mt-2 mb-2">
-                    <p className="text-base text-lufga text-[#4B5E5B]">{limitTitle}</p>
-                    <p className="text-[#CAEAE5]  text-base text-lufga font-thin ">
-                        {" "}
-                        ${limit}
+            <div className="mt-4">
+                <div className="flex justify-between items-center">
+                    <p className="text-base text-lufga text-[#4B5E5B]">
+                        {availableAmountTitle} amount
                     </p>
-                </div> */}
+                    <p className="text-base text-lufga text-[#CAEAE5]">{availableAmount}</p>
+                </div>
+                <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
+            </div> 
+            <div className="mt-4">
+                <div className="flex justify-between items-center">
+                    <p className="text-base text-lufga text-[#4B5E5B]">
+                        {protocolBalanceTitle}
+                    </p>
+                    <p className="text-base text-lufga text-[#CAEAE5]">{protocolBalance}</p>
+                </div>
+                <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
+            </div>
+            <div className="mt-4">
+                <div className="flex justify-between items-center">
+                    <p className="text-base text-lufga text-[#4B5E5B]">Total APY</p>
+                    <p className="text-base text-lufga text-[#CAEAE5]">{formatNumber(totalApy, 3)}%</p>
+                </div>
+                <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
+            </div>
+            <div>
                 <div className="flex justify-between items-center mt-2 mb-2">
-                    <p className="text-base text-lufga text-[#4B5E5B]">Daily earnings</p>
-                    <p className="text-[#2DC24E]  text-base text-lufga  ">
+                    <p className="text-base text-lufga text-[#4B5E5B]">Daily {actionType == "supply" || actionType == "withdraw" ? "earnings" : "cost"}</p>
+                    <p className={`text-base text-lufga ${dailyEarning >= 0 ? "text-[#2DC24E]" : "text-red-500"}`}>
                         {" "}
                         ${formatNumber(dailyEarning, 3)}
                     </p>
                 </div>
             </div>
-            <Button title={btnTitle} />
+            <Button title={buttonText} onClick={() => triggerAction()} />
         </>
     );
 };
