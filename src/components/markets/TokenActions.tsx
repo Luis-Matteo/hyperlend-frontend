@@ -53,6 +53,9 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       }
 
       setProgress(Number(amount) >= availableAmount ? 100 : ((Number(amount) / availableAmount) * 100));
+      if (amount >= availableAmount){
+        setAmount(availableAmount)
+      }
     }, [amount, btnTitle])
 
     const { address } = useAccount();

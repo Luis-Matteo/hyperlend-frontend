@@ -1,4 +1,5 @@
 import Chart from 'react-apexcharts';
+import { formatNumber } from '../../utils/functions';
 
 interface ChartProps {
   data: number[];
@@ -79,7 +80,10 @@ const MyChart = ({ data }: ChartProps) => {
             colors: ['#CAEAE5']  // Line color
         },
         tooltip: {
-            enabled: false  // Disable the tooltip
+            // custom: function({series, seriesIndex, dataPointIndex}: any) {
+            //     return `<div>$${formatNumber(series[seriesIndex][dataPointIndex], 2)}</div>`;
+            // }
+            enabled: false
         },
         legend: {
             show: false  // Hide the series label (legend)
