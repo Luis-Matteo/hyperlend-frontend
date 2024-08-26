@@ -46,6 +46,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                         className="form-control-plaintext text-xl text-secondary border-0 p-0 text-right"
                         value={availableAmount}
                         onChange={(e) => {
+                          console.log(e)
                           // handleDirectInputChange(e)
                         }}
                         style={{

@@ -3,7 +3,7 @@ import { useReadContracts, useReadContract } from 'wagmi'
 import { normalizeBN, RAY, rayDiv, rayMul } from '@aave/math-utils';
 import { BigNumber } from 'bignumber.js';
 
-import { calculateApy, padArray } from './functions';
+import { calculateApy } from './functions';
 import { Reserve, ReservesData } from '../utils/types'
 import { contracts, assetAddresses, abis, tokenToRateStrategyMap } from './tokens';
 
