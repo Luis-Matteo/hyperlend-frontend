@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import Navbar from '../layouts/Navbar';
 import CardItem from '../components/common/CardItem';
 import { useParams } from 'react-router-dom';
-import { useSwitchChain, useAccount } from 'wagmi'
+import { useSwitchChain, useAccount, useReadContract } from 'wagmi'
+import { erc20Abi } from 'viem'
+
 import { formatNumber, decodeConfig } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../components/charts/InterestRateModelChart';
@@ -13,6 +15,10 @@ import {
     iconsMap, tokenDecimalsMap,
     liqMap, ltvMap, liqPenaltyMap
 } from '../utils/tokens';
+
+import {
+  useUserPositionsData
+} from '../utils/userState';
 
 import {
     useProtocolReservesData,
@@ -35,23 +41,41 @@ function TokenDetail() {
         }
     }, [account])
 
+    const { data: userWalletBalance } = useReadContract(
+      account.isConnected && account.address ?
+        {
+          abi: erc20Abi,
+          address: token,
+          functionName: 'balanceOf',
+          args: [account.address],
+        } as any : undefined
+    );
+
     const { reserveDataMap } = useProtocolReservesData();
     const { priceDataMap } = useProtocolPriceData()
     const { interestRateDataMap } = useProtocolInterestRate()
     const protocolAssetReserveData = useProtocolAssetReserveData(token);
     const [activeButton, setActiveButton] = useState(1);
 
+    const userPositionsData = useUserPositionsData(account.isConnected, account.address);
+    const supplied = userPositionsData.supplied.find(e => e.underlyingAsset == token);
+    const borrowed = userPositionsData.borrowed.find(e => e.underlyingAsset == token);
+
+    useEffect(() => {
+      handleButtonClick(activeButton) //refresh TokenAction page when data updates
+      console.log(userPositionsData)
+    }, [userPositionsData, userWalletBalance])
+
     const [actionData, setActionData] = useState<TokenActionsProps>({
-        amountTitle: "Suppliable",
-        amount: 9291,
-        totalApy: 9.92,
+        availableAmountTitle: "Suppliable",
+        availableAmount: Number(userWalletBalance) / Math.pow(10, tokenDecimalsMap[token]),
+        totalApy: interestRateDataMap[token].supply,
         percentBtn: 100,
-        balanceTitle: "Supply balance (PURR)",
-        balance: 0,
-        limitTitle: "Borrow limit",
-        limit: 1000,
-        dailyEarning: 687,
+        protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
+        protocolBalance: (supplied?.balance || 0),
+        dailyEarning: (supplied?.value || 0) * (interestRateDataMap[token].supply / 100) / 365,
         btnTitle: "Supply",
+        token: token
     });
 
     const handleButtonClick = (button: number) => {
@@ -60,58 +84,54 @@ function TokenDetail() {
         switch (button) {
             case 1:
                 setActionData({
-                    amountTitle: "Suppliable",
-                    amount: 9291,
-                    totalApy: 9.92,
+                    availableAmountTitle: "Suppliable",
+                    availableAmount: Number(userWalletBalance) / Math.pow(10, tokenDecimalsMap[token]),
+                    totalApy: interestRateDataMap[token].supply,
                     percentBtn: 100,
-                    balanceTitle: "Supply balance (PURR)",
-                    balance: 0,
-                    limitTitle: "Borrow limit",
-                    limit: 1000,
-                    dailyEarning: 687,
+                    protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
+                    protocolBalance: (supplied?.balance || 0),
+                    dailyEarning: (supplied?.value || 0) * (interestRateDataMap[token].supply / 100) / 365,
                     btnTitle: "Supply",
+                    token: token
                 });
                 break;
             case 2:
                 setActionData({
-                    amountTitle: "Withdrawable",
-                    amount: 929,
-                    totalApy: 9.92,
+                    availableAmountTitle: "N/A",
+                    availableAmount: 0, //amount supplied - used collateral
+                    totalApy: interestRateDataMap[token].supply,
                     percentBtn: 100,
-                    balanceTitle: "Supply balance (PURR)",
-                    balance: 0,
-                    limitTitle: "Borrow limit",
-                    limit: 1000,
-                    dailyEarning: 687,
+                    protocolBalanceTitle: `Withdrawable balance (${tokenNameMap[token]})`,
+                    protocolBalance: (supplied?.balance || 0),
+                    dailyEarning: (supplied?.value || 0) * (interestRateDataMap[token].supply / 100) / 365,
                     btnTitle: "Withdraw",
+                    token: token
                 });
                 break;
             case 3:
                 setActionData({
-                    amountTitle: "Borrow",
-                    amount: 9291,
-                    totalApy: 9.92,
-                    percentBtn: 80,
-                    balanceTitle: "Borrow balance (PURR)",
-                    balance: 0,
-                    limitTitle: "Borrow limit used",
-                    limit: 1000,
-                    dailyEarning: 687,
-                    btnTitle: "Borrow",
+                  availableAmountTitle: "Borrowable",
+                  availableAmount: 0, //amount supplied
+                  totalApy: interestRateDataMap[token].borrow,
+                  percentBtn: 100,
+                  protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
+                  protocolBalance: (borrowed?.balance || 0),
+                  dailyEarning: -1 * (borrowed?.value || 0) * (interestRateDataMap[token].borrow / 100) / 365,
+                  btnTitle: "Borrow",
+                  token: token
                 });
                 break;
             case 4:
                 setActionData({
-                    amountTitle: "Repayable",
-                    amount: 9291,
-                    totalApy: 9.92,
-                    percentBtn: 100,
-                    balanceTitle: "Borrow balance (PURR)",
-                    balance: 0,
-                    limitTitle: "Borrow limit used",
-                    limit: 1000,
-                    dailyEarning: 687,
-                    btnTitle: "Repay",
+                  availableAmountTitle: "Repayable",
+                  availableAmount: Number(userWalletBalance) / Math.pow(10, tokenDecimalsMap[token]),
+                  totalApy: interestRateDataMap[token].borrow,
+                  percentBtn: 100,
+                  protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
+                  protocolBalance: (borrowed?.balance || 0),
+                  dailyEarning: -1 * (borrowed?.value || 0) * (interestRateDataMap[token].borrow / 100) / 365,
+                  btnTitle: "Borrow",
+                  token: token
                 });
                 break;
             default:

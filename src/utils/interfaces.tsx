@@ -1,12 +1,11 @@
 export interface TokenActionsProps {
-    amountTitle: string;
-    amount: number;
+    availableAmountTitle: string;
+    availableAmount: number;
     totalApy: number;
     percentBtn: number;
-    balanceTitle: string;
-    balance: number;
-    limitTitle: string;
-    limit: number;
+    protocolBalanceTitle: string;
+    protocolBalance: number;
     dailyEarning: number;
     btnTitle: string;
+    token: string;
 }

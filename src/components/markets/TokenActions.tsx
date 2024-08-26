@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import ProgressBar from "../common/PercentBar";
 import Button from "../common/Button";
-import { catImage } from "../../assets/img";
 import { TokenActionsProps } from "../../utils/interfaces";
 import ToggleButton from "../common/ToggleButton";
 
+import { formatNumber } from "../../utils/functions";
+import { iconsMap, tokenNameMap } from "../../utils/tokens";
 
 const TokenActions: React.FC<TokenActionsProps> = ({
-    amountTitle,
-    amount,
+    availableAmountTitle,
+    availableAmount,
     totalApy,
     percentBtn,
-    balanceTitle,
-    balance,
-    limitTitle,
-    limit,
+    protocolBalanceTitle,
+    protocolBalance,
     dailyEarning,
     btnTitle,
+    token
 }) => {
     const [progress, setProgress] = useState<number>(80);
 
@@ -39,8 +39,24 @@ const TokenActions: React.FC<TokenActionsProps> = ({
             }
             <div className="flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4">
                 <div className="flex gap-3 items-center w-fit p-3">
-                    <img src={catImage} alt="cat" />
-                    <p className="text-base text-[#CAEAE566]">0.00</p>
+                    <img src={iconsMap[tokenNameMap[token]]} height={'30px'} width={'30px'} alt="coinIcon" />
+                    <p className="text-base text-[#CAEAE566]">
+                      <input
+                        type="text"
+                        className="form-control-plaintext text-xl text-secondary border-0 p-0 text-right"
+                        value={availableAmount}
+                        onChange={(e) => {
+                          // handleDirectInputChange(e)
+                        }}
+                        style={{
+                          background: 'transparent',
+                          outline: 'none',
+                          boxShadow: 'none',
+                          width: 'auto',
+                          minWidth: '50px',
+                        }}
+                      />
+                    </p>
                 </div>
                 <div className="bg-[#081916] px-4 py-3 rounded">
                     <p className="text-base text-[#CAEAE566]">{percentBtn === 100 ? 'MAX' : `${percentBtn}% LIMIT`} </p>
@@ -53,19 +69,28 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                     can borrow PURR from this pool
                 </p>
             }
+            {btnTitle != "Withdraw" ? <div className="mt-4">
+                <div className="flex justify-between items-center">
+                    <p className="text-base text-lufga text-[#4B5E5B]">
+                        {availableAmountTitle} amount
+                    </p>
+                    <p className="text-base text-lufga text-[#CAEAE5]">{availableAmount}</p>
+                </div>
+                <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
+            </div> : ''}
             <div className="mt-4">
                 <div className="flex justify-between items-center">
                     <p className="text-base text-lufga text-[#4B5E5B]">
-                        {amountTitle} amount
+                        {protocolBalanceTitle}
                     </p>
-                    <p className="text-base text-lufga text-[#CAEAE5]">{amount}</p>
+                    <p className="text-base text-lufga text-[#CAEAE5]">{protocolBalance}</p>
                 </div>
                 <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
             </div>
             <div className="mt-4">
                 <div className="flex justify-between items-center">
                     <p className="text-base text-lufga text-[#4B5E5B]">Total APY</p>
-                    <p className="text-base text-lufga text-[#CAEAE5]">{totalApy}%</p>
+                    <p className="text-base text-lufga text-[#CAEAE5]">{formatNumber(totalApy, 3)}%</p>
                 </div>
                 <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
             </div>
@@ -77,7 +102,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                         </p>
                         <p className="text-[#CAEAE5]  text-base text-lufga font-thin ">
                             {" "}
-                            $918{" "}
+                            {protocolBalance}{" "}
                         </p>
                     </div>
 
@@ -85,7 +110,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                         <p className="text-base text-lufga text-[#4B5E5B]">MAX: </p>
                         <p className="text-[#CAEAE5]  text-base text-lufga font-thin ">
                             {" "}
-                            $1505{" "}
+                            {availableAmount + protocolBalance}{" "}
                         </p>
                     </div>
                 </div>
@@ -102,24 +127,18 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                 />
             </div>
             <div>
-                <div className="flex justify-between items-center mt-2 mb-2">
-                    <p className="text-base text-lufga mt-2 text-[#4B5E5B]">
-                        {balanceTitle}: {"  "}{" "}
-                    </p>
-                    <p className="text-[#CAEAE5]  text-base text-lufga font-thin ">{balance}</p>
-                </div>
-                <div className="flex justify-between items-center mt-2 mb-2">
+                {/* <div className="flex justify-between items-center mt-2 mb-2">
                     <p className="text-base text-lufga text-[#4B5E5B]">{limitTitle}</p>
                     <p className="text-[#CAEAE5]  text-base text-lufga font-thin ">
                         {" "}
                         ${limit}
                     </p>
-                </div>
+                </div> */}
                 <div className="flex justify-between items-center mt-2 mb-2">
                     <p className="text-base text-lufga text-[#4B5E5B]">Daily earnings</p>
                     <p className="text-[#2DC24E]  text-base text-lufga  ">
                         {" "}
-                        ${dailyEarning}
+                        ${formatNumber(dailyEarning, 3)}
                     </p>
                 </div>
             </div>

@@ -16,13 +16,26 @@ interface BorrowInfoChartType {
   token: string;
 }
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="custom-tooltip" style={{ backgroundColor: '#fff', padding: '10px', border: '1px solid #ccc' }}>
+        <p className="label" style={{color: '#302DC2'}}>{`Date: ${label}`}</p>
+        <p className="intro" style={{color: '#38b2ac'}}>{`APY: ${payload[0].value}%`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
+
 const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type }) => {
   const rawData = useInterestRateHistory(token)
   
   const data = rawData.map((e: any) => {
     const rate = type == "supply" ? e.liquidityRate : e.borrowRate;
     return {
-      time: new Date(e.timestamp),
+      time: new Date(e.timestamp).toDateString(),
       rate: formatNumber(calculateApy(Number(rate)), 2)
     }
   })
@@ -44,7 +57,7 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type }) => {
             // domain={[10, 100]} // Set the Y-axis domain from 10 to 100
             // ticks={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} // Define ticks manually
           />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip/>} />
           <Line
             type="monotone"
             dataKey="rate"
