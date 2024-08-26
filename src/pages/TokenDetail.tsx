@@ -60,7 +60,7 @@ function TokenDetail() {
     const { interestRateDataMap } = useProtocolInterestRate()
     const protocolAssetReserveData = useProtocolAssetReserveData(token);
     const [activeButton, setActiveButton] = useState(1);
-
+    
     const userPositionsData = useUserPositionsData(account.isConnected, account.address);
     const supplied = userPositionsData.supplied.find(e => e.underlyingAsset == token)
     const borrowed = userPositionsData.borrowed.find(e => e.underlyingAsset == token)
@@ -85,6 +85,8 @@ function TokenDetail() {
     const handleButtonClick = (button: number) => {
         setActiveButton(button);
 
+        const tokenPrice = (Number(priceDataMap[token]) / Math.pow(10, 8))
+        const borrowLiquidity = Number(protocolAssetReserveData.totalAToken - protocolAssetReserveData.totalVariableDebt) / Math.pow(10, tokenDecimalsMap[token])
         switch (button) {
             case 1:
                 setActionData({
@@ -103,7 +105,7 @@ function TokenDetail() {
             case 2:
                 setActionData({
                     availableAmountTitle: "Withdrawable",
-                    availableAmount: userPositionsData.totalBorrowLimit / (Number(priceDataMap[token]) / Math.pow(10, 8)),
+                    availableAmount: (supplied?.balance || 0) > userPositionsData.totalBorrowLimit / tokenPrice ? userPositionsData.totalBorrowLimit / tokenPrice : (supplied?.balance || 0),
                     totalApy: interestRateDataMap[token].supply,
                     percentBtn: 100,
                     protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
@@ -117,7 +119,7 @@ function TokenDetail() {
             case 3:
                 setActionData({
                   availableAmountTitle: "Borrowable",
-                  availableAmount: userPositionsData.totalBorrowLimit / (Number(priceDataMap[token]) / Math.pow(10, 8)),
+                  availableAmount: borrowLiquidity < userPositionsData.totalBorrowLimit / tokenPrice ? borrowLiquidity : userPositionsData.totalBorrowLimit / tokenPrice,
                   totalApy: interestRateDataMap[token].borrow,
                   percentBtn: 100,
                   protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
