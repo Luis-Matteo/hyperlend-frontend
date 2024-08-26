@@ -1,5 +1,5 @@
 import Chart from 'react-apexcharts';
-import { formatNumber } from '../../utils/functions';
+// import { formatNumber } from '../../utils/functions';
 
 interface ChartProps {
   data: number[];
