@@ -17,14 +17,14 @@ function ToggleButton({ status, setStatus, onClick }: ToggleButtonPropsProps) {
         >
             <div
                 className={`p-2 rounded-full transition-all duration-500 ${status
-                    ? "bg-secondary translate-x-0"
-                    : "bg-transparent translate-x-full"
+                    ? "bg-transparent translate-x-full"
+                    : "bg-secondary translate-x-0"
                     }`}
             />
             <div
                 className={`p-2 rounded-full transition-all duration-500 ${!status
-                    ? "bg-secondary translate-x-0"
-                    : "bg-transparent -translate-x-full"
+                    ? "bg-transparent -translate-x-full"
+                    : "bg-secondary translate-x-0"
                     }`}
             />
         </button>
