@@ -160,8 +160,9 @@ function Dashboard() {
                   %)
                 </p>
               </div>
-              <div className=''>
-                <MyChart data={historicalNetWorth} />
+              <div className='w-[800px] h-[150px]'>
+                <MyChart 
+                data={historicalNetWorth} />
               </div>
             </div>
           </CardItem>

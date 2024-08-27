@@ -7,7 +7,7 @@ type CardItemProps = {
 
 function CardItem({ className, children }: CardItemProps) {
   return (
-    <div className={`rounded-2xl ${className} ${className.includes('bg' ? '' : 'bg-primary')}`}>
+    <div className={`rounded-2xl bg-primary ${className}`}>
       {children}
     </div>
   );

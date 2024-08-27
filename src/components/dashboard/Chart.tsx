@@ -126,8 +126,8 @@ const MyChart = ({ data }: ChartProps) => {
             options={options as any}
             series={series}
             type="area"
-            width="800"
-            height="150"
+            width="100%"
+            height="100%"
         />
     );
 };
