@@ -36,17 +36,17 @@ function formatAddress(inputAddress: string) {
   return `${start}...${end}`;
 }
 
-export function capitalizeString(s: string){
+export function capitalizeString(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-function calculateApy(currentRate: number){
+function calculateApy(currentRate: number) {
   let rateDecimal = currentRate / 1e27
   let apy = Math.pow(Math.E, rateDecimal) - 1
   return apy * 100
 }
 
-export function decodeConfig(configNumber: bigint){
+export function decodeConfig(configNumber: bigint) {
   // bit 0-15: LTV
   // bit 16-31: Liquidation threshold
   // bit 32-47: Liquidation bonus
@@ -119,12 +119,39 @@ export function filterString(inputString: string, searchPhrase: string) {
 
 export function padArray(arr: any, x: any, defaultValue: any) {
   const paddingNeeded = x - arr.length;
-  
+
   if (paddingNeeded > 0) {
-      const paddingArray = new Array(paddingNeeded).fill(defaultValue);
-      return arr.concat(paddingArray);
+    const paddingArray = new Array(paddingNeeded).fill(defaultValue);
+    return arr.concat(paddingArray);
   }
   return arr;
 }
 
-export { formatNumber, formatAddress, formatUnit, calculateApy };
+const copyToClipboard = (text: string): void => {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        console.log('Text copied to clipboard successfully!');
+      },
+      (err) => {
+        console.error('Failed to copy text to clipboard', err);
+      }
+    );
+  } else {
+    // Fallback method if clipboard API is not supported
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      console.log('Text copied to clipboard successfully!');
+    } catch (err) {
+      console.error('Failed to copy text to clipboard', err);
+    }
+    document.body.removeChild(textArea);
+  }
+};
+
+export { formatNumber, formatAddress, formatUnit, calculateApy, copyToClipboard };

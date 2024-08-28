@@ -8,6 +8,7 @@ export default {
     extend: {
       boxShadow: {
         'custom': '0 0 15px #252525',
+        '4xl': '0 0 40px #252525',
       },
       fontFamily: {
         lufga: ['Lufga', 'sans-serif'],
