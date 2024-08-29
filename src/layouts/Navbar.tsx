@@ -1,8 +1,7 @@
 // import { useState } from 'react'; 
 import { useDispatch } from 'react-redux';
 import { toggleSidebar } from '../store/sidebarSlice';
-// import magnifyIcon from '../assets/icons/magnify-icon.svg';
-import dashboardIcon from '../assets/icons/dashboard-icon.svg';
+import hamburgerIcon from '../assets/icons/hamburger-icon.svg';
 
 type NavbarProps = {
   pageTitle: string;
@@ -16,15 +15,15 @@ function Navbar({ pageTitle, pageIcon }: NavbarProps) {
   return (
     <div>
       <div className="w-full flex justify-between items-center">
-        <div className='flex gap-2'>
-          <button className='font-lufga text-white lg:hidden' onClick={() => dispatch(toggleSidebar())}
+        <div className='flex gap-2 items-center'>
+          <button className='py-1 px-2 font-lufga text-white lg:hidden' onClick={() => dispatch(toggleSidebar())}
           >
-            <img src={dashboardIcon} alt=''/>
+            <img src={hamburgerIcon} alt=''/>
           </button>
           {
             pageIcon ? <img src={pageIcon} height="30px" width="30px" alt=''/> : ""
           }
-          <h2 className="font-lufga text-3xl text-white">
+          <h2 className="font-lufga md:text-xl lg:text-3xl text-white">
           {pageTitle}
           </h2>
         </div>
