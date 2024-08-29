@@ -18,8 +18,8 @@ function Router() {
   return (
     <BrowserRouter>
       <Sidebar />
-      <main className="bg-primary-light flex-1 relative">
-        <div className="relative px-4 py-12 sm:p-14 z-20 max-h-screen h-full overflow-auto ">
+      <main className="bg-primary-light flex-1 relative lg:h-screen">
+        <div className="relative px-4 py-8 md:px-6 xl:p-14 z-20 lg:max-h-screen h-full overflow-auto ">
           <Routes>
             <Route path="/" element={<Navigate to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />

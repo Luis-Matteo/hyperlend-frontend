@@ -6,16 +6,32 @@ import NavButton from '../components/header/NavButton';
 import logo from '../assets/icons/logo-text.svg';
 import Status from '../components/header/Status';
 import logoutIcon from '../assets/icons/logout-icon.svg';
+import xmarkIcon from '../assets/icons/xmark-icon.svg'
 import referralsIcon from '../assets/icons/referralsIcon.svg'
-import { toggleModalOpen } from '../store/sidebarSlice';
-
+import { toggleModalOpen, toggleSidebar } from '../store/sidebarSlice';
+import { useEffect, useRef } from 'react';
 function Sidebar() {
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state: RootState) => state.sidebar.isOpen);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        if (isSidebarOpen) {
+          dispatch(toggleSidebar());
+        }
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isSidebarOpen, dispatch]);
 
   return (
-    <div className={`bg-primary ${isSidebarOpen ? 'hidden' : 'block'}`}>
-      <div className="w-64 p-10 flex-col justify-between flex h-screen ">
+    <div
+      ref={sidebarRef}
+      className={`bg-primary transition-transform duration-300 absolute z-30 lg:relative ${isSidebarOpen ? 'translate-x-0 shadow-custom' : '-translate-x-full lg:translate-x-0'}`}>
+      <div className="w-64 p-10 flex-col justify-between flex h-screen">
         <div className="">
           <div className="pt-4">
             <img className="" src={logo} alt="" />
@@ -38,12 +54,12 @@ function Sidebar() {
               className="flex items-center gap-2 rounded-full hover:bg-[#1F2A29]"
               type="button"
               onClick={() => dispatch(toggleModalOpen())}
-              
+
             >
               <div
                 className="p-3 "
               >
-                <img src={referralsIcon} className="w-5" alt="referrals"/>
+                <img src={referralsIcon} className="w-5" alt="referrals" />
               </div>
               <p
                 className="font-lufga font-medium text-secondary"
@@ -53,12 +69,16 @@ function Sidebar() {
             </button>
           </div>
         </div>
-        <div className="">
+        <div className="flex justify-between">
           <button className="flex gap-4 items-center" type="button">
             <img className="" src={logoutIcon} alt="" />
             <a href='https://docs.hyperlend.finance' target="_blank"><p className="font-lufga text-grey-light">
               Docs
             </p></a>
+          </button>
+          <button className="lg:hidden" type="button"
+          onClick={() => dispatch(toggleSidebar())}>
+            <img className="" src={xmarkIcon} alt="" />
           </button>
         </div>
       </div>
