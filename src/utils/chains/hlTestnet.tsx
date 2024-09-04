@@ -43,6 +43,7 @@ const liqPenaltyMap: any = {
 }
 
 const hlTestnet: any = {
+  chainName: "hyperEvmTestnet",
   networkChainId: networkChainId,
   contracts: contracts,
   tokenFullNameMap: tokenFullNameMap,

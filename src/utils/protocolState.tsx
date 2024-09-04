@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { calculateApy } from './functions';
 import { Reserve, ReservesData } from '../utils/types'
-import { contracts, assetAddresses, abis, tokenToRateStrategyMap } from './tokens';
+import { contracts, assetAddresses, abis, tokenToRateStrategyMap, chainName } from './tokens';
 
 export function useProtocolReservesData(): ReservesData {
   const { data: reserveDataResults, isLoading, isError } = useReadContracts({
@@ -247,7 +247,7 @@ export function useInterestRateHistory(token: string){
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('https://api.hyperlend.finance/data/interestRateHistory?chain=arbitrum&token=' + token)
+    fetch('https://api.hyperlend.finance/data/interestRateHistory?chain='+chainName+'&token=' + token)
       .then(response => response.json())
       .then(json => {
         const values = json ? json.map((e: any) => ({

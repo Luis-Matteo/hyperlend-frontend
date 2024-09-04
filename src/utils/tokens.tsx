@@ -38,6 +38,7 @@ const networkConfigs: any = {
   998: hlTestnet
 }
 
+export const chainName: string = networkConfigs[currentChainId].chainName || arb.chainName;
 export const networkChainId: number = networkConfigs[currentChainId].networkChainId || arb.networkChainId;
 export const contracts: any = networkConfigs[currentChainId].contracts || arb.contracts;
 export const assetAddresses: string[] = networkConfigs[currentChainId].assetAddresses || arb.assetAddresses;

@@ -64,6 +64,7 @@ const liqPenaltyMap: any = {
 }
 
 const arb: any = {
+  chainName: "arbitrum",
   networkChainId: networkChainId,
   contracts: contracts,
   tokenFullNameMap: tokenFullNameMap,

@@ -4,7 +4,7 @@ import { erc20Abi } from 'viem'
 
 import { calculateApy, padArray } from './functions';
 import { UserReserveData, UserPositionData, UserPositionsData } from '../utils/types'
-import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap, abis, liqMap } from './tokens';
+import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap, abis, liqMap, chainName } from './tokens';
 
 import { useProtocolReservesData, useProtocolPriceData } from './protocolState';
 
@@ -153,7 +153,7 @@ export function useGetUserBalanceHistory(address: `0x${string}` | undefined) {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('https://api.hyperlend.finance/data/user/valueChange?chain=arbitrum&address=' + address)
+    fetch('https://api.hyperlend.finance/data/user/valueChange?chain='+chainName+'&address=' + address)
       .then(response => response.json())
       .then(json => {
         setData({
@@ -175,7 +175,7 @@ export function useUserPortfolioHistory(address: `0x${string}` | undefined, isCo
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('https://api.hyperlend.finance/data/user/historicalNetWorth?chain=arbitrum&address=' + address)
+    fetch('https://api.hyperlend.finance/data/user/historicalNetWorth?chain='+chainName+'&address=' + address)
       .then(response => response.json())
       .then(json => {
         setData(json ? json.map((e: any) => e.usdValue) : [])
