@@ -9,7 +9,7 @@ import ReactGA from 'react-ga4';
 
 import { decodeConfig, filterString } from '../utils/functions';
 import { AssetDetail, ModalType } from '../utils/types';
-import { tokenNameMap, tokenFullNameMap, iconsMap, tokenDecimalsMap, stablecoinsList } from '../utils/tokens';
+import { tokenNameMap, tokenFullNameMap, iconsMap, tokenDecimalsMap, stablecoinsList, networkChainId } from '../utils/tokens';
 
 import { useProtocolReservesData, useProtocolAssetReserveData, useProtocolPriceData, useProtocolInterestRate } from '../utils/protocolState';
 import { Link } from 'react-router-dom';
@@ -23,8 +23,8 @@ function Overview() {
   const account = useAccount()
 
   useEffect(() => {
-    if (account.isConnected && account.chainId != 42161) {
-      switchChain({ chainId: 42161 });
+    if (account.isConnected && account.chainId != networkChainId) {
+      switchChain({ chainId: networkChainId });
     }
   }, [account])
 

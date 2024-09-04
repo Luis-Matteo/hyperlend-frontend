@@ -10,7 +10,15 @@ import xmarkIcon from '../assets/icons/xmark-icon.svg'
 import referralsIcon from '../assets/icons/referralsIcon.svg'
 import { toggleModalOpen, toggleSidebar } from '../store/sidebarSlice';
 import { useEffect, useRef } from 'react';
+
+import { networkChainId } from '../utils/tokens';
+import { useAccount } from 'wagmi'
+import faucetIcon from '../assets/icons/faucet-color.svg'
+import { claimFaucet } from '../utils/hlTestnet';
+
 function Sidebar() {
+  const { isConnected, address } = useAccount()
+
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state: RootState) => state.sidebar.isOpen);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -67,6 +75,28 @@ function Sidebar() {
                 Referrals
               </p>
             </button>
+            {
+              networkChainId == 998 && isConnected ?
+                <button
+                  className="flex items-center gap-2 rounded-full hover:bg-[#1F2A29]"
+                  type="button"
+                  onClick={() => {
+                    claimFaucet(address)
+                  }}
+                >
+                  <div
+                    className="p-3 "
+                  >
+                    <img src={faucetIcon} className="w-5" alt="faucet" />
+                  </div>
+                  <p
+                    className="font-lufga font-medium text-secondary"
+                  >
+                    Faucet
+                  </p>
+                </button>
+            : ""
+            }
           </div>
         </div>
         <div className="flex justify-between">

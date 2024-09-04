@@ -9,6 +9,8 @@ import OracleAbi from "../abis/OracleAbi.json"
 import DataProviderAbi from "../abis/DataProviderAbi.json"
 import rateStrategyAbi from "../abis/RateStrategyAbi.json"
 
+export const networkChainId: number = 998 //42161
+
 const contracts: any = {
   "protocolDataProvider": "0x824A4309686C74C3369Ab2273A6f2ced629422e2",
   "poolAddressesProvider": "0xE65D4B4E740Ad55a04B7dc5Ba2f458215350cc32",

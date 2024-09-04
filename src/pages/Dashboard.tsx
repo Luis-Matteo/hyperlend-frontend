@@ -10,7 +10,7 @@ import ReactGA from 'react-ga4';
 
 import { ModalType } from '../utils/types';
 
-import { contracts, abis } from '../utils/tokens';
+import { contracts, abis, networkChainId } from '../utils/tokens';
 import { useUserPositionsData, useUserWalletBalance, useUserPortfolioHistory } from '../utils/userState';
 import { getUserPoints } from '../utils/userPoints';
 import MyChart from '../components/dashboard/Chart';
@@ -25,8 +25,8 @@ function Dashboard() {
   const { address, chainId, isConnected } = useAccount()
 
   useEffect(() => {
-    if (isConnected && chainId != 42161) {
-      switchChain({ chainId: 42161 });
+    if (isConnected && chainId != networkChainId) {
+      switchChain({ chainId: networkChainId });
     }
   }, [isConnected, chainId])
 

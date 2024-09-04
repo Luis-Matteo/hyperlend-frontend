@@ -14,7 +14,8 @@ import { TokenActionsProps } from '../utils/interfaces';
 import {
     tokenNameMap,
     iconsMap, tokenDecimalsMap,
-    liqMap, ltvMap, liqPenaltyMap
+    liqMap, ltvMap, liqPenaltyMap,
+    networkChainId
 } from '../utils/tokens';
 
 import {
@@ -40,8 +41,8 @@ function TokenDetail() {
     const account = useAccount()
 
     useEffect(() => {
-        if (account.isConnected && account.chainId != 42161) {
-            switchChain({ chainId: 42161 });
+        if (account.isConnected && account.chainId != networkChainId) {
+            switchChain({ chainId: networkChainId });
         }
     }, [account])
 
