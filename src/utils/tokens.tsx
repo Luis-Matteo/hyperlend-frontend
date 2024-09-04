@@ -25,7 +25,8 @@ export const iconsMap: any = {
   "ETH": ethIcon,
   "USDT": usdtIcon,
   "USDC": usdcIcon,
-  "WBTC": wbtcIcon
+  "WBTC": wbtcIcon,
+  "MBTC": wbtcIcon
 }
 
 export const stablecoinsList = ["USDC", "USDT"]
