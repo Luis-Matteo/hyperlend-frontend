@@ -1,5 +1,3 @@
-// import { useState } from 'react';
-
 export function claimFaucet(userAddress?: string) {
   const requestOptions = {
     method: 'POST',
