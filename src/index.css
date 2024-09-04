@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+ background-color: #071311;
+}
 @font-face {
     font-family: 'Lufga';
     src: url('./assets/fonts/LufgaRegular.ttf') format('truetype');

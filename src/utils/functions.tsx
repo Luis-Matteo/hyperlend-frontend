@@ -23,7 +23,7 @@ function formatUnit(num: number, decimal: number = 2) {
   } else if (numAbs >= 1e3) {
     formattedNum = `${(numAbs / 1e3).toFixed(decimal)}K`;
   } else {
-    formattedNum = numAbs.toFixed(decimal);
+    formattedNum = numAbs.toFixed(4);
   }
 
   return sign < 0 ? `-${formattedNum}` : formattedNum;
