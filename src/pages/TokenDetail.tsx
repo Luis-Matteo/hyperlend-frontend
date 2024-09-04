@@ -337,11 +337,11 @@ function TokenDetail() {
                                     <p className="text-xs text-[#797979]">Utilization rate</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
-                                    <span className="w-2 h-2 bg-[#2DC296] rounded-full"></span>
+                                    <span className="w-2 h-2 bg-[#f10750] rounded-full"></span>
                                     <p className="text-xs text-[#797979]">Borrow APY</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
-                                    <span className="w-2 h-2 bg-[#BFC22D] rounded-full"></span>
+                                    <span className="w-2 h-2 bg-[#38b2ac] rounded-full"></span>
                                     <p className="text-xs text-[#797979]">Supply APY</p>
                                 </div>
                             </ul>

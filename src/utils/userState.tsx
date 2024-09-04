@@ -42,7 +42,7 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
     const balanceNormalized = Number(e.scaledATokenBalance) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
     const priceUsd = Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
     const valueUsd = priceUsd * balanceNormalized;
-    const apr = calculateApy(Number(reserveDataMap[e.underlyingAsset]?.currentLiquidityRate || 0));
+    const apr = calculateApy(reserveDataMap[e.underlyingAsset]?.currentLiquidityRate || BigInt(0));
 
     return {
       underlyingAsset: e.underlyingAsset,
@@ -60,7 +60,7 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
     const balanceNormalized = Number(e.scaledVariableDebt) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
     const priceUsd = Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
     const valueUsd = priceUsd * balanceNormalized;
-    const apr = calculateApy(Number(reserveDataMap[e.underlyingAsset]?.currentVariableBorrowRate || 0))
+    const apr = calculateApy(reserveDataMap[e.underlyingAsset]?.currentVariableBorrowRate || BigInt(0))
 
     return {
       underlyingAsset: e.underlyingAsset,

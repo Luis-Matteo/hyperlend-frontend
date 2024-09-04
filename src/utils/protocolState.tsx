@@ -116,10 +116,9 @@ export function useProtocolInterestRate(){
     return assetAddresses.reduce((acc, asset, index) => {
       const result = interestRateDataResults[index]
       if (result && result.status === 'success') {
-
         acc[asset] = {
-          supply: calculateApy(Number((reserveDataMap[asset] as any).currentLiquidityRate)),
-          borrow: calculateApy(Number((reserveDataMap[asset] as any).currentVariableBorrowRate))
+          supply: calculateApy((reserveDataMap[asset] as any).currentLiquidityRate),
+          borrow: calculateApy((reserveDataMap[asset] as any).currentVariableBorrowRate)
         }
       } else {
         console.error(`Failed to get interest rate data for asset: ${asset}`);
@@ -170,7 +169,7 @@ export function useProtocolInterestRateModel(token: string){
   const rates: Rates[] = [];
 
   const rateStrategyType = tokenToRateStrategyMap[token] || "volatileOne"
-  const methods = ['getVariableRateSlope1', 'getVariableRateSlope2', 'OPTIMAL_USAGE_RATIO', 'getBaseStableBorrowRate']
+  const methods = ['getVariableRateSlope1', 'getVariableRateSlope2', 'OPTIMAL_USAGE_RATIO', 'getBaseVariableBorrowRate']
   
   const { data: interestRateStrategyData } = useReadContracts({
     contracts: methods.map(method => ({
@@ -194,8 +193,8 @@ export function useProtocolInterestRateModel(token: string){
   const variableRateSlope1 = params['getVariableRateSlope1'];
   const variableRateSlope2 = params['getVariableRateSlope2'];
   const optimalUsageRatio = params['OPTIMAL_USAGE_RATIO'];
-  const baseVariableBorrowRate = params['getBaseStableBorrowRate']
-
+  const baseVariableBorrowRate = params['getBaseVariableBorrowRate']
+  
   const resolution = 200;
   const step = 100 / resolution;
   const formattedOptimalUtilizationRate = normalizeBN(optimalUsageRatio, 25).toNumber();

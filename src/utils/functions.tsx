@@ -1,3 +1,5 @@
+import { BigNumber } from 'bignumber.js';
+
 function formatNumber(inputNumber: number, decimal: number) {
   const num = Number(inputNumber);
   if (inputNumber % 1 === 0) {
@@ -40,8 +42,9 @@ export function capitalizeString(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-function calculateApy(currentRate: number) {
-  let rateDecimal = currentRate / 1e27
+function calculateApy(currentRate: BigInt) {
+  let rateBN = new BigNumber(currentRate.toString());
+  let rateDecimal = Number(rateBN.div(1e27))
   let apy = Math.pow(Math.E, rateDecimal) - 1
   return apy * 100
 }
