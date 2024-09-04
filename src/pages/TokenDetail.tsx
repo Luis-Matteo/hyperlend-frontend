@@ -4,6 +4,7 @@ import CardItem from '../components/common/CardItem';
 import { useParams } from 'react-router-dom';
 import { useSwitchChain, useAccount, useReadContract } from 'wagmi'
 import { erc20Abi } from 'viem'
+import ReactGA from 'react-ga4';
 
 import { formatNumber, decodeConfig } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
@@ -31,6 +32,9 @@ import TokenActions from '../components/markets/TokenActions';
 function TokenDetail() {
     let { token } = useParams();
     token = token || ""
+
+    ReactGA.send({ hitType: "pageview", page: "/token-details", title: token });
+
 
     const { switchChain } = useSwitchChain()
     const account = useAccount()

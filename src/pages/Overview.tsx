@@ -5,6 +5,7 @@ import { formatNumber, formatUnit } from '../utils/functions';
 import Navbar from '../layouts/Navbar';
 import Modal from '../components/common/Modal';
 import { useSwitchChain, useAccount } from 'wagmi'
+import ReactGA from 'react-ga4';
 
 import { decodeConfig, filterString } from '../utils/functions';
 import { AssetDetail, ModalType } from '../utils/types';
@@ -16,6 +17,8 @@ import InfoItem from '../components/common/InfoItem';
 import { assetsInfos } from '../utils/constants';
 
 function Overview() {
+  ReactGA.send({ hitType: "pageview", page: "/markets" });
+
   const { switchChain } = useSwitchChain()
   const account = useAccount()
 

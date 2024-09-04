@@ -6,6 +6,7 @@ import Navbar from '../layouts/Navbar';
 import PositionBar from '../components/dashboard/PositionBar';
 import Modal from '../components/common/Modal';
 import { useSwitchChain, useAccount, useWriteContract } from 'wagmi'
+import ReactGA from 'react-ga4';
 
 import { ModalType } from '../utils/types';
 
@@ -17,6 +18,8 @@ import Factor from '../components/dashboard/Factor';
 import InfoItem from '../components/common/InfoItem';
 
 function Dashboard() {
+  ReactGA.send({ hitType: "pageview", page: "/dashboard" });
+
   const { data: hash, writeContractAsync } = useWriteContract()
   const { switchChain } = useSwitchChain()
   const { address, chainId, isConnected } = useAccount()
