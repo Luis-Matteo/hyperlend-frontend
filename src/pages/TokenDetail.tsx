@@ -36,7 +36,6 @@ function TokenDetail() {
 
     ReactGA.send({ hitType: "pageview", page: "/token-details", title: token });
 
-
     const { switchChain } = useSwitchChain()
     const account = useAccount()
 

@@ -65,7 +65,7 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
     return {
       underlyingAsset: e.underlyingAsset,
       assetName: tokenNameMap[e.underlyingAsset],
-      balance: Number(e.scaledVariableDebt) / Math.pow(10, 6),
+      balance: balanceNormalized,
       value: valueUsd,
       apr: apr,
       icon: iconsMap[tokenNameMap[e.underlyingAsset]],
@@ -89,7 +89,7 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
     totalSupplyUsd: totalSupply,
     totalBorrowUsd: totalBorrow,
     totalBalanceUsd: totalSupply - totalBorrow,
-    totalBorrowLimit: totalBorrowAvailable - totalBorrow,
+    totalBorrowLimit: totalBorrowAvailable,
     healthFactor: totalLiquidationThreshold / totalBorrow,
     netApy: isNaN(netApy) ? 0 : netApy,
     totalLiquidationThreshold: totalLiquidationThreshold,
