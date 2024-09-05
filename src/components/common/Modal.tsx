@@ -67,7 +67,6 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const getBorrowLimit = () => {
     // TODO: enforce protocol borrow cap
     const borrowCap = decodeConfig(reserveDataMap[token].configuration.data).borrowCap
-    console.log(borrowCap)
     const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8)
     const borrowAvailableTokens = (userPositionsData?.totalBorrowLimit || 0) / tokenPriceUsd
     const availableInPool = Number(assetReserveData.totalAToken) / Math.pow(10, tokenDecimalsMap[token])
@@ -135,11 +134,14 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   };
 
   const handleDirectInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(Number(event.target.value) <= availableBalance ? Number(event.target.value) : availableBalance)
-    setProgress(Number(event.target.value) >= availableBalance ? 100 : ((Number(event.target.value) / availableBalance) * 100));
+    let inputValue = parseFloat(event.target.value) as any; 
+    if (!isNaN(inputValue)) {  
+        setAmount(inputValue <= availableBalance ? inputValue : availableBalance);
+        setProgress(inputValue >= availableBalance ? 100 : ((inputValue / availableBalance) * 100));
 
-    setAllowance(Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]))
-    updateAvailableAmount();
+        setAllowance(Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]));
+        updateAvailableAmount();
+    }
   }
 
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -210,7 +212,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                 </div>
               </div>
               <input
-                type="text"
+                type="number"
                 className="form-control-plaintext text-xl text-secondary border-0 p-0 text-right"
                 value={amount}
                 onChange={(e) => {
@@ -221,7 +223,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                   outline: 'none',
                   boxShadow: 'none',
                   width: 'auto',
-                  minWidth: '50px',
+                  minWidth: '50px'
                 }}
               />
             </div>

@@ -126,7 +126,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                     <img src={iconsMap[tokenNameMap[token]]} height={'30px'} width={'30px'} alt="coinIcon" />
                     <p className="text-base text-[#CAEAE566]">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control-plaintext text-xl text-secondary border-0 p-0 text-right"
                         value={amount}
                         onChange={(e) => {

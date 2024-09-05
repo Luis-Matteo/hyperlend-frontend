@@ -10,7 +10,6 @@ export function claimFaucet(userAddress?: string) {
     .then(data => {
       if (data.status == "ok") alert("ETH claimed")
       else alert(data.response)
-      console.log(data)
     })
     .catch(error => {
       alert(error)
