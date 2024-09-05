@@ -78,8 +78,8 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
   const totalBorrowAvailable = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * ltvMap[a.underlyingAsset]), 0);
   const totalLiquidationThreshold = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * liqMap[a.underlyingAsset]), 0);
 
-  const supplyInterestEarned = supplied.reduce((partialSum: number, a: any) => partialSum + (a.apr * a.value), 0);
-  const borrowInterestEarned = borrowed.reduce((partialSum: number, a: any) => partialSum + (a.apr * a.value), 0);
+  const supplyInterestEarned = supplied.reduce((partialSum: number, a: any) => partialSum + (a.apr / 100 * a.value), 0);
+  const borrowInterestEarned = borrowed.reduce((partialSum: number, a: any) => partialSum + (a.apr / 100 * a.value), 0);
   const netApy = (supplyInterestEarned - borrowInterestEarned) / 100;
 
   return {
