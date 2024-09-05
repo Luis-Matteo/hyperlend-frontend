@@ -66,7 +66,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
 
   const getBorrowLimit = () => {
     // TODO: enforce protocol borrow cap
-    const borrowCap = decodeConfig(reserveDataMap[token].configuration.data).borrowCap
+    // const borrowCap = decodeConfig(reserveDataMap[token].configuration.data).borrowCap
     const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8)
     const borrowAvailableTokens = (userPositionsData?.totalBorrowLimit || 0) / tokenPriceUsd
     const availableInPool = Number(assetReserveData.totalAToken) / Math.pow(10, tokenDecimalsMap[token])
