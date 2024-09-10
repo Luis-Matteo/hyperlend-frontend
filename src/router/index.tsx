@@ -18,7 +18,7 @@ function MainContent() {
   const modalOpen = useSelector((state: RootState) => state.sidebar.modalOpen);
 
   return (
-    <main className="bg-primary-light flex-1 relative lg:h-screen">
+    <main className="bg-primary-light w-full lg:w-[calc(100vw-256px)] relative lg:h-screen">
       <div className="relative px-4 py-8 md:px-6 xl:p-14 z-20 lg:max-h-screen h-full overflow-auto ">
         <Routes>
           <Route path="/" element={<Navigate to="dashboard" />} />
