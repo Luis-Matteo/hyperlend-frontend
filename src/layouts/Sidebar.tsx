@@ -11,8 +11,8 @@ import referralsIcon from '../assets/icons/referralsIcon.svg'
 import { toggleModalOpen, toggleSidebar } from '../store/sidebarSlice';
 import { useEffect, useRef } from 'react';
 
-import { networkChainId } from '../utils/tokens';
-import { useAccount } from 'wagmi'
+import { networkChainId, contracts, abis } from '../utils/tokens';
+import { useAccount, useWriteContract } from 'wagmi'
 import faucetIcon from '../assets/icons/faucet-color.svg'
 import { claimFaucet } from '../utils/hlTestnet';
 
@@ -34,6 +34,18 @@ function Sidebar() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isSidebarOpen, dispatch]);
+
+  const { data: hash, writeContractAsync, error } = useWriteContract()
+  const sendClaimTx = () => {
+    writeContractAsync({
+      address: contracts.faucet,
+      abi: abis.faucet,
+      functionName: "claim",
+      args: []
+    })
+    if (error && error.message) alert(error.message)
+    console.log("MockBTC claimed: ", hash)
+  }
 
   return (
     <div
@@ -82,6 +94,7 @@ function Sidebar() {
                   type="button"
                   onClick={() => {
                     claimFaucet(address)
+                    sendClaimTx()
                   }}
                 >
                   <div

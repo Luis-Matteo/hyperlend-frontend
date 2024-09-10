@@ -11,6 +11,7 @@ import PoolAbi from "../abis/PoolAbi.json"
 import OracleAbi from "../abis/OracleAbi.json"
 import DataProviderAbi from "../abis/DataProviderAbi.json"
 import rateStrategyAbi from "../abis/RateStrategyAbi.json"
+import faucetAbi from "../abis/FaucetAbi.json";
 
 export const abis: Record<string, any> = {
   "dataProvider": DataProviderAbi,
@@ -18,7 +19,8 @@ export const abis: Record<string, any> = {
   "pool": PoolAbi,
   "oracle": OracleAbi,
   "protocolDataProvider": DataProviderAbi,
-  "rateStrategy": rateStrategyAbi
+  "rateStrategy": rateStrategyAbi,
+  "faucet": faucetAbi
 }
 
 export const iconsMap: any = {

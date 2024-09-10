@@ -8,7 +8,9 @@ export function claimFaucet(userAddress?: string) {
   fetch('https://api.hyperliquid-testnet.xyz/info', requestOptions)
     .then(response => response.json())
     .then(data => {
-      if (data.status == "ok") alert("ETH claimed")
+      if (data.status == "ok") {
+        alert("ETH claimed")
+      }
       else alert(data.response)
     })
     .catch(error => {

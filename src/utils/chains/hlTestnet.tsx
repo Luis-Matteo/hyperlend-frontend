@@ -9,7 +9,8 @@ const contracts: any = {
   "rateStrategies": {
     "volatileOne": "0xFf377dbB97c674Bfa201d8CdcAe597D1231317Ea",
     "stableOne": "0xAEd164046AFB672EdD2350C974355d93a06142ad"
-  }
+  },
+  "faucet": "0x941559AF458A9a0448b411a26047584b506283A7"
 }
 
 const tokenFullNameMap: any = {
