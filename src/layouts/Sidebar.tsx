@@ -7,8 +7,8 @@ import logo from '../assets/icons/logo-text.svg';
 import Status from '../components/header/Status';
 import logoutIcon from '../assets/icons/logout-icon.svg';
 import xmarkIcon from '../assets/icons/xmark-icon.svg'
-import referralsIcon from '../assets/icons/referralsIcon.svg'
-import { toggleModalOpen, toggleSidebar } from '../store/sidebarSlice';
+// import referralsIcon from '../assets/icons/referralsIcon.svg'
+import { /*toggleModalOpen,*/ toggleSidebar } from '../store/sidebarSlice';
 import { useEffect, useRef } from 'react';
 
 import { networkChainId, contracts, abis } from '../utils/tokens';
