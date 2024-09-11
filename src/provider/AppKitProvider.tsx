@@ -39,7 +39,7 @@ const hyperEvmTestnet = defineChain({
   },
 })
 
-const chains = [mainnet, arbitrum, hyperEvmTestnet] as const
+const chains = [hyperEvmTestnet] as const
 const config = defaultWagmiConfig({
     chains,
     projectId,
