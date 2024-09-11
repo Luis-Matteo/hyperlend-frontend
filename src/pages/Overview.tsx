@@ -74,6 +74,20 @@ function Overview() {
     }
     return assets;
   }
+  const assets = getAssets()
+
+  if (Object.keys(reserveDataMap).length == 0){
+    return (
+      <>
+      <div className="w-full">
+        <Navbar
+          pageTitle="Markets"
+        />
+        <div className='text-white'>Connect wallet</div>
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
@@ -110,7 +124,7 @@ function Overview() {
             </div>
             <div className="lg:max-h-[calc(100vh-346px)] xl:max-h-[calc(100vh-394px)] h-full overflow-auto hidden lg:block">
               {
-                (getAssets() || []).map((item, key) => (
+                (assets || []).map((item, key) => (
                   <div
                     className="grid grid-cols-11 items-center py-[14px] px-2.5 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer"
                     key={key}
@@ -189,7 +203,7 @@ function Overview() {
           </div>
           <div className="lg:hidden w-full">
             {
-              (getAssets() || []).map((item, key) => (
+              (assets || []).map((item, key) => (
                 <div
                   className="items-center py-[14px] px-2.5 border-b-[1px] border-gray-light hover:bg-[#1F2A29] cursor-pointer"
                   key={key}
