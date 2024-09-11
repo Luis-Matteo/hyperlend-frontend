@@ -109,7 +109,7 @@ function TokenDetail() {
             case 2:
                 setActionData({
                     availableAmountTitle: "Withdrawable",
-                    availableAmount: (supplied?.balance || 0) > userPositionsData.totalBorrowLimit / tokenPrice ? userPositionsData.totalBorrowLimit / tokenPrice : (supplied?.balance || 0),
+                    availableAmount: /*(supplied?.balance || 0) > userPositionsData.totalBorrowLimit / tokenPrice ? userPositionsData.totalBorrowLimit / tokenPrice : */(supplied?.balance || 0), //TODO fix this to account for borrow limit correctly
                     totalApy: interestRateDataMap[token].supply,
                     percentBtn: 100,
                     protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
