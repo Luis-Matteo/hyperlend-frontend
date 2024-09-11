@@ -2,7 +2,7 @@ import { createWeb3Modal } from '@web3modal/wagmi/react'
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 
 import { WagmiProvider } from 'wagmi'
-import { arbitrum, mainnet } from 'wagmi/chains'
+import { arbitrum } from 'wagmi/chains'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactNode } from 'react'
 import { defineChain } from 'viem'
@@ -39,7 +39,7 @@ const hyperEvmTestnet = defineChain({
   },
 })
 
-const chains = [hyperEvmTestnet] as const
+const chains = [arbitrum, hyperEvmTestnet] as const
 const config = defaultWagmiConfig({
     chains,
     projectId,
