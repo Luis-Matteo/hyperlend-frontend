@@ -70,7 +70,7 @@ function Sidebar() {
                 disabled={item.disabled}
               />
             ))}
-            <button
+            {/* <button
               className="flex items-center gap-2 rounded-full hover:bg-[#1F2A29]"
               type="button"
               onClick={() => dispatch(toggleModalOpen())}
@@ -86,7 +86,7 @@ function Sidebar() {
               >
                 Referrals
               </p>
-            </button>
+            </button> */}
             {
               networkChainId == 998 && isConnected ?
                 <button
