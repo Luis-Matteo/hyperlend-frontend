@@ -30,6 +30,11 @@ const TokenActions: React.FC<TokenActionsProps> = ({
 
     const actionType = btnTitle.toLowerCase()
 
+    const { address } = useAccount();
+    const { data: hash, writeContract, error } = useWriteContract()
+    const userAllow = useUserAllowance(token, address || '0x', contracts.pool)
+    const [userAllowance, setUserAllowance] = useState(0)
+
     const [buttonText, setButtonText] = useState(btnTitle)
     const [collateral, setCollateral] = useState(isCollateralEnabled);
     const [amount, setAmount] = useState(0)
@@ -44,7 +49,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
 
     useEffect(() => {
       if (actionType == "supply" || actionType == "repay"){
-        const allowance = (Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])).toString()
+        const allowance = parseFloat((Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0)
         if (amount > Number(allowance)){
           setButtonText("Approve")
         } else {
@@ -56,24 +61,30 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       if (amount >= availableAmount){
         setAmount(availableAmount)
       }
-    }, [amount, btnTitle])
+    }, [amount, btnTitle, hash, userAllowance])
 
-    const { address } = useAccount();
-    const { data: hash, writeContract, error } = useWriteContract()
-    const userAllowance = useUserAllowance(token, address || '0x', contracts.pool)
+    useEffect(() => {
+      if (userAllow as number > userAllowance) setUserAllowance(userAllow as number)
+    }, [amount])
+
+    //update allowance on `approve` call
+    useEffect(() => {
+      if (hash != null) setUserAllowance(amount)
+    }, [hash])
 
     const triggerAction = () => {
       const bgIntAmount = parseFloat((amount * Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0).toString() as any as bigint
+      const allowance = parseFloat((Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0)
 
       if (actionType == "supply" || actionType == "repay") {
-        const allowance = parseFloat((Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0)
         if (Number(allowance) < amount) {
           writeContract({
             address: token as any,
             abi: erc20Abi,
             functionName: 'approve',
             args: [contracts.pool, bgIntAmount],
-          })
+          });
+          setButtonText(btnTitle)
         }
       }
 
@@ -83,14 +94,16 @@ const TokenActions: React.FC<TokenActionsProps> = ({
         "borrow": [token, bgIntAmount, 2, 0, address], //asset, amount, interestRateMode (2 = variable), refCode, onBehalfOf
         "repay": [token, bgIntAmount, 2, address] //asset, amount, interestRateMode, onBehalfOf
       }
-  
-      writeContract({
-        address: contracts.pool,
-        abi: abis.pool,
-        functionName: actionType,
-        args: functionParams[actionType]
-      })
-      console.log(hash)
+
+      if (Number(allowance) >= amount) {
+        writeContract({
+          address: contracts.pool,
+          abi: abis.pool,
+          functionName: actionType,
+          args: functionParams[actionType]
+        })
+        console.log(hash)
+      }
     }
 
     const updateCollateral = () => {
@@ -126,7 +139,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                     <img src={iconsMap[tokenNameMap[token]]} height={'30px'} width={'30px'} alt="coinIcon" />
                     <p className="text-base text-[#CAEAE566] w-[120px]">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control-plaintext text-xl text-secondary border-0 p-0 text-left min-w-[120px]"
                         value={amount}
                         onChange={(e) => {
