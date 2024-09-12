@@ -255,7 +255,8 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             </div>
             <div className='relative '>
               <ProgressBar
-                progress={progress} className='h-1.5' />
+                progress={progress}
+                control={true} className='h-1.5' />
               <input
                 type="range"
                 min="0"
