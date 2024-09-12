@@ -80,7 +80,7 @@ function Dashboard() {
                   />
                   <InfoItem
                     title={
-                      <span>Health factor is a numerical value that represents the ratio of the value of a user's collateral to the value of their borrowed assets. <br />It is designed to give borrowers a clear understanding of the risk associated with their current loan.</span>
+                      <span>Health factor is a numerical value that represents the ratio of the value of a user's collateral to the value of their borrowed assets. <br />It is designed to give borrowers a clear understanding of the risk associated with their current positions.<br /> HF under 1.2 is generally considered low.</span>
                     }
                     className='w-[340px]' />
 

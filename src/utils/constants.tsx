@@ -42,7 +42,7 @@ const navLinks: NavLinkProps[] = [
 const assetsInfos = [
   {
     title: "Total Supplied",
-    tooltip: "Total hyperlend deposits for each assests."
+    tooltip: "Total hyperlend deposits for each asset."
   },
   {
     title: "Supply APY",
@@ -50,7 +50,7 @@ const assetsInfos = [
   },
   {
     title: "Total Borrowed",
-    tooltip: "Total hyperlend borrows for each assests."
+    tooltip: "Total hyperlend borrows for each asset."
   },
   {
     title: "Borrow APY",
@@ -66,7 +66,7 @@ const assetsInfos = [
   },
   {
     title: "LTV",
-    tooltip: "The amount you can borrow against your collateral. The higher the LTV, the higher amount you can borrow against your collateral."
+    tooltip: "The amount you can borrow against your collateral. e.g. 80% LTV means you can borrow up to 80% of the collateral value."
   },
 ]
 export { navLinks, assetsInfos };
