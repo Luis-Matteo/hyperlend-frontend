@@ -122,12 +122,12 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                 </div>
             }
             <div className="flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4">
-                <div className="flex gap-3 items-center w-fit p-3">
+                <div className="flex gap-3 items-center p-3">
                     <img src={iconsMap[tokenNameMap[token]]} height={'30px'} width={'30px'} alt="coinIcon" />
-                    <p className="text-base text-[#CAEAE566]">
+                    <p className="text-base text-[#CAEAE566] w-[120px]">
                       <input
-                        type="number"
-                        className="form-control-plaintext text-xl text-secondary border-0 p-0 text-right"
+                        type="text"
+                        className="form-control-plaintext text-xl text-secondary border-0 p-0 text-left min-w-[120px]"
                         value={amount}
                         onChange={(e) => {
                           handleDirectInputChange(e)
@@ -180,7 +180,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                 </div>
             </div> */}
             <div className="relative my-2 ">
-                <ProgressBar progress={progress} className="h-1.5" />
+                <ProgressBar progress={progress} control={true} className="h-1.5" />
                 <input
                     type="range"
                     min="0"

@@ -6,7 +6,7 @@ import { useSwitchChain, useAccount, useReadContract } from 'wagmi'
 import { erc20Abi } from 'viem'
 import ReactGA from 'react-ga4';
 
-import { formatNumber, decodeConfig } from '../utils/functions';
+import { formatNumber, decodeConfig, formatAddress } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../components/charts/InterestRateModelChart';
 import { TokenActionsProps } from '../utils/interfaces';
@@ -262,8 +262,8 @@ function TokenDetail() {
     return (
         <div className="w-full">
             <Navbar pageTitle={tokenNameMap[token]} pageIcon={iconsMap[tokenNameMap[token]]} />
-            <CardItem className="p-12 my-6">
-                <div className="flex gap-20">
+            <CardItem className="p-4 lg:p-12 my-6">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                     {(supplies || []).map((supply, index) => (
                         <div className="font-lufga" key={index}>
                             <p className="text-xs pb-4 text-[#E1E1E1]">{supply.name}</p>
@@ -272,9 +272,9 @@ function TokenDetail() {
                     ))}
                 </div>
             </CardItem>
-            <div className="flex gap-8">
-                <div className="w-2/3">
-                    <CardItem className="p-8 mb-6">
+            <div className="flex flex-col-reverse lg:flex-row lg:gap-8 w-full">
+                <div className="flex-grow w-auto">
+                    <CardItem className="p-4 lg:p-8 mb-6">
                         <div className="flex justify-between items-center">
                             <p className="text-[#797979] text-xl font-lufga">Supply Info</p>
                             <ul className="flex gap-4 items-center">
@@ -293,7 +293,7 @@ function TokenDetail() {
                             <span className="w-2 h-2 bg-[#2DC24E] rounded-full mr-2"></span>
                             <p className="text-xs text-[#797979] font-lufga">Supply APY</p>
                         </div>
-                        <div className="flex gap-12">
+                        <div className="flex justify-between gap-4 md:justify-start md:gap-12">
                             {(supplyInfos || []).map((supplyInfo, index) => (
                                 <div className="font-lufga" key={index}>
                                     <p className="text-[9px] pb-2 text-[#E1E1E1]">{supplyInfo.name}</p>
@@ -303,7 +303,7 @@ function TokenDetail() {
                         </div>
                         <BorrowInfoChart type="supply" token={token} />
                     </CardItem>
-                    <CardItem className="p-8 mb-6">
+                    <CardItem className="p-4 lg:p-8 mb-6">
                         <div className="flex justify-between items-center">
                             <p className="text-[#797979] text-xl font-lufga">Borrow Info</p>
                             <ul className="flex gap-4 items-center">
@@ -322,7 +322,7 @@ function TokenDetail() {
                             <span className="w-2 h-2 bg-[#302DC2] rounded-full mr-2"></span>
                             <p className="text-xs text-[#797979] font-lufga">Borrow API</p>
                         </div>
-                        <div className="flex gap-12">
+                        <div className="flex justify-between gap-4 md:justify-start md:gap-12">
                             {(borrowInfos || []).map((borrowInfo, index) => (
                                 <div className="font-lufga" key={index}>
                                     <p className="text-[9px] pb-2 text-[#E1E1E1]">{borrowInfo.name}</p>
@@ -332,7 +332,7 @@ function TokenDetail() {
                         </div>
                         <BorrowInfoChart type="borrow" token={token} />
                     </CardItem>
-                    <CardItem className="p-8 mb-6">
+                    <CardItem className="p-4 lg:p-8 mb-6">
                         <div className="flex justify-between items-center">
                             <p className="text-[#797979] text-xl font-lufga">Interest Rate Model</p>
                             <ul className="flex gap-4 items-center">
@@ -352,7 +352,7 @@ function TokenDetail() {
                         </div>
                         <InterestRateModelChart token={token} currentUtilization={(totalBorrowedTokens / totalSuppliedTokens) * 100} />
                     </CardItem>
-                    <CardItem className="p-8 mb-6">
+                    <CardItem className="p-4 lg:p-8 mb-6">
                         <div className="flex justify-between items-center mb-8">
                             <p className="text-[#797979] text-xl font-lufga">Market Details</p>
                         </div>
@@ -362,7 +362,14 @@ function TokenDetail() {
                                     <p className="text-base text-lufga text-[#CAEAE5B2]">{marketDetail.name}</p>
                                     {
                                         marketDetail.link
-                                            ? <a href={marketDetail.link} target="_blank"><p className="text-base text-lufga text-[#CAEAE5]">{marketDetail.value}</p></a>
+                                            ? <a href={marketDetail.link} target="_blank" rel="noopener noreferrer">
+                                            <p className="block md:hidden text-base text-lufga text-[#CAEAE5]">
+                                              {formatAddress(marketDetail.value)}
+                                            </p>
+                                            <p className="hidden md:block text-base text-lufga text-[#CAEAE5]">
+                                              {marketDetail.value}
+                                            </p>
+                                          </a>
                                             : <p className="text-base text-lufga text-[#CAEAE5]">{marketDetail.value}</p>
                                     }
                                 </div>
@@ -371,8 +378,8 @@ function TokenDetail() {
                         ))}
                     </CardItem>
                 </div>
-                <div className="w-1/3">
-                    <CardItem className="p-8 mb-6 font-lufga">
+                <div className="w-full lg:w-1/3 lg:min-w-[360px]">
+                    <CardItem className="p-4 lg:p-8 mb-6 font-lufga">
                         <div className="w-full grid grid-cols-4 text-center">
                             {buttons.map((button) => (
                                 <button key={button.id} onClick={() => handleButtonClick(button.id)}>

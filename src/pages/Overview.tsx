@@ -106,7 +106,7 @@ function Overview() {
         <CardItem
           className="md:py-6 md:px-7 flex-1 w-full overflow-x-auto"
         >
-          <div className='lg:w-[1496px]'>
+          <div className='lg:min-w-[1496px] lg:w-full'>
             <div className="py-3 px-2 border-y-[1px] bg-grey border-[#212325] hidden lg:grid grid-cols-11 gap-2">
               <div className="text-white font-lufga text-[11px] col-span-2">Asset</div>
               {
