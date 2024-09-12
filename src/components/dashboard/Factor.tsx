@@ -7,8 +7,8 @@ interface FactorProps {
 const Factor = ({ healthFactor }: FactorProps) => {
     const dots = Array.from({ length: 25 }); // Adjust the number of dots
 
-    const maxHealthFactor = 5;
-    const normalizedHealthFactor = isNaN(healthFactor) ? 0 : healthFactor
+    const maxHf = 3;
+    const hf = isNaN(healthFactor) ? 0 : healthFactor
   
     return (
       <div className="relative border-2 shadow-custom border-[#252525] w-72 h-72 rounded-full bg-transparent">
@@ -16,13 +16,15 @@ const Factor = ({ healthFactor }: FactorProps) => {
           {dots.map((_, index) => {
             const angle = (index / dots.length) * 180 - 90; // Half circle angle calculation
             const rotation = `rotate(${angle}deg)`;
-            const opacity = index * (dots.length / maxHealthFactor) / (dots.length * normalizedHealthFactor) //from 0 to 1 at currentHealthFactor
-            
+            const maxOpacity = ((hf / maxHf) * 100) + 40
+            const opacityRaw = hf > maxHf ? index * (100 / dots.length) / 100 : index * maxOpacity / dots.length / 100
+            const opacity = Math.max(0.1, Math.min(opacityRaw, 1)); 
+
             // Calculate color
             const hue = Math.floor((index / dots.length) * 120); // 0 to 120 (red to green)
             let color = `hsla(${hue}, 100%, 50%, ${opacity})`;
 
-            if (index > normalizedHealthFactor * (dots.length / maxHealthFactor)) color = `bg-[#282829]`
+            if (index > hf * (dots.length / maxHf)) color = `bg-[#282829]`
 
             return (
               <div

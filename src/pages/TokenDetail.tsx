@@ -4,6 +4,7 @@ import CardItem from '../components/common/CardItem';
 import { useParams } from 'react-router-dom';
 import { useSwitchChain, useAccount, useReadContract } from 'wagmi'
 import { erc20Abi } from 'viem'
+import ReactGA from 'react-ga4';
 
 import { formatNumber, decodeConfig, formatAddress } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
@@ -13,7 +14,8 @@ import { TokenActionsProps } from '../utils/interfaces';
 import {
     tokenNameMap,
     iconsMap, tokenDecimalsMap,
-    liqMap, ltvMap, liqPenaltyMap
+    liqMap, ltvMap, liqPenaltyMap,
+    networkChainId
 } from '../utils/tokens';
 
 import {
@@ -32,12 +34,14 @@ function TokenDetail() {
     let { token } = useParams();
     token = token || ""
 
+    ReactGA.send({ hitType: "pageview", page: "/token-details", title: token });
+
     const { switchChain } = useSwitchChain()
     const account = useAccount()
 
     useEffect(() => {
-        if (account.isConnected && account.chainId != 42161) {
-            switchChain({ chainId: 42161 });
+        if (account.isConnected && account.chainId != networkChainId) {
+            switchChain({ chainId: networkChainId });
         }
     }, [account])
 
@@ -105,7 +109,7 @@ function TokenDetail() {
             case 2:
                 setActionData({
                     availableAmountTitle: "Withdrawable",
-                    availableAmount: (supplied?.balance || 0) > userPositionsData.totalBorrowLimit / tokenPrice ? userPositionsData.totalBorrowLimit / tokenPrice : (supplied?.balance || 0),
+                    availableAmount: /*(supplied?.balance || 0) > userPositionsData.totalBorrowLimit / tokenPrice ? userPositionsData.totalBorrowLimit / tokenPrice : */(supplied?.balance || 0), //TODO fix this to account for borrow limit correctly
                     totalApy: interestRateDataMap[token].supply,
                     percentBtn: 100,
                     protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
@@ -337,11 +341,11 @@ function TokenDetail() {
                                     <p className="text-xs text-[#797979]">Utilization rate</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
-                                    <span className="w-2 h-2 bg-[#2DC296] rounded-full"></span>
+                                    <span className="w-2 h-2 bg-[#f10750] rounded-full"></span>
                                     <p className="text-xs text-[#797979]">Borrow APY</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
-                                    <span className="w-2 h-2 bg-[#BFC22D] rounded-full"></span>
+                                    <span className="w-2 h-2 bg-[#38b2ac] rounded-full"></span>
                                     <p className="text-xs text-[#797979]">Supply APY</p>
                                 </div>
                             </ul>

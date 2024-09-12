@@ -44,7 +44,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
 
     useEffect(() => {
       if (actionType == "supply" || actionType == "repay"){
-        const allowance = parseFloat((Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0)
+        const allowance = (Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])).toString()
         if (amount > Number(allowance)){
           setButtonText("Approve")
         } else {

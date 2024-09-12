@@ -4,7 +4,7 @@ import { erc20Abi } from 'viem'
 
 import { calculateApy, padArray } from './functions';
 import { UserReserveData, UserPositionData, UserPositionsData } from '../utils/types'
-import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap, abis, liqMap } from './tokens';
+import { contracts, assetAddresses, tokenNameMap, tokenDecimalsMap, iconsMap, ltvMap, abis, liqMap, chainName } from './tokens';
 
 import { useProtocolReservesData, useProtocolPriceData } from './protocolState';
 
@@ -42,7 +42,7 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
     const balanceNormalized = Number(e.scaledATokenBalance) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
     const priceUsd = Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
     const valueUsd = priceUsd * balanceNormalized;
-    const apr = calculateApy(Number(reserveDataMap[e.underlyingAsset]?.currentLiquidityRate || 0));
+    const apr = calculateApy(reserveDataMap[e.underlyingAsset]?.currentLiquidityRate || BigInt(0));
 
     return {
       underlyingAsset: e.underlyingAsset,
@@ -60,12 +60,12 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
     const balanceNormalized = Number(e.scaledVariableDebt) / Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
     const priceUsd = Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
     const valueUsd = priceUsd * balanceNormalized;
-    const apr = calculateApy(Number(reserveDataMap[e.underlyingAsset]?.currentVariableBorrowRate || 0))
+    const apr = calculateApy(reserveDataMap[e.underlyingAsset]?.currentVariableBorrowRate || BigInt(0))
 
     return {
       underlyingAsset: e.underlyingAsset,
       assetName: tokenNameMap[e.underlyingAsset],
-      balance: Number(e.scaledVariableDebt) / Math.pow(10, 6),
+      balance: balanceNormalized,
       value: valueUsd,
       apr: apr,
       icon: iconsMap[tokenNameMap[e.underlyingAsset]],
@@ -78,8 +78,8 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
   const totalBorrowAvailable = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * ltvMap[a.underlyingAsset]), 0);
   const totalLiquidationThreshold = supplied.reduce((partialSum: number, a: any) => partialSum + (a.value * liqMap[a.underlyingAsset]), 0);
 
-  const supplyInterestEarned = supplied.reduce((partialSum: number, a: any) => partialSum + (a.apr * a.value), 0);
-  const borrowInterestEarned = borrowed.reduce((partialSum: number, a: any) => partialSum + (a.apr * a.value), 0);
+  const supplyInterestEarned = supplied.reduce((partialSum: number, a: any) => partialSum + (a.apr / 100 * a.value), 0);
+  const borrowInterestEarned = borrowed.reduce((partialSum: number, a: any) => partialSum + (a.apr / 100 * a.value), 0);
   const netApy = (supplyInterestEarned - borrowInterestEarned) / 100;
 
   return {
@@ -89,7 +89,7 @@ export function useUserPositionsData(isConnected: boolean, address: `0x${string}
     totalSupplyUsd: totalSupply,
     totalBorrowUsd: totalBorrow,
     totalBalanceUsd: totalSupply - totalBorrow,
-    totalBorrowLimit: totalBorrowAvailable - totalBorrow,
+    totalBorrowLimit: totalBorrowAvailable,
     healthFactor: totalLiquidationThreshold / totalBorrow,
     netApy: isNaN(netApy) ? 0 : netApy,
     totalLiquidationThreshold: totalLiquidationThreshold,
@@ -153,7 +153,7 @@ export function useGetUserBalanceHistory(address: `0x${string}` | undefined) {
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('https://api.hyperlend.finance/data/user/valueChange?chain=arbitrum&address=' + address)
+    fetch('https://api.hyperlend.finance/data/user/valueChange?chain='+chainName+'&address=' + address)
       .then(response => response.json())
       .then(json => {
         setData({
@@ -175,7 +175,7 @@ export function useUserPortfolioHistory(address: `0x${string}` | undefined, isCo
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('https://api.hyperlend.finance/data/user/historicalNetWorth?chain=arbitrum&address=' + address)
+    fetch('https://api.hyperlend.finance/data/user/historicalNetWorth?chain='+chainName+'&address=' + address)
       .then(response => response.json())
       .then(json => {
         setData(json ? json.map((e: any) => e.usdValue) : [])

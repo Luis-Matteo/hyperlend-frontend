@@ -22,8 +22,8 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return (
       <div className="custom-tooltip" style={{ backgroundColor: '#fff', padding: '10px', border: '1px solid #ccc' }}>
         <p className="label" style={{color: '#302DC2'}}>{`Utilization Rate: ${label}%`}</p>
-        <p className="intro" style={{color: '#38b2ac'}}>{`Borrow APY: ${payload[0].value}%`}</p>
-        <p className="intro" style={{color: '#ecc94b'}}>{`Supply APY: ${payload[1].value}%`}</p>
+        <p className="intro" style={{color: '#f10750'}}>{`Borrow APY: ${payload[0].value}%`}</p>
+        <p className="intro" style={{color: '#38b2ac'}}>{`Supply APY: ${payload[1].value}%`}</p>
       </div>
     );
   }
@@ -35,10 +35,12 @@ const InterestRateModelChart: React.FC<InterestRateModelChartType> = ({ token, c
   const rawData = useProtocolInterestRateModel(token)
 
   const data = rawData.map((e) => {
+    let borrowRatePercent = e.variableRate * 100
+    let supplyRatePercent = e.utilization * e.variableRate * (1 - 0.2)
     return {
       utilization: e.utilization,
-      supply: Number(formatNumber(e.variableRate * 100 * 0.8, 2)),
-      borrow: Number(formatNumber(e.variableRate * 100, 2))
+      supply: Number(formatNumber(supplyRatePercent, 2)),
+      borrow: Number(formatNumber(borrowRatePercent, 2))
     }
   })
 
@@ -54,8 +56,8 @@ const InterestRateModelChart: React.FC<InterestRateModelChartType> = ({ token, c
         <YAxis />
         <Tooltip content={<CustomTooltip/>} />
         <ReferenceLine x={Number(parseFloat(currentUtilization.toString()).toFixed(0))} stroke="#302DC2" />
-        <Line type="monotone" dataKey="borrow" stroke="#38b2ac" dot={false} name="Borrow APY" />
-        <Line type="monotone" dataKey="supply" stroke="#ecc94b" dot={false} name="Supply APY" />
+        <Line type="monotone" dataKey="borrow" stroke="#f10750" dot={false} name="Borrow APY" />
+        <Line type="monotone" dataKey="supply" stroke="#38b2ac" dot={false} name="Supply APY" />
       </LineChart>
     </ResponsiveContainer>
   );

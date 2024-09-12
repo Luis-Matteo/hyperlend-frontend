@@ -36,7 +36,7 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type }) => {
     const rate = type == "supply" ? e.liquidityRate : e.borrowRate;
     return {
       time: new Date(e.timestamp).toDateString(),
-      rate: formatNumber(calculateApy(Number(rate)), 2)
+      rate: formatNumber(calculateApy(rate), 2)
     }
   })
 

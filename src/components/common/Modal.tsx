@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import xmarkIcon from '../../assets/icons/xmark-icon.svg'
 import gearIcon from '../../assets/icons/gear-icon.svg'
-import { formatNumber, capitalizeString, decodeConfig } from '../../utils/functions';
+import { formatNumber, capitalizeString/*, decodeConfig*/ } from '../../utils/functions';
 import ProgressBar from '../common/PercentBar';
 import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { erc20Abi } from 'viem'
@@ -11,7 +11,7 @@ import { erc20Abi } from 'viem'
 import { ModalProps } from '../../utils/types';
 import { contracts, tokenNameMap, tokenDecimalsMap, iconsMap, abis, liqMap } from '../../utils/tokens';
 
-import { useProtocolInterestRate, useProtocolPriceData, useProtocolAssetReserveData, useProtocolReservesData } from '../../utils/protocolState';
+import { useProtocolInterestRate, useProtocolPriceData, useProtocolAssetReserveData/*, useProtocolReservesData*/ } from '../../utils/protocolState';
 import { useUserPositionsData } from '../../utils/userState'
 
 function Modal({ token, modalType, onClose }: ModalProps) {
@@ -51,7 +51,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
 
   const { priceDataMap } = useProtocolPriceData()
   const { interestRateDataMap } = useProtocolInterestRate();
-  const { reserveDataMap } = useProtocolReservesData();
+  // const { reserveDataMap } = useProtocolReservesData();
 
   const userPositionsData = useUserPositionsData(isConnected, address);
   const assetReserveData = useProtocolAssetReserveData(token)
@@ -66,8 +66,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
 
   const getBorrowLimit = () => {
     // TODO: enforce protocol borrow cap
-    const borrowCap = decodeConfig(reserveDataMap[token].configuration.data).borrowCap
-    console.log(borrowCap)
+    // const borrowCap = decodeConfig(reserveDataMap[token].configuration.data).borrowCap
     const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8)
     const borrowAvailableTokens = (userPositionsData?.totalBorrowLimit || 0) / tokenPriceUsd
     const availableInPool = Number(assetReserveData.totalAToken) / Math.pow(10, tokenDecimalsMap[token])
@@ -135,11 +134,14 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   };
 
   const handleDirectInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(Number(event.target.value) <= availableBalance ? Number(event.target.value) : availableBalance)
-    setProgress(Number(event.target.value) >= availableBalance ? 100 : ((Number(event.target.value) / availableBalance) * 100));
+    let inputValue = parseFloat(event.target.value) as any; 
+    if (!isNaN(inputValue)) {  
+        setAmount(inputValue <= availableBalance ? inputValue : availableBalance);
+        setProgress(inputValue >= availableBalance ? 100 : ((inputValue / availableBalance) * 100));
 
-    setAllowance(Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]))
-    updateAvailableAmount();
+        setAllowance(Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]));
+        updateAvailableAmount();
+    }
   }
 
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -210,7 +212,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                 </div>
               </div>
               <input
-                type="text"
+                type="number"
                 className="form-control-plaintext text-xl text-secondary border-0 p-0 text-right"
                 value={amount}
                 onChange={(e) => {
@@ -221,7 +223,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                   outline: 'none',
                   boxShadow: 'none',
                   width: 'auto',
-                  minWidth: '50px',
+                  minWidth: '50px'
                 }}
               />
             </div>
@@ -275,7 +277,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             }>
             {
               modalType == "supply" || modalType == "repay" ?
-                (allowance >= amount ? "Supply" : "Approve") : capitalizeString(modalType)
+                (allowance >= amount ? capitalizeString(modalType) : "Approve") : capitalizeString(modalType)
             }
           </button>
           <div className='flex justify-end mb-6'>

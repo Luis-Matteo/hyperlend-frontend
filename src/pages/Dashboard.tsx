@@ -6,10 +6,11 @@ import Navbar from '../layouts/Navbar';
 import PositionBar from '../components/dashboard/PositionBar';
 import Modal from '../components/common/Modal';
 import { useSwitchChain, useAccount, useWriteContract } from 'wagmi'
+import ReactGA from 'react-ga4';
 
 import { ModalType } from '../utils/types';
 
-import { contracts, abis } from '../utils/tokens';
+import { contracts, abis, networkChainId } from '../utils/tokens';
 import { useUserPositionsData, useUserWalletBalance, useUserPortfolioHistory } from '../utils/userState';
 import { getUserPoints } from '../utils/userPoints';
 import MyChart from '../components/dashboard/Chart';
@@ -17,13 +18,15 @@ import Factor from '../components/dashboard/Factor';
 import InfoItem from '../components/common/InfoItem';
 
 function Dashboard() {
+  ReactGA.send({ hitType: "pageview", page: "/dashboard" });
+
   const { data: hash, writeContractAsync } = useWriteContract()
   const { switchChain } = useSwitchChain()
   const { address, chainId, isConnected } = useAccount()
 
   useEffect(() => {
-    if (isConnected && chainId != 42161) {
-      switchChain({ chainId: 42161 });
+    if (isConnected && chainId != networkChainId) {
+      switchChain({ chainId: networkChainId });
     }
   }, [isConnected, chainId])
 

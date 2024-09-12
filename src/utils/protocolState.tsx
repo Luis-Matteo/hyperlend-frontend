@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { calculateApy } from './functions';
 import { Reserve, ReservesData } from '../utils/types'
-import { contracts, assetAddresses, abis, tokenToRateStrategyMap } from './tokens';
+import { contracts, assetAddresses, abis, tokenToRateStrategyMap, chainName } from './tokens';
 
 export function useProtocolReservesData(): ReservesData {
   const { data: reserveDataResults, isLoading, isError } = useReadContracts({
@@ -116,10 +116,9 @@ export function useProtocolInterestRate(){
     return assetAddresses.reduce((acc, asset, index) => {
       const result = interestRateDataResults[index]
       if (result && result.status === 'success') {
-
         acc[asset] = {
-          supply: calculateApy(Number((reserveDataMap[asset] as any).currentLiquidityRate)),
-          borrow: calculateApy(Number((reserveDataMap[asset] as any).currentVariableBorrowRate))
+          supply: calculateApy((reserveDataMap[asset] as any).currentLiquidityRate),
+          borrow: calculateApy((reserveDataMap[asset] as any).currentVariableBorrowRate)
         }
       } else {
         console.error(`Failed to get interest rate data for asset: ${asset}`);
@@ -170,7 +169,7 @@ export function useProtocolInterestRateModel(token: string){
   const rates: Rates[] = [];
 
   const rateStrategyType = tokenToRateStrategyMap[token] || "volatileOne"
-  const methods = ['getVariableRateSlope1', 'getVariableRateSlope2', 'OPTIMAL_USAGE_RATIO', 'getBaseStableBorrowRate']
+  const methods = ['getVariableRateSlope1', 'getVariableRateSlope2', 'OPTIMAL_USAGE_RATIO', 'getBaseVariableBorrowRate']
   
   const { data: interestRateStrategyData } = useReadContracts({
     contracts: methods.map(method => ({
@@ -194,8 +193,8 @@ export function useProtocolInterestRateModel(token: string){
   const variableRateSlope1 = params['getVariableRateSlope1'];
   const variableRateSlope2 = params['getVariableRateSlope2'];
   const optimalUsageRatio = params['OPTIMAL_USAGE_RATIO'];
-  const baseVariableBorrowRate = params['getBaseStableBorrowRate']
-
+  const baseVariableBorrowRate = params['getBaseVariableBorrowRate']
+  
   const resolution = 200;
   const step = 100 / resolution;
   const formattedOptimalUtilizationRate = normalizeBN(optimalUsageRatio, 25).toNumber();
@@ -248,7 +247,7 @@ export function useInterestRateHistory(token: string){
   const [data, setData] = useState<any>(null);
 
   useEffect(() => {
-    fetch('https://api.hyperlend.finance/data/interestRateHistory?chain=arbitrum&token=' + token)
+    fetch('https://api.hyperlend.finance/data/interestRateHistory?chain='+chainName+'&token=' + token)
       .then(response => response.json())
       .then(json => {
         const values = json ? json.map((e: any) => ({

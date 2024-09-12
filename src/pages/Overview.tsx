@@ -5,10 +5,11 @@ import { formatNumber, formatUnit } from '../utils/functions';
 import Navbar from '../layouts/Navbar';
 import Modal from '../components/common/Modal';
 import { useSwitchChain, useAccount } from 'wagmi'
+import ReactGA from 'react-ga4';
 
 import { decodeConfig, filterString } from '../utils/functions';
 import { AssetDetail, ModalType } from '../utils/types';
-import { tokenNameMap, tokenFullNameMap, iconsMap, tokenDecimalsMap, stablecoinsList } from '../utils/tokens';
+import { tokenNameMap, tokenFullNameMap, iconsMap, tokenDecimalsMap, stablecoinsList, networkChainId } from '../utils/tokens';
 
 import { useProtocolReservesData, useProtocolAssetReserveData, useProtocolPriceData, useProtocolInterestRate } from '../utils/protocolState';
 import { Link } from 'react-router-dom';
@@ -16,12 +17,14 @@ import InfoItem from '../components/common/InfoItem';
 import { assetsInfos } from '../utils/constants';
 
 function Overview() {
+  ReactGA.send({ hitType: "pageview", page: "/markets" });
+
   const { switchChain } = useSwitchChain()
   const account = useAccount()
 
   useEffect(() => {
-    if (account.isConnected && account.chainId != 42161) {
-      switchChain({ chainId: 42161 });
+    if (account.isConnected && account.chainId != networkChainId) {
+      switchChain({ chainId: networkChainId });
     }
   }, [account])
 
@@ -71,6 +74,20 @@ function Overview() {
     }
     return assets;
   }
+  const assets = getAssets()
+
+  if (Object.keys(reserveDataMap).length == 0){
+    return (
+      <>
+      <div className="w-full">
+        <Navbar
+          pageTitle="Markets"
+        />
+        <div className='text-white'>Connect wallet</div>
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
@@ -107,7 +124,7 @@ function Overview() {
             </div>
             <div className="lg:max-h-[calc(100vh-346px)] xl:max-h-[calc(100vh-394px)] h-full overflow-auto hidden lg:block">
               {
-                (getAssets() || []).map((item, key) => (
+                (assets || []).map((item, key) => (
                   <div
                     className="grid grid-cols-11 items-center py-[14px] px-2.5 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer"
                     key={key}
@@ -186,7 +203,7 @@ function Overview() {
           </div>
           <div className="lg:hidden w-full">
             {
-              (getAssets() || []).map((item, key) => (
+              (assets || []).map((item, key) => (
                 <div
                   className="items-center py-[14px] px-2.5 border-b-[1px] border-gray-light hover:bg-[#1F2A29] cursor-pointer"
                   key={key}
