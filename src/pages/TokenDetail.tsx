@@ -91,7 +91,7 @@ function TokenDetail() {
 
         const tokenPrice = (Number(priceDataMap[token]) / Math.pow(10, 8))
         const borrowLiquidity = Number(protocolAssetReserveData.totalAToken - protocolAssetReserveData.totalVariableDebt) / Math.pow(10, tokenDecimalsMap[token])
-        const totalBorrowInToken = userPositionsData.totalBorrowUsd / tokenPrice
+        const totalBorrowInToken = (userPositionsData.totalBorrowUsd / tokenPrice) * 1.25 //TODO: account for LTV
         switch (button) {
             case 1:
                 setActionData({
