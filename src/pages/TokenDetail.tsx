@@ -123,7 +123,7 @@ function TokenDetail() {
             case 3:
                 setActionData({
                   availableAmountTitle: "Borrowable",
-                  availableAmount: borrowLiquidity < userPositionsData.totalBorrowLimit / tokenPrice ? borrowLiquidity : userPositionsData.totalBorrowLimit / tokenPrice,
+                  availableAmount: (borrowLiquidity < userPositionsData.totalBorrowLimit / tokenPrice ? borrowLiquidity : userPositionsData.totalBorrowLimit / tokenPrice) * 0.99,
                   totalApy: interestRateDataMap[token].borrow,
                   percentBtn: 100,
                   protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
