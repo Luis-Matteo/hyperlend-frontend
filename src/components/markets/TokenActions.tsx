@@ -74,7 +74,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
 
     const triggerAction = () => {
       const bgIntAmount = parseFloat((amount * Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0).toString() as any as bigint
-      const allowance = parseFloat((Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0)
+      const allowance = Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])
 
       if (actionType == "supply" || actionType == "repay") {
         if (Number(allowance) < amount) {
