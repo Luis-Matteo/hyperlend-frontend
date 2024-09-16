@@ -3,7 +3,7 @@ import ProgressBar from "../common/PercentBar";
 import Button from "../common/Button";
 import { TokenActionsProps } from "../../utils/interfaces";
 import ToggleButton from "../common/ToggleButton";
-import { useAccount, useWriteContract } from 'wagmi'
+import { useAccount, useWriteContract, useWaitForTransactionReceipt  } from 'wagmi'
 import { erc20Abi } from 'viem'
 
 import { formatNumber } from "../../utils/functions";
@@ -28,25 +28,36 @@ const TokenActions: React.FC<TokenActionsProps> = ({
         setAmount(availableAmount * Number(event.target.value) / 100)
     };
 
-    const actionType = btnTitle.toLowerCase()
-
-    const { address } = useAccount();
-    const { data: hash, writeContract, error } = useWriteContract()
-    const userAllow = useUserAllowance(token, address || '0x', contracts.pool)
-    const [userAllowance, setUserAllowance] = useState(0)
-
-    const [buttonText, setButtonText] = useState(btnTitle)
-    const [collateral, setCollateral] = useState(isCollateralEnabled);
-    const [amount, setAmount] = useState(0)
-
-    useEffect(() => {
-      setButtonText(btnTitle)
-    }, [btnTitle])
-
     const handleDirectInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setAmount(Number(event.target.value) >= availableAmount ? availableAmount : Number(event.target.value))
     }
 
+    const actionType = btnTitle.toLowerCase()
+    useEffect(() => {
+      setButtonText(btnTitle)
+    }, [btnTitle])
+
+    const { address } = useAccount();
+    const { data: hash, writeContract, error } = useWriteContract()
+    const { data: txReceipt } = useWaitForTransactionReceipt({
+      hash: hash,
+    })
+
+    const userAllowanceBn = useUserAllowance(token, address || '0x', contracts.pool)
+
+    const [userAllowance, setUserAllowance] = useState(0)
+    const [buttonText, setButtonText] = useState(btnTitle)
+    const [collateral, setCollateral] = useState(isCollateralEnabled);
+    const [amount, setAmount] = useState(0)
+
+    //update button after approval
+    useEffect(() => {
+      if (txReceipt && txReceipt.status == "success"){
+        setButtonText(btnTitle)
+      }
+    }, [txReceipt])
+
+    //check approval amount on changes
     useEffect(() => {
       if (actionType == "supply" || actionType == "repay"){
         const allowance = Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])
@@ -56,7 +67,10 @@ const TokenActions: React.FC<TokenActionsProps> = ({
           setButtonText(btnTitle)
         }
       }
+    }, [amount, btnTitle, hash, userAllowance, txReceipt])
 
+    //update progress & amount on changes
+    useEffect(() => {
       setProgress(Number(amount) >= availableAmount ? 100 : ((Number(amount) / availableAmount) * 100));
       if (amount >= availableAmount){
         setAmount(availableAmount)
@@ -64,20 +78,15 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     }, [amount, btnTitle, hash, userAllowance])
 
     useEffect(() => {
-      if (userAllow as number >= userAllowance) setUserAllowance(userAllow as number)
-    }, [amount])
-
-    //update allowance on `approve` call
-    useEffect(() => {
-      if (hash != null) setUserAllowance(amount)
-    }, [hash])
+      if (userAllowanceBn as number >= userAllowance) setUserAllowance(userAllowanceBn as number)
+    }, [amount, userAllowanceBn])
 
     const triggerAction = () => {
       const bgIntAmount = parseFloat((amount * Math.pow(10, tokenDecimalsMap[token])).toString()).toFixed(0).toString() as any as bigint
       const allowance = Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token])
 
       if (actionType == "supply" || actionType == "repay") {
-        if (Number(allowance) < amount) {
+        if (allowance < amount) {
           writeContract({
             address: token as any,
             abi: erc20Abi,
@@ -95,7 +104,15 @@ const TokenActions: React.FC<TokenActionsProps> = ({
         "repay": [token, bgIntAmount, 2, address] //asset, amount, interestRateMode, onBehalfOf
       }
 
-      if (Number(allowance) >= amount) {
+      if (actionType == "supply" && allowance >= amount) {
+        writeContract({
+          address: contracts.pool,
+          abi: abis.pool,
+          functionName: actionType,
+          args: functionParams[actionType]
+        })
+        console.log(hash)
+      } else {
         writeContract({
           address: contracts.pool,
           abi: abis.pool,
