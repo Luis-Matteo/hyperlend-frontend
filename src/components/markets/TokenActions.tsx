@@ -91,7 +91,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
             address: token as any,
             abi: erc20Abi,
             functionName: 'approve',
-            args: [contracts.pool, bgIntAmount],
+            args: [contracts.pool, 999999999999999999999999999999999999999n],
           });
           setButtonText(btnTitle)
         }
