@@ -14,7 +14,6 @@ import { tokenNameMap, tokenFullNameMap, iconsMap, tokenDecimalsMap, stablecoins
 import { useProtocolReservesData, useProtocolAssetReserveData, useProtocolPriceData, useProtocolInterestRate } from '../utils/protocolState';
 import { Link } from 'react-router-dom';
 import InfoItem from '../components/common/InfoItem';
-import { assetsInfos } from '../utils/constants';
 
 function Overview() {
   ReactGA.send({ hitType: "pageview", page: "/markets" });
