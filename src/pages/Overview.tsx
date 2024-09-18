@@ -76,14 +76,14 @@ function Overview() {
   }
   const assets = getAssets()
 
-  if (Object.keys(reserveDataMap).length == 0){
+  if (Object.keys(reserveDataMap).length == 0) {
     return (
       <>
-      <div className="w-full">
-        <Navbar
-          pageTitle="Markets"
-        />
-        <div className='text-white'>Connect wallet</div>
+        <div className="w-full">
+          <Navbar
+            pageTitle="Markets"
+          />
+          <div className='text-white'>Connect wallet</div>
         </div>
       </>
     )
@@ -104,40 +104,73 @@ function Overview() {
           setSearchText={setSearchText}
         />
         <CardItem
-          className="md:py-6 md:px-7 flex-1 w-full overflow-x-auto"
+          className="md:py-6 md:px-7"
         >
-          <div className='lg:min-w-[1496px] lg:w-full'>
-            <div className="py-3 px-2 border-y-[1px] bg-grey border-[#212325] hidden lg:grid grid-cols-11 gap-2">
-              <div className="text-white font-lufga text-[11px] col-span-2">Asset</div>
-              {
-                (assetsInfos || []).map((item, key) => (
-                  <div className="flex gap-2 items-center" key={key}>
-                    <p className='text-white font-lufga text-[11px] whitespace-nowrap'>{item.title}</p>
-                    <InfoItem
-                      title={<span>{item.tooltip}</span>}
-                      className='w-[300px]' />
-                  </div>
-                ))
-              }
-              <div></div>
-              <div></div>
+          <div className='w-full'>
+            <div className="py-3 px-2 border-y-[1px] bg-grey border-[#212325] hidden xl:flex justify-between xl:gap-2 2xl:gap-8">
+              <div className='flex flex-1 items-center gap-2'>
+                <div className="text-white font-lufga text-[11px] w-[80px] 2xl:w-[20%]">Asset</div>
+                <div className="flex gap-2 items-center w-[13%]">
+                  <p className='text-white font-lufga text-[11px] whitespace-nowrap'>Total Supplied</p>
+                  <InfoItem
+                    title={<span>Total hyperlend deposits for each asset.</span>}
+                    className='w-[300px]' />
+                </div>
+                <div className="flex gap-2 items-center w-[11%]">
+                  <p className='text-white font-lufga text-[11px] whitespace-nowrap'>Supply APY</p>
+                  <InfoItem
+                    title={<span>A percentage you will earn on deposits over a year.</span>}
+                    className='w-[300px]' />
+                </div>
+                <div className="flex gap-2 items-center w-[13%]">
+                  <p className='text-white font-lufga text-[11px] whitespace-nowrap'>Total Borrowed</p>
+                  <InfoItem
+                    title={<span>Total hyperlend borrows for each asset.</span>}
+                    className='w-[300px]' />
+                </div>
+                <div className="flex gap-2 items-center w-[11%]">
+                  <p className='text-white font-lufga text-[11px] whitespace-nowrap'>Borrow APY</p>
+                  <InfoItem
+                    title={<span>A percentage you will pay on borrows over a year.</span>}
+                    className='w-[300px]' />
+                </div>
+                <div className="flex gap-2 items-center w-[16%]">
+                  <p className='text-white font-lufga text-[11px] whitespace-nowrap'>Available Liquidity</p>
+                  <InfoItem
+                    title={<span>The amount of tokens available to borrow for each asset.</span>}
+                    className='w-[300px]' />
+                </div>
+                <div className="flex gap-2 items-center w-[9%]">
+                  <p className='text-white font-lufga text-[11px] whitespace-nowrap'>Collateral</p>
+                  <InfoItem
+                    title={<span>Signals if you can borrow using this asset as a collateral.</span>}
+                    className='w-[300px]' />
+                </div>
+                <div className="flex gap-2 items-center w-[]">
+                  <p className='text-white font-lufga text-[11px] whitespace-nowrap'>LTV</p>
+                  <InfoItem
+                    title={<span>The amount you can borrow against your collateral. e.g. 80% LTV means you can borrow up to 80% of the collateral value.</span>}
+                    className='w-[300px]' />
+                </div>
+              </div>
+              <div className='w-[120px] 2xl:w-[240px]'></div>
             </div>
-            <div className="lg:max-h-[calc(100vh-346px)] xl:max-h-[calc(100vh-394px)] h-full overflow-auto hidden lg:block">
+            <div className="lg:max-h-[calc(100vh-346px)] xl:max-h-[calc(100vh-394px)] h-full overflow-auto hidden xl:block">
               {
                 (assets || []).map((item, key) => (
                   <div
-                    className="grid grid-cols-11 items-center py-[14px] px-2.5 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer"
+                    className="flex justify-between items-center xl:gap-2 2xl:gap-8 py-[14px] px-2.5 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer"
                     key={key}
                   >
                     <Link
-                      className="col-span-9 grid grid-cols-9 gap-2 items-center"
+                      className="flex flex-1 gap-2 items-center"
                       to={`${item.underlyingAsset}`}
                     >
-                      <div className="flex items-center gap-2 col-span-2 h-full">
+                      <div className="flex items-center gap-2 h-full w-[80px] 2xl:w-[20%]">
                         <img src={item.icon} alt="symbol" className="w-4 h-4 md:w-6 md:h-6" />
                         <p className='text-xs md:text-base text-white font-lufga'>{item.symbol}</p>
                       </div>
-                      <div className="text-white font-lufga">
+                      <div className="text-white font-lufga w-[13%]">
                         <p className="">
                           {formatUnit(item.totalSupplied)}
                         </p>
@@ -145,8 +178,8 @@ function Overview() {
                           ${formatUnit(item.totalSuppliedUsd)}
                         </p>
                       </div>
-                      <div className="text-white font-lufga">{formatNumber(item.supplyApy, 2)}%</div>
-                      <div className="text-white font-lufga">
+                      <div className="text-white font-lufga w-[11%]">{formatNumber(item.supplyApy, 2)}%</div>
+                      <div className="text-white font-lufga w-[13%]">
                         <p className="">
                           {formatUnit(item.totalBorrowed)}
                         </p>
@@ -154,8 +187,8 @@ function Overview() {
                           ${formatUnit(item.totalBorrowedUsd)}
                         </p>
                       </div>
-                      <div className="text-white font-lufga">{formatNumber(item.borrowApy, 2)}%</div>
-                      <div className="text-white font-lufga">
+                      <div className="text-white font-lufga w-[11%]">{formatNumber(item.borrowApy, 2)}%</div>
+                      <div className="text-white font-lufga w-[16%]">
                         <p className="">
                           {formatUnit(item.totalLiquidityToken)}
                         </p>
@@ -163,13 +196,13 @@ function Overview() {
                           ${formatUnit(item.totalLiquidtyUsd)}
                         </p>
                       </div>
-                      <div className="text-white font-lufga">{
+                      <div className="text-white font-lufga w-[9%]">{
                         item.isCollateral ? <div className="text-success">✓</div> : "─"
                       }</div>
                       <div className="text-white font-lufga">{formatNumber(item.ltv, 2)}%</div>
                     </Link>
 
-                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 col-span-2">
+                    <div className="grid xl:grid-cols-1 2xl:grid-cols-2 gap-2 xl:w-[120px] 2xl:w-[240px] ">
                       <button
                         className="w-full py-2 bg-secondary font-lufga rounded-xl font-bold hover:"
                         onClick={
@@ -201,7 +234,7 @@ function Overview() {
               }
             </div>
           </div>
-          <div className="lg:hidden w-full">
+          <div className="xl:hidden w-full">
             {
               (assets || []).map((item, key) => (
                 <div
