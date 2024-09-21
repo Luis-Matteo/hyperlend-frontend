@@ -70,7 +70,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8)
     const borrowAvailableTokens = (userPositionsData?.totalBorrowLimit || 0) / tokenPriceUsd
     const availableInPool = Number(assetReserveData.totalAToken) / Math.pow(10, tokenDecimalsMap[token])
-    return borrowAvailableTokens > availableInPool ? availableInPool : borrowAvailableTokens;
+    return borrowAvailableTokens > availableInPool ? availableInPool : borrowAvailableTokens * 0.85;
   }
 
   const getPrecision = () => {
