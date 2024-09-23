@@ -9,6 +9,7 @@ import { erc20Abi } from 'viem'
 import { formatNumber } from "../../utils/functions";
 import { iconsMap, tokenNameMap, tokenDecimalsMap, contracts, abis } from "../../utils/tokens";
 import { useUserAllowance } from '../../utils/userState';
+import { getErrorMessage } from '../../utils/errorCodes';
 
 const TokenActions: React.FC<TokenActionsProps> = ({
     availableAmountTitle,
@@ -183,7 +184,12 @@ const TokenActions: React.FC<TokenActionsProps> = ({
             {
                 error ? <p className="text-xs text-[#FF0000] mt-2">
                     {
-                      error?.message.includes("Contract Call") ? error?.message.split("Contract Call")[0] 
+                      error?.message.includes("Contract Call") 
+                      ? error?.message.split("Contract Call")[0] + 
+                        (error?.message.split("Contract Call")[0].includes("reverted with the following reason:") 
+                          ? `(${getErrorMessage(error?.message.split("Contract Call")[0].split("reverted with the following reason:")[1].trim())})`
+                          : ""
+                        )
                       : error?.message.split("Request Arguments")[0]
                     }
                 </p> : ''
