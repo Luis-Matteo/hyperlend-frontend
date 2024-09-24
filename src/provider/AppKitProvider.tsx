@@ -26,7 +26,7 @@ const hyperEvmTestnet = defineChain({
   name: 'HyperEVM Testnet',
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
-    default: { http: ['https://api.hyperliquid-testnet.xyz/evm', 'rpc-testnet.hyperlend.finance'] },
+    default: { http: ['https://api.hyperliquid-testnet.xyz/evm', 'https://rpc-testnet.hyperlend.finance/evm'] },
   },
   blockExplorers: {
     default: { name: 'Etherscan', url: 'https://etherscan.io' },
