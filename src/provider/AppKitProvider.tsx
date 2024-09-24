@@ -29,7 +29,7 @@ const hyperEvmTestnet = defineChain({
     default: { http: ['https://api.hyperliquid-testnet.xyz/evm', 'https://rpc-testnet.hyperlend.finance/evm'] },
   },
   blockExplorers: {
-    default: { name: 'Etherscan', url: 'https://etherscan.io' },
+    default: { name: 'HyperEVM testnet explorer', url: 'https://explorer.hyperlend.finance/' },
   },
   contracts: {
     multicall3: {
