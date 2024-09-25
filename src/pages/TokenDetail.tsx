@@ -19,7 +19,7 @@ import {
 } from '../utils/tokens';
 
 import {
-  useUserPositionsData
+    useUserPositionsData
 } from '../utils/userState';
 
 import {
@@ -46,17 +46,17 @@ function TokenDetail() {
     }, [account])
 
     const normalizeDecimalsAmount = (x: number) => {
-      return Number(x) / Math.pow(10, tokenDecimalsMap[token])
+        return Number(x) / Math.pow(10, tokenDecimalsMap[token])
     }
 
     const { data: userWalletBalance } = useReadContract(
-      account.isConnected && account.address ?
-        {
-          abi: erc20Abi,
-          address: token,
-          functionName: 'balanceOf',
-          args: [account.address],
-        } as any : undefined
+        account.isConnected && account.address ?
+            {
+                abi: erc20Abi,
+                address: token,
+                functionName: 'balanceOf',
+                args: [account.address],
+            } as any : undefined
     );
 
     const { reserveDataMap } = useProtocolReservesData();
@@ -64,7 +64,7 @@ function TokenDetail() {
     const { interestRateDataMap } = useProtocolInterestRate()
     const protocolAssetReserveData = useProtocolAssetReserveData(token);
     const [activeButton, setActiveButton] = useState(1);
-    
+
     const userPositionsData = useUserPositionsData(account.isConnected, account.address);
     const supplied = userPositionsData.supplied.find(e => e.underlyingAsset == token)
     const borrowed = userPositionsData.borrowed.find(e => e.underlyingAsset == token)
@@ -83,7 +83,7 @@ function TokenDetail() {
     });
 
     useEffect(() => {
-      handleButtonClick(activeButton)
+        handleButtonClick(activeButton)
     }, [userWalletBalance])
 
     const handleButtonClick = (button: number) => {
@@ -110,7 +110,7 @@ function TokenDetail() {
             case 2:
                 setActionData({
                     availableAmountTitle: "Withdrawable",
-                    availableAmount: (supplied?.balance || 0) - totalBorrowInToken, 
+                    availableAmount: (supplied?.balance || 0) - totalBorrowInToken,
                     totalApy: interestRateDataMap[token].supply,
                     percentBtn: 100,
                     protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
@@ -123,30 +123,30 @@ function TokenDetail() {
                 break;
             case 3:
                 setActionData({
-                  availableAmountTitle: "Borrowable",
-                  availableAmount: (borrowLiquidity < userPositionsData.totalBorrowLimit / tokenPrice ? borrowLiquidity : userPositionsData.totalBorrowLimit / tokenPrice) * 0.9,
-                  totalApy: interestRateDataMap[token].borrow,
-                  percentBtn: 100,
-                  protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
-                  protocolBalance: (borrowed?.balance || 0),
-                  dailyEarning: -1 * (borrowed?.value || 0) * (interestRateDataMap[token].borrow / 100) / 365,
-                  btnTitle: "Borrow",
-                  token: token,
-                  isCollateralEnabled: false
+                    availableAmountTitle: "Borrowable",
+                    availableAmount: (borrowLiquidity < userPositionsData.totalBorrowLimit / tokenPrice ? borrowLiquidity : userPositionsData.totalBorrowLimit / tokenPrice) * 0.9,
+                    totalApy: interestRateDataMap[token].borrow,
+                    percentBtn: 100,
+                    protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
+                    protocolBalance: (borrowed?.balance || 0),
+                    dailyEarning: -1 * (borrowed?.value || 0) * (interestRateDataMap[token].borrow / 100) / 365,
+                    btnTitle: "Borrow",
+                    token: token,
+                    isCollateralEnabled: false
                 });
                 break;
             case 4:
                 setActionData({
-                  availableAmountTitle: "Repayable",
-                  availableAmount: (borrowed?.balance || 0) > normalizeDecimalsAmount(Number(userWalletBalance)) ? normalizeDecimalsAmount(Number(userWalletBalance)) : (borrowed?.balance || 0),
-                  totalApy: interestRateDataMap[token].borrow,
-                  percentBtn: 100,
-                  protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
-                  protocolBalance: (borrowed?.balance || 0),
-                  dailyEarning: -1 * (borrowed?.value || 0) * (interestRateDataMap[token].borrow / 100) / 365,
-                  btnTitle: "Repay",
-                  token: token,
-                  isCollateralEnabled: false
+                    availableAmountTitle: "Repayable",
+                    availableAmount: (borrowed?.balance || 0) > normalizeDecimalsAmount(Number(userWalletBalance)) ? normalizeDecimalsAmount(Number(userWalletBalance)) : (borrowed?.balance || 0),
+                    totalApy: interestRateDataMap[token].borrow,
+                    percentBtn: 100,
+                    protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
+                    protocolBalance: (borrowed?.balance || 0),
+                    dailyEarning: -1 * (borrowed?.value || 0) * (interestRateDataMap[token].borrow / 100) / 365,
+                    btnTitle: "Repay",
+                    token: token,
+                    isCollateralEnabled: false
                 });
                 break;
             default:
@@ -263,7 +263,7 @@ function TokenDetail() {
     return (
         <div className="w-full">
             <Navbar pageTitle={tokenNameMap[token]} pageIcon={iconsMap[tokenNameMap[token]]} />
-            <CardItem className="p-4 lg:p-12 my-6">
+            <CardItem className="p-4 lg:p-12 my-6 hidden lg:block">
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                     {(supplies || []).map((supply, index) => (
                         <div className="font-lufga" key={index}>
@@ -273,6 +273,14 @@ function TokenDetail() {
                     ))}
                 </div>
             </CardItem>
+            <div className='lg:hidden my-8 grid grid-cols-1 md:grid-cols-2 gap-3'>
+                {(supplies || []).map((supply, index) => (
+                    <CardItem className="px-[32px] py-[22px] flex flex-col gap-2" key={index}>
+                        <p className="text-xs font-light font-lufga text-[#E1E1E1] italic">{supply.name}</p>
+                        <p className="text-3xl font-medium font-lufga text-white">{supply.value}</p>
+                    </CardItem>
+                ))}
+            </div>
             <div className="flex flex-col-reverse lg:flex-row lg:gap-8 w-full">
                 <div className="flex-grow w-auto">
                     <CardItem className="p-4 lg:p-8 mb-6">
@@ -357,21 +365,21 @@ function TokenDetail() {
                         <div className="flex justify-between items-center mb-8">
                             <p className="text-[#797979] text-xl font-lufga">Market Details</p>
                         </div>
-                        {(marketDetails || []).map((marketDetail, index) => (
+                        {(marketDetails || []).map((item, index) => (
                             <div key={index}>
                                 <div className="flex justify-between items-center">
-                                    <p className="text-base text-lufga text-[#CAEAE5B2]">{marketDetail.name}</p>
+                                    <p className="text-base font-lufga text-[#CAEAE5B2]">{item.name}</p>
                                     {
-                                        marketDetail.link
-                                            ? <a href={marketDetail.link} target="_blank" rel="noopener noreferrer">
-                                            <p className="block md:hidden text-base text-lufga text-[#CAEAE5]">
-                                              {formatAddress(marketDetail.value)}
-                                            </p>
-                                            <p className="hidden md:block text-base text-lufga text-[#CAEAE5]">
-                                              {marketDetail.value}
-                                            </p>
-                                          </a>
-                                            : <p className="text-base text-lufga text-[#CAEAE5]">{marketDetail.value}</p>
+                                        item.link
+                                            ? <a href={item.link} target="_blank" rel="noopener noreferrer">
+                                                <p className="block md:hidden text-base font-lufga text-[#CAEAE5] hover:text-gray-light">
+                                                    {formatAddress(item.value)}
+                                                </p>
+                                                <p className="hidden md:block text-base font-lufga text-[#CAEAE5] hover:text-gray-light">
+                                                    {item.value}
+                                                </p>
+                                            </a>
+                                            : <p className="text-base font-lufga text-[#CAEAE5] ">{item.value}</p>
                                     }
                                 </div>
                                 <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
