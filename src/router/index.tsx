@@ -30,7 +30,7 @@ function MainContent() {
         </Routes>
         {modalOpen && <Referrals />}
       </div>
-      <div className="absolute top-0 right-0 w-full h-full z-10">
+      <div className="absolute top-0 right-0 w-full h-screen z-10">
         {
           location.pathname.match(/^\/markets\/[^/]+$/) ?
             <img

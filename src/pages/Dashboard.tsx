@@ -112,7 +112,7 @@ function Dashboard() {
             </CardItem>
           </div>
           <CardItem
-            className="py-4 lg:py-6 px-4 lg:px-7"
+            className="py-4 lg:py-6 px-4 lg:px-7 order-first lg:order-none"
           >
             <div className="flex flex-col lg:flex-row gap-4 xl:gap-12 2xl:gap-24 justify-between items-center">
               <div className='flex gap-4 justify-between items-center w-full lg:flex-1'>

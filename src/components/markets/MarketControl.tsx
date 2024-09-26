@@ -26,7 +26,7 @@ function MarketControl({ status, setStatus, stable, setStable, searchText, setSe
     setMobileSearch((prev) => !prev)
   }
   return (
-    <div className="pt-16 pb-4">
+    <div className="pt-8 pb-4">
       <CardItem
         className="py-3 px-2 md:px-6 flex justify-between items-center"
       >

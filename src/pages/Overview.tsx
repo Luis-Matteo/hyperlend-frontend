@@ -103,10 +103,10 @@ function Overview() {
           setSearchText={setSearchText}
         />
         <CardItem
-          className="md:py-6 md:px-7"
+          className="md:py-6 md:px-7 hidden xl:block"
         >
           <div className='w-full'>
-            <div className="py-3 px-2 border-y-[1px] bg-grey border-[#212325] hidden xl:flex justify-between xl:gap-2 2xl:gap-8">
+            <div className="py-3 px-2 border-y-[1px] bg-grey border-[#212325] flex justify-between xl:gap-2 2xl:gap-8">
               <div className='flex flex-1 items-center gap-2'>
                 <div className="text-white font-lufga text-[11px] w-[80px] 2xl:w-[20%]">Asset</div>
                 <div className="flex gap-2 items-center w-[13%]">
@@ -233,106 +233,76 @@ function Overview() {
               }
             </div>
           </div>
-          <div className="xl:hidden w-full">
-            {
-              (assets || []).map((item, key) => (
-                <div
-                  className="items-center py-[14px] px-2.5 border-b-[1px] border-gray-light hover:bg-[#1F2A29] cursor-pointer"
-                  key={key}
-                >
-                  <Link
-                    className="flex flex-col gap-1"
-                    to={`${item.underlyingAsset}`}
-                  >
-                    <div className="flex items-center gap-2 col-span-2 h-full">
-                      <img src={item.icon} alt="symbol" className="w-6 h-6" />
-                      <p className=' text-white font-lufga'>{item.symbol}</p>
-                    </div>
-                    <div className='flex gap-2 items-center justify-between border-b-[1px] border-gray'>
-                      <p className='text-white font-lufga text-sm md:text-base '>Total Supplied</p>
-                      <div className='flex flex-col gap-1 items-end'>
-                        <p className="text-white font-lufga text-sm md:text-base">
-                          {formatUnit(item.totalSupplied)}
-                        </p>
-                        <p className="text-white font-lufga text-sm md:text-base">
-                          ${formatUnit(item.totalSuppliedUsd)}
-                        </p>
-                      </div>
-                    </div>
-                    <div className='flex gap-2 items-center justify-between border-b-[1px] border-gray'>
-                      <p className='text-white font-lufga text-sm md:text-base'>Supply APY</p>
-                      <p className="text-white font-lufga text-sm md:text-base">{formatUnit(item.supplyApy)}</p>
-                    </div>
-                    <div className='flex gap-2 items-center justify-between border-b-[1px] border-gray'>
-                      <p className='text-white font-lufga text-sm md:text-base'>Total Borrowed</p>
-                      <div className='flex flex-col gap-1 items-end'>
-                        <p className="text-white font-lufga text-sm md:text-base">
-                          {formatUnit(item.totalBorrowed)}
-                        </p>
-                        <p className="text-white font-lufga text-sm md:text-base">
-                          ${formatUnit(item.totalBorrowedUsd)}
-                        </p>
-                      </div>
-                    </div>
-                    <div className='flex gap-2 items-center justify-between border-b-[1px] border-gray'>
-                      <p className='text-white font-lufga text-sm md:text-base'>Borrow APY</p>
-                      <p className="text-white font-lufga text-sm md:text-base">{formatUnit(item.borrowApy)}</p>
-                    </div>
-                    <div className='flex gap-2 items-center justify-between border-b-[1px] border-gray'>
-                      <p className='text-white font-lufga text-sm md:text-base'>Available Liquidity</p>
-                      <div className='flex flex-col gap-1 items-end'>
-                        <p className="text-white font-lufga text-sm md:text-base">
-                          {formatUnit(item.totalLiquidityToken)}
-                        </p>
-                        <p className="text-white font-lufga text-sm md:text-base">
-                          ${formatUnit(item.totalLiquidtyUsd)}
-                        </p>
-                      </div>
-                    </div>
-                    <div className='flex gap-4 items-center justify-between'>
-                      <div className='flex justify-between items-center w-full'>
-                        <p className='text-white font-lufga text-sm md:text-base'>Collateral</p>
-                        <div className="text-white font-lufga">{
-                          item.isCollateral ? <div className="text-success">✓</div> : "─"
-                        }</div>
-                      </div>
-                      <div className='flex justify-between items-center w-full'>
-                        <p className='text-white font-lufga text-sm md:text-base'>LTV</p>
-                        <p className="text-white font-lufga text-sm md:text-base">{formatNumber(item.ltv, 2)}%</p>
-                      </div>
-                    </div>
-                  </Link>
-                  <div className="grid grid-cols-2 gap-4 col-span-2">
-                    <button
-                      className="w-full py-2 bg-secondary font-lufga rounded-xl font-bold hover:"
-                      onClick={
-                        () => {
-                          setModalStatus(true)
-                          setModalType('supply')
-                          setSelectedToken(item.underlyingAsset)
-                        }
-                      }
-                    >
-                      Supply
-                    </button>
-                    <button
-                      className="w-full py-2 bg-secondary font-lufga rounded-xl font-bold"
-                      onClick={
-                        () => {
-                          setModalStatus(true)
-                          setModalType('borrow')
-                          setSelectedToken(item.underlyingAsset)
-                        }
-                      }
-                    >
-                      Borrow
-                    </button>
-                  </div>
-                </div>
-              ))
-            }
-          </div >
         </CardItem >
+        <div className="xl:hidden w-full">
+          {
+            (assets|| []).map((item, key) => (
+              <CardItem
+                className="items-center"
+                key={key}
+              >
+                <Link
+                  className="flex flex-col hover:bg-[#1F2A29] cursor-pointer rounded-t-2xl"
+                  to={`${item.underlyingAsset}`}
+                >
+                  <div className="flex items-center gap-2 col-span-2 h-full p-[20px] rounded-t-2xl bg-gradient-to-t from-transparent to-[#f7931a40]">
+                    <img src={item.icon} alt="symbol" className="w-6 h-6" />
+                    <p className=' text-white font-lufga'>{item.symbol}</p>
+                  </div>
+                  <div className='flex flex-col gap-[30px] p-[24px] border-y-[1px] border-[#212325]'>
+                    <p className='text-[#B1B5C3] font-medium font-lufga text-sm md:text-base '>Total Supplied: <span className='text-white'>{formatUnit(item.totalSupplied)} </span><span className='text-xs'>(${formatUnit(item.totalSuppliedUsd)})</span></p>
+                    <div className='grid grid-cols-2 gap-[30px]'>
+                      <div className='flex flex-col gap-[14px]'>
+                        <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>Supply APY</p>
+                        <p className='text-white font-medium font-lufga text-lg'>{formatUnit(item.supplyApy)}%</p>
+                      </div>
+                      <div className='flex flex-col gap-[14px]'>
+                        <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>Total Borrowed</p>
+                        <p className='text-white font-medium font-lufga text-lg'>{formatUnit(item.totalBorrowed)} <span className='text-[#B1B5C3] text-xs'>${formatUnit(item.totalBorrowedUsd)}</span></p>
+                      </div>
+                    </div>
+                    <div className='grid grid-cols-2 gap-[30px]'>
+                      <div className='flex flex-col gap-[14px]'>
+                        <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>Borrow APY</p>
+                        <p className='text-success font-medium font-lufga text-lg'>{formatUnit(item.borrowApy)}%</p>
+                      </div>
+                      <div className='flex flex-col gap-[14px]'>
+                        <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>Available Liquidity</p>
+                        <p className='text-white font-medium font-lufga text-lg'>{formatUnit(item.totalLiquidityToken)} <span className='text-[#B1B5C3] text-xs'>${formatUnit(item.totalLiquidtyUsd)}</span></p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+                <div className="grid grid-cols-2 gap-4 p-[24px]">
+                  <button
+                    className="w-full py-2 text-secondary font-lufga rounded-xl font-bold hover:text-gray-light"
+                    onClick={
+                      () => {
+                        setModalStatus(true)
+                        setModalType('supply')
+                        setSelectedToken(item.underlyingAsset)
+                      }
+                    }
+                  >
+                    Supply
+                  </button>
+                  <button
+                    className="w-full py-2 text-secondary font-lufga rounded-xl font-bold hover:text-gray-light"
+                    onClick={
+                      () => {
+                        setModalStatus(true)
+                        setModalType('borrow')
+                        setSelectedToken(item.underlyingAsset)
+                      }
+                    }
+                  >
+                    Borrow
+                  </button>
+                </div>
+              </CardItem>
+            ))
+          }
+        </div >
       </div >
       {
         modalStatus &&

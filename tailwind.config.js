@@ -1,13 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}',
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       boxShadow: {
-        'custom': '0 0 15px #252525',
+        custom: '0 0 15px #252525',
         '4xl': '0 0 40px #252525',
       },
       fontFamily: {
@@ -23,10 +20,10 @@ export default {
         grey: '#1A1D1E',
         'grey-light': '#E1E1E1',
         success: '#2DC24E',
-        warning:'#FFD542',
+        warning: '#FFD542',
       },
       blur: {
-        xs: '2px'
+        xs: '2px',
       },
     },
   },

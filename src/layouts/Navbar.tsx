@@ -10,21 +10,21 @@ type NavbarProps = {
 
 function Navbar({ pageTitle, pageIcon }: NavbarProps) {
   const dispatch = useDispatch();
-  
+
   // const [searchText, setSearchText] = useState<string>('');
   return (
     <div>
+      <button className='font-lufga text-white lg:hidden mb-6' onClick={() => dispatch(toggleSidebar())}
+      >
+        <img src={hamburgerIcon} alt='' />
+      </button>
       <div className="w-full flex justify-between items-center">
         <div className='flex gap-2 items-center'>
-          <button className='py-1 px-2 font-lufga text-white lg:hidden' onClick={() => dispatch(toggleSidebar())}
-          >
-            <img src={hamburgerIcon} alt=''/>
-          </button>
           {
-            pageIcon ? <img src={pageIcon} height="30px" width="30px" alt=''/> : ""
+            pageIcon ? <img src={pageIcon} height="30px" width="30px" alt='' /> : ""
           }
-          <h2 className="font-lufga md:text-xl lg:text-3xl text-white">
-          {pageTitle}
+          <h2 className="font-lufga text-3xl text-white">
+            {pageTitle}
           </h2>
         </div>
         <div className="flex items-center gap-4">
