@@ -15,6 +15,7 @@ import { networkChainId, contracts, abis } from '../utils/tokens';
 import { useAccount, useWriteContract } from 'wagmi'
 import faucetIcon from '../assets/icons/faucet-color.svg'
 import { claimFaucet } from '../utils/hlTestnet';
+import explorerIcon from '../assets/icons/explorer-icon.svg';
 
 function Sidebar() {
   const { isConnected, address } = useAccount()
@@ -87,6 +88,24 @@ function Sidebar() {
                 Referrals
               </p>
             </button> */}
+            <button
+              className="flex items-center gap-2 rounded-full hover:bg-[#1F2A29]"
+              type="button"
+              onClick={() => {
+                window.open("https://explorer.hyperlend.finance", '_blank');
+              }}
+            >
+              <div
+                className="p-3 "
+              >
+                <img src={explorerIcon} className="w-5" alt="faucet" />
+              </div>
+              <p
+                className="font-lufga font-medium text-secondary"
+              >
+                Explorer
+              </p>
+            </button>
             {
               networkChainId == 998 && isConnected ?
                 <button
