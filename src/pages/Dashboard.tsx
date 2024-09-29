@@ -5,7 +5,7 @@ import { formatNumber } from '../utils/functions';
 import Navbar from '../layouts/Navbar';
 import PositionBar from '../components/dashboard/PositionBar';
 import Modal from '../components/common/Modal';
-import { useSwitchChain, useAccount, useWriteContract } from 'wagmi'
+import { useSwitchChain, useAccount, useWriteContract, useBlockNumber } from 'wagmi'
 import ReactGA from 'react-ga4';
 
 import { ModalType } from '../utils/types';
@@ -23,6 +23,12 @@ function Dashboard() {
   const { data: hash, writeContractAsync } = useWriteContract()
   const { switchChain } = useSwitchChain()
   const { address, chainId, isConnected } = useAccount()
+  const { error: blockNumberError} = useBlockNumber()
+
+  if (blockNumberError){
+    console.log(blockNumberError.name)
+    alert(`RPC node error: ${blockNumberError.message} \n\nPlease try again later!`)
+  }
 
   useEffect(() => {
     if (isConnected && chainId != networkChainId) {
