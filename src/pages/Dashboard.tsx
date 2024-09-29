@@ -23,7 +23,7 @@ function Dashboard() {
   const { data: hash, writeContractAsync } = useWriteContract()
   const { switchChain } = useSwitchChain()
   const { address, chainId, isConnected } = useAccount()
-  const { data: blockNumber, error: blockNumberError} = useBlockNumber()
+  const { error: blockNumberError} = useBlockNumber()
 
   if (blockNumberError){
     console.log(blockNumberError.name)
