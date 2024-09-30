@@ -1,4 +1,4 @@
-import Chart from "react-apexcharts";
+import Chart from 'react-apexcharts';
 // import { formatNumber } from '../../utils/functions';
 
 interface ChartProps {
@@ -8,7 +8,7 @@ interface ChartProps {
 const MyChart = ({ data }: ChartProps) => {
   const options = {
     chart: {
-      id: "basic-line",
+      id: 'basic-line',
       toolbar: {
         show: false, // Hide the toolbar
       },
@@ -54,7 +54,7 @@ const MyChart = ({ data }: ChartProps) => {
       },
     },
     fill: {
-      type: "gradient",
+      type: 'gradient',
       gradient: {
         shadeIntensity: 1,
         opacityFrom: 0.7,
@@ -63,21 +63,21 @@ const MyChart = ({ data }: ChartProps) => {
         colorStops: [
           {
             offset: 0,
-            color: "#CAEAE5",
+            color: '#CAEAE5',
             opacity: 0.3,
           },
           {
             offset: 100,
-            color: "#FEF0EE",
+            color: '#FEF0EE',
             opacity: 0,
           },
         ],
       },
     },
     stroke: {
-      curve: "smooth",
+      curve: 'smooth',
       width: 2, // Line width
-      colors: ["#CAEAE5"], // Line color
+      colors: ['#CAEAE5'], // Line color
     },
     tooltip: {
       // custom: function({series, seriesIndex, dataPointIndex}: any) {
@@ -93,7 +93,7 @@ const MyChart = ({ data }: ChartProps) => {
     },
     plotOptions: {
       area: {
-        fillTo: "end", // Ensure fill extends to the end
+        fillTo: 'end', // Ensure fill extends to the end
       },
     },
     responsive: [
@@ -122,7 +122,7 @@ const MyChart = ({ data }: ChartProps) => {
 
   const series = [
     {
-      name: "series-1",
+      name: 'series-1',
       data: data,
     },
   ];
@@ -131,9 +131,9 @@ const MyChart = ({ data }: ChartProps) => {
     <Chart
       options={options as any}
       series={series}
-      type="area"
-      width="100%"
-      height="100%"
+      type='area'
+      width='100%'
+      height='100%'
     />
   );
 };

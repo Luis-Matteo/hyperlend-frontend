@@ -6,8 +6,8 @@ body {
   background-color: #071311;
 }
 @font-face {
-  font-family: "Lufga";
-  src: url("./assets/fonts/LufgaRegular.ttf") format("truetype");
+  font-family: 'Lufga';
+  src: url('./assets/fonts/LufgaRegular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -44,6 +44,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }

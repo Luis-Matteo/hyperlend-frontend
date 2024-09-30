@@ -1,13 +1,13 @@
-import { BigNumber } from "bignumber.js";
+import { BigNumber } from 'bignumber.js';
 
 function formatNumber(inputNumber: number, decimal: number) {
   const num = Number(inputNumber);
   if (inputNumber % 1 === 0) {
-    return num.toLocaleString("en-US", {
+    return num.toLocaleString('en-US', {
       minimumFractionDigits: 0,
     });
   }
-  return num.toLocaleString("en-US", {
+  return num.toLocaleString('en-US', {
     minimumFractionDigits: decimal,
     maximumFractionDigits: decimal,
   });
@@ -32,7 +32,7 @@ function formatUnit(num: number, decimal: number = 2) {
 }
 
 function formatAddress(inputAddress: string) {
-  if (!inputAddress) return "";
+  if (!inputAddress) return '';
   const start = inputAddress.slice(0, 6);
   const end = inputAddress.slice(-3);
   return `${start}...${end}`;
@@ -136,24 +136,24 @@ const copyToClipboard = (text: string): void => {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(
       () => {
-        console.log("Text copied to clipboard successfully!");
+        console.log('Text copied to clipboard successfully!');
       },
       (err) => {
-        console.error("Failed to copy text to clipboard", err);
+        console.error('Failed to copy text to clipboard', err);
       },
     );
   } else {
     // Fallback method if clipboard API is not supported
-    const textArea = document.createElement("textarea");
+    const textArea = document.createElement('textarea');
     textArea.value = text;
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
     try {
-      document.execCommand("copy");
-      console.log("Text copied to clipboard successfully!");
+      document.execCommand('copy');
+      console.log('Text copied to clipboard successfully!');
     } catch (err) {
-      console.error("Failed to copy text to clipboard", err);
+      console.error('Failed to copy text to clipboard', err);
     }
     document.body.removeChild(textArea);
   }

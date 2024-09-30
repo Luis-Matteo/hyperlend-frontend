@@ -1,17 +1,17 @@
-import { useMemo, useCallback, useState, useEffect } from "react";
-import { useReadContracts, useReadContract } from "wagmi";
-import { normalizeBN, RAY, rayDiv, rayMul } from "@aave/math-utils";
-import { BigNumber } from "bignumber.js";
+import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useReadContracts, useReadContract } from 'wagmi';
+import { normalizeBN, RAY, rayDiv, rayMul } from '@aave/math-utils';
+import { BigNumber } from 'bignumber.js';
 
-import { calculateApy } from "./functions";
-import { Reserve, ReservesData } from "../utils/types";
+import { calculateApy } from './functions';
+import { Reserve, ReservesData } from '../utils/types';
 import {
   contracts,
   assetAddresses,
   abis,
   tokenToRateStrategyMap,
   chainName,
-} from "./tokens";
+} from './tokens';
 
 export function useProtocolReservesData(): ReservesData {
   const {
@@ -22,7 +22,7 @@ export function useProtocolReservesData(): ReservesData {
     contracts: assetAddresses.map((asset) => ({
       abi: abis.pool,
       address: contracts.pool,
-      functionName: "getReserveData",
+      functionName: 'getReserveData',
       args: [asset],
     })),
   });
@@ -32,21 +32,21 @@ export function useProtocolReservesData(): ReservesData {
       return assetAddresses.reduce(
         (acc, asset) => {
           acc[asset] = {
-            aTokenAddress: "",
+            aTokenAddress: '',
             accruedToTreasury: 0n,
             configuration: { data: 0n },
             currentLiquidityRate: 0n,
             currentStableBorrowRate: 0n,
             currentVariableBorrowRate: 0n,
             id: 0,
-            interestRateStrategyAddress: "0x",
+            interestRateStrategyAddress: '0x',
             isolationModeTotalDebt: 0n,
             lastUpdateTimestamp: 0,
             liquidityIndex: 0n,
-            stableDebtTokenAddress: "",
+            stableDebtTokenAddress: '',
             unbacked: 0n,
             variableBorrowIndex: 0n,
-            variableDebtTokenAddress: "",
+            variableDebtTokenAddress: '',
           };
           return acc;
         },
@@ -57,7 +57,7 @@ export function useProtocolReservesData(): ReservesData {
     return assetAddresses.reduce(
       (acc, asset, index) => {
         const result = reserveDataResults[index];
-        if (result && result.status === "success") {
+        if (result && result.status === 'success') {
           acc[asset] = result.result as Reserve;
         } else {
           console.error(`Failed to get reserve data for asset: ${asset}`);
@@ -82,7 +82,7 @@ export function useProtocolPriceData() {
     contracts: assetAddresses.map((asset) => ({
       abi: abis.oracle,
       address: contracts.oracle,
-      functionName: "getAssetPrice",
+      functionName: 'getAssetPrice',
       args: [asset],
     })),
   });
@@ -101,7 +101,7 @@ export function useProtocolPriceData() {
     return assetAddresses.reduce(
       (acc, asset, index) => {
         const result = priceDataResults[index];
-        if (result && result.status === "success") {
+        if (result && result.status === 'success') {
           acc[asset] = result.result as bigint;
         } else {
           console.error(`Failed to get price data for asset: ${asset}`);
@@ -127,7 +127,7 @@ export function useProtocolInterestRate() {
     contracts: assetAddresses.map((asset) => ({
       abi: abis.pool,
       address: contracts.pool,
-      functionName: "getReserveData",
+      functionName: 'getReserveData',
       args: [asset],
     })),
   });
@@ -149,7 +149,7 @@ export function useProtocolInterestRate() {
     return assetAddresses.reduce(
       (acc, asset, index) => {
         const result = interestRateDataResults[index];
-        if (result && result.status === "success") {
+        if (result && result.status === 'success') {
           acc[asset] = {
             supply: calculateApy(
               (reserveDataMap[asset] as any).currentLiquidityRate,
@@ -179,7 +179,7 @@ export function useProtocolAssetReserveData(asset: string) {
   const { data } = useReadContract({
     abi: abis.protocolDataProvider,
     address: contracts.protocolDataProvider,
-    functionName: "getReserveData",
+    functionName: 'getReserveData',
     args: [asset],
   });
 
@@ -209,12 +209,12 @@ interface Rates {
 export function useProtocolInterestRateModel(token: string) {
   const rates: Rates[] = [];
 
-  const rateStrategyType = tokenToRateStrategyMap[token] || "volatileOne";
+  const rateStrategyType = tokenToRateStrategyMap[token] || 'volatileOne';
   const methods = [
-    "getVariableRateSlope1",
-    "getVariableRateSlope2",
-    "OPTIMAL_USAGE_RATIO",
-    "getBaseVariableBorrowRate",
+    'getVariableRateSlope1',
+    'getVariableRateSlope2',
+    'OPTIMAL_USAGE_RATIO',
+    'getBaseVariableBorrowRate',
   ];
 
   const { data: interestRateStrategyData } = useReadContracts({
@@ -229,7 +229,7 @@ export function useProtocolInterestRateModel(token: string) {
   const params = methods.reduce(
     (acc, method, index) => {
       const result = interestRateStrategyData[index];
-      if (result && result.status === "success") {
+      if (result && result.status === 'success') {
         acc[method] = interestRateStrategyData[index].result;
       } else {
         console.error(
@@ -241,10 +241,10 @@ export function useProtocolInterestRateModel(token: string) {
     {} as Record<string, any>,
   );
 
-  const variableRateSlope1 = params["getVariableRateSlope1"];
-  const variableRateSlope2 = params["getVariableRateSlope2"];
-  const optimalUsageRatio = params["OPTIMAL_USAGE_RATIO"];
-  const baseVariableBorrowRate = params["getBaseVariableBorrowRate"];
+  const variableRateSlope1 = params['getVariableRateSlope1'];
+  const variableRateSlope2 = params['getVariableRateSlope2'];
+  const optimalUsageRatio = params['OPTIMAL_USAGE_RATIO'];
+  const baseVariableBorrowRate = params['getBaseVariableBorrowRate'];
 
   const resolution = 200;
   const step = 100 / resolution;
@@ -305,9 +305,9 @@ export function useInterestRateHistory(token: string) {
 
   useEffect(() => {
     fetch(
-      "https://api.hyperlend.finance/data/interestRateHistory?chain=" +
+      'https://api.hyperlend.finance/data/interestRateHistory?chain=' +
         chainName +
-        "&token=" +
+        '&token=' +
         token,
     )
       .then((response) => response.json())

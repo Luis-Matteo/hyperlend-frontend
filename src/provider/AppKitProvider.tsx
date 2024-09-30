@@ -1,11 +1,11 @@
-import { createWeb3Modal } from "@web3modal/wagmi/react";
-import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
+import { createWeb3Modal } from '@web3modal/wagmi/react';
+import { defaultWagmiConfig } from '@web3modal/wagmi/react/config';
 
-import { WagmiProvider } from "wagmi";
-import { arbitrum } from "wagmi/chains";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactNode } from "react";
-import { defineChain } from "viem";
+import { WagmiProvider } from 'wagmi';
+import { arbitrum } from 'wagmi/chains';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactNode } from 'react';
+import { defineChain } from 'viem';
 
 // 0. Setup queryClient
 const queryClient = new QueryClient();
@@ -15,33 +15,33 @@ const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
 
 // 2. Create wagmiConfig
 const metadata = {
-  name: "Hyperlend",
-  description: "Hyperlend",
-  url: "https://hyperlend.com",
-  icons: ["https://avatars.githubusercontent.com/u/37784886"],
+  name: 'Hyperlend',
+  description: 'Hyperlend',
+  url: 'https://hyperlend.com',
+  icons: ['https://avatars.githubusercontent.com/u/37784886'],
 };
 
 const hyperEvmTestnet = defineChain({
   id: 998,
-  name: "HyperEVM Testnet",
-  nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+  name: 'HyperEVM Testnet',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
     default: {
       http: [
-        "https://api.hyperliquid-testnet.xyz/evm",
-        "https://rpc-testnet.hyperlend.finance/evm",
+        'https://api.hyperliquid-testnet.xyz/evm',
+        'https://rpc-testnet.hyperlend.finance/evm',
       ],
     },
   },
   blockExplorers: {
     default: {
-      name: "HyperEVM testnet explorer",
-      url: "https://explorer.hyperlend.finance/",
+      name: 'HyperEVM testnet explorer',
+      url: 'https://explorer.hyperlend.finance/',
     },
   },
   contracts: {
     multicall3: {
-      address: "0xca11bde05977b3631167028862be2a173976ca11",
+      address: '0xca11bde05977b3631167028862be2a173976ca11',
       blockCreated: 5285829,
     },
   },

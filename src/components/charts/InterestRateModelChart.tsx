@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   LineChart,
   Line,
@@ -7,10 +7,10 @@ import {
   Tooltip,
   ResponsiveContainer,
   ReferenceLine,
-} from "recharts";
+} from 'recharts';
 
-import { formatNumber } from "../../utils/functions";
-import { useProtocolInterestRateModel } from "../../utils/protocolState";
+import { formatNumber } from '../../utils/functions';
+import { useProtocolInterestRateModel } from '../../utils/protocolState';
 
 interface InterestRateModelChartType {
   token: string;
@@ -21,24 +21,24 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div
-        className="custom-tooltip"
+        className='custom-tooltip'
         style={{
-          backgroundColor: "#fff",
-          padding: "10px",
-          border: "1px solid #ccc",
+          backgroundColor: '#fff',
+          padding: '10px',
+          border: '1px solid #ccc',
         }}
       >
         <p
-          className="label"
-          style={{ color: "#302DC2" }}
+          className='label'
+          style={{ color: '#302DC2' }}
         >{`Utilization Rate: ${label}%`}</p>
         <p
-          className="intro"
-          style={{ color: "#f10750" }}
+          className='intro'
+          style={{ color: '#f10750' }}
         >{`Borrow APY: ${payload[0].value}%`}</p>
         <p
-          className="intro"
-          style={{ color: "#38b2ac" }}
+          className='intro'
+          style={{ color: '#38b2ac' }}
         >{`Supply APY: ${payload[1].value}%`}</p>
       </div>
     );
@@ -64,14 +64,14 @@ const InterestRateModelChart: React.FC<InterestRateModelChartType> = ({
   });
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width='100%' height={400}>
       <LineChart
         data={data}
         margin={{ top: 10, right: 30, left: 10, bottom: 10 }}
       >
         <XAxis
-          dataKey="utilization"
-          name="Utilization rate"
+          dataKey='utilization'
+          name='Utilization rate'
           axisLine={false}
           tickLine={false}
         />
@@ -79,21 +79,21 @@ const InterestRateModelChart: React.FC<InterestRateModelChartType> = ({
         <Tooltip content={<CustomTooltip />} />
         <ReferenceLine
           x={Number(parseFloat(currentUtilization.toString()).toFixed(0))}
-          stroke="#302DC2"
+          stroke='#302DC2'
         />
         <Line
-          type="monotone"
-          dataKey="borrow"
-          stroke="#f10750"
+          type='monotone'
+          dataKey='borrow'
+          stroke='#f10750'
           dot={false}
-          name="Borrow APY"
+          name='Borrow APY'
         />
         <Line
-          type="monotone"
-          dataKey="supply"
-          stroke="#38b2ac"
+          type='monotone'
+          dataKey='supply'
+          stroke='#38b2ac'
           dot={false}
-          name="Supply APY"
+          name='Supply APY'
         />
       </LineChart>
     </ResponsiveContainer>

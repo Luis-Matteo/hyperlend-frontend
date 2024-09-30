@@ -64,7 +64,7 @@ export interface UserPositionsData {
   totalLiquidationThreshold: number;
 }
 
-export type ModalType = "supply" | "withdraw" | "borrow" | "repay";
+export type ModalType = 'supply' | 'withdraw' | 'borrow' | 'repay';
 
 export interface ModalProps {
   token: string;

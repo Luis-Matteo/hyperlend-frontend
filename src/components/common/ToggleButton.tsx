@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 type ToggleButtonPropsProps = {
   status: boolean;
@@ -9,27 +9,27 @@ type ToggleButtonPropsProps = {
 function ToggleButton({ status, setStatus, onClick }: ToggleButtonPropsProps) {
   return (
     <button
-      type="button"
+      type='button'
       className={`p-0.5 rounded-full flex items-center duration-500 ${
-        status ? "bg-green-500" : "bg-[#081916]"
+        status ? 'bg-green-500' : 'bg-[#081916]'
       }`}
       onClick={() => {
         setStatus((prev) => !prev);
-        onClick ? onClick() : "";
+        onClick ? onClick() : '';
       }}
     >
       <div
         className={`p-2 rounded-full transition-all duration-500 ${
           status
-            ? "bg-transparent translate-x-full"
-            : "bg-secondary translate-x-0"
+            ? 'bg-transparent translate-x-full'
+            : 'bg-secondary translate-x-0'
         }`}
       />
       <div
         className={`p-2 rounded-full transition-all duration-500 ${
           !status
-            ? "bg-transparent -translate-x-full"
-            : "bg-secondary translate-x-0"
+            ? 'bg-transparent -translate-x-full'
+            : 'bg-secondary translate-x-0'
         }`}
       />
     </button>

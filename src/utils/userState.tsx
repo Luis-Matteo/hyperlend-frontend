@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { useAccount, useReadContract } from "wagmi";
-import { erc20Abi } from "viem";
+import { useState, useEffect } from 'react';
+import { useAccount, useReadContract } from 'wagmi';
+import { erc20Abi } from 'viem';
 
-import { calculateApy, padArray } from "./functions";
+import { calculateApy, padArray } from './functions';
 import {
   UserReserveData,
   UserPositionData,
   UserPositionsData,
-} from "../utils/types";
+} from '../utils/types';
 import {
   contracts,
   assetAddresses,
@@ -18,9 +18,9 @@ import {
   abis,
   liqMap,
   chainName,
-} from "./tokens";
+} from './tokens';
 
-import { useProtocolReservesData, useProtocolPriceData } from "./protocolState";
+import { useProtocolReservesData, useProtocolPriceData } from './protocolState';
 
 export function useUserPositionsData(
   isConnected: boolean,
@@ -33,11 +33,11 @@ export function useUserPositionsData(
   const { data: userReservesData } = useReadContract({
     abi: abis.uiPoolDataProvider,
     address: contracts.uiPoolDataProvider,
-    functionName: "getUserReservesData",
+    functionName: 'getUserReservesData',
     //use null address if wallet is not connected (fixes the white screen errror when connecting/disconnecting caused by "Rendered fewer hooks than expected")
     args: [
       contracts.poolAddressesProvider,
-      address || "0x0000000000000000000000000000000000000000",
+      address || '0x0000000000000000000000000000000000000000',
     ],
   });
 
@@ -58,7 +58,7 @@ export function useUserPositionsData(
   }
 
   const supplied: UserPositionData[] = userReservesData
-    ? (userReservesData as any)["0"]
+    ? (userReservesData as any)['0']
         .map((e: UserReserveData) => {
           const balanceNormalized =
             Number(e.scaledATokenBalance) /
@@ -86,7 +86,7 @@ export function useUserPositionsData(
     : [];
 
   const borrowed: UserPositionData[] = userReservesData
-    ? (userReservesData as any)["0"]
+    ? (userReservesData as any)['0']
         .map((e: UserReserveData) => {
           const balanceNormalized =
             Number(e.scaledVariableDebt) /
@@ -167,7 +167,7 @@ export function useUserWalletBalance() {
         ? ({
             abi: erc20Abi,
             address: asset,
-            functionName: "balanceOf",
+            functionName: 'balanceOf',
             args: [address],
           } as any)
         : undefined,
@@ -180,7 +180,7 @@ export function useUserWalletBalance() {
         ? {
             abi: abis.oracle,
             address: contracts.oracle,
-            functionName: "getAssetPrice",
+            functionName: 'getAssetPrice',
             args: [asset],
           }
         : undefined,
@@ -225,9 +225,9 @@ export function useGetUserBalanceHistory(address: `0x${string}` | undefined) {
 
   useEffect(() => {
     fetch(
-      "https://api.hyperlend.finance/data/user/valueChange?chain=" +
+      'https://api.hyperlend.finance/data/user/valueChange?chain=' +
         chainName +
-        "&address=" +
+        '&address=' +
         address,
     )
       .then((response) => response.json())
@@ -255,9 +255,9 @@ export function useUserPortfolioHistory(
 
   useEffect(() => {
     fetch(
-      "https://api.hyperlend.finance/data/user/historicalNetWorth?chain=" +
+      'https://api.hyperlend.finance/data/user/historicalNetWorth?chain=' +
         chainName +
-        "&address=" +
+        '&address=' +
         address,
     )
       .then((response) => response.json())
@@ -283,7 +283,7 @@ export function useUserAllowance(
       ? ({
           abi: erc20Abi,
           address: contract,
-          functionName: "allowance",
+          functionName: 'allowance',
           args: [owner, spender],
         } as any)
       : undefined,

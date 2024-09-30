@@ -1,17 +1,17 @@
-import ethIcon from "../assets/icons/coins/eth-icon.svg";
-import usdcIcon from "../assets/icons/coins/usdc-icon.svg";
-import usdtIcon from "../assets/icons/coins/usdt-icon.svg";
-import wbtcIcon from "../assets/icons/coins/wbtc-icon.svg";
+import ethIcon from '../assets/icons/coins/eth-icon.svg';
+import usdcIcon from '../assets/icons/coins/usdc-icon.svg';
+import usdtIcon from '../assets/icons/coins/usdt-icon.svg';
+import wbtcIcon from '../assets/icons/coins/wbtc-icon.svg';
 
-import arb from "./chains/arb";
-import hlTestnet from "./chains/hlTestnet";
+import arb from './chains/arb';
+import hlTestnet from './chains/hlTestnet';
 
-import UiPoolDataProviderV3Abi from "../abis/UiPoolDataProviderV3Abi.json";
-import PoolAbi from "../abis/PoolAbi.json";
-import OracleAbi from "../abis/OracleAbi.json";
-import DataProviderAbi from "../abis/DataProviderAbi.json";
-import rateStrategyAbi from "../abis/RateStrategyAbi.json";
-import faucetAbi from "../abis/FaucetAbi.json";
+import UiPoolDataProviderV3Abi from '../abis/UiPoolDataProviderV3Abi.json';
+import PoolAbi from '../abis/PoolAbi.json';
+import OracleAbi from '../abis/OracleAbi.json';
+import DataProviderAbi from '../abis/DataProviderAbi.json';
+import rateStrategyAbi from '../abis/RateStrategyAbi.json';
+import faucetAbi from '../abis/FaucetAbi.json';
 
 export const abis: Record<string, any> = {
   dataProvider: DataProviderAbi,
@@ -31,7 +31,7 @@ export const iconsMap: any = {
   MBTC: wbtcIcon,
 };
 
-export const stablecoinsList = ["USDC", "USDT"];
+export const stablecoinsList = ['USDC', 'USDT'];
 
 const currentChainId: number = 998;
 

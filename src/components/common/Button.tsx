@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface ButtonProps {
   title: string;
@@ -9,9 +9,9 @@ const Button: React.FC<ButtonProps> = ({ title, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="bg-[#CAEAE5] w-full p-4 rounded-md mt-4"
+      className='bg-[#CAEAE5] w-full p-4 rounded-md mt-4'
     >
-      <p className="text-lg text-black font-extrabold">{title}</p>
+      <p className='text-lg text-black font-extrabold'>{title}</p>
     </button>
   );
 };

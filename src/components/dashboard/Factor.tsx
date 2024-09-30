@@ -1,4 +1,4 @@
-import { formatNumber } from "../../utils/functions";
+import { formatNumber } from '../../utils/functions';
 
 interface FactorProps {
   healthFactor: number;
@@ -11,8 +11,8 @@ const Factor = ({ healthFactor }: FactorProps) => {
   const hf = isNaN(healthFactor) ? 0 : healthFactor;
 
   return (
-    <div className="relative border-2 shadow-custom border-[#252525] w-72 h-72 rounded-full bg-transparent">
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full flex justify-center items-center">
+    <div className='relative border-2 shadow-custom border-[#252525] w-72 h-72 rounded-full bg-transparent'>
+      <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full flex justify-center items-center'>
         {dots.map((_, index) => {
           const angle = (index / dots.length) * 180 - 90; // Half circle angle calculation
           const rotation = `rotate(${angle}deg)`;
@@ -41,12 +41,12 @@ const Factor = ({ healthFactor }: FactorProps) => {
           );
         })}
       </div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <span className="text-white font-bold text-3xl">
+      <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
+        <span className='text-white font-bold text-3xl'>
           {isNaN(healthFactor) ? 0 : formatNumber(healthFactor, 2)}
         </span>
       </div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full flex justify-center items-center">
+      <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full flex justify-center items-center'>
         {/* Dots with gradient background opacity */}
         {dots.map((_, index) => {
           const angle = (index / dots.length) * 180 - 90; // Half circle angle calculation

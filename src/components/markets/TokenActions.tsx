@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
-import ProgressBar from "../common/PercentBar";
-import Button from "../common/Button";
-import { TokenActionsProps } from "../../utils/interfaces";
-import ToggleButton from "../common/ToggleButton";
+import React, { useEffect, useState } from 'react';
+import ProgressBar from '../common/PercentBar';
+import Button from '../common/Button';
+import { TokenActionsProps } from '../../utils/interfaces';
+import ToggleButton from '../common/ToggleButton';
 import {
   useAccount,
   useWriteContract,
   useWaitForTransactionReceipt,
-} from "wagmi";
-import { erc20Abi } from "viem";
+} from 'wagmi';
+import { erc20Abi } from 'viem';
 
-import { formatNumber } from "../../utils/functions";
+import { formatNumber } from '../../utils/functions';
 import {
   iconsMap,
   tokenNameMap,
   tokenDecimalsMap,
   contracts,
   abis,
-} from "../../utils/tokens";
-import { useUserAllowance } from "../../utils/userState";
-import { getErrorMessage } from "../../utils/errorCodes";
+} from '../../utils/tokens';
+import { useUserAllowance } from '../../utils/userState';
+import { getErrorMessage } from '../../utils/errorCodes';
 
 const TokenActions: React.FC<TokenActionsProps> = ({
   availableAmountTitle,
@@ -62,7 +62,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
 
   const userAllowanceBn = useUserAllowance(
     token,
-    address || "0x",
+    address || '0x',
     contracts.pool,
   );
 
@@ -73,7 +73,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
 
   //update button after approval
   useEffect(() => {
-    if (txReceipt && txReceipt.status == "success") {
+    if (txReceipt && txReceipt.status == 'success') {
       setButtonText(btnTitle);
     }
   }, [txReceipt]);
@@ -86,8 +86,8 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     }
   }, [error?.message]);
 
-  console.log("___error", error);
-  console.log("___errorMSG___", errorMsg);
+  console.log('___error', error);
+  console.log('___errorMSG___', errorMsg);
 
   useEffect(() => {
     if (errorMsg) {
@@ -99,11 +99,11 @@ const TokenActions: React.FC<TokenActionsProps> = ({
 
   //check approval amount on changes
   useEffect(() => {
-    if (actionType == "supply" || actionType == "repay") {
+    if (actionType == 'supply' || actionType == 'repay') {
       const allowance =
         Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token]);
       if (amount > allowance) {
-        setButtonText("Approve");
+        setButtonText('Approve');
       } else {
         setButtonText(btnTitle);
       }
@@ -136,12 +136,12 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     const allowance =
       Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token]);
 
-    if (actionType == "supply" || actionType == "repay") {
+    if (actionType == 'supply' || actionType == 'repay') {
       if (allowance < amount) {
         writeContract({
           address: token as any,
           abi: erc20Abi,
-          functionName: "approve",
+          functionName: 'approve',
           args: [contracts.pool, 999999999999999999999999999999999999999n],
         });
         setButtonText(btnTitle);
@@ -155,7 +155,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       repay: [token, bgIntAmount, 2, address], //asset, amount, interestRateMode, onBehalfOf
     };
 
-    if (actionType == "supply" && allowance >= amount) {
+    if (actionType == 'supply' && allowance >= amount) {
       writeContract({
         address: contracts.pool,
         abi: abis.pool,
@@ -178,7 +178,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     writeContract({
       address: contracts.pool,
       abi: abis.pool,
-      functionName: "setUserUseReserveAsCollateral",
+      functionName: 'setUserUseReserveAsCollateral',
       args: [token, !collateral],
     });
     if (hash) setCollateral(!collateral);
@@ -192,9 +192,9 @@ const TokenActions: React.FC<TokenActionsProps> = ({
 
   return (
     <>
-      {btnTitle === "Supply" && (
-        <div className="flex justify-between items-center mt-4">
-          <p className="text-base text-[#CAEAE566]">Collateral</p>
+      {btnTitle === 'Supply' && (
+        <div className='flex justify-between items-center mt-4'>
+          <p className='text-base text-[#CAEAE566]'>Collateral</p>
           <ToggleButton
             status={collateral}
             setStatus={setCollateral}
@@ -202,56 +202,56 @@ const TokenActions: React.FC<TokenActionsProps> = ({
           />
         </div>
       )}
-      <div className="flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4">
-        <div className="flex gap-3 items-center p-3">
+      <div className='flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4'>
+        <div className='flex gap-3 items-center p-3'>
           <img
             src={iconsMap[tokenNameMap[token]]}
-            height={"30px"}
-            width={"30px"}
-            alt="coinIcon"
+            height={'30px'}
+            width={'30px'}
+            alt='coinIcon'
           />
-          <p className="text-base text-[#CAEAE566] w-[120px]">
+          <p className='text-base text-[#CAEAE566] w-[120px]'>
             <input
-              type="number"
-              className="form-control-plaintext text-xl text-secondary border-0 p-0 text-left min-w-[120px]"
+              type='number'
+              className='form-control-plaintext text-xl text-secondary border-0 p-0 text-left min-w-[120px]'
               value={amount.toFixed(2)}
               onChange={(e) => {
                 handleDirectInputChange(e);
               }}
               style={{
-                background: "transparent",
-                outline: "none",
-                boxShadow: "none",
-                width: "auto",
-                minWidth: "50px",
+                background: 'transparent',
+                outline: 'none',
+                boxShadow: 'none',
+                width: 'auto',
+                minWidth: '50px',
               }}
             />
           </p>
         </div>
-        <div className="bg-[#081916] px-4 py-3 rounded">
+        <div className='bg-[#081916] px-4 py-3 rounded'>
           <button
-            className="text-base text-[#CAEAE566]"
+            className='text-base text-[#CAEAE566]'
             onClick={() => {
               setMaxAmount();
             }}
           >
-            {percentBtn === 100 ? "MAX" : `${percentBtn}% LIMIT`}
+            {percentBtn === 100 ? 'MAX' : `${percentBtn}% LIMIT`}
           </button>
         </div>
       </div>
       {errorMsg ? (
-        <p className="text-xs text-[#FF0000] mt-2">
-          {errorMsg.includes("Contract Call")
-            ? errorMsg.split("Contract Call")[0] +
+        <p className='text-xs text-[#FF0000] mt-2'>
+          {errorMsg.includes('Contract Call')
+            ? errorMsg.split('Contract Call')[0] +
               (errorMsg
-                .split("Contract Call")[0]
-                .includes("reverted with the following reason:")
-                ? `(${getErrorMessage(errorMsg.split("Contract Call")[0].split("reverted with the following reason:")[1].trim())})`
-                : "")
-            : errorMsg.split("Request Arguments")[0]}
+                .split('Contract Call')[0]
+                .includes('reverted with the following reason:')
+                ? `(${getErrorMessage(errorMsg.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
+                : '')
+            : errorMsg.split('Request Arguments')[0]}
         </p>
       ) : (
-        ""
+        ''
       )}
       {/* <div className="mt-4">
                 <div className="flex justify-between items-center">
@@ -274,60 +274,60 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                     </div>
                 </div>
             </div> */}
-      <div className="relative my-2 ">
-        <ProgressBar progress={progress} control={true} className="h-1.5" />
+      <div className='relative my-2 '>
+        <ProgressBar progress={progress} control={true} className='h-1.5' />
         <input
-          type="range"
-          min="0"
-          max="100"
+          type='range'
+          min='0'
+          max='100'
           value={progress}
           onChange={handleProgessChange}
-          className="w-full top-0 left-0 absolute opacity-0 cursor-pointer"
+          className='w-full top-0 left-0 absolute opacity-0 cursor-pointer'
         />
       </div>
-      <div className="mt-4">
-        <div className="flex justify-between items-center">
-          <p className="text-base text-lufga text-[#4B5E5B]">
+      <div className='mt-4'>
+        <div className='flex justify-between items-center'>
+          <p className='text-base text-lufga text-[#4B5E5B]'>
             {availableAmountTitle} amount
           </p>
-          <p className="text-base text-lufga text-[#CAEAE5]">
+          <p className='text-base text-lufga text-[#CAEAE5]'>
             {availableAmount}
           </p>
         </div>
-        <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
+        <hr className='mt-4 mb-4 text-[#212325] border-t-[0.25px]' />
       </div>
-      <div className="mt-4">
-        <div className="flex justify-between items-center">
-          <p className="text-base text-lufga text-[#4B5E5B]">
+      <div className='mt-4'>
+        <div className='flex justify-between items-center'>
+          <p className='text-base text-lufga text-[#4B5E5B]'>
             {protocolBalanceTitle}
           </p>
-          <p className="text-base text-lufga text-[#CAEAE5]">
+          <p className='text-base text-lufga text-[#CAEAE5]'>
             {protocolBalance}
           </p>
         </div>
-        <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
+        <hr className='mt-4 mb-4 text-[#212325] border-t-[0.25px]' />
       </div>
-      <div className="mt-4">
-        <div className="flex justify-between items-center">
-          <p className="text-base text-lufga text-[#4B5E5B]">Total APY</p>
-          <p className="text-base text-lufga text-[#CAEAE5]">
+      <div className='mt-4'>
+        <div className='flex justify-between items-center'>
+          <p className='text-base text-lufga text-[#4B5E5B]'>Total APY</p>
+          <p className='text-base text-lufga text-[#CAEAE5]'>
             {formatNumber(totalApy, 3)}%
           </p>
         </div>
-        <hr className="mt-4 mb-4 text-[#212325] border-t-[0.25px]" />
+        <hr className='mt-4 mb-4 text-[#212325] border-t-[0.25px]' />
       </div>
       <div>
-        <div className="flex justify-between items-center mt-2 mb-2">
-          <p className="text-base text-lufga text-[#4B5E5B]">
-            Daily{" "}
-            {actionType == "supply" || actionType == "withdraw"
-              ? "earnings"
-              : "cost"}
+        <div className='flex justify-between items-center mt-2 mb-2'>
+          <p className='text-base text-lufga text-[#4B5E5B]'>
+            Daily{' '}
+            {actionType == 'supply' || actionType == 'withdraw'
+              ? 'earnings'
+              : 'cost'}
           </p>
           <p
-            className={`text-base text-lufga ${dailyEarning >= 0 ? "text-[#2DC24E]" : "text-red-500"}`}
+            className={`text-base text-lufga ${dailyEarning >= 0 ? 'text-[#2DC24E]' : 'text-red-500'}`}
           >
-            {" "}
+            {' '}
             ${formatNumber(dailyEarning, 3)}
           </p>
         </div>
