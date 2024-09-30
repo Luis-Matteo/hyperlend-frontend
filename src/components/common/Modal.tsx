@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from "framer-motion";
 
 import xmarkIcon from '../../assets/icons/xmark-icon.svg'
-import gearIcon from '../../assets/icons/gear-icon.svg'
 import { formatNumber, capitalizeString/*, decodeConfig*/ } from '../../utils/functions';
 import ProgressBar from '../common/PercentBar';
 import { useAccount, useReadContract, useWriteContract } from 'wagmi'

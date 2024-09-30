@@ -58,7 +58,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     }
   }, [txReceipt])
 
-  const [errorMsg, setErrorMsg] = useState()
+  const [errorMsg, setErrorMsg] = useState<any>(null)
 
   useEffect(() => {
     if (error?.message) {
@@ -73,7 +73,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   useEffect(() => {
     if (errorMsg) {
       setTimeout(() => {
-        setErrorMsg()
+        setErrorMsg(null)
       }, 4000);
     }
   }, [errorMsg])
