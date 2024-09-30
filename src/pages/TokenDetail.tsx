@@ -9,7 +9,7 @@ import ReactGA from 'react-ga4';
 import { formatNumber, decodeConfig, formatAddress } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../components/charts/InterestRateModelChart';
-import { TokenActionsProps } from '../utils/interfaces';
+import { TokenActionsProps } from '../utils/types';
 
 import {
   tokenNameMap,
@@ -19,16 +19,18 @@ import {
   ltvMap,
   liqPenaltyMap,
   networkChainId,
-} from '../utils/tokens';
+} from '../utils/config';
 
-import { useUserPositionsData } from '../utils/userState';
+import { useUserPositionsData } from '../utils/user/positions';
 
-import {
-  useProtocolReservesData,
-  useProtocolAssetReserveData,
-  useProtocolPriceData,
-  useProtocolInterestRate,
-} from '../utils/protocolState';
+import { useProtocolPriceData } from '../utils/protocol/prices';
+import { useProtocolInterestRate } from '../utils/protocol/interestRates';
+import { useProtocolAssetReserveData } from '../utils/protocol/reserves';
+
+// import { getErrorMessage } from '../../utils/constants/errorCodes';
+
+import { useProtocolReservesData } from '../utils/protocol/reserves';
+
 import TokenActions from '../components/markets/TokenActions';
 
 function TokenDetail() {

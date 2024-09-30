@@ -2,7 +2,6 @@ import { createWeb3Modal } from '@web3modal/wagmi/react';
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config';
 
 import { WagmiProvider } from 'wagmi';
-import { arbitrum } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { defineChain } from 'viem';
@@ -18,7 +17,7 @@ const metadata = {
   name: 'Hyperlend',
   description: 'Hyperlend',
   url: 'https://hyperlend.com',
-  icons: ['https://avatars.githubusercontent.com/u/37784886'],
+  icons: ['https://www.hyperlend.finance/assets/logo-text-BcZCnvTH.svg'],
 };
 
 const hyperEvmTestnet = defineChain({
@@ -47,11 +46,13 @@ const hyperEvmTestnet = defineChain({
   },
 });
 
-const chains = [arbitrum, hyperEvmTestnet] as const;
+const chains = [hyperEvmTestnet] as const;
+const enableInjected = true as const;
 const config = defaultWagmiConfig({
   chains,
   projectId,
   metadata,
+  enableInjected,
 });
 
 // 3. Create modal

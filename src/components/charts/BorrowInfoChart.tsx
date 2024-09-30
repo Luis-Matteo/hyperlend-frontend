@@ -9,7 +9,7 @@ import {
 } from 'recharts';
 
 import { calculateApy, formatNumber } from '../../utils/functions';
-import { useInterestRateHistory } from '../../utils/protocolState';
+import { useInterestRateHistory } from '../../utils/protocol/history';
 
 interface BorrowInfoChartType {
   type: string;

@@ -16,14 +16,13 @@ import {
   tokenDecimalsMap,
   stablecoinsList,
   networkChainId,
-} from '../utils/tokens';
+} from '../utils/config';
 
-import {
-  useProtocolReservesData,
-  useProtocolAssetReserveData,
-  useProtocolPriceData,
-  useProtocolInterestRate,
-} from '../utils/protocolState';
+import { useProtocolPriceData } from '../utils/protocol/prices';
+import { useProtocolInterestRate } from '../utils/protocol/interestRates';
+import { useProtocolAssetReserveData } from '../utils/protocol/reserves';
+import { useProtocolReservesData } from '../utils/protocol/reserves';
+
 import { Link } from 'react-router-dom';
 import InfoItem from '../components/common/InfoItem';
 
@@ -100,17 +99,6 @@ function Overview() {
     return assets;
   };
   const assets = getAssets();
-
-  if (Object.keys(reserveDataMap).length == 0) {
-    return (
-      <>
-        <div className='w-full'>
-          <Navbar pageTitle='Markets' />
-          <div className='text-white'>Connect wallet</div>
-        </div>
-      </>
-    );
-  }
 
   return (
     <>
