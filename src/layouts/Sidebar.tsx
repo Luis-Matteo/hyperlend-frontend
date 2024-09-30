@@ -1,7 +1,8 @@
 import { NavLink } from '../utils/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import { navLinks } from '../utils/constants';
+// import { navLinks } from '../utils/constants';
+import { navLinksTop, navLinksDown } from '../utils/constants';
 import NavButton from '../components/header/NavButton';
 import logo from '../assets/icons/logo-text.svg';
 import Status from '../components/header/Status';
@@ -61,34 +62,22 @@ function Sidebar() {
             <Status />
           </div>
           <div className="flex flex-col gap-6 pt-10">
-            {navLinks.map((item: NavLink) => (
-              <NavButton
-                key={item.id}
-                id={item.id}
-                title={item.title}
-                url={item.url}
-                icon={item.icon}
-                disabled={item.disabled}
-              />
-            ))}
-            {/* <button
-              className="flex items-center gap-2 rounded-full hover:bg-[#1F2A29]"
-              type="button"
-              onClick={() => dispatch(toggleModalOpen())}
 
-            >
-              <div
-                className="p-3 "
-              >
-                <img src={referralsIcon} className="w-5" alt="referrals" />
-              </div>
-              <p
-                className="font-lufga font-medium text-secondary"
-              >
-                Referrals
-              </p>
-            </button> */}
-            <button
+
+            {
+              navLinksTop.map((item: NavLink) => (
+                <NavButton
+                  key={item.id}
+                  id={item.id}
+                  title={item.title}
+                  url={item.url}
+                  icon={item.icon}
+                  disabled={item.disabled}
+                />
+              ))
+            }
+
+            < button
               className="flex items-center gap-2 rounded-full hover:bg-[#1F2A29]"
               type="button"
               onClick={() => {
@@ -96,7 +85,7 @@ function Sidebar() {
               }}
             >
               <div
-                className="p-3 "
+                className="px-3"
               >
                 <img src={explorerIcon} className="w-5" alt="faucet" />
               </div>
@@ -106,6 +95,7 @@ function Sidebar() {
                 Explorer
               </p>
             </button>
+            
             {
               networkChainId == 998 && isConnected ?
                 <button
@@ -117,7 +107,7 @@ function Sidebar() {
                   }}
                 >
                   <div
-                    className="p-3 "
+                    className="px-3 "
                   >
                     <img src={faucetIcon} className="w-5" alt="faucet" />
                   </div>
@@ -127,9 +117,22 @@ function Sidebar() {
                     Faucet
                   </p>
                 </button>
-            : ""
+                : ""
             }
+
+            {navLinksDown.map((item: NavLink) => (
+              <NavButton
+                key={item.id}
+                id={item.id}
+                title={item.title}
+                url={item.url}
+                icon={item.icon}
+                disabled={item.disabled}
+              />
+            ))}
+
           </div>
+
         </div>
         <div className="flex justify-between">
           <button className="flex gap-4 items-center" type="button">
@@ -139,12 +142,12 @@ function Sidebar() {
             </p></a>
           </button>
           <button className="lg:hidden" type="button"
-          onClick={() => dispatch(toggleSidebar())}>
+            onClick={() => dispatch(toggleSidebar())}>
             <img className="" src={xmarkIcon} alt="" />
           </button>
         </div>
       </div>
-    </div>
+    // </div>
   );
 }
 

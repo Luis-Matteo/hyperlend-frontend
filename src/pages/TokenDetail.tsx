@@ -388,7 +388,7 @@ function TokenDetail() {
                     </CardItem>
                 </div>
                 <div className="w-full lg:w-1/3 lg:min-w-[360px]">
-                    <CardItem className="p-4 lg:p-8 mb-6 font-lufga">
+                    <CardItem className="p-4 lg:p-8 mb-6 font-lufga sticky top-0">
                         <div className="w-full grid grid-cols-4 text-center">
                             {buttons.map((button) => (
                                 <button key={button.id} onClick={() => handleButtonClick(button.id)}>
