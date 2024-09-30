@@ -52,7 +52,7 @@ const config = defaultWagmiConfig({
   chains,
   projectId,
   metadata,
-  enableInjected
+  enableInjected,
 });
 
 // 3. Create modal

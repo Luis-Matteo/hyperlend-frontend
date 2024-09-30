@@ -9,7 +9,7 @@ import {
   iconsMap,
   ltvMap,
   abis,
-  liqMap
+  liqMap,
 } from '../config';
 
 import { useProtocolReservesData } from '../protocol/reserves';
@@ -23,7 +23,8 @@ export function useUserPositionsData(
 ): UserPositionsData {
   const { reserveDataMap } = useProtocolReservesData();
   const { priceDataMap } = useProtocolPriceData();
-  const { totalBalanceChange, totalBalanceChangePercentage } = useGetUserBalanceHistory(address);
+  const { totalBalanceChange, totalBalanceChangePercentage } =
+    useGetUserBalanceHistory(address);
   const { data: userReservesData } = useReadContract({
     abi: abis.uiPoolDataProvider,
     address: contracts.uiPoolDataProvider,
@@ -38,7 +39,7 @@ export function useUserPositionsData(
     return {
       supplied: [],
       borrowed: [],
-  
+
       totalSupplyUsd: 0,
       totalBorrowUsd: 0,
       totalBalanceUsd: 0,
@@ -46,7 +47,7 @@ export function useUserPositionsData(
       healthFactor: 0,
       netApy: 0,
       totalLiquidationThreshold: 0,
-  
+
       totalBalanceChange: 0,
       totalBalanceChangePercentage: 0,
     };

@@ -1,12 +1,7 @@
-import { useAccount, useReadContract } from "wagmi";
+import { useAccount, useReadContract } from 'wagmi';
 import { erc20Abi } from 'viem';
 
-import {
-  contracts,
-  assetAddresses,
-  tokenDecimalsMap,
-  abis,
-} from '../config';
+import { contracts, assetAddresses, tokenDecimalsMap, abis } from '../config';
 
 export function useUserWalletBalance() {
   const { address, isConnected } = useAccount();
