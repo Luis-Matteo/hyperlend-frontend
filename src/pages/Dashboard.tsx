@@ -1,10 +1,4 @@
 import { useState, useEffect } from 'react';
-import CardItem from '../components/common/CardItem';
-import SectionTitle from '../components/common/SectionTitle';
-import { formatNumber } from '../utils/functions';
-import Navbar from '../layouts/Navbar';
-import PositionBar from '../components/dashboard/PositionBar';
-import Modal from '../components/common/Modal';
 import {
   useSwitchChain,
   useAccount,
@@ -13,18 +7,24 @@ import {
 } from 'wagmi';
 import ReactGA from 'react-ga4';
 
+import Modal from '../components/common/Modal';
+import CardItem from '../components/common/CardItem';
+import InfoItem from '../components/common/InfoItem';
+import SectionTitle from '../components/common/SectionTitle';
+
+import Navbar from '../layouts/Navbar';
+import Factor from '../components/dashboard/Factor';
+import MyChart from '../components/dashboard/Chart';
+import PositionBar from '../components/dashboard/PositionBar';
+
+import { formatNumber } from '../utils/functions';
 import { ModalType } from '../utils/types';
 
-import { contracts, abis, networkChainId } from '../utils/tokens';
-import {
-  useUserPositionsData,
-  useUserWalletBalance,
-  useUserPortfolioHistory,
-} from '../utils/userState';
-import { getUserPoints } from '../utils/userPoints';
-import MyChart from '../components/dashboard/Chart';
-import Factor from '../components/dashboard/Factor';
-import InfoItem from '../components/common/InfoItem';
+import { getUserPoints } from '../utils/user/points';
+import { contracts, abis, networkChainId } from '../utils/config';
+import { useUserPositionsData } from '../utils/user/positions';
+import { useUserWalletBalance } from '../utils/user/wallet';
+import { useUserPortfolioHistory } from '../utils/user/history';
 
 function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
@@ -33,6 +33,11 @@ function Dashboard() {
   const { switchChain } = useSwitchChain();
   const { address, chainId, isConnected } = useAccount();
   const { error: blockNumberError } = useBlockNumber();
+
+  const [modalStatus, setModalStatus] = useState<boolean>(false);
+  const [modalToken, setModalToken] = useState<string>('');
+  const [modalType, setModalType] = useState<ModalType>('supply');
+  const closeModal = () => setModalStatus(false);
 
   if (blockNumberError) {
     console.log(blockNumberError.name);
@@ -64,11 +69,6 @@ function Dashboard() {
     getUserPoints();
   const { walletBalanceValue } = useUserWalletBalance();
   const { historicalNetWorth } = useUserPortfolioHistory(address, isConnected);
-
-  const [modalStatus, setModalStatus] = useState<boolean>(false);
-  const [modalToken, setModalToken] = useState<string>('');
-  const [modalType, setModalType] = useState<ModalType>('supply');
-  const closeModal = () => setModalStatus(false);
 
   const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {
     writeContractAsync({

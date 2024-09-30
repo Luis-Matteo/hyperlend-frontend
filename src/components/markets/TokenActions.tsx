@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ProgressBar from '../common/PercentBar';
 import Button from '../common/Button';
-import { TokenActionsProps } from '../../utils/interfaces';
+import { TokenActionsProps } from '../../utils/types';
 import ToggleButton from '../common/ToggleButton';
 import {
   useAccount,
@@ -17,9 +17,9 @@ import {
   tokenDecimalsMap,
   contracts,
   abis,
-} from '../../utils/tokens';
-import { useUserAllowance } from '../../utils/userState';
-import { getErrorMessage } from '../../utils/errorCodes';
+} from '../../utils/config';
+import { useUserAllowance } from '../../utils/user/wallet';
+import { getErrorMessage } from '../../utils/constants/errorCodes';
 
 const TokenActions: React.FC<TokenActionsProps> = ({
   availableAmountTitle,

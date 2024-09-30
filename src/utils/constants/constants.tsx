@@ -1,5 +1,5 @@
-import dashboardIcon from '../assets/icons/dashboard-icon.svg';
-import lendborrowIcon from '../assets/icons/lend-borrow-icon.svg';
+import dashboardIcon from '../../assets/icons/dashboard-icon.svg';
+import lendborrowIcon from '../../assets/icons/lend-borrow-icon.svg';
 
 type NavLinkProps = {
   id: string;

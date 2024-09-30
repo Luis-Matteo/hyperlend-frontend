@@ -18,14 +18,13 @@ import {
   iconsMap,
   abis,
   liqMap,
-} from '../../utils/tokens';
+} from '../../utils/config';
 
-import {
-  useProtocolInterestRate,
-  useProtocolPriceData,
-  useProtocolAssetReserveData /*, useProtocolReservesData*/,
-} from '../../utils/protocolState';
-import { useUserPositionsData } from '../../utils/userState';
+import { useProtocolPriceData } from '../../utils/protocol/prices';
+import { useProtocolInterestRate } from '../../utils/protocol/interestRates';
+import { useProtocolAssetReserveData } from '../../utils/protocol/reserves';
+
+import { useUserPositionsData } from '../../utils/user/positions';
 
 function Modal({ token, modalType, onClose }: ModalProps) {
   const { address, isConnected } = useAccount();

@@ -2,7 +2,7 @@ import { NavLink } from '../utils/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 // import { navLinks } from '../utils/constants';
-import { navLinksTop, navLinksDown } from '../utils/constants';
+import { navLinksTop, navLinksDown } from '../utils/constants/constants';
 import NavButton from '../components/header/NavButton';
 import logo from '../assets/icons/logo-text.svg';
 import Status from '../components/header/Status';
@@ -12,10 +12,10 @@ import xmarkIcon from '../assets/icons/xmark-icon.svg';
 import { /*toggleModalOpen,*/ toggleSidebar } from '../store/sidebarSlice';
 import { useEffect, useRef } from 'react';
 
-import { networkChainId, contracts, abis } from '../utils/tokens';
+import { networkChainId, contracts, abis } from '../utils/config';
 import { useAccount, useWriteContract } from 'wagmi';
 import faucetIcon from '../assets/icons/faucet-color.svg';
-import { claimFaucet } from '../utils/hlTestnet';
+import { claimFaucet } from '../utils/protocol/faucet';
 import explorerIcon from '../assets/icons/explorer-icon.svg';
 
 function Sidebar() {
