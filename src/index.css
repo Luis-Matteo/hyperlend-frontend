@@ -2,37 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
- background-color: #071311;
+body {
+  background-color: #071311;
 }
 @font-face {
-    font-family: 'Lufga';
-    src: url('./assets/fonts/LufgaRegular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Lufga';
+  src: url('./assets/fonts/LufgaRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
 *::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    border-radius: 6px;    /* Width of the scrollbar */
+  width: 6px;
+  height: 6px;
+  border-radius: 6px; /* Width of the scrollbar */
 }
 
 *::-webkit-scrollbar-track {
-    background: #050F0D;
-    /* Background of the track */
+  background: #050f0d;
+  /* Background of the track */
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: #4F4F4F;
-    /* Color of the scrollbar thumb */
-    border-radius: 10px;
-    /* Space around the thumb */
+  background-color: #4f4f4f;
+  /* Color of the scrollbar thumb */
+  border-radius: 10px;
+  /* Space around the thumb */
 }
 
 *::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-    /* Color when hovered */
+  background-color: #555;
+  /* Color when hovered */
 }
 
 /* Remove Arrows/Spinners on number input */
@@ -44,6 +44,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }

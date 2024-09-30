@@ -6,7 +6,7 @@ function App() {
   ReactGA.initialize('G-Q79JWRWB61');
   return (
     <AppKitProvider>
-      <div className="flex">
+      <div className='flex'>
         <Router />
       </div>
     </AppKitProvider>

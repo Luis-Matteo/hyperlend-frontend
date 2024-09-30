@@ -60,5 +60,9 @@
       "prettier --write",
       "eslint --fix"
     ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "jsxSingleQuote": true
   }
 }

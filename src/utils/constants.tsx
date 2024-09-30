@@ -2,12 +2,12 @@ import dashboardIcon from '../assets/icons/dashboard-icon.svg';
 import lendborrowIcon from '../assets/icons/lend-borrow-icon.svg';
 
 type NavLinkProps = {
-    id: string;
-    title: string;
-    url: string;
-    icon?: string;
-    disabled: boolean;
-}
+  id: string;
+  title: string;
+  url: string;
+  icon?: string;
+  disabled: boolean;
+};
 
 // const navLinks: NavLinkProps[] = [
 //   {
@@ -53,7 +53,6 @@ const navLinksTop: NavLinkProps[] = [
     icon: lendborrowIcon,
     disabled: false,
   },
-
 ];
 
 const navLinksDown: NavLinkProps[] = [
@@ -73,35 +72,34 @@ const navLinksDown: NavLinkProps[] = [
 
 const assetsInfos = [
   {
-    title: "Total Supplied",
-    tooltip: "Total hyperlend deposits for each asset."
+    title: 'Total Supplied',
+    tooltip: 'Total hyperlend deposits for each asset.',
   },
   {
-    title: "Supply APY",
-    tooltip: "A percentage you will earn on deposits over a year."
+    title: 'Supply APY',
+    tooltip: 'A percentage you will earn on deposits over a year.',
   },
   {
-    title: "Total Borrowed",
-    tooltip: "Total hyperlend borrows for each asset."
+    title: 'Total Borrowed',
+    tooltip: 'Total hyperlend borrows for each asset.',
   },
   {
-    title: "Borrow APY",
-    tooltip: "A percentage you will pay on borrows over a year."
+    title: 'Borrow APY',
+    tooltip: 'A percentage you will pay on borrows over a year.',
   },
   {
-    title: "Available Liquidity",
-    tooltip: "The amount of tokens available to borrow for each asset."
+    title: 'Available Liquidity',
+    tooltip: 'The amount of tokens available to borrow for each asset.',
   },
   {
-    title: "Collateral",
-    tooltip: "Signals if you can borrow using this asset as a collateral."
+    title: 'Collateral',
+    tooltip: 'Signals if you can borrow using this asset as a collateral.',
   },
   {
-    title: "LTV",
-    tooltip: "The amount you can borrow against your collateral. e.g. 80% LTV means you can borrow up to 80% of the collateral value."
+    title: 'LTV',
+    tooltip:
+      'The amount you can borrow against your collateral. e.g. 80% LTV means you can borrow up to 80% of the collateral value.',
   },
-]
+];
 // export { navLinks, assetsInfos };
 export { navLinksTop, navLinksDown, assetsInfos };
-
-

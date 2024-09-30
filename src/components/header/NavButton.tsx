@@ -23,36 +23,39 @@ function NavButton({
   if (disabled) {
     return (
       <button
-        className="flex items-center gap-2 cursor-not-allowed"
+        className='flex items-center gap-2 cursor-not-allowed'
         disabled
         key={id}
-        type="button"
+        type='button'
       >
-        <div className="px-3">
-          <img src={lockIcon} className="w-5" alt="locked" />
+        <div className='px-3'>
+          <img src={lockIcon} className='w-5' alt='locked' />
         </div>
-        <p className="font-lufga font-medium text-gray">{title}</p>
+        <p className='font-lufga font-medium text-gray'>{title}</p>
       </button>
     );
   }
 
   return (
     <button
-      className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform ${currentRoute === url ? 'bg-secondary p-1 rounded-full' : ''
-        }`}
+      className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform ${
+        currentRoute === url ? 'bg-secondary p-1 rounded-full' : ''
+      }`}
       onClick={() => navigate(url)}
       key={id}
-      type="button"
+      type='button'
     >
       <div
-        className={`transition-all duration-300 ease-in-out transform ${currentRoute === url ? 'p-2 bg-grey rounded-full' : 'px-3'
-          }`}
+        className={`transition-all duration-300 ease-in-out transform ${
+          currentRoute === url ? 'p-2 bg-grey rounded-full' : 'px-3'
+        }`}
       >
-        <img src={icon} className="w-5" alt={title} />
+        <img src={icon} className='w-5' alt={title} />
       </div>
       <p
-        className={`font-lufga font-medium transition-colors duration-300 ease-in-out ${currentRoute === url ? '' : 'text-secondary'
-          }`}
+        className={`font-lufga font-medium transition-colors duration-300 ease-in-out ${
+          currentRoute === url ? '' : 'text-secondary'
+        }`}
       >
         {title}
       </p>
