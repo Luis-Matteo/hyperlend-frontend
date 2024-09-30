@@ -10,7 +10,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import Referrals from '../pages/Referrals';
 import backgroundImage from '../assets/img/background.svg';
-import backgroundGradient from '../assets/img/background-gradient.svg';
+// import backgroundGradient from '../assets/img/background-gradient.svg';
+import backgroundGradient from '../assets/img/background-orange.svg';
 import { useLocation } from 'react-router-dom';
 
 function MainContent() {

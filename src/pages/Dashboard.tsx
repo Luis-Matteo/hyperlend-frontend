@@ -101,10 +101,10 @@ function Dashboard() {
             >
               <SectionTitle
                 title="Your Positions"
-                className='mb-8'
+                className='mb-8 font-lufga'
               />
               <div className='flex flex-col justify-between gap-5 px-5 w-full'>
-                <div className='h-20'>
+                <div className='h-20 font-lufga'>
                   <span className='text-white mb-2'>Collateral deposited</span>
                   <PositionBar
                     available={totalSupplyUsd} total={totalSupplyUsd + walletBalanceValue} />
@@ -170,7 +170,7 @@ function Dashboard() {
                   </p>
                 </div>
               </div>
-              <div className='w-full lg:w-[400px] xl:w-[500px] 2xl:w-[800px] h-[150px]'>
+              <div className='w-full lg:w-[400px] xl:w-[500px] 2xl:w-1/2 h-[150px]'>
                 <MyChart
                   data={historicalNetWorth} />
               </div>

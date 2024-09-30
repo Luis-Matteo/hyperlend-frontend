@@ -25,15 +25,15 @@ const Actions: React.FC<ActionProps> = ({
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
   };
- 
+
   return (
     <div>
       {noteAboveInput}
       <div className="flex items-center justify-between bg-[#071311] rounded-md p-4 mt-4 mb-4">
         <div className="flex gap-3 items-center w-fit p-3">
-            <img src={catImage} alt="cat" />
-        <p className="text-base text-[#CAEAE566]">0.00</p>
-        </div>  
+          <img src={catImage} alt="cat" />
+          <p className="text-base text-[#CAEAE566]">0.00</p>
+        </div>
         <div className="bg-[#081916] p-4 rounded">
           <p className="text-base text-[#CAEAE566]">{inputDeal}</p>
         </div>

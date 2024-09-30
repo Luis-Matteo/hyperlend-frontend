@@ -9,7 +9,36 @@ type NavLinkProps = {
     disabled: boolean;
 }
 
-const navLinks: NavLinkProps[] = [
+// const navLinks: NavLinkProps[] = [
+//   {
+//     id: 'dashboard',
+//     title: 'Dashboard',
+//     url: '/dashboard',
+//     icon: dashboardIcon,
+//     disabled: false,
+//   },
+//   {
+//     id: 'markets',
+//     title: 'Markets',
+//     url: '/markets',
+//     icon: lendborrowIcon,
+//     disabled: false,
+//   },
+//   {
+//     id: 'points',
+//     title: 'Points',
+//     url: '/points',
+//     disabled: true,
+//   },
+//   {
+//     id: 'staking',
+//     title: 'Staking',
+//     url: '/staking',
+//     disabled: true,
+//   },
+// ];
+
+const navLinksTop: NavLinkProps[] = [
   {
     id: 'dashboard',
     title: 'Dashboard',
@@ -24,6 +53,10 @@ const navLinks: NavLinkProps[] = [
     icon: lendborrowIcon,
     disabled: false,
   },
+
+];
+
+const navLinksDown: NavLinkProps[] = [
   {
     id: 'points',
     title: 'Points',
@@ -37,7 +70,6 @@ const navLinks: NavLinkProps[] = [
     disabled: true,
   },
 ];
-
 
 const assetsInfos = [
   {
@@ -69,6 +101,7 @@ const assetsInfos = [
     tooltip: "The amount you can borrow against your collateral. e.g. 80% LTV means you can borrow up to 80% of the collateral value."
   },
 ]
-export { navLinks, assetsInfos };
+// export { navLinks, assetsInfos };
+export { navLinksTop, navLinksDown, assetsInfos };
 
 

@@ -269,7 +269,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
               />
             </div>
           </div>
-          <button className='w-full py-4 bg-secondary font-lufga rounded-xl font-bold mb-3'
+          <button className='w-full py-4 bg-secondary font-lufga rounded-xl font-bold mb-6'
             onClick={
               () => {
                 sendTransaction()
@@ -280,12 +280,12 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                 (allowance >= amount ? capitalizeString(modalType) : "Approve") : capitalizeString(modalType)
             }
           </button>
-          <div className='flex justify-end mb-6'>
+          {/* <div className='flex justify-end mb-6'>
             <button className='px-3 py-1.5 flex gap-2 items-center bg-[#050F0D] rounded-full'>
               <img src={gearIcon} alt="" />
               <p className='uppercase text-[#797979]'>settings</p>
             </button>
-          </div>
+          </div> */}
           <div className='flex flex-col gap-3'>
             <div className='flex justify-between'>
               <p className='font-lufga text-[#797979] text-xs'>{modalType == "supply" ? "Supply" : "Borrow"} APY</p>
