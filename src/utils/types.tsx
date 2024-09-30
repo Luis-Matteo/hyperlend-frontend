@@ -47,7 +47,7 @@ export interface UserPositionData {
   price: number;
   apr: number;
   icon: string;
-  isCollateralEnabled?: boolean
+  isCollateralEnabled?: boolean;
 }
 
 export interface UserPositionsData {
@@ -67,8 +67,8 @@ export interface UserPositionsData {
 export type ModalType = "supply" | "withdraw" | "borrow" | "repay";
 
 export interface ModalProps {
-  token: string,
-  modalType: ModalType,
+  token: string;
+  modalType: ModalType;
   onClose: () => void;
 }
 
@@ -80,7 +80,7 @@ export interface ReservesData {
 
 export interface AssetDetail {
   name: string;
-  symbol: string,
+  symbol: string;
   underlyingAsset: string;
   icon: string;
   totalSupplied: number;
@@ -94,4 +94,4 @@ export interface AssetDetail {
   isCollateral: boolean;
   ltv: number;
   isStable: boolean;
-} 
+}

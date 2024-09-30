@@ -1,10 +1,7 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from "react-router-dom";
 
 function Markets() {
-
-  return (
-    <Outlet />
-  );
+  return <Outlet />;
 }
 
 export default Markets;

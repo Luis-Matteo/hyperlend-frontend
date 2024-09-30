@@ -8,8 +8,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import { calculateApy, formatNumber } from '../../utils/functions'
-import { useInterestRateHistory } from '../../utils/protocolState';
+import { calculateApy, formatNumber } from "../../utils/functions";
+import { useInterestRateHistory } from "../../utils/protocolState";
 
 interface BorrowInfoChartType {
   type: string;
@@ -19,9 +19,19 @@ interface BorrowInfoChartType {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="custom-tooltip" style={{ backgroundColor: '#fff', padding: '10px', border: '1px solid #ccc' }}>
-        <p className="label" style={{color: '#302DC2'}}>{`Date: ${label}`}</p>
-        <p className="intro" style={{color: '#38b2ac'}}>{`APY: ${payload[0].value}%`}</p>
+      <div
+        className="custom-tooltip"
+        style={{
+          backgroundColor: "#fff",
+          padding: "10px",
+          border: "1px solid #ccc",
+        }}
+      >
+        <p className="label" style={{ color: "#302DC2" }}>{`Date: ${label}`}</p>
+        <p
+          className="intro"
+          style={{ color: "#38b2ac" }}
+        >{`APY: ${payload[0].value}%`}</p>
       </div>
     );
   }
@@ -30,15 +40,15 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type }) => {
-  const rawData = useInterestRateHistory(token)
-  
+  const rawData = useInterestRateHistory(token);
+
   const data = rawData.map((e: any) => {
     const rate = type == "supply" ? e.liquidityRate : e.borrowRate;
     return {
       time: new Date(e.timestamp).toDateString(),
-      rate: formatNumber(calculateApy(rate), 2)
-    }
-  })
+      rate: formatNumber(calculateApy(rate), 2),
+    };
+  });
 
   return (
     <div style={{ padding: "20px" }}>
@@ -57,7 +67,7 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type }) => {
             // domain={[10, 100]} // Set the Y-axis domain from 10 to 100
             // ticks={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} // Define ticks manually
           />
-          <Tooltip content={<CustomTooltip/>} />
+          <Tooltip content={<CustomTooltip />} />
           <Line
             type="monotone"
             dataKey="rate"

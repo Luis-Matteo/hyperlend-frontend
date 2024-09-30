@@ -7,7 +7,7 @@ type ProgressBarProps = {
 function ProgressBar({
   progress,
   className,
-  control = false
+  control = false,
 }: ProgressBarProps) {
   return (
     <div className={`w-full bg-gray rounded-full relative ${className}`}>
@@ -21,9 +21,9 @@ function ProgressBar({
           className="absolute top-1/2 transform -translate-y-1/2 bg-secondary rounded-full"
           style={{
             left: `${progress}%`,
-            width: "16px", 
+            width: "16px",
             height: "16px",
-            marginLeft: "-8px" 
+            marginLeft: "-8px",
           }}
         />
       )}

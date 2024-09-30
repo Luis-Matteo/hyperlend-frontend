@@ -1,58 +1,62 @@
-import { NavLink } from '../utils/types';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import { NavLink } from "../utils/types";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
 // import { navLinks } from '../utils/constants';
-import { navLinksTop, navLinksDown } from '../utils/constants';
-import NavButton from '../components/header/NavButton';
-import logo from '../assets/icons/logo-text.svg';
-import Status from '../components/header/Status';
-import logoutIcon from '../assets/icons/logout-icon.svg';
-import xmarkIcon from '../assets/icons/xmark-icon.svg'
+import { navLinksTop, navLinksDown } from "../utils/constants";
+import NavButton from "../components/header/NavButton";
+import logo from "../assets/icons/logo-text.svg";
+import Status from "../components/header/Status";
+import logoutIcon from "../assets/icons/logout-icon.svg";
+import xmarkIcon from "../assets/icons/xmark-icon.svg";
 // import referralsIcon from '../assets/icons/referralsIcon.svg'
-import { /*toggleModalOpen,*/ toggleSidebar } from '../store/sidebarSlice';
-import { useEffect, useRef } from 'react';
+import { /*toggleModalOpen,*/ toggleSidebar } from "../store/sidebarSlice";
+import { useEffect, useRef } from "react";
 
-import { networkChainId, contracts, abis } from '../utils/tokens';
-import { useAccount, useWriteContract } from 'wagmi'
-import faucetIcon from '../assets/icons/faucet-color.svg'
-import { claimFaucet } from '../utils/hlTestnet';
-import explorerIcon from '../assets/icons/explorer-icon.svg';
+import { networkChainId, contracts, abis } from "../utils/tokens";
+import { useAccount, useWriteContract } from "wagmi";
+import faucetIcon from "../assets/icons/faucet-color.svg";
+import { claimFaucet } from "../utils/hlTestnet";
+import explorerIcon from "../assets/icons/explorer-icon.svg";
 
 function Sidebar() {
-  const { isConnected, address } = useAccount()
+  const { isConnected, address } = useAccount();
 
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state: RootState) => state.sidebar.isOpen);
   const sidebarRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target as Node)
+      ) {
         if (isSidebarOpen) {
           dispatch(toggleSidebar());
         }
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isSidebarOpen, dispatch]);
 
-  const { data: hash, writeContractAsync, error } = useWriteContract()
+  const { data: hash, writeContractAsync, error } = useWriteContract();
   const sendClaimTx = () => {
     writeContractAsync({
       address: contracts.faucet,
       abi: abis.faucet,
       functionName: "claim",
-      args: []
-    })
-    if (error && error.message) alert(error.message)
-    console.log("MockBTC claimed: ", hash)
-  }
+      args: [],
+    });
+    if (error && error.message) alert(error.message);
+    console.log("MockBTC claimed: ", hash);
+  };
 
   return (
     <div
       ref={sidebarRef}
-      className={`bg-primary transition-transform duration-300 absolute z-30 lg:relative ${isSidebarOpen ? 'translate-x-0 shadow-custom' : '-translate-x-full lg:translate-x-0'}`}>
+      className={`bg-primary transition-transform duration-300 absolute z-30 lg:relative ${isSidebarOpen ? "translate-x-0 shadow-custom" : "-translate-x-full lg:translate-x-0"}`}
+    >
       <div className="w-64 p-10 flex-col justify-between flex h-screen">
         <div className="">
           <div className="pt-4">
@@ -62,63 +66,47 @@ function Sidebar() {
             <Status />
           </div>
           <div className="flex flex-col gap-6 pt-10">
+            {navLinksTop.map((item: NavLink) => (
+              <NavButton
+                key={item.id}
+                id={item.id}
+                title={item.title}
+                url={item.url}
+                icon={item.icon}
+                disabled={item.disabled}
+              />
+            ))}
 
-
-            {
-              navLinksTop.map((item: NavLink) => (
-                <NavButton
-                  key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  url={item.url}
-                  icon={item.icon}
-                  disabled={item.disabled}
-                />
-              ))
-            }
-
-            < button
+            <button
               className="flex items-center gap-2 rounded-full"
               type="button"
               onClick={() => {
-                window.open("https://explorer.hyperlend.finance", '_blank');
+                window.open("https://explorer.hyperlend.finance", "_blank");
               }}
             >
-              <div
-                className="px-3"
-              >
+              <div className="px-3">
                 <img src={explorerIcon} className="w-5" alt="faucet" />
               </div>
-              <p
-                className="font-lufga font-medium text-secondary"
-              >
-                Explorer
-              </p>
+              <p className="font-lufga font-medium text-secondary">Explorer</p>
             </button>
-            
-            {
-              networkChainId == 998 && isConnected ?
-                <button
-                  className="flex items-center gap-2 rounded-full"
-                  type="button"
-                  onClick={() => {
-                    claimFaucet(address)
-                    sendClaimTx()
-                  }}
-                >
-                  <div
-                    className="px-3 "
-                  >
-                    <img src={faucetIcon} className="w-5" alt="faucet" />
-                  </div>
-                  <p
-                    className="font-lufga font-medium text-secondary"
-                  >
-                    Faucet
-                  </p>
-                </button>
-                : ""
-            }
+
+            {networkChainId == 998 && isConnected ? (
+              <button
+                className="flex items-center gap-2 rounded-full"
+                type="button"
+                onClick={() => {
+                  claimFaucet(address);
+                  sendClaimTx();
+                }}
+              >
+                <div className="px-3 ">
+                  <img src={faucetIcon} className="w-5" alt="faucet" />
+                </div>
+                <p className="font-lufga font-medium text-secondary">Faucet</p>
+              </button>
+            ) : (
+              ""
+            )}
 
             {navLinksDown.map((item: NavLink) => (
               <NavButton
@@ -130,24 +118,26 @@ function Sidebar() {
                 disabled={item.disabled}
               />
             ))}
-
           </div>
-
         </div>
         <div className="flex justify-between">
           <button className="flex gap-4 items-center" type="button">
             <img className="" src={logoutIcon} alt="" />
-            <a href='https://docs.hyperlend.finance' target="_blank"><p className="font-lufga text-grey-light">
-              Docs
-            </p></a>
+            <a href="https://docs.hyperlend.finance" target="_blank">
+              <p className="font-lufga text-grey-light">Docs</p>
+            </a>
           </button>
-          <button className="lg:hidden" type="button"
-            onClick={() => dispatch(toggleSidebar())}>
+          <button
+            className="lg:hidden"
+            type="button"
+            onClick={() => dispatch(toggleSidebar())}
+          >
             <img className="" src={xmarkIcon} alt="" />
           </button>
         </div>
       </div>
-    // </div>
+      //{" "}
+    </div>
   );
 }
 

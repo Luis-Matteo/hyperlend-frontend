@@ -1,13 +1,13 @@
-import { BigNumber } from 'bignumber.js';
+import { BigNumber } from "bignumber.js";
 
 function formatNumber(inputNumber: number, decimal: number) {
   const num = Number(inputNumber);
   if (inputNumber % 1 === 0) {
-    return num.toLocaleString('en-US', {
+    return num.toLocaleString("en-US", {
       minimumFractionDigits: 0,
     });
   }
-  return num.toLocaleString('en-US', {
+  return num.toLocaleString("en-US", {
     minimumFractionDigits: decimal,
     maximumFractionDigits: decimal,
   });
@@ -32,7 +32,7 @@ function formatUnit(num: number, decimal: number = 2) {
 }
 
 function formatAddress(inputAddress: string) {
-  if (!inputAddress) return '';
+  if (!inputAddress) return "";
   const start = inputAddress.slice(0, 6);
   const end = inputAddress.slice(-3);
   return `${start}...${end}`;
@@ -44,9 +44,9 @@ export function capitalizeString(s: string) {
 
 function calculateApy(currentRate: BigInt) {
   let rateBN = new BigNumber(currentRate.toString());
-  let rateDecimal = Number(rateBN.div(1e27))
-  let apy = Math.pow(Math.E, rateDecimal) - 1
-  return apy * 100
+  let rateDecimal = Number(rateBN.div(1e27));
+  let apy = Math.pow(Math.E, rateDecimal) - 1;
+  return apy * 100;
 }
 
 export function decodeConfig(configNumber: bigint) {
@@ -67,7 +67,7 @@ export function decodeConfig(configNumber: bigint) {
   // bit 152-167: liquidation protocol fee
   // bit 168-175: eMode category
   // bit 176-211: unbacked mint cap in whole tokens, 0 ⇒ no cap
-  // bit 212-251: debt ceiling for isolation mode with decimals 
+  // bit 212-251: debt ceiling for isolation mode with decimals
   // bit 252-255: unused
 
   const ltv = Number(extractBits(configNumber, 0, 16));
@@ -77,9 +77,11 @@ export function decodeConfig(configNumber: bigint) {
   const reserveIsActive = extractBits(configNumber, 56, 1) === BigInt(1);
   const reserveIsFrozen = extractBits(configNumber, 57, 1) === BigInt(1);
   const borrowingIsEnabled = extractBits(configNumber, 58, 1) === BigInt(1);
-  const stableRateBorrowingEnabled = extractBits(configNumber, 59, 1) === BigInt(1);
+  const stableRateBorrowingEnabled =
+    extractBits(configNumber, 59, 1) === BigInt(1);
   const assetIsPaused = extractBits(configNumber, 60, 1) === BigInt(1);
-  const borrowingInIsolationModeEnabled = extractBits(configNumber, 61, 1) === BigInt(1);
+  const borrowingInIsolationModeEnabled =
+    extractBits(configNumber, 61, 1) === BigInt(1);
   const reserved = Number(extractBits(configNumber, 62, 2));
   const reserveFactor = Number(extractBits(configNumber, 64, 16));
   const borrowCap = Number(extractBits(configNumber, 80, 36));
@@ -107,7 +109,7 @@ export function decodeConfig(configNumber: bigint) {
     debtCeiling,
     eModeCategory,
     unbackedMintCap,
-    liquidationProtocolFee
+    liquidationProtocolFee,
   };
 }
 
@@ -117,7 +119,7 @@ function extractBits(number: any, offset: any, size: any) {
 }
 
 export function filterString(inputString: string, searchPhrase: string) {
-  return inputString.toLowerCase().includes(searchPhrase.toLowerCase())
+  return inputString.toLowerCase().includes(searchPhrase.toLowerCase());
 }
 
 export function padArray(arr: any, x: any, defaultValue: any) {
@@ -134,27 +136,33 @@ const copyToClipboard = (text: string): void => {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(
       () => {
-        console.log('Text copied to clipboard successfully!');
+        console.log("Text copied to clipboard successfully!");
       },
       (err) => {
-        console.error('Failed to copy text to clipboard', err);
-      }
+        console.error("Failed to copy text to clipboard", err);
+      },
     );
   } else {
     // Fallback method if clipboard API is not supported
-    const textArea = document.createElement('textarea');
+    const textArea = document.createElement("textarea");
     textArea.value = text;
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
     try {
-      document.execCommand('copy');
-      console.log('Text copied to clipboard successfully!');
+      document.execCommand("copy");
+      console.log("Text copied to clipboard successfully!");
     } catch (err) {
-      console.error('Failed to copy text to clipboard', err);
+      console.error("Failed to copy text to clipboard", err);
     }
     document.body.removeChild(textArea);
   }
 };
 
-export { formatNumber, formatAddress, formatUnit, calculateApy, copyToClipboard };
+export {
+  formatNumber,
+  formatAddress,
+  formatUnit,
+  calculateApy,
+  copyToClipboard,
+};
