@@ -78,7 +78,7 @@ function Sidebar() {
             }
 
             < button
-              className="flex items-center gap-2 rounded-full hover:bg-[#1F2A29]"
+              className="flex items-center gap-2 rounded-full"
               type="button"
               onClick={() => {
                 window.open("https://explorer.hyperlend.finance", '_blank');
@@ -99,7 +99,7 @@ function Sidebar() {
             {
               networkChainId == 998 && isConnected ?
                 <button
-                  className="flex items-center gap-2 rounded-full hover:bg-[#1F2A29]"
+                  className="flex items-center gap-2 rounded-full"
                   type="button"
                   onClick={() => {
                     claimFaucet(address)
