@@ -109,7 +109,7 @@ function Dashboard() {
                   <PositionBar
                     available={totalSupplyUsd} total={totalSupplyUsd + walletBalanceValue} />
                 </div>
-                <div className='h-20'>
+                <div className='h-20 font-lufga'>
                   <span className='text-white mb-2'>Borrow</span>
                   <PositionBar
                     available={totalBorrowUsd} total={totalBorrowLimit} />
