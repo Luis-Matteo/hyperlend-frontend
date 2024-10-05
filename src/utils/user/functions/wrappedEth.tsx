@@ -58,7 +58,10 @@ export async function wrappedTokenAction(
       abi: abis.wrappedTokenGatewayV3,
       functionName: functionNames[action],
       args: functionParams[action],
-      value: action === 'supply' || action === 'repay' ? bgIntAmount : (0 as any as bigint),
+      value:
+        action === 'supply' || action === 'repay'
+          ? bgIntAmount
+          : (0 as any as bigint),
     });
 
     await publicClient.waitForTransactionReceipt({ hash: txResult.hash });
