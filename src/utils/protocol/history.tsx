@@ -14,13 +14,15 @@ export function useInterestRateHistory(token: string) {
     )
       .then((response) => response.json())
       .then((json) => {
-        const values = json
+        let values = json
           ? json.map((e: any) => ({
               timestamp: e.timestamp,
               liquidityRate: e[token].currentLiquidityRate,
               borrowRate: e[token].currentVariableBorrowRate,
             }))
           : [];
+        values.sort((a: any, b: any) => a.timestamp - b.timestamp);
+
         setData(values);
       })
       .catch((error) => console.error(error));
