@@ -101,5 +101,13 @@ const assetsInfos = [
       'The amount you can borrow against your collateral. e.g. 80% LTV means you can borrow up to 80% of the collateral value.',
   },
 ];
+
+const tokenDetailButton = [
+  { id: 1, label: 'Supply' },
+  { id: 2, label: 'Withdraw' },
+  { id: 3, label: 'Borrow' },
+  { id: 4, label: 'Repay' },
+];
+
 // export { navLinks, assetsInfos };
-export { navLinksTop, navLinksDown, assetsInfos };
+export { navLinksTop, navLinksDown, assetsInfos, tokenDetailButton };

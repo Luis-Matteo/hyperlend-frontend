@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import Navbar from '../layouts/Navbar';
 import CardItem from '../components/common/CardItem';
 import { useParams } from 'react-router-dom';
-import { useSwitchChain, useAccount, useReadContract } from 'wagmi';
-import { erc20Abi } from 'viem';
+import { useSwitchChain, useAccount, useBalance } from 'wagmi';
 import ReactGA from 'react-ga4';
 
-import { formatNumber, decodeConfig, formatAddress } from '../utils/functions';
+import { tokenDetailButton } from '../utils/constants/constants'
+
+import { formatNumber, decodeConfig, formatAddress, normalizeDecimalsAmount } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../components/charts/InterestRateModelChart';
 import { TokenActionsProps } from '../utils/types';
@@ -19,6 +20,7 @@ import {
   ltvMap,
   liqPenaltyMap,
   networkChainId,
+  wrappedTokens,
 } from '../utils/config';
 
 import { useUserPositionsData } from '../utils/user/positions';
@@ -31,6 +33,8 @@ import { useProtocolAssetReserveData } from '../utils/protocol/reserves';
 
 import { useProtocolReservesData } from '../utils/protocol/reserves';
 
+import { useUserTokenBalance } from '../utils/user/wallet';
+
 import TokenActions from '../components/markets/TokenActions';
 
 function TokenDetail() {
@@ -39,40 +43,30 @@ function TokenDetail() {
 
   ReactGA.send({ hitType: 'pageview', page: '/token-details', title: token });
 
+  const [activeButton, setActiveButton] = useState(1);
+
   const { switchChain } = useSwitchChain();
-  const account = useAccount();
+  const { address, chainId, isConnected } = useAccount();
 
   useEffect(() => {
-    if (account.isConnected && account.chainId != networkChainId) {
+    if (isConnected && chainId != networkChainId) {
       switchChain({ chainId: networkChainId });
     }
-  }, [account]);
+  }, [isConnected, chainId]);
 
-  const normalizeDecimalsAmount = (x: number) => {
-    return Number(x) / Math.pow(10, tokenDecimalsMap[token]);
-  };
-
-  const { data: userWalletBalance } = useReadContract(
-    account.isConnected && account.address
-      ? ({
-          abi: erc20Abi,
-          address: token,
-          functionName: 'balanceOf',
-          args: [account.address],
-        } as any)
-      : undefined,
-  );
+  const userWalletTokenBalance = useUserTokenBalance(isConnected, token, address);
+  const { data: userEthBalance } = useBalance({ address: address })
 
   const { reserveDataMap } = useProtocolReservesData();
   const { priceDataMap } = useProtocolPriceData();
   const { interestRateDataMap } = useProtocolInterestRate();
-  const protocolAssetReserveData = useProtocolAssetReserveData(token);
-  const [activeButton, setActiveButton] = useState(1);
 
+  const protocolAssetReserveData = useProtocolAssetReserveData(token);
   const userPositionsData = useUserPositionsData(
-    account.isConnected,
-    account.address,
+    isConnected,
+    address,
   );
+
   const supplied = userPositionsData.supplied.find(
     (e) => e.underlyingAsset == token,
   );
@@ -80,28 +74,7 @@ function TokenDetail() {
     (e) => e.underlyingAsset == token,
   );
 
-  const [actionData, setActionData] = useState<TokenActionsProps>({
-    availableAmountTitle: 'Suppliable',
-    availableAmount: normalizeDecimalsAmount(Number(userWalletBalance)),
-    totalApy: interestRateDataMap[token].supply,
-    percentBtn: 100,
-    protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
-    protocolBalance: supplied?.balance || 0,
-    dailyEarning:
-      ((supplied?.value || 0) * (interestRateDataMap[token].supply / 100)) /
-      365,
-    btnTitle: 'Supply',
-    token: token,
-    isCollateralEnabled: supplied?.isCollateralEnabled || false,
-  });
-
-  useEffect(() => {
-    handleButtonClick(activeButton);
-  }, [userWalletBalance]);
-
-  const handleButtonClick = (button: number) => {
-    setActiveButton(button);
-
+  const getAvailableAmount: any = (actionType: string) => {
     const tokenPrice = Number(priceDataMap[token]) / Math.pow(10, 8);
     const borrowLiquidity =
       Number(
@@ -110,19 +83,98 @@ function TokenDetail() {
       ) / Math.pow(10, tokenDecimalsMap[token]);
     const totalBorrowInToken =
       (userPositionsData.totalBorrowUsd / tokenPrice) * 1.25; //TODO: account for LTV
+    const totalSuppliedInToken =  (userPositionsData.totalSupplyUsd / tokenPrice) * 1.25; //TODO: account for LTV
+
+    if (actionType == "supply"){
+      return normalizeDecimalsAmount(
+        wrappedTokens.includes(token) ? Number(userEthBalance?.value) : Number(userWalletTokenBalance),
+        token,
+        tokenDecimalsMap
+      )
+    }
+
+    if (actionType == "withdraw"){
+      return (
+        (supplied?.balance || 0) - totalBorrowInToken + totalSuppliedInToken > (supplied?.balance || 0) 
+          ? (supplied?.balance || 0) 
+          : (supplied?.balance || 0) - totalBorrowInToken + totalSuppliedInToken
+      )
+    }
+
+    if (actionType == "borrow"){
+      return (
+        (borrowLiquidity < userPositionsData.totalBorrowLimit / tokenPrice
+          ? borrowLiquidity
+          : userPositionsData.totalBorrowLimit / tokenPrice) * 0.9
+      )
+    }
+
+    if (actionType == "repay"){
+      return (
+        (borrowed?.balance || 0) >
+            normalizeDecimalsAmount(
+              wrappedTokens.includes(token) ? Number(userEthBalance?.value) : Number(userWalletTokenBalance),
+              token,
+              tokenDecimalsMap
+            )
+              ? normalizeDecimalsAmount(
+                wrappedTokens.includes(token) ? Number(userEthBalance?.value) : Number(userWalletTokenBalance),
+                token,
+                tokenDecimalsMap
+              )
+              : borrowed?.balance || 0
+      )
+    }
+  }
+
+  const getDailyEarnings: any = (actionType: string) => {
+    if (actionType == "supply" || actionType == "withdraw"){
+      return (
+        ((supplied?.value || 0) * (interestRateDataMap[token].supply / 100)) /
+        365
+      )
+    }
+
+    if (actionType == "borrow" || actionType == "repay"){
+      return (
+        (-1 *
+          (borrowed?.value || 0) *
+          (interestRateDataMap[token].borrow / 100)) /
+        365
+      )
+    }
+  } 
+
+  const [actionData, setActionData] = useState<TokenActionsProps>({
+    availableAmountTitle: 'Suppliable',
+    availableAmount: getAvailableAmount('supply'),
+    totalApy: interestRateDataMap[token].supply,
+    percentBtn: 100,
+    protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
+    protocolBalance: supplied?.balance || 0,
+    dailyEarning: getDailyEarnings('supply'),
+    btnTitle: 'Supply',
+    token: token,
+    isCollateralEnabled: supplied?.isCollateralEnabled || false,
+  });
+
+  useEffect(() => {
+    handleButtonClick(activeButton);
+  }, [userWalletTokenBalance, userEthBalance]);
+
+  const handleButtonClick = (button: number) => {
+    setActiveButton(button);
+
     switch (button) {
       case 1:
         setActionData({
           availableAmountTitle: 'Suppliable',
-          availableAmount: normalizeDecimalsAmount(Number(userWalletBalance)),
+          availableAmount: getAvailableAmount('supply'),
           totalApy: interestRateDataMap[token].supply,
           percentBtn: 100,
           protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
           protocolBalance: supplied?.balance || 0,
-          dailyEarning:
-            ((supplied?.value || 0) *
-              (interestRateDataMap[token].supply / 100)) /
-            365,
+          dailyEarning: getDailyEarnings('supply'),
           btnTitle: 'Supply',
           token: token,
           isCollateralEnabled: supplied?.isCollateralEnabled || false,
@@ -131,58 +183,40 @@ function TokenDetail() {
       case 2:
         setActionData({
           availableAmountTitle: 'Withdrawable',
-          availableAmount: (supplied?.balance || 0) - totalBorrowInToken,
+          availableAmount: getAvailableAmount('withdraw'),
           totalApy: interestRateDataMap[token].supply,
           percentBtn: 100,
           protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
           protocolBalance: supplied?.balance || 0,
-          dailyEarning:
-            ((supplied?.value || 0) *
-              (interestRateDataMap[token].supply / 100)) /
-            365,
+          dailyEarning: getDailyEarnings('withdraw'),
           btnTitle: 'Withdraw',
           token: token,
-          isCollateralEnabled: false,
+          isCollateralEnabled: false, //not used
         });
         break;
       case 3:
         setActionData({
           availableAmountTitle: 'Borrowable',
-          availableAmount:
-            (borrowLiquidity < userPositionsData.totalBorrowLimit / tokenPrice
-              ? borrowLiquidity
-              : userPositionsData.totalBorrowLimit / tokenPrice) * 0.9,
+          availableAmount: getAvailableAmount('borrow'),
           totalApy: interestRateDataMap[token].borrow,
           percentBtn: 100,
           protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
           protocolBalance: borrowed?.balance || 0,
-          dailyEarning:
-            (-1 *
-              (borrowed?.value || 0) *
-              (interestRateDataMap[token].borrow / 100)) /
-            365,
+          dailyEarning: getDailyEarnings('borrow'),
           btnTitle: 'Borrow',
           token: token,
-          isCollateralEnabled: false,
+          isCollateralEnabled: false, //not used
         });
         break;
       case 4:
         setActionData({
           availableAmountTitle: 'Repayable',
-          availableAmount:
-            (borrowed?.balance || 0) >
-            normalizeDecimalsAmount(Number(userWalletBalance))
-              ? normalizeDecimalsAmount(Number(userWalletBalance))
-              : borrowed?.balance || 0,
+          availableAmount: getAvailableAmount('repay'),
           totalApy: interestRateDataMap[token].borrow,
           percentBtn: 100,
           protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
           protocolBalance: borrowed?.balance || 0,
-          dailyEarning:
-            (-1 *
-              (borrowed?.value || 0) *
-              (interestRateDataMap[token].borrow / 100)) /
-            365,
+          dailyEarning: getDailyEarnings('repay'),
           btnTitle: 'Repay',
           token: token,
           isCollateralEnabled: false,
@@ -192,13 +226,6 @@ function TokenDetail() {
         break;
     }
   };
-
-  const buttons = [
-    { id: 1, label: 'Supply' },
-    { id: 2, label: 'Withdraw' },
-    { id: 3, label: 'Borrow' },
-    { id: 4, label: 'Repay' },
-  ];
 
   const tokenPrice = Number(priceDataMap[token]) / Math.pow(10, 8);
   const totalSuppliedTokens =
@@ -274,7 +301,7 @@ function TokenDetail() {
   const marketDetails = [
     {
       name: 'Token contract',
-      link: `https://arbiscan.io/token/${token}`,
+      link: `https://explorer.hyperlend.finance/token/${token}`,
       value: token,
     },
     {
@@ -464,7 +491,7 @@ function TokenDetail() {
         <div className='w-full lg:w-1/3 lg:min-w-[360px]'>
           <CardItem className='p-4 lg:p-8 mb-6 font-lufga sticky top-0'>
             <div className='w-full grid grid-cols-4 text-center'>
-              {buttons.map((button) => (
+              {tokenDetailButton.map((button) => (
                 <button
                   key={button.id}
                   onClick={() => handleButtonClick(button.id)}

@@ -23,7 +23,7 @@ import { ModalType } from '../utils/types';
 import { getUserPoints } from '../utils/user/points';
 import { contracts, abis, networkChainId } from '../utils/config';
 import { useUserPositionsData } from '../utils/user/positions';
-import { useUserWalletBalance } from '../utils/user/wallet';
+import { useUserWalletValueUsd } from '../utils/user/wallet';
 import { useUserPortfolioHistory } from '../utils/user/history';
 
 function Dashboard() {
@@ -67,7 +67,7 @@ function Dashboard() {
 
   const { totalPoints, pointsIncrease, pointsPercentIncrease } =
     getUserPoints();
-  const { walletBalanceValue } = useUserWalletBalance();
+  const { walletBalanceValue } = useUserWalletValueUsd();
   const { historicalNetWorth } = useUserPortfolioHistory(address, isConnected);
 
   const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {

@@ -4,11 +4,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import xmarkIcon from '../../assets/icons/xmark-icon.svg';
 import {
   formatNumber,
-  capitalizeString /*, decodeConfig*/,
+  capitalizeString,
 } from '../../utils/functions';
 import ProgressBar from '../common/PercentBar';
-import { useAccount, useReadContract, useWriteContract } from 'wagmi';
-import { erc20Abi } from 'viem';
+import { useAccount, useWriteContract, useBalance, usePublicClient } from 'wagmi';
 
 import { ModalProps } from '../../utils/types';
 import {
@@ -16,59 +15,21 @@ import {
   tokenNameMap,
   tokenDecimalsMap,
   iconsMap,
-  abis,
-  liqMap,
+  wrappedTokens,
 } from '../../utils/config';
+
+import { getTokenPrecision, calculateAvailableBalance, calculatePredictedHealthFactor } from '../../utils/user/functions/utils';
 
 import { useProtocolPriceData } from '../../utils/protocol/prices';
 import { useProtocolInterestRate } from '../../utils/protocol/interestRates';
 import { useProtocolAssetReserveData } from '../../utils/protocol/reserves';
 
 import { useUserPositionsData } from '../../utils/user/positions';
+import { useUserWrappedTokenAllowanceData, useUserAllowance, useUserTokenBalance } from '../../utils/user/wallet';
+import { wrappedTokenAction } from '../../utils/user/functions/wrappedEth';
+import { protocolAction } from '../../utils/user/functions/actions';
 
 function Modal({ token, modalType, onClose }: ModalProps) {
-  const { address, isConnected } = useAccount();
-  const { data: hash, writeContractAsync } = useWriteContract();
-
-  const { data: userWalletBalance } = useReadContract(
-    isConnected && address
-      ? ({
-          abi: erc20Abi,
-          address: token,
-          functionName: 'balanceOf',
-          args: [address],
-        } as any)
-      : undefined,
-  );
-  const { data: userAllowance } = useReadContract(
-    isConnected && address
-      ? ({
-          abi: erc20Abi,
-          address: token,
-          functionName: 'allowance',
-          args: [address, contracts.pool],
-        } as any)
-      : undefined,
-  );
-
-  /*
-  supply:
-    - selecting amount from wallet
-  withdraw:
-    - selecting amount from supply position
-  borrow:
-    - selecting amount from max available to borrow
-  repay:
-    - selecting amount from borrow position
-  */
-
-  const { priceDataMap } = useProtocolPriceData();
-  const { interestRateDataMap } = useProtocolInterestRate();
-  // const { reserveDataMap } = useProtocolReservesData();
-
-  const userPositionsData = useUserPositionsData(isConnected, address);
-  const assetReserveData = useProtocolAssetReserveData(token);
-
   const [amount, setAmount] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
   const percentList = [25, 50, 75, 100];
@@ -77,94 +38,65 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const [allowance, setAllowance] = useState<number>(0);
   const [predictedHealth, setPredictedHealth] = useState<number>(0);
 
-  const getBorrowLimit = () => {
-    // TODO: enforce protocol borrow cap
-    // const borrowCap = decodeConfig(reserveDataMap[token].configuration.data).borrowCap
-    const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8);
-    const borrowAvailableTokens =
-      (userPositionsData?.totalBorrowLimit || 0) / tokenPriceUsd;
-    const availableInPool =
-      Number(assetReserveData.totalAToken) /
-      Math.pow(10, tokenDecimalsMap[token]);
-    return borrowAvailableTokens > availableInPool
-      ? availableInPool
-      : borrowAvailableTokens * 0.85;
-  };
+  const publicClient = usePublicClient();
+  const { address, isConnected } = useAccount();
+  const { data: hash, writeContractAsync } = useWriteContract();
+  const { data: userEthBalance } = useBalance({ address: address })
 
-  const getPrecision = () => {
-    const minAmountStr = (
-      1 /
-      (Number(priceDataMap[token]) / Math.pow(10, 8)) /
-      100
-    )
-      .toFixed(20)
-      .toString(); //amount of token, worth $0.01
-    const match = minAmountStr.replace('.', '').match(/^0+/);
-    return match ? match[0].length : 2;
-  };
+  const userWalletTokenBalance = useUserTokenBalance(isConnected, token, address);
+  const userAllowance = useUserAllowance(
+    isConnected,
+    token, 
+    address || "0x0000000000000000000000000000000000000000", 
+    contracts.pool
+  );
+  const {
+    hTokenAllowance,
+    dTokenAllowance,
+  } = useUserWrappedTokenAllowanceData(
+    address || "0x0000000000000000000000000000000000000000",
+    contracts.wrappedTokenGatewayV3
+  );
+
+  const { priceDataMap } = useProtocolPriceData();
+  const { interestRateDataMap } = useProtocolInterestRate();
+
+  const userPositionsData = useUserPositionsData(isConnected, address);
+  const assetReserveData = useProtocolAssetReserveData(token);
 
   const updateAvailableAmount = () => {
-    const userTokenSuppliedPosition = userPositionsData?.supplied.find(
-      (e) => e.underlyingAsset == token,
-    );
-    const userTokenBorrowedPosition = userPositionsData?.borrowed.find(
-      (e) => e.underlyingAsset == token,
-    );
-    const userBorrowLimitToken = getBorrowLimit();
-
-    switch (modalType) {
-      case 'supply':
-        // TODO: enforce protocol supply cap
-        const normalizedWalletBalance =
-          (Number(userWalletBalance) || 0) /
-          Math.pow(10, tokenDecimalsMap[token]);
-        setAvailableBalance(normalizedWalletBalance);
-        break;
-      case 'withdraw':
-        setAvailableBalance(userTokenSuppliedPosition?.balance || 0);
-        break;
-      case 'borrow':
-        setAvailableBalance(userBorrowLimitToken);
-        break;
-      case 'repay':
-        setAvailableBalance(userTokenBorrowedPosition?.balance || 0);
-        break;
-    }
+    const avBalance = calculateAvailableBalance(
+      token,
+      userPositionsData,
+      priceDataMap,
+      assetReserveData,
+      userEthBalance,
+      userWalletTokenBalance,
+      modalType
+    )
+    setAvailableBalance(avBalance)
   };
 
   useEffect(() => {
     updateAvailableAmount();
-  }, [userWalletBalance]);
+  }, [userWalletTokenBalance, userEthBalance]);
 
   useEffect(() => {
     if (amount != 0) {
-      const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8);
-      const amountUsd =
-        amount *
-        tokenPriceUsd *
-        (modalType == 'repay' || modalType == 'withdraw' ? -1 : 1);
-
-      const newTotalBorrow =
-        modalType == 'borrow' || modalType == 'repay'
-          ? (userPositionsData?.totalBorrowUsd || 0) + amountUsd
-          : userPositionsData?.totalBorrowUsd || 0;
-
-      const newTotalThreshold =
-        modalType == 'supply' || modalType == 'withdraw'
-          ? (userPositionsData?.totalLiquidationThreshold || 0) +
-            amountUsd * liqMap[token]
-          : userPositionsData?.totalLiquidationThreshold || 0;
-
-      const newHealth =
-        newTotalBorrow > 0 ? newTotalThreshold / newTotalBorrow : Infinity;
-
+      const newHealth = calculatePredictedHealthFactor(
+        token,
+        amount,
+        modalType,
+        priceDataMap,
+        userPositionsData
+      )
       setPredictedHealth(newHealth);
     }
   }, [amount]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
-    setAmount((availableBalance / 100) * Number(event.target.value));
+    setAmount((availableBalance / 100) * parseFloat(event.target.value));
 
     setAllowance(
       Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]),
@@ -197,39 +129,40 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     }
   };
 
-  const sendTransaction = () => {
+  const sendTransaction = async () => {
     const bgIntAmount = parseFloat(
       (amount * Math.pow(10, tokenDecimalsMap[token])).toString(),
     )
       .toFixed(0)
       .toString() as any as bigint;
 
-    if (modalType == 'supply' || modalType == 'repay') {
-      if (allowance < amount) {
-        writeContractAsync({
-          address: token as any,
-          abi: erc20Abi,
-          functionName: 'approve',
-          args: [contracts.pool, bgIntAmount],
-        });
-        setAllowance(amount);
-      }
+    if (wrappedTokens.includes(token)) {
+      await wrappedTokenAction(
+        modalType,
+        token,
+        bgIntAmount,
+        address || "0x0000000000000000000000000000000000000000",
+        hTokenAllowance,
+        dTokenAllowance,
+        writeContractAsync,
+        publicClient
+      );
+      return;
     }
 
-    const functionParams: any = {
-      supply: [token, bgIntAmount, address, 0], //asset, amount, onBehalfOf, refCode
-      withdraw: [token, bgIntAmount, address], //asset, amount, to
-      borrow: [token, bgIntAmount, 2, 0, address], //asset, amount, interestRateMode (2 = variable), refCode, onBehalfOf
-      repay: [token, bgIntAmount, 2, address], //asset, amount, interestRateMode, onBehalfOf
-    };
+    await protocolAction(
+      modalType,
+      token,
+      address || "0x0000000000000000000000000000000000000000",
+      allowance,
+      amount,
+      bgIntAmount,
+      writeContractAsync,
+      publicClient
+    )
 
-    writeContractAsync({
-      address: contracts.pool,
-      abi: abis.pool,
-      functionName: modalType,
-      args: functionParams[modalType],
-    });
-    console.log(hash);
+    setAllowance(amount);
+    console.log(hash)
   };
 
   return (
@@ -270,11 +203,11 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                     {modalType == 'supply' || modalType == 'withdraw'
                       ? formatNumber(
                           interestRateDataMap[token].supply,
-                          getPrecision(),
+                          getTokenPrecision(token, priceDataMap),
                         )
                       : formatNumber(
                           interestRateDataMap[token].borrow,
-                          getPrecision(),
+                          getTokenPrecision(token, priceDataMap),
                         )}
                     % APY
                   </p>
@@ -307,7 +240,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                       : modalType == 'withdraw'
                         ? 'Position'
                         : ''}
-                : {formatNumber(availableBalance, getPrecision())}{' '}
+                : {formatNumber(availableBalance, getTokenPrecision(token, priceDataMap))}{' '}
                 {tokenNameMap[token]}
               </p>
               <ul className='flex gap-2 items-center'>
@@ -332,7 +265,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             <div className='flex justify-between mb-2'>
               <p className='font-lufga font-light text-[#797979]'>Available</p>
               <p className='font-lufga font-light text-[#797979]'>
-                {formatNumber(availableBalance, getPrecision())}
+                {formatNumber(availableBalance, getTokenPrecision(token, priceDataMap))}
               </p>
             </div>
             <div className='relative '>
@@ -357,11 +290,25 @@ function Modal({ token, modalType, onClose }: ModalProps) {
               sendTransaction();
             }}
           >
-            {modalType == 'supply' || modalType == 'repay'
-              ? allowance >= amount
-                ? capitalizeString(modalType)
-                : 'Approve'
-              : capitalizeString(modalType)}
+            {
+              modalType == 'supply' || modalType == 'repay'
+              ? 
+                wrappedTokens.includes(token) ? capitalizeString(modalType)
+                :
+                allowance >= amount
+                  ? capitalizeString(modalType)
+                  : 'Approve'
+              : 
+              (
+                modalType == "borrow" && wrappedTokens.includes(token) 
+                ? 
+                (
+                  Number(dTokenAllowance) / Math.pow(10, 18) >= amount ? capitalizeString(modalType) : "Approve"
+                )
+                : 
+                capitalizeString(modalType)
+              )
+            }
           </button>
           {/* <div className='flex justify-end mb-6'>
             <button className='px-3 py-1.5 flex gap-2 items-center bg-[#050F0D] rounded-full'>
@@ -397,7 +344,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                 {formatNumber(
                   Number(assetReserveData.totalAToken) /
                     Math.pow(10, tokenDecimalsMap[token]),
-                  getPrecision(),
+                  getTokenPrecision(token, priceDataMap),
                 )}
               </p>
             </div>

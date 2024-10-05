@@ -55,6 +55,7 @@ export function useUserPortfolioHistory(
     )
       .then((response) => response.json())
       .then((json) => {
+        json.sort((a: any, b: any) => a.timestamp - b.timestamp); 
         setData({
           historicalNetWorth: padArray(
             json ? json.map((e: any) => e.usdValue) : [],
