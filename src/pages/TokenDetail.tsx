@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 import { useSwitchChain, useAccount, useBalance } from 'wagmi';
 import ReactGA from 'react-ga4';
 
-import { tokenDetailButton } from '../utils/constants/constants'
+import { tokenDetailButton } from '../utils/constants/constants';
 
-import { formatNumber, decodeConfig, formatAddress, normalizeDecimalsAmount } from '../utils/functions';
+import { formatNumber, decodeConfig, formatAddress } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../components/charts/InterestRateModelChart';
 import { TokenActionsProps } from '../utils/types';
@@ -20,20 +20,22 @@ import {
   ltvMap,
   liqPenaltyMap,
   networkChainId,
-  wrappedTokens,
 } from '../utils/config';
 
-import { useUserPositionsData } from '../utils/user/positions';
+import {
+  useUserPositionsData,
+  useUserAccountData,
+} from '../utils/user/positions';
 
 import { useProtocolPriceData } from '../utils/protocol/prices';
 import { useProtocolInterestRate } from '../utils/protocol/interestRates';
 import { useProtocolAssetReserveData } from '../utils/protocol/reserves';
 
-// import { getErrorMessage } from '../../utils/constants/errorCodes';
-
 import { useProtocolReservesData } from '../utils/protocol/reserves';
 
 import { useUserTokenBalance } from '../utils/user/wallet';
+
+import { calculateAvailableBalance } from '../utils/user/functions/utils';
 
 import TokenActions from '../components/markets/TokenActions';
 
@@ -54,18 +56,20 @@ function TokenDetail() {
     }
   }, [isConnected, chainId]);
 
-  const userWalletTokenBalance = useUserTokenBalance(isConnected, token, address);
-  const { data: userEthBalance } = useBalance({ address: address })
+  const userWalletTokenBalance = useUserTokenBalance(
+    isConnected,
+    token,
+    address,
+  );
+  const { data: userEthBalance } = useBalance({ address: address });
 
   const { reserveDataMap } = useProtocolReservesData();
   const { priceDataMap } = useProtocolPriceData();
   const { interestRateDataMap } = useProtocolInterestRate();
 
+  const userAccountData = useUserAccountData(address);
   const protocolAssetReserveData = useProtocolAssetReserveData(token);
-  const userPositionsData = useUserPositionsData(
-    isConnected,
-    address,
-  );
+  const userPositionsData = useUserPositionsData(isConnected, address);
 
   const supplied = userPositionsData.supplied.find(
     (e) => e.underlyingAsset == token,
@@ -75,75 +79,36 @@ function TokenDetail() {
   );
 
   const getAvailableAmount: any = (actionType: string) => {
-    const tokenPrice = Number(priceDataMap[token]) / Math.pow(10, 8);
-    const borrowLiquidity =
-      Number(
-        protocolAssetReserveData.totalAToken -
-          protocolAssetReserveData.totalVariableDebt,
-      ) / Math.pow(10, tokenDecimalsMap[token]);
-    const totalBorrowInToken =
-      (userPositionsData.totalBorrowUsd / tokenPrice) * 1.25; //TODO: account for LTV
-    const totalSuppliedInToken =  (userPositionsData.totalSupplyUsd / tokenPrice) * 1.25; //TODO: account for LTV
-
-    if (actionType == "supply"){
-      return normalizeDecimalsAmount(
-        wrappedTokens.includes(token) ? Number(userEthBalance?.value) : Number(userWalletTokenBalance),
-        token,
-        tokenDecimalsMap
-      )
-    }
-
-    if (actionType == "withdraw"){
-      return (
-        (supplied?.balance || 0) - totalBorrowInToken + totalSuppliedInToken > (supplied?.balance || 0) 
-          ? (supplied?.balance || 0) 
-          : (supplied?.balance || 0) - totalBorrowInToken + totalSuppliedInToken
-      )
-    }
-
-    if (actionType == "borrow"){
-      return (
-        (borrowLiquidity < userPositionsData.totalBorrowLimit / tokenPrice
-          ? borrowLiquidity
-          : userPositionsData.totalBorrowLimit / tokenPrice) * 0.9
-      )
-    }
-
-    if (actionType == "repay"){
-      return (
-        (borrowed?.balance || 0) >
-            normalizeDecimalsAmount(
-              wrappedTokens.includes(token) ? Number(userEthBalance?.value) : Number(userWalletTokenBalance),
-              token,
-              tokenDecimalsMap
-            )
-              ? normalizeDecimalsAmount(
-                wrappedTokens.includes(token) ? Number(userEthBalance?.value) : Number(userWalletTokenBalance),
-                token,
-                tokenDecimalsMap
-              )
-              : borrowed?.balance || 0
-      )
-    }
-  }
+    return calculateAvailableBalance(
+      token,
+      userPositionsData,
+      userAccountData,
+      priceDataMap,
+      protocolAssetReserveData,
+      reserveDataMap,
+      userEthBalance,
+      userWalletTokenBalance,
+      actionType,
+    );
+  };
 
   const getDailyEarnings: any = (actionType: string) => {
-    if (actionType == "supply" || actionType == "withdraw"){
+    if (actionType == 'supply' || actionType == 'withdraw') {
       return (
         ((supplied?.value || 0) * (interestRateDataMap[token].supply / 100)) /
         365
-      )
+      );
     }
 
-    if (actionType == "borrow" || actionType == "repay"){
+    if (actionType == 'borrow' || actionType == 'repay') {
       return (
         (-1 *
           (borrowed?.value || 0) *
           (interestRateDataMap[token].borrow / 100)) /
         365
-      )
+      );
     }
-  } 
+  };
 
   const [actionData, setActionData] = useState<TokenActionsProps>({
     availableAmountTitle: 'Suppliable',

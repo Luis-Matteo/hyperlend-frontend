@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import xmarkIcon from '../../assets/icons/xmark-icon.svg';
-import {
-  formatNumber,
-  capitalizeString,
-} from '../../utils/functions';
+import { formatNumber, capitalizeString } from '../../utils/functions';
 import ProgressBar from '../common/PercentBar';
-import { useAccount, useWriteContract, useBalance, usePublicClient } from 'wagmi';
+import {
+  useAccount,
+  useWriteContract,
+  useBalance,
+  usePublicClient,
+} from 'wagmi';
 
 import { ModalProps } from '../../utils/types';
 import {
@@ -18,16 +20,29 @@ import {
   wrappedTokens,
 } from '../../utils/config';
 
-import { getTokenPrecision, calculateAvailableBalance, calculatePredictedHealthFactor } from '../../utils/user/functions/utils';
+import {
+  getTokenPrecision,
+  calculateAvailableBalance,
+  calculatePredictedHealthFactor,
+} from '../../utils/user/functions/utils';
 
 import { useProtocolPriceData } from '../../utils/protocol/prices';
 import { useProtocolInterestRate } from '../../utils/protocol/interestRates';
 import { useProtocolAssetReserveData } from '../../utils/protocol/reserves';
 
-import { useUserPositionsData } from '../../utils/user/positions';
-import { useUserWrappedTokenAllowanceData, useUserAllowance, useUserTokenBalance } from '../../utils/user/wallet';
+import {
+  useUserPositionsData,
+  useUserAccountData,
+} from '../../utils/user/positions';
+import {
+  useUserWrappedTokenAllowanceData,
+  useUserAllowance,
+  useUserTokenBalance,
+} from '../../utils/user/wallet';
 import { wrappedTokenAction } from '../../utils/user/functions/wrappedEth';
 import { protocolAction } from '../../utils/user/functions/actions';
+
+import { useProtocolReservesData } from '../../utils/protocol/reserves';
 
 function Modal({ token, modalType, onClose }: ModalProps) {
   const [amount, setAmount] = useState<number>(0);
@@ -41,25 +56,30 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const publicClient = usePublicClient();
   const { address, isConnected } = useAccount();
   const { data: hash, writeContractAsync } = useWriteContract();
-  const { data: userEthBalance } = useBalance({ address: address })
+  const { data: userEthBalance } = useBalance({ address: address });
 
-  const userWalletTokenBalance = useUserTokenBalance(isConnected, token, address);
+  const userWalletTokenBalance = useUserTokenBalance(
+    isConnected,
+    token,
+    address,
+  );
   const userAllowance = useUserAllowance(
     isConnected,
-    token, 
-    address || "0x0000000000000000000000000000000000000000", 
-    contracts.pool
+    token,
+    address || '0x0000000000000000000000000000000000000000',
+    contracts.pool,
   );
-  const {
-    hTokenAllowance,
-    dTokenAllowance,
-  } = useUserWrappedTokenAllowanceData(
-    address || "0x0000000000000000000000000000000000000000",
-    contracts.wrappedTokenGatewayV3
+  const { hTokenAllowance, dTokenAllowance } = useUserWrappedTokenAllowanceData(
+    address || '0x0000000000000000000000000000000000000000',
+    contracts.wrappedTokenGatewayV3,
   );
 
   const { priceDataMap } = useProtocolPriceData();
   const { interestRateDataMap } = useProtocolInterestRate();
+  const { reserveDataMap } = useProtocolReservesData();
+
+  const userAccountData = useUserAccountData(address);
+  const protocolAssetReserveData = useProtocolAssetReserveData(token);
 
   const userPositionsData = useUserPositionsData(isConnected, address);
   const assetReserveData = useProtocolAssetReserveData(token);
@@ -68,13 +88,15 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     const avBalance = calculateAvailableBalance(
       token,
       userPositionsData,
+      userAccountData,
       priceDataMap,
-      assetReserveData,
+      protocolAssetReserveData,
+      reserveDataMap,
       userEthBalance,
       userWalletTokenBalance,
-      modalType
-    )
-    setAvailableBalance(avBalance)
+      modalType,
+    );
+    setAvailableBalance(avBalance);
   };
 
   useEffect(() => {
@@ -88,8 +110,8 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         amount,
         modalType,
         priceDataMap,
-        userPositionsData
-      )
+        userPositionsData,
+      );
       setPredictedHealth(newHealth);
     }
   }, [amount]);
@@ -141,11 +163,11 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         modalType,
         token,
         bgIntAmount,
-        address || "0x0000000000000000000000000000000000000000",
+        address || '0x0000000000000000000000000000000000000000',
         hTokenAllowance,
         dTokenAllowance,
         writeContractAsync,
-        publicClient
+        publicClient,
       );
       return;
     }
@@ -153,16 +175,16 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     await protocolAction(
       modalType,
       token,
-      address || "0x0000000000000000000000000000000000000000",
+      address || '0x0000000000000000000000000000000000000000',
       allowance,
       amount,
       bgIntAmount,
       writeContractAsync,
-      publicClient
-    )
+      publicClient,
+    );
 
     setAllowance(amount);
-    console.log(hash)
+    console.log(hash);
   };
 
   return (
@@ -240,7 +262,11 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                       : modalType == 'withdraw'
                         ? 'Position'
                         : ''}
-                : {formatNumber(availableBalance, getTokenPrecision(token, priceDataMap))}{' '}
+                :{' '}
+                {formatNumber(
+                  availableBalance,
+                  getTokenPrecision(token, priceDataMap),
+                )}{' '}
                 {tokenNameMap[token]}
               </p>
               <ul className='flex gap-2 items-center'>
@@ -265,7 +291,10 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             <div className='flex justify-between mb-2'>
               <p className='font-lufga font-light text-[#797979]'>Available</p>
               <p className='font-lufga font-light text-[#797979]'>
-                {formatNumber(availableBalance, getTokenPrecision(token, priceDataMap))}
+                {formatNumber(
+                  availableBalance,
+                  getTokenPrecision(token, priceDataMap),
+                )}
               </p>
             </div>
             <div className='relative '>
@@ -290,25 +319,17 @@ function Modal({ token, modalType, onClose }: ModalProps) {
               sendTransaction();
             }}
           >
-            {
-              modalType == 'supply' || modalType == 'repay'
-              ? 
-                wrappedTokens.includes(token) ? capitalizeString(modalType)
-                :
-                allowance >= amount
+            {modalType == 'supply' || modalType == 'repay'
+              ? wrappedTokens.includes(token)
+                ? capitalizeString(modalType)
+                : allowance >= amount
                   ? capitalizeString(modalType)
                   : 'Approve'
-              : 
-              (
-                modalType == "borrow" && wrappedTokens.includes(token) 
-                ? 
-                (
-                  Number(dTokenAllowance) / Math.pow(10, 18) >= amount ? capitalizeString(modalType) : "Approve"
-                )
-                : 
-                capitalizeString(modalType)
-              )
-            }
+              : modalType == 'borrow' && wrappedTokens.includes(token)
+                ? Number(dTokenAllowance) / Math.pow(10, 18) >= amount
+                  ? capitalizeString(modalType)
+                  : 'Approve'
+                : capitalizeString(modalType)}
           </button>
           {/* <div className='flex justify-end mb-6'>
             <button className='px-3 py-1.5 flex gap-2 items-center bg-[#050F0D] rounded-full'>

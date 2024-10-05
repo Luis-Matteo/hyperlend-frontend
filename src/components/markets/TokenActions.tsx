@@ -7,7 +7,7 @@ import {
   useAccount,
   useWriteContract,
   useWaitForTransactionReceipt,
-  usePublicClient
+  usePublicClient,
 } from 'wagmi';
 
 import { formatNumber } from '../../utils/functions';
@@ -16,12 +16,18 @@ import {
   tokenNameMap,
   tokenDecimalsMap,
   contracts,
-  wrappedTokens
+  wrappedTokens,
 } from '../../utils/config';
-import { useUserAllowance, useUserWrappedTokenAllowanceData } from '../../utils/user/wallet';
+import {
+  useUserAllowance,
+  useUserWrappedTokenAllowanceData,
+} from '../../utils/user/wallet';
 import { getErrorMessage } from '../../utils/constants/errorCodes';
 import { wrappedTokenAction } from '../../utils/user/functions/wrappedEth';
-import { protocolAction, updateCollateralAction } from '../../utils/user/functions/actions';
+import {
+  protocolAction,
+  updateCollateralAction,
+} from '../../utils/user/functions/actions';
 
 const TokenActions: React.FC<TokenActionsProps> = ({
   availableAmountTitle,
@@ -43,7 +49,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   const [collateral, setCollateral] = useState(isCollateralEnabled);
   const [amount, setAmount] = useState(0);
   const [errorMsg, setErrorMsg] = useState<any>(null);
-  const [isTxPending, setIsTxPending] = useState(false)
+  const [isTxPending, setIsTxPending] = useState(false);
 
   const handleProgessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
@@ -73,12 +79,9 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     address || '0x0000000000000000000000000000000000000000',
     contracts.pool,
   );
-  const {
-    hTokenAllowance,
-    dTokenAllowance,
-  } = useUserWrappedTokenAllowanceData(
-    address || "0x0000000000000000000000000000000000000000",
-    contracts.wrappedTokenGatewayV3
+  const { hTokenAllowance, dTokenAllowance } = useUserWrappedTokenAllowanceData(
+    address || '0x0000000000000000000000000000000000000000',
+    contracts.wrappedTokenGatewayV3,
   );
 
   useEffect(() => {
@@ -86,13 +89,13 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   }, [btnTitle]);
 
   useEffect(() => {
-    if (isTxPending){
+    if (isTxPending) {
       //TODO: add loading icon
-      setButtonText("Sending transaction...")
+      setButtonText('Sending transaction...');
     } else {
-      setButtonText(btnTitle)
+      setButtonText(btnTitle);
     }
-  }, [isTxPending])
+  }, [isTxPending]);
 
   useEffect(() => {
     if (error?.message) {
@@ -121,10 +124,16 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       }
     }
 
-    if (wrappedTokens.includes(token)){
-      if (actionType == 'withdraw' && amount > Number(hTokenAllowance) / Math.pow(10, 18)){
+    if (wrappedTokens.includes(token)) {
+      if (
+        actionType == 'withdraw' &&
+        amount > Number(hTokenAllowance) / Math.pow(10, 18)
+      ) {
         setButtonText('Approve');
-      } else if (actionType == "borrow" && amount > Number(dTokenAllowance) / Math.pow(10, 18)){
+      } else if (
+        actionType == 'borrow' &&
+        amount > Number(dTokenAllowance) / Math.pow(10, 18)
+      ) {
         setButtonText('Approve');
       } else {
         setButtonText(btnTitle);
@@ -157,44 +166,44 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       .toString() as any as bigint;
 
     if (wrappedTokens.includes(token)) {
-      setIsTxPending(true)
+      setIsTxPending(true);
       await wrappedTokenAction(
         actionType,
         token,
         bgIntAmount,
-        address || "0x0000000000000000000000000000000000000000",
+        address || '0x0000000000000000000000000000000000000000',
         hTokenAllowance,
         dTokenAllowance,
         writeContractAsync,
-        publicClient
+        publicClient,
       );
-      setIsTxPending(false)
+      setIsTxPending(false);
       return;
     }
 
-    setIsTxPending(true)
+    setIsTxPending(true);
     await protocolAction(
       actionType,
       token,
-      address || "0x0000000000000000000000000000000000000000",
+      address || '0x0000000000000000000000000000000000000000',
       Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token]),
       amount,
       bgIntAmount,
       writeContractAsync,
-      publicClient
-    )
-    setIsTxPending(false)
+      publicClient,
+    );
+    setIsTxPending(false);
   };
 
   const updateCollateral = async () => {
-    setIsTxPending(true)
+    setIsTxPending(true);
     await updateCollateralAction(
       token,
       collateral,
       writeContractAsync,
-      publicClient
-    )
-    setIsTxPending(false)
+      publicClient,
+    );
+    setIsTxPending(false);
     setCollateral(!collateral);
     console.log(hash);
   };

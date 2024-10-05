@@ -1,17 +1,13 @@
 import { erc20Abi } from 'viem';
 
-import { 
-  contracts, 
-  wrappedTokenProtocolTokens, 
-  abis 
-} from "../../config";
+import { contracts, wrappedTokenProtocolTokens, abis } from '../../config';
 
 const functionNames: any = {
   supply: 'depositETH',
   withdraw: 'withdrawETH',
   borrow: 'borrowETH',
-  repay: 'repayETH'
-}
+  repay: 'repayETH',
+};
 
 export async function wrappedTokenAction(
   action: string,
@@ -21,28 +17,32 @@ export async function wrappedTokenAction(
   hTokenAllowance: number,
   dTokenAllowance: number,
   writeContractAsync: any,
-  publicClient: any 
+  publicClient: any,
 ) {
   try {
-    if (action === "withdraw") {
+    if (action === 'withdraw') {
       if (hTokenAllowance < Number(bgIntAmount)) {
         const approveResult = await writeContractAsync({
           address: wrappedTokenProtocolTokens.hToken,
           abi: erc20Abi,
-          functionName: "approve",
+          functionName: 'approve',
           args: [contracts.wrappedTokenGatewayV3, bgIntAmount],
         });
-        await publicClient.waitForTransactionReceipt({ hash: approveResult.hash });
+        await publicClient.waitForTransactionReceipt({
+          hash: approveResult.hash,
+        });
       }
-    } else if (action === "borrow") {
+    } else if (action === 'borrow') {
       if (dTokenAllowance < Number(bgIntAmount)) {
         const approveResult = await writeContractAsync({
           address: wrappedTokenProtocolTokens.dToken,
           abi: abis.variableDebtToken,
-          functionName: "approveDelegation",
+          functionName: 'approveDelegation',
           args: [contracts.wrappedTokenGatewayV3, bgIntAmount],
         });
-        await publicClient.waitForTransactionReceipt({ hash: approveResult.hash });
+        await publicClient.waitForTransactionReceipt({
+          hash: approveResult.hash,
+        });
       }
     }
 
@@ -58,11 +58,11 @@ export async function wrappedTokenAction(
       abi: abis.wrappedTokenGatewayV3,
       functionName: functionNames[action],
       args: functionParams[action],
-      value: action === "supply" ? bgIntAmount : (0 as any as bigint),
+      value: action === 'supply' ? bgIntAmount : (0 as any as bigint),
     });
 
     await publicClient.waitForTransactionReceipt({ hash: txResult.hash });
   } catch (error) {
-    console.error("An error occurred in wrappedTokenAction:", error);
+    console.error('An error occurred in wrappedTokenAction:', error);
   }
 }

@@ -1,30 +1,8 @@
-import { tokenDecimalsMap, wrappedTokens, liqMap } from '../../config'
-
-//return borrow users borrow limit in current token
-export function getBorrowLimitInToken(
-  token: string,
-  priceDataMap: any,
-  userPositionsData: any,
-  assetReserveData: any
-): any {
-  // TODO: enforce protocol borrow cap
-  // const borrowCap = decodeConfig(reserveDataMap[token].configuration.data).borrowCap
-  const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8);
-  const borrowAvailableTokens =
-    (userPositionsData?.totalBorrowLimit || 0) / tokenPriceUsd;
-  const availableInPool =
-    Number(assetReserveData.totalAToken) /
-    Math.pow(10, tokenDecimalsMap[token]);
-  return borrowAvailableTokens > availableInPool
-    ? availableInPool
-    : borrowAvailableTokens * 0.85;
-}
+import { tokenDecimalsMap, wrappedTokens, liqMap } from '../../config';
+import { normalizeDecimalsAmount, decodeConfig } from '../../functions';
 
 //return precision for token amount worth $0.01
-export function getTokenPrecision(
-  token: string,
-  priceDataMap: any
-): any {
+export function getTokenPrecision(token: string, priceDataMap: any): any {
   const minAmountStr = (
     1 /
     (Number(priceDataMap[token]) / Math.pow(10, 8)) /
@@ -40,42 +18,137 @@ export function getTokenPrecision(
 export function calculateAvailableBalance(
   token: string,
   userPositionsData: any,
+  userAccountData: any,
   priceDataMap: any,
   assetReserveData: any,
+  reserveDataMap: any,
   userEthBalance: any,
   userWalletTokenBalance: any,
-  actionType: string
+  actionType: string,
 ): any {
-  const userTokenSuppliedPosition = userPositionsData?.supplied.find(
-    (e: any) => e.underlyingAsset == token,
-  );
-  const userTokenBorrowedPosition = userPositionsData?.borrowed.find(
-    (e: any) => e.underlyingAsset == token,
-  );
-
-  const userBorrowLimitToken = getBorrowLimitInToken(
-    token,
-    priceDataMap,
-    userPositionsData,
-    assetReserveData
-  );
-
-  const userBalance = wrappedTokens.includes(token) ? userEthBalance?.value : userWalletTokenBalance;
+  const params = {
+    token: token,
+    userPositionsData: userPositionsData,
+    userAccountData: userAccountData,
+    priceDataMap: priceDataMap,
+    assetReserveData: assetReserveData,
+    reserveDataMap: reserveDataMap,
+    userEthBalance: userEthBalance,
+    userWalletTokenBalance: userWalletTokenBalance,
+    actionType: actionType,
+  };
 
   switch (actionType) {
     case 'supply':
-      // TODO: enforce protocol supply cap
-      const normalizedWalletBalance =
-        (Number(userBalance) || 0) /
-        Math.pow(10, tokenDecimalsMap[token]);
-      return normalizedWalletBalance;
+      return getAvailableSupply(params);
     case 'withdraw':
-      return userTokenSuppliedPosition?.balance || 0;
+      return getAvailableWithdraw(params);
     case 'borrow':
-      return userBorrowLimitToken;
+      return getAvailableBorrow(params);
     case 'repay':
-      return userTokenBorrowedPosition?.balance || 0;
-  } 
+      return getAvailableRepay(params);
+  }
+}
+
+function getAvailableSupply(params: any) {
+  const supplyCap = decodeConfig(
+    params.reserveDataMap[params.token].configuration.data,
+  ).supplyCap;
+  const totalSupplied =
+    Number(params.assetReserveData.totalAToken) /
+    Math.pow(10, tokenDecimalsMap[params.token]);
+  const userAmount = normalizeDecimalsAmount(
+    wrappedTokens.includes(params.token)
+      ? Number(params.userEthBalance?.value)
+      : Number(params.userWalletTokenBalance),
+    params.token,
+    tokenDecimalsMap,
+  );
+
+  return totalSupplied + userAmount > supplyCap
+    ? supplyCap - totalSupplied
+    : userAmount;
+}
+
+function getAvailableWithdraw(params: any) {
+  const [totalCollateralBase, totalDebtBase, , , currentLiquidationThreshold] =
+    params.userAccountData;
+
+  const totalSupplied =
+    Number(params.assetReserveData.totalAToken) /
+    Math.pow(10, tokenDecimalsMap[params.token]);
+  const totalBorrowed =
+    Number(params.assetReserveData.totalVariableDebt) /
+    Math.pow(10, tokenDecimalsMap[params.token]);
+  const availableLiquidity = totalSupplied - totalBorrowed;
+
+  const supplied = params.userPositionsData.supplied.find(
+    (e: any) => e.underlyingAsset == params.token,
+  );
+  const tokenPriceUsd =
+    Number(params.priceDataMap[params.token]) / Math.pow(10, 8);
+  const userBalanceToken = supplied?.balance;
+  const userBalanceValueUsd = userBalanceToken * tokenPriceUsd;
+
+  const maxWithdrawableUsd =
+    (Number(totalCollateralBase) -
+      Number(totalDebtBase) / (Number(currentLiquidationThreshold) / 10000)) /
+    Math.pow(10, 8);
+  const maxWithdrawableAmountUsd =
+    maxWithdrawableUsd > userBalanceValueUsd
+      ? userBalanceValueUsd
+      : maxWithdrawableUsd;
+
+  const maxWithdrawableAmountToken = maxWithdrawableAmountUsd / tokenPriceUsd;
+  return maxWithdrawableAmountToken > availableLiquidity
+    ? availableLiquidity
+    : maxWithdrawableAmountToken;
+}
+
+function getAvailableBorrow(params: any): any {
+  const borrowCap = decodeConfig(
+    params.reserveDataMap[params.token].configuration.data,
+  ).borrowCap;
+
+  const totalSupplied =
+    Number(params.assetReserveData.totalAToken) /
+    Math.pow(10, tokenDecimalsMap[params.token]);
+  const totalBorrowed =
+    Number(params.assetReserveData.totalVariableDebt) /
+    Math.pow(10, tokenDecimalsMap[params.token]);
+  const availableLiquidity = totalSupplied - totalBorrowed;
+
+  const tokenPrice = params.priceDataMap[params.token]; //10**8 decimals from oracle
+  const [, , availableBorrowsBase] = params.userAccountData; //in usd, 10**8 decimals
+  const availableBorrowBaseToken =
+    Number(availableBorrowsBase) / Number(tokenPrice);
+
+  const availableAfterCap =
+    borrowCap != 0 && totalBorrowed + availableBorrowBaseToken > borrowCap
+      ? borrowCap - totalBorrowed
+      : availableBorrowBaseToken;
+
+  return availableAfterCap > availableLiquidity
+    ? availableLiquidity
+    : availableAfterCap;
+}
+
+function getAvailableRepay(params: any) {
+  const borrowedBalance =
+    params.userPositionsData.borrowed.find(
+      (e: any) => e.underlyingAsset == params.token,
+    )?.balance || 0;
+  if (borrowedBalance == 0) return 0;
+
+  const userBalance = normalizeDecimalsAmount(
+    wrappedTokens.includes(params.token)
+      ? Number(params.userEthBalance?.value)
+      : Number(params.userWalletTokenBalance),
+    params.token,
+    tokenDecimalsMap,
+  );
+
+  return borrowedBalance > userBalance ? userBalance : borrowedBalance;
 }
 
 export function calculatePredictedHealthFactor(
@@ -83,7 +156,7 @@ export function calculatePredictedHealthFactor(
   amount: number,
   actionType: string,
   priceDataMap: any,
-  userPositionsData: any
+  userPositionsData: any,
 ): any {
   const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8);
   const amountUsd =

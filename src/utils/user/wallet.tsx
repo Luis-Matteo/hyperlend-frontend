@@ -1,7 +1,13 @@
 import { useAccount, useReadContract } from 'wagmi';
 import { erc20Abi } from 'viem';
 
-import { contracts, assetAddresses, tokenDecimalsMap, abis, wrappedTokenProtocolTokens } from '../config';
+import {
+  contracts,
+  assetAddresses,
+  tokenDecimalsMap,
+  abis,
+  wrappedTokenProtocolTokens,
+} from '../config';
 
 export function useUserWalletValueUsd() {
   const { address, isConnected } = useAccount();
@@ -65,7 +71,11 @@ export function useUserWalletValueUsd() {
   };
 }
 
-export function useUserTokenBalance(isConnected: boolean, token: string, address?: string): any {
+export function useUserTokenBalance(
+  isConnected: boolean,
+  token: string,
+  address?: string,
+): any {
   const { data } = useReadContract(
     isConnected && address
       ? ({
@@ -100,13 +110,13 @@ export function useUserAllowance(
 }
 
 interface IUserWrappedTokenAllowanceData {
-  hTokenAllowance?: any,
-  dTokenAllowance?: any
+  hTokenAllowance?: any;
+  dTokenAllowance?: any;
 }
 
 export function useUserWrappedTokenAllowanceData(
   owner: string,
-  spender: string
+  spender: string,
 ): IUserWrappedTokenAllowanceData {
   const { address, isConnected } = useAccount();
   //allowances to wrappedTokenGatewayV3
@@ -134,6 +144,6 @@ export function useUserWrappedTokenAllowanceData(
 
   return {
     hTokenAllowance: userHTokenAllowance,
-    dTokenAllowance: userDTokenAllowance
-  }
+    dTokenAllowance: userDTokenAllowance,
+  };
 }

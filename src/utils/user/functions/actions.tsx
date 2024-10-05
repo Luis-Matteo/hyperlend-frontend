@@ -10,7 +10,7 @@ export async function protocolAction(
   amount: number,
   bgIntAmount: bigint,
   writeContractAsync: any,
-  publicClient: any
+  publicClient: any,
 ) {
   try {
     if (actionType == 'supply' || actionType == 'repay') {
@@ -21,7 +21,9 @@ export async function protocolAction(
           functionName: 'approve',
           args: [contracts.pool, bgIntAmount],
         });
-        await publicClient.waitForTransactionReceipt({ hash: approveResult.hash });
+        await publicClient.waitForTransactionReceipt({
+          hash: approveResult.hash,
+        });
       }
     }
 
@@ -31,7 +33,7 @@ export async function protocolAction(
       borrow: [token, bgIntAmount, 2, 0, userAddress], //asset, amount, interestRateMode (2 = variable), refCode, onBehalfOf
       repay: [token, bgIntAmount, 2, userAddress], //asset, amount, interestRateMode, onBehalfOf
     };
-  
+
     const txResult = await writeContractAsync({
       address: contracts.pool,
       abi: abis.pool,
@@ -40,7 +42,7 @@ export async function protocolAction(
     });
     await publicClient.waitForTransactionReceipt({ hash: txResult.hash });
   } catch (error) {
-    console.error("An error occurred in protocolAction:", error);
+    console.error('An error occurred in protocolAction:', error);
   }
 }
 
@@ -48,8 +50,8 @@ export async function updateCollateralAction(
   token: string,
   currentCollateralStatus: boolean,
   writeContractAsync: any,
-  publicClient: any
-){
+  publicClient: any,
+) {
   try {
     const txResult = await writeContractAsync({
       address: contracts.pool,
@@ -59,6 +61,6 @@ export async function updateCollateralAction(
     });
     await publicClient.waitForTransactionReceipt({ hash: txResult.hash });
   } catch (error) {
-    console.error("An error occurred in updateCollateral:", error);
+    console.error('An error occurred in updateCollateral:', error);
   }
 }

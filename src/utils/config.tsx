@@ -12,7 +12,7 @@ import OracleAbi from '../abis/OracleAbi.json';
 import DataProviderAbi from '../abis/DataProviderAbi.json';
 import rateStrategyAbi from '../abis/RateStrategyAbi.json';
 import faucetAbi from '../abis/FaucetAbi.json';
-import wrappedTokenGatewayV3Abi from '../abis/WrappedTokenGatewayV3Abi.json'
+import wrappedTokenGatewayV3Abi from '../abis/WrappedTokenGatewayV3Abi.json';
 import variableDebtTokenAbi from '../abis/VariableDebtTokenAbi.json';
 
 export const abis: Record<string, any> = {
@@ -24,7 +24,7 @@ export const abis: Record<string, any> = {
   rateStrategy: rateStrategyAbi,
   faucet: faucetAbi,
   wrappedTokenGatewayV3: wrappedTokenGatewayV3Abi,
-  variableDebtToken: variableDebtTokenAbi
+  variableDebtToken: variableDebtTokenAbi,
 };
 
 export const iconsMap: any = {
@@ -65,5 +65,8 @@ export const tokenToRateStrategyMap: any =
   arb.tokenToRateStrategyMap;
 export const liqPenaltyMap: any =
   networkConfigs[currentChainId].liqPenaltyMap || arb.liqPenaltyMap;
-export const wrappedTokens: any = networkConfigs[currentChainId].wrappedTokens || arb.wrappedTokens;
-export const wrappedTokenProtocolTokens: any = networkConfigs[currentChainId].wrappedTokenProtocolTokens || arb.wrappedTokenProtocolTokens;
+export const wrappedTokens: any =
+  networkConfigs[currentChainId].wrappedTokens || arb.wrappedTokens;
+export const wrappedTokenProtocolTokens: any =
+  networkConfigs[currentChainId].wrappedTokenProtocolTokens ||
+  arb.wrappedTokenProtocolTokens;
