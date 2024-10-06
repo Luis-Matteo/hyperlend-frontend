@@ -70,3 +70,5 @@ export const wrappedTokens: any =
 export const wrappedTokenProtocolTokens: any =
   networkConfigs[currentChainId].wrappedTokenProtocolTokens ||
   arb.wrappedTokenProtocolTokens;
+export const tokenToGradient: any =
+  networkConfigs[currentChainId].tokenToGradient || arb.tokenToGradient;

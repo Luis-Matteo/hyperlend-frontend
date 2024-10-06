@@ -8,9 +8,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import Referrals from '../pages/Referrals';
 import backgroundImage from '../assets/img/background.svg';
-// import backgroundGradient from '../assets/img/background-gradient.svg';
-import backgroundGradient from '../assets/img/background-orange.svg';
 import { useLocation } from 'react-router-dom';
+import backgroundGradientOrange from '../assets/img/background-orange.svg';
+
+import { tokenToGradient } from '../utils/config';
 
 function MainContent() {
   const location = useLocation();
@@ -31,7 +32,15 @@ function MainContent() {
       </div>
       <div className='absolute top-0 right-0 w-full h-screen z-10'>
         {location.pathname.match(/^\/markets\/[^/]+$/) ? (
-          <img className='w-full' src={backgroundGradient} alt='' />
+          <img
+            className='w-full'
+            src={
+              tokenToGradient[location.pathname.split('/')[2]]
+                ? tokenToGradient[location.pathname.split('/')[2]]
+                : backgroundGradientOrange
+            }
+            alt=''
+          />
         ) : (
           <img className='h-full w-full' src={backgroundImage} alt='' />
         )}

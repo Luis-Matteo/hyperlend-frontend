@@ -58,6 +58,14 @@ const wrappedTokenProtocolTokens: any = {
   hToken: '0x7992aa2353722E5947f393C0E892203604b9A194',
 };
 
+import backgroundGradientBlue from '../../assets/img/background-gradient.svg';
+import backgroundGradientOrange from '../../assets/img/background-orange.svg';
+
+const tokenToGradient: any = {
+  '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': backgroundGradientOrange,
+  '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': backgroundGradientBlue,
+};
+
 const hlTestnet: any = {
   chainName: 'hyperEvmTestnet',
   networkChainId: networkChainId,
@@ -72,6 +80,7 @@ const hlTestnet: any = {
   liqPenaltyMap: liqPenaltyMap,
   wrappedTokens: wrappedTokens,
   wrappedTokenProtocolTokens: wrappedTokenProtocolTokens,
+  tokenToGradient: tokenToGradient,
 };
 
 export default hlTestnet;
