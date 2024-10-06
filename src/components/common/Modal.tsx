@@ -118,8 +118,8 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   }, [amount]);
 
   useEffect(() => {
-    setUseMaxAmount(progress == 100)
-  }, [progress])
+    setUseMaxAmount(progress == 100);
+  }, [progress]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
@@ -173,7 +173,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         dTokenAllowance,
         writeContractAsync,
         publicClient,
-        useMaxAmount
+        useMaxAmount,
       );
       return;
     }
@@ -187,7 +187,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
       bgIntAmount,
       writeContractAsync,
       publicClient,
-      useMaxAmount
+      useMaxAmount,
     );
 
     setAllowance(amount);

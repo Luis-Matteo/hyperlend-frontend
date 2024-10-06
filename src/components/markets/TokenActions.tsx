@@ -160,8 +160,8 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   }, [amount, userAllowanceBn]);
 
   useEffect(() => {
-    setUseMaxAmount(progress == 100)
-  }, [progress])
+    setUseMaxAmount(progress == 100);
+  }, [progress]);
 
   const sendTransaction = async () => {
     const bgIntAmount = parseFloat(
@@ -181,7 +181,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
         dTokenAllowance,
         writeContractAsync,
         publicClient,
-        useMaxAmount
+        useMaxAmount,
       );
       setIsTxPending(false);
       return;
@@ -197,7 +197,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       bgIntAmount,
       writeContractAsync,
       publicClient,
-      useMaxAmount
+      useMaxAmount,
     );
     setIsTxPending(false);
   };

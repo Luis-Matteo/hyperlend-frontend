@@ -18,7 +18,7 @@ export async function wrappedTokenAction(
   dTokenAllowance: number,
   writeContractAsync: any,
   publicClient: any,
-  useMaxAmount: boolean
+  useMaxAmount: boolean,
 ) {
   try {
     if (action === 'withdraw') {
@@ -54,8 +54,9 @@ export async function wrappedTokenAction(
       repay: [token, bgIntAmount, 2, address],
     };
 
-    if (useMaxAmount && (action == "withdraw" || action == "repay")){
-        functionParams[action][1] = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+    if (useMaxAmount && (action == 'withdraw' || action == 'repay')) {
+      functionParams[action][1] =
+        '115792089237316195423570985008687907853269984665640564039457584007913129639935';
     }
 
     const txResult = await writeContractAsync({
