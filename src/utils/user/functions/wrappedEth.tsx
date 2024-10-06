@@ -57,6 +57,7 @@ export async function wrappedTokenAction(
     if (useMaxAmount && (action == 'withdraw' || action == 'repay')) {
       functionParams[action][1] =
         '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+      bgIntAmount = bgIntAmount * BigInt(1.01) //it's recommended to send an _amount slightly higher than the current borrowed amount, will be refunded
     }
 
     const txResult = await writeContractAsync({
