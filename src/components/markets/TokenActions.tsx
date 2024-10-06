@@ -50,6 +50,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   const [amount, setAmount] = useState(0);
   const [errorMsg, setErrorMsg] = useState<any>(null);
   const [isTxPending, setIsTxPending] = useState(false);
+  const [useMaxAmount, setUseMaxAmount] = useState(false);
 
   const handleProgessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
@@ -158,6 +159,10 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       setUserAllowance(userAllowanceBn as number);
   }, [amount, userAllowanceBn]);
 
+  useEffect(() => {
+    setUseMaxAmount(progress == 100)
+  }, [progress])
+
   const sendTransaction = async () => {
     const bgIntAmount = parseFloat(
       (amount * Math.pow(10, tokenDecimalsMap[token])).toString(),
@@ -176,6 +181,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
         dTokenAllowance,
         writeContractAsync,
         publicClient,
+        useMaxAmount
       );
       setIsTxPending(false);
       return;
@@ -191,6 +197,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       bgIntAmount,
       writeContractAsync,
       publicClient,
+      useMaxAmount
     );
     setIsTxPending(false);
   };

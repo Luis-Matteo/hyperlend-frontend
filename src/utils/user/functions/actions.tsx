@@ -11,6 +11,7 @@ export async function protocolAction(
   bgIntAmount: bigint,
   writeContractAsync: any,
   publicClient: any,
+  useMaxAmount: boolean
 ) {
   try {
     if (actionType == 'supply' || actionType == 'repay') {
@@ -33,6 +34,10 @@ export async function protocolAction(
       borrow: [token, bgIntAmount, 2, 0, userAddress], //asset, amount, interestRateMode (2 = variable), refCode, onBehalfOf
       repay: [token, bgIntAmount, 2, userAddress], //asset, amount, interestRateMode, onBehalfOf
     };
+
+    if (useMaxAmount && (actionType == "withdraw" || actionType == "repay")){
+        functionParams[actionType][1] = '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+    }
 
     const txResult = await writeContractAsync({
       address: contracts.pool,

@@ -52,6 +52,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const [availableBalance, setAvailableBalance] = useState<number>(0);
   const [allowance, setAllowance] = useState<number>(0);
   const [predictedHealth, setPredictedHealth] = useState<number>(0);
+  const [useMaxAmount, setUseMaxAmount] = useState(false);
 
   const publicClient = usePublicClient();
   const { address, isConnected } = useAccount();
@@ -116,6 +117,10 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     }
   }, [amount]);
 
+  useEffect(() => {
+    setUseMaxAmount(progress == 100)
+  }, [progress])
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
     setAmount((availableBalance / 100) * parseFloat(event.target.value));
@@ -168,6 +173,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         dTokenAllowance,
         writeContractAsync,
         publicClient,
+        useMaxAmount
       );
       return;
     }
@@ -181,6 +187,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
       bgIntAmount,
       writeContractAsync,
       publicClient,
+      useMaxAmount
     );
 
     setAllowance(amount);

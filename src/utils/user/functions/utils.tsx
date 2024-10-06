@@ -90,6 +90,8 @@ function getAvailableWithdraw(params: any) {
   const userBalanceToken = supplied?.balance;
   const userBalanceValueUsd = userBalanceToken * tokenPriceUsd;
 
+  if (userBalanceToken == 0) return 0;
+
   const maxWithdrawableUsd =
     (Number(totalCollateralBase) -
       Number(totalDebtBase) / (Number(currentLiquidationThreshold) / 10000)) /
