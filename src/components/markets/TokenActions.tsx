@@ -28,6 +28,8 @@ import {
   protocolAction,
   updateCollateralAction,
 } from '../../utils/user/functions/actions';
+import { getTokenPrecision } from '../../utils/user/functions/utils';
+import { useProtocolPriceData } from '../../utils/protocol/prices';
 
 const TokenActions: React.FC<TokenActionsProps> = ({
   availableAmountTitle,
@@ -84,6 +86,8 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     address || '0x0000000000000000000000000000000000000000',
     contracts.wrappedTokenGatewayV3,
   );
+
+  const { priceDataMap } = useProtocolPriceData();
 
   useEffect(() => {
     setButtonText(btnTitle);
@@ -300,7 +304,10 @@ const TokenActions: React.FC<TokenActionsProps> = ({
             {availableAmountTitle} amount
           </p>
           <p className='text-base text-lufga text-[#CAEAE5]'>
-            {availableAmount}
+            {formatNumber(
+              Number(availableAmount),
+              getTokenPrecision(token, priceDataMap),
+            )}
           </p>
         </div>
         <hr className='mt-4 mb-4 text-[#212325] border-t-[0.25px]' />
@@ -311,7 +318,10 @@ const TokenActions: React.FC<TokenActionsProps> = ({
             {protocolBalanceTitle}
           </p>
           <p className='text-base text-lufga text-[#CAEAE5]'>
-            {protocolBalance}
+            {formatNumber(
+              Number(protocolBalance),
+              getTokenPrecision(token, priceDataMap),
+            )}
           </p>
         </div>
         <hr className='mt-4 mb-4 text-[#212325] border-t-[0.25px]' />
