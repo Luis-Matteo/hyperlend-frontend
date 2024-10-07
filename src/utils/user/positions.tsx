@@ -155,12 +155,12 @@ export function useUserPositionsData(
 }
 
 export function useUserAccountData(address?: string) {
-  const { data: userAccountData } = useReadContract({
+  const { data: userAccountData, refetch } = useReadContract({
     abi: abis.pool,
     address: contracts.pool,
     functionName: 'getUserAccountData',
     args: [address || '0x0000000000000000000000000000000000000000'],
   });
 
-  return userAccountData;
+  return { userAccountData, refetch };
 }

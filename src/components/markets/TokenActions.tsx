@@ -40,6 +40,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   btnTitle,
   token,
   isCollateralEnabled,
+  handleDataFromActions,
 }) => {
   const actionType = btnTitle.toLowerCase();
 
@@ -94,6 +95,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       //TODO: add loading icon
       setButtonText('Sending transaction...');
     } else {
+      handleDataFromActions('refetch');
       setButtonText(btnTitle);
     }
   }, [isTxPending]);

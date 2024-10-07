@@ -107,4 +107,5 @@ export interface TokenActionsProps {
   btnTitle: string;
   token: string;
   isCollateralEnabled: boolean;
+  handleDataFromActions: any;
 }

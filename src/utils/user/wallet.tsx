@@ -76,7 +76,7 @@ export function useUserTokenBalance(
   token: string,
   address?: string,
 ): any {
-  const { data } = useReadContract(
+  const { data, refetch } = useReadContract(
     isConnected && address
       ? ({
           abi: erc20Abi,
@@ -87,7 +87,10 @@ export function useUserTokenBalance(
       : undefined,
   );
 
-  return data;
+  return {
+    data,
+    refetch,
+  };
 }
 
 export function useUserAllowance(

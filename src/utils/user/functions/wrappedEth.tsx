@@ -27,10 +27,13 @@ export async function wrappedTokenAction(
           address: wrappedTokenProtocolTokens.hToken,
           abi: erc20Abi,
           functionName: 'approve',
-          args: [contracts.wrappedTokenGatewayV3, bgIntAmount],
+          args: [
+            contracts.wrappedTokenGatewayV3,
+            '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+          ],
         });
         await publicClient.waitForTransactionReceipt({
-          hash: approveResult.hash,
+          hash: approveResult,
         });
       }
     } else if (action === 'borrow') {
@@ -39,10 +42,13 @@ export async function wrappedTokenAction(
           address: wrappedTokenProtocolTokens.dToken,
           abi: abis.variableDebtToken,
           functionName: 'approveDelegation',
-          args: [contracts.wrappedTokenGatewayV3, bgIntAmount],
+          args: [
+            contracts.wrappedTokenGatewayV3,
+            '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+          ],
         });
         await publicClient.waitForTransactionReceipt({
-          hash: approveResult.hash,
+          hash: approveResult,
         });
       }
     }
@@ -71,7 +77,7 @@ export async function wrappedTokenAction(
           : (0 as any as bigint),
     });
 
-    await publicClient.waitForTransactionReceipt({ hash: txResult.hash });
+    await publicClient.waitForTransactionReceipt({ hash: txResult });
   } catch (error) {
     console.error('An error occurred in wrappedTokenAction:', error);
   }

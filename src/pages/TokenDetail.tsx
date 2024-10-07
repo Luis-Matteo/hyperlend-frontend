@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import Navbar from '../layouts/Navbar';
 import CardItem from '../components/common/CardItem';
 import { useParams } from 'react-router-dom';
@@ -45,6 +45,7 @@ function TokenDetail() {
 
   ReactGA.send({ hitType: 'pageview', page: '/token-details', title: token });
 
+  const [, forceUpdate] = useReducer((x: any) => x + 1, 0);
   const [activeButton, setActiveButton] = useState(1);
 
   const { switchChain } = useSwitchChain();
@@ -56,20 +57,23 @@ function TokenDetail() {
     }
   }, [isConnected, chainId]);
 
-  const userWalletTokenBalance = useUserTokenBalance(
-    isConnected,
-    token,
-    address,
-  );
-  const { data: userEthBalance } = useBalance({ address: address });
+  //refetch on update
+  const {
+    data: userWalletTokenBalance,
+    refetch: refetchUserWalletTokenBalance,
+  } = useUserTokenBalance(isConnected, token, address);
+  const { data: userEthBalance, refetch: refetchUserEthBalance } = useBalance({
+    address: address,
+  });
+  const { userAccountData, refetch: refetchUserAccountData } =
+    useUserAccountData(address);
 
+  const userPositionsData = useUserPositionsData(isConnected, address);
+
+  const protocolAssetReserveData = useProtocolAssetReserveData(token);
   const { reserveDataMap } = useProtocolReservesData();
   const { priceDataMap } = useProtocolPriceData();
   const { interestRateDataMap } = useProtocolInterestRate();
-
-  const userAccountData = useUserAccountData(address);
-  const protocolAssetReserveData = useProtocolAssetReserveData(token);
-  const userPositionsData = useUserPositionsData(isConnected, address);
 
   const supplied = userPositionsData.supplied.find(
     (e) => e.underlyingAsset == token,
@@ -77,6 +81,18 @@ function TokenDetail() {
   const borrowed = userPositionsData.borrowed.find(
     (e) => e.underlyingAsset == token,
   );
+
+  function handleDataFromActions(data: any) {
+    setTimeout(() => {
+      console.log(data);
+      //handle data refresh here
+      refetchUserWalletTokenBalance()
+      refetchUserEthBalance()
+      refetchUserAccountData()
+      forceUpdate()
+      window.location.reload();
+    }, 1000 * 10)
+  }
 
   const getAvailableAmount: any = (actionType: string) => {
     return calculateAvailableBalance(
@@ -121,6 +137,7 @@ function TokenDetail() {
     btnTitle: 'Supply',
     token: token,
     isCollateralEnabled: supplied?.isCollateralEnabled || false,
+    handleDataFromActions: handleDataFromActions,
   });
 
   useEffect(() => {
@@ -143,6 +160,7 @@ function TokenDetail() {
           btnTitle: 'Supply',
           token: token,
           isCollateralEnabled: supplied?.isCollateralEnabled || false,
+          handleDataFromActions: handleDataFromActions,
         });
         break;
       case 2:
@@ -157,6 +175,7 @@ function TokenDetail() {
           btnTitle: 'Withdraw',
           token: token,
           isCollateralEnabled: false, //not used
+          handleDataFromActions: handleDataFromActions,
         });
         break;
       case 3:
@@ -171,6 +190,7 @@ function TokenDetail() {
           btnTitle: 'Borrow',
           token: token,
           isCollateralEnabled: false, //not used
+          handleDataFromActions: handleDataFromActions,
         });
         break;
       case 4:
@@ -185,6 +205,7 @@ function TokenDetail() {
           btnTitle: 'Repay',
           token: token,
           isCollateralEnabled: false,
+          handleDataFromActions: handleDataFromActions,
         });
         break;
       default:

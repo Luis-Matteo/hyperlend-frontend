@@ -59,7 +59,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const { data: hash, writeContractAsync } = useWriteContract();
   const { data: userEthBalance } = useBalance({ address: address });
 
-  const userWalletTokenBalance = useUserTokenBalance(
+  const { data: userWalletTokenBalance } = useUserTokenBalance(
     isConnected,
     token,
     address,
