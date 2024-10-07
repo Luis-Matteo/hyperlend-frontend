@@ -7,8 +7,8 @@ import {
   useAccount,
   useWriteContract,
   useWaitForTransactionReceipt,
+  usePublicClient,
 } from 'wagmi';
-import { erc20Abi } from 'viem';
 
 import { formatNumber } from '../../utils/functions';
 import {
@@ -16,10 +16,18 @@ import {
   tokenNameMap,
   tokenDecimalsMap,
   contracts,
-  abis,
+  wrappedTokens,
 } from '../../utils/config';
-import { useUserAllowance } from '../../utils/user/wallet';
+import {
+  useUserAllowance,
+  useUserWrappedTokenAllowanceData,
+} from '../../utils/user/wallet';
 import { getErrorMessage } from '../../utils/constants/errorCodes';
+import { wrappedTokenAction } from '../../utils/user/functions/wrappedEth';
+import {
+  protocolAction,
+  updateCollateralAction,
+} from '../../utils/user/functions/actions';
 
 const TokenActions: React.FC<TokenActionsProps> = ({
   availableAmountTitle,
@@ -33,7 +41,17 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   token,
   isCollateralEnabled,
 }) => {
+  const actionType = btnTitle.toLowerCase();
+
   const [progress, setProgress] = useState<number>(0);
+  const [userAllowance, setUserAllowance] = useState(0);
+  const [buttonText, setButtonText] = useState(btnTitle);
+  const [collateral, setCollateral] = useState(isCollateralEnabled);
+  const [amount, setAmount] = useState(0);
+  const [errorMsg, setErrorMsg] = useState<any>(null);
+  const [isTxPending, setIsTxPending] = useState(false);
+  const [useMaxAmount, setUseMaxAmount] = useState(false);
+
   const handleProgessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
     setAmount((availableAmount * Number(event.target.value)) / 100);
@@ -49,45 +67,42 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     );
   };
 
-  const actionType = btnTitle.toLowerCase();
-  useEffect(() => {
-    setButtonText(btnTitle);
-  }, [btnTitle]);
-
-  const { address } = useAccount();
-  const { data: hash, writeContract, error } = useWriteContract();
+  const publicClient = usePublicClient();
+  const { address, isConnected } = useAccount();
+  const { data: hash, writeContractAsync, error } = useWriteContract();
   const { data: txReceipt } = useWaitForTransactionReceipt({
     hash: hash,
   });
 
   const userAllowanceBn = useUserAllowance(
+    isConnected,
     token,
-    address || '0x',
+    address || '0x0000000000000000000000000000000000000000',
     contracts.pool,
   );
+  const { hTokenAllowance, dTokenAllowance } = useUserWrappedTokenAllowanceData(
+    address || '0x0000000000000000000000000000000000000000',
+    contracts.wrappedTokenGatewayV3,
+  );
 
-  const [userAllowance, setUserAllowance] = useState(0);
-  const [buttonText, setButtonText] = useState(btnTitle);
-  const [collateral, setCollateral] = useState(isCollateralEnabled);
-  const [amount, setAmount] = useState(0);
-
-  //update button after approval
   useEffect(() => {
-    if (txReceipt && txReceipt.status == 'success') {
+    setButtonText(btnTitle);
+  }, [btnTitle]);
+
+  useEffect(() => {
+    if (isTxPending) {
+      //TODO: add loading icon
+      setButtonText('Sending transaction...');
+    } else {
       setButtonText(btnTitle);
     }
-  }, [txReceipt]);
-
-  const [errorMsg, setErrorMsg] = useState<any>(null);
+  }, [isTxPending]);
 
   useEffect(() => {
     if (error?.message) {
       setErrorMsg(error?.message);
     }
   }, [error?.message]);
-
-  console.log('___error', error);
-  console.log('___errorMSG___', errorMsg);
 
   useEffect(() => {
     if (errorMsg) {
@@ -102,7 +117,24 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     if (actionType == 'supply' || actionType == 'repay') {
       const allowance =
         Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token]);
-      if (amount > allowance) {
+
+      if (amount > allowance && !wrappedTokens.includes(token)) {
+        setButtonText('Approve');
+      } else {
+        setButtonText(btnTitle);
+      }
+    }
+
+    if (wrappedTokens.includes(token)) {
+      if (
+        actionType == 'withdraw' &&
+        amount > Number(hTokenAllowance) / Math.pow(10, 18)
+      ) {
+        setButtonText('Approve');
+      } else if (
+        actionType == 'borrow' &&
+        amount > Number(dTokenAllowance) / Math.pow(10, 18)
+      ) {
         setButtonText('Approve');
       } else {
         setButtonText(btnTitle);
@@ -127,61 +159,59 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       setUserAllowance(userAllowanceBn as number);
   }, [amount, userAllowanceBn]);
 
-  const triggerAction = () => {
+  useEffect(() => {
+    setUseMaxAmount(progress == 100);
+  }, [progress]);
+
+  const sendTransaction = async () => {
     const bgIntAmount = parseFloat(
       (amount * Math.pow(10, tokenDecimalsMap[token])).toString(),
     )
       .toFixed(0)
       .toString() as any as bigint;
-    const allowance =
-      Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token]);
 
-    if (actionType == 'supply' || actionType == 'repay') {
-      if (allowance < amount) {
-        writeContract({
-          address: token as any,
-          abi: erc20Abi,
-          functionName: 'approve',
-          args: [contracts.pool, 999999999999999999999999999999999999999n],
-        });
-        setButtonText(btnTitle);
-      }
+    if (wrappedTokens.includes(token)) {
+      setIsTxPending(true);
+      await wrappedTokenAction(
+        actionType,
+        token,
+        bgIntAmount,
+        address || '0x0000000000000000000000000000000000000000',
+        hTokenAllowance,
+        dTokenAllowance,
+        writeContractAsync,
+        publicClient,
+        useMaxAmount,
+      );
+      setIsTxPending(false);
+      return;
     }
 
-    const functionParams: any = {
-      supply: [token, bgIntAmount, address, 0], //asset, amount, onBehalfOf, refCode
-      withdraw: [token, bgIntAmount, address], //asset, amount, to
-      borrow: [token, bgIntAmount, 2, 0, address], //asset, amount, interestRateMode (2 = variable), refCode, onBehalfOf
-      repay: [token, bgIntAmount, 2, address], //asset, amount, interestRateMode, onBehalfOf
-    };
-
-    if (actionType == 'supply' && allowance >= amount) {
-      writeContract({
-        address: contracts.pool,
-        abi: abis.pool,
-        functionName: actionType,
-        args: functionParams[actionType],
-      });
-      console.log(hash);
-    } else {
-      writeContract({
-        address: contracts.pool,
-        abi: abis.pool,
-        functionName: actionType,
-        args: functionParams[actionType],
-      });
-      console.log(hash);
-    }
+    setIsTxPending(true);
+    await protocolAction(
+      actionType,
+      token,
+      address || '0x0000000000000000000000000000000000000000',
+      Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token]),
+      amount,
+      bgIntAmount,
+      writeContractAsync,
+      publicClient,
+      useMaxAmount,
+    );
+    setIsTxPending(false);
   };
 
-  const updateCollateral = () => {
-    writeContract({
-      address: contracts.pool,
-      abi: abis.pool,
-      functionName: 'setUserUseReserveAsCollateral',
-      args: [token, !collateral],
-    });
-    if (hash) setCollateral(!collateral);
+  const updateCollateral = async () => {
+    setIsTxPending(true);
+    await updateCollateralAction(
+      token,
+      collateral,
+      writeContractAsync,
+      publicClient,
+    );
+    setIsTxPending(false);
+    setCollateral(!collateral);
     console.log(hash);
   };
 
@@ -214,7 +244,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
             <input
               type='number'
               className='form-control-plaintext text-xl text-secondary border-0 p-0 text-left min-w-[120px]'
-              value={amount.toFixed(2)}
+              value={amount}
               onChange={(e) => {
                 handleDirectInputChange(e);
               }}
@@ -253,27 +283,6 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       ) : (
         ''
       )}
-      {/* <div className="mt-4">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                        <p className="text-base text-lufga text-[#4B5E5B]">
-                            Current: {"  "}{" "}
-                        </p>
-                        <p className="text-[#CAEAE5]  text-base text-lufga font-thin ">
-                            {" "}
-                            {protocolBalance}{" "}
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                        <p className="text-base text-lufga text-[#4B5E5B]">MAX: </p>
-                        <p className="text-[#CAEAE5]  text-base text-lufga font-thin ">
-                            {" "}
-                            {availableAmount + protocolBalance}{" "}
-                        </p>
-                    </div>
-                </div>
-            </div> */}
       <div className='relative my-2 '>
         <ProgressBar progress={progress} control={true} className='h-1.5' />
         <input
@@ -332,7 +341,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
           </p>
         </div>
       </div>
-      <Button title={buttonText} onClick={() => triggerAction()} />
+      <Button title={buttonText} onClick={() => sendTransaction()} />
     </>
   );
 };

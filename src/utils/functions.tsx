@@ -159,10 +159,19 @@ const copyToClipboard = (text: string): void => {
   }
 };
 
+const normalizeDecimalsAmount = (
+  x: number,
+  token: string,
+  tokenDecimalsMap: any,
+) => {
+  return Number(x) / Math.pow(10, tokenDecimalsMap[token]);
+};
+
 export {
   formatNumber,
   formatAddress,
   formatUnit,
   calculateApy,
   copyToClipboard,
+  normalizeDecimalsAmount,
 };

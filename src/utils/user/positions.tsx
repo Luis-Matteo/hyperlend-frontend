@@ -153,3 +153,14 @@ export function useUserPositionsData(
     totalBalanceChangePercentage: totalBalanceChangePercentage,
   };
 }
+
+export function useUserAccountData(address?: string) {
+  const { data: userAccountData } = useReadContract({
+    abi: abis.pool,
+    address: contracts.pool,
+    functionName: 'getUserAccountData',
+    args: [address || '0x0000000000000000000000000000000000000000'],
+  });
+
+  return userAccountData;
+}

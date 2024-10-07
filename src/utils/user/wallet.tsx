@@ -1,9 +1,15 @@
 import { useAccount, useReadContract } from 'wagmi';
 import { erc20Abi } from 'viem';
 
-import { contracts, assetAddresses, tokenDecimalsMap, abis } from '../config';
+import {
+  contracts,
+  assetAddresses,
+  tokenDecimalsMap,
+  abis,
+  wrappedTokenProtocolTokens,
+} from '../config';
 
-export function useUserWalletBalance() {
+export function useUserWalletValueUsd() {
   const { address, isConnected } = useAccount();
 
   const balanceDataResults = assetAddresses.map((asset) =>
@@ -65,14 +71,33 @@ export function useUserWalletBalance() {
   };
 }
 
+export function useUserTokenBalance(
+  isConnected: boolean,
+  token: string,
+  address?: string,
+): any {
+  const { data } = useReadContract(
+    isConnected && address
+      ? ({
+          abi: erc20Abi,
+          address: token,
+          functionName: 'balanceOf',
+          args: [address],
+        } as any)
+      : undefined,
+  );
+
+  return data;
+}
+
 export function useUserAllowance(
+  isConnected: boolean,
   contract: string,
   owner: string,
   spender: string,
-) {
-  const { address, isConnected } = useAccount();
+): any {
   const { data } = useReadContract(
-    isConnected && address
+    isConnected
       ? ({
           abi: erc20Abi,
           address: contract,
@@ -82,4 +107,43 @@ export function useUserAllowance(
       : undefined,
   );
   return data;
+}
+
+interface IUserWrappedTokenAllowanceData {
+  hTokenAllowance?: any;
+  dTokenAllowance?: any;
+}
+
+export function useUserWrappedTokenAllowanceData(
+  owner: string,
+  spender: string,
+): IUserWrappedTokenAllowanceData {
+  const { address, isConnected } = useAccount();
+  //allowances to wrappedTokenGatewayV3
+  const { data: userHTokenAllowance } = useReadContract(
+    isConnected && address
+      ? ({
+          abi: erc20Abi,
+          address: wrappedTokenProtocolTokens.hToken,
+          functionName: 'allowance',
+          args: [owner, spender],
+        } as any)
+      : undefined,
+  );
+
+  const { data: userDTokenAllowance } = useReadContract(
+    isConnected && address
+      ? ({
+          abi: abis.variableDebtToken,
+          address: wrappedTokenProtocolTokens.dToken,
+          functionName: 'borrowAllowance',
+          args: [owner, spender],
+        } as any)
+      : undefined,
+  );
+
+  return {
+    hTokenAllowance: userHTokenAllowance,
+    dTokenAllowance: userDTokenAllowance,
+  };
 }
