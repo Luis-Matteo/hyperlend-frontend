@@ -77,21 +77,24 @@ function Overview() {
         Number(protocolAssetReserveData.totalVariableDebt) /
         Math.pow(10, tokenDecimalsMap[token]);
 
-      const totalSuppliedUsd = tokenPrice * totalSuppliedTokens
-      const totalBorrowedUsd = tokenPrice * totalBorrowedTokens
-      const totalLiquidityToken = totalSuppliedTokens - totalBorrowedTokens
-      const totalLiquidityUsd = tokenPrice * totalSuppliedTokens - tokenPrice * totalBorrowedTokens
+      const totalSuppliedUsd = tokenPrice * totalSuppliedTokens;
+      const totalBorrowedUsd = tokenPrice * totalBorrowedTokens;
+      const totalLiquidityToken = totalSuppliedTokens - totalBorrowedTokens;
+      const totalLiquidityUsd =
+        tokenPrice * totalSuppliedTokens - tokenPrice * totalBorrowedTokens;
 
       assets.push({
         name: tokenFullNameMap[token],
         symbol: tokenNameMap[token],
         underlyingAsset: token,
         icon: iconsMap[tokenNameMap[token]],
-        totalSupplied: isNaN(totalSuppliedTokens) ? 0  : totalSuppliedTokens,
-        totalSuppliedUsd: isNaN(totalSuppliedUsd) ? 0  : totalSuppliedUsd,
-        totalBorrowed: isNaN(totalBorrowedTokens) ? 0  : totalBorrowedTokens,
-        totalBorrowedUsd: isNaN(totalBorrowedUsd) ? 0  : totalBorrowedUsd,
-        totalLiquidityToken: isNaN(totalLiquidityToken) ? 0  : totalLiquidityToken,
+        totalSupplied: isNaN(totalSuppliedTokens) ? 0 : totalSuppliedTokens,
+        totalSuppliedUsd: isNaN(totalSuppliedUsd) ? 0 : totalSuppliedUsd,
+        totalBorrowed: isNaN(totalBorrowedTokens) ? 0 : totalBorrowedTokens,
+        totalBorrowedUsd: isNaN(totalBorrowedUsd) ? 0 : totalBorrowedUsd,
+        totalLiquidityToken: isNaN(totalLiquidityToken)
+          ? 0
+          : totalLiquidityToken,
         totalLiquidtyUsd: isNaN(totalLiquidityUsd) ? 0 : totalLiquidityUsd,
         supplyApy: interestRateDataMap[token].supply,
         borrowApy: interestRateDataMap[token].borrow,

@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '../layouts/Navbar';
 import CardItem from '../components/common/CardItem';
 import { useParams } from 'react-router-dom';
@@ -137,7 +137,7 @@ function TokenDetail() {
 
   const handleButtonClick = (button: number) => {
     setActiveButton(button);
-    
+
     let newActionData: any;
     switch (button) {
       case 1:

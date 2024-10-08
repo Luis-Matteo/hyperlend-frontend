@@ -176,8 +176,8 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       .toFixed(0)
       .toString() as any as bigint;
 
+    setIsTxPending(true);
     if (wrappedTokens.includes(token)) {
-      setIsTxPending(true);
       await wrappedTokenAction(
         actionType,
         token,
@@ -193,7 +193,6 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       return;
     }
 
-    setIsTxPending(true);
     await protocolAction(
       actionType,
       token,
