@@ -284,7 +284,10 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                 .includes('reverted with the following reason:')
                 ? `(${getErrorMessage(errorMsg.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
                 : '')
-            : errorMsg.split('Request Arguments')[0]}
+            : getErrorMessage(errorMsg.split('Request Arguments')[0]) !=
+                'ERROR_MESSAGE_NOT_FOUND'
+              ? getErrorMessage(errorMsg.split('Request Arguments')[0])
+              : errorMsg.split('Request Arguments')[0]}
         </p>
       ) : (
         ''

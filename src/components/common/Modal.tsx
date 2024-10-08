@@ -79,11 +79,14 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const { interestRateDataMap } = useProtocolInterestRate();
   const { reserveDataMap } = useProtocolReservesData();
 
-  const userAccountData = useUserAccountData(address);
+  const { userAccountData, refetch: refetchUserAccountData } =
+    useUserAccountData(address);
   const protocolAssetReserveData = useProtocolAssetReserveData(token);
 
   const userPositionsData = useUserPositionsData(isConnected, address);
   const assetReserveData = useProtocolAssetReserveData(token);
+
+  console.log(userAccountData)
 
   const updateAvailableAmount = () => {
     const avBalance = calculateAvailableBalance(

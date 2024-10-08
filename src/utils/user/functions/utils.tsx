@@ -26,6 +26,8 @@ export function calculateAvailableBalance(
   userWalletTokenBalance: any,
   actionType: string,
 ): any {
+  if (!userAccountData) userAccountData = [0, 0, 0, 0, 0]
+  
   const params = {
     token: token,
     userPositionsData: userPositionsData,

@@ -83,15 +83,7 @@ function TokenDetail() {
   );
 
   function handleDataFromActions(data: any) {
-    setTimeout(() => {
-      console.log(data);
-      //handle data refresh here
-      refetchUserWalletTokenBalance()
-      refetchUserEthBalance()
-      refetchUserAccountData()
-      forceUpdate()
-      window.location.reload();
-    }, 1000 * 10)
+    console.log(data);
   }
 
   const getAvailableAmount: any = (actionType: string) => {

@@ -33,6 +33,9 @@ export function useUserPositionsData(
       contracts.poolAddressesProvider,
       address || '0x0000000000000000000000000000000000000000',
     ],
+    query: {
+      refetchInterval: 10000,
+    },
   });
 
   if (!isConnected || !address) {
@@ -160,6 +163,9 @@ export function useUserAccountData(address?: string) {
     address: contracts.pool,
     functionName: 'getUserAccountData',
     args: [address || '0x0000000000000000000000000000000000000000'],
+    query: {
+      refetchInterval: 10000,
+    },
   });
 
   return { userAccountData, refetch };

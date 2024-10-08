@@ -20,6 +20,9 @@ export function useUserWalletValueUsd() {
             address: asset,
             functionName: 'balanceOf',
             args: [address],
+            query: {
+              refetchInterval: 10000,
+            },
           } as any)
         : undefined,
     ),
@@ -33,6 +36,9 @@ export function useUserWalletValueUsd() {
             address: contracts.oracle,
             functionName: 'getAssetPrice',
             args: [asset],
+            query: {
+              refetchInterval: 10000,
+            },
           }
         : undefined,
     ),
@@ -83,6 +89,9 @@ export function useUserTokenBalance(
           address: token,
           functionName: 'balanceOf',
           args: [address],
+          query: {
+            refetchInterval: 10000,
+          },
         } as any)
       : undefined,
   );
@@ -106,6 +115,9 @@ export function useUserAllowance(
           address: contract,
           functionName: 'allowance',
           args: [owner, spender],
+          query: {
+            refetchInterval: 10000,
+          },
         } as any)
       : undefined,
   );
@@ -130,6 +142,9 @@ export function useUserWrappedTokenAllowanceData(
           address: wrappedTokenProtocolTokens.hToken,
           functionName: 'allowance',
           args: [owner, spender],
+          query: {
+            refetchInterval: 10000,
+          },
         } as any)
       : undefined,
   );
@@ -141,6 +156,9 @@ export function useUserWrappedTokenAllowanceData(
           address: wrappedTokenProtocolTokens.dToken,
           functionName: 'borrowAllowance',
           args: [owner, spender],
+          query: {
+            refetchInterval: 10000,
+          },
         } as any)
       : undefined,
   );
