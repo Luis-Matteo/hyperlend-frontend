@@ -86,8 +86,6 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const userPositionsData = useUserPositionsData(isConnected, address);
   const assetReserveData = useProtocolAssetReserveData(token);
 
-  console.log(userAccountData)
-
   const updateAvailableAmount = () => {
     const avBalance = calculateAvailableBalance(
       token,

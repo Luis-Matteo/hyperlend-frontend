@@ -45,7 +45,6 @@ function TokenDetail() {
 
   ReactGA.send({ hitType: 'pageview', page: '/token-details', title: token });
 
-  const [, forceUpdate] = useReducer((x: any) => x + 1, 0);
   const [activeButton, setActiveButton] = useState(1);
 
   const { switchChain } = useSwitchChain();
@@ -58,15 +57,15 @@ function TokenDetail() {
   }, [isConnected, chainId]);
 
   //refetch on update
-  const {
-    data: userWalletTokenBalance,
-    refetch: refetchUserWalletTokenBalance,
-  } = useUserTokenBalance(isConnected, token, address);
-  const { data: userEthBalance, refetch: refetchUserEthBalance } = useBalance({
+  const { data: userWalletTokenBalance } = useUserTokenBalance(
+    isConnected,
+    token,
+    address,
+  );
+  const { data: userEthBalance } = useBalance({
     address: address,
   });
-  const { userAccountData, refetch: refetchUserAccountData } =
-    useUserAccountData(address);
+  const { userAccountData } = useUserAccountData(address);
 
   const userPositionsData = useUserPositionsData(isConnected, address);
 
@@ -134,14 +133,15 @@ function TokenDetail() {
 
   useEffect(() => {
     handleButtonClick(activeButton);
-  }, [userWalletTokenBalance, userEthBalance]);
+  }, [userWalletTokenBalance, userEthBalance, userPositionsData]);
 
   const handleButtonClick = (button: number) => {
     setActiveButton(button);
-
+    
+    let newActionData: any;
     switch (button) {
       case 1:
-        setActionData({
+        newActionData = {
           availableAmountTitle: 'Suppliable',
           availableAmount: getAvailableAmount('supply'),
           totalApy: interestRateDataMap[token].supply,
@@ -153,10 +153,10 @@ function TokenDetail() {
           token: token,
           isCollateralEnabled: supplied?.isCollateralEnabled || false,
           handleDataFromActions: handleDataFromActions,
-        });
+        };
         break;
       case 2:
-        setActionData({
+        newActionData = {
           availableAmountTitle: 'Withdrawable',
           availableAmount: getAvailableAmount('withdraw'),
           totalApy: interestRateDataMap[token].supply,
@@ -168,10 +168,10 @@ function TokenDetail() {
           token: token,
           isCollateralEnabled: false, //not used
           handleDataFromActions: handleDataFromActions,
-        });
+        };
         break;
       case 3:
-        setActionData({
+        newActionData = {
           availableAmountTitle: 'Borrowable',
           availableAmount: getAvailableAmount('borrow'),
           totalApy: interestRateDataMap[token].borrow,
@@ -183,10 +183,10 @@ function TokenDetail() {
           token: token,
           isCollateralEnabled: false, //not used
           handleDataFromActions: handleDataFromActions,
-        });
+        };
         break;
       case 4:
-        setActionData({
+        newActionData = {
           availableAmountTitle: 'Repayable',
           availableAmount: getAvailableAmount('repay'),
           totalApy: interestRateDataMap[token].borrow,
@@ -198,10 +198,14 @@ function TokenDetail() {
           token: token,
           isCollateralEnabled: false,
           handleDataFromActions: handleDataFromActions,
-        });
+        };
         break;
       default:
         break;
+    }
+
+    if (JSON.stringify(actionData) !== JSON.stringify(newActionData)) {
+      setActionData(newActionData); //prevent Maximum update depth exceeded errors
     }
   };
 
