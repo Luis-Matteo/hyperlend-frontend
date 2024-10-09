@@ -56,20 +56,23 @@ function TokenDetail() {
     }
   }, [isConnected, chainId]);
 
-  const userWalletTokenBalance = useUserTokenBalance(
+  //refetch on update
+  const { data: userWalletTokenBalance } = useUserTokenBalance(
     isConnected,
     token,
     address,
   );
-  const { data: userEthBalance } = useBalance({ address: address });
+  const { data: userEthBalance } = useBalance({
+    address: address,
+  });
+  const { userAccountData } = useUserAccountData(address);
 
+  const userPositionsData = useUserPositionsData(isConnected, address);
+
+  const protocolAssetReserveData = useProtocolAssetReserveData(token);
   const { reserveDataMap } = useProtocolReservesData();
   const { priceDataMap } = useProtocolPriceData();
   const { interestRateDataMap } = useProtocolInterestRate();
-
-  const userAccountData = useUserAccountData(address);
-  const protocolAssetReserveData = useProtocolAssetReserveData(token);
-  const userPositionsData = useUserPositionsData(isConnected, address);
 
   const supplied = userPositionsData.supplied.find(
     (e) => e.underlyingAsset == token,
@@ -77,6 +80,10 @@ function TokenDetail() {
   const borrowed = userPositionsData.borrowed.find(
     (e) => e.underlyingAsset == token,
   );
+
+  function handleDataFromActions(data: any) {
+    console.log(data);
+  }
 
   const getAvailableAmount: any = (actionType: string) => {
     return calculateAvailableBalance(
@@ -121,18 +128,20 @@ function TokenDetail() {
     btnTitle: 'Supply',
     token: token,
     isCollateralEnabled: supplied?.isCollateralEnabled || false,
+    handleDataFromActions: handleDataFromActions,
   });
 
   useEffect(() => {
     handleButtonClick(activeButton);
-  }, [userWalletTokenBalance, userEthBalance]);
+  }, [userWalletTokenBalance, userEthBalance, userPositionsData]);
 
   const handleButtonClick = (button: number) => {
     setActiveButton(button);
 
+    let newActionData: any;
     switch (button) {
       case 1:
-        setActionData({
+        newActionData = {
           availableAmountTitle: 'Suppliable',
           availableAmount: getAvailableAmount('supply'),
           totalApy: interestRateDataMap[token].supply,
@@ -143,10 +152,11 @@ function TokenDetail() {
           btnTitle: 'Supply',
           token: token,
           isCollateralEnabled: supplied?.isCollateralEnabled || false,
-        });
+          handleDataFromActions: handleDataFromActions,
+        };
         break;
       case 2:
-        setActionData({
+        newActionData = {
           availableAmountTitle: 'Withdrawable',
           availableAmount: getAvailableAmount('withdraw'),
           totalApy: interestRateDataMap[token].supply,
@@ -157,10 +167,11 @@ function TokenDetail() {
           btnTitle: 'Withdraw',
           token: token,
           isCollateralEnabled: false, //not used
-        });
+          handleDataFromActions: handleDataFromActions,
+        };
         break;
       case 3:
-        setActionData({
+        newActionData = {
           availableAmountTitle: 'Borrowable',
           availableAmount: getAvailableAmount('borrow'),
           totalApy: interestRateDataMap[token].borrow,
@@ -171,10 +182,11 @@ function TokenDetail() {
           btnTitle: 'Borrow',
           token: token,
           isCollateralEnabled: false, //not used
-        });
+          handleDataFromActions: handleDataFromActions,
+        };
         break;
       case 4:
-        setActionData({
+        newActionData = {
           availableAmountTitle: 'Repayable',
           availableAmount: getAvailableAmount('repay'),
           totalApy: interestRateDataMap[token].borrow,
@@ -185,10 +197,15 @@ function TokenDetail() {
           btnTitle: 'Repay',
           token: token,
           isCollateralEnabled: false,
-        });
+          handleDataFromActions: handleDataFromActions,
+        };
         break;
       default:
         break;
+    }
+
+    if (JSON.stringify(actionData) !== JSON.stringify(newActionData)) {
+      setActionData(newActionData); //prevent Maximum update depth exceeded errors
     }
   };
 

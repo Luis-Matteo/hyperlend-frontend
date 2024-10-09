@@ -20,7 +20,10 @@ export async function protocolAction(
           address: token as any,
           abi: erc20Abi,
           functionName: 'approve',
-          args: [contracts.pool, bgIntAmount],
+          args: [
+            contracts.pool,
+            '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+          ],
         });
         await publicClient.waitForTransactionReceipt({
           hash: approveResult.hash,

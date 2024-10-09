@@ -28,6 +28,7 @@ const hyperEvmTestnet = defineChain({
     default: {
       http: [
         'https://api.hyperliquid-testnet.xyz/evm',
+        'https://hyperliquid.lgns.xyz',
         'https://rpc-testnet.hyperlend.finance/evm',
       ],
     },

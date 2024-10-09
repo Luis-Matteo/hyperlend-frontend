@@ -42,6 +42,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   btnTitle,
   token,
   isCollateralEnabled,
+  handleDataFromActions,
 }) => {
   const actionType = btnTitle.toLowerCase();
 
@@ -98,6 +99,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       //TODO: add loading icon
       setButtonText('Sending transaction...');
     } else {
+      handleDataFromActions('refetch');
       setButtonText(btnTitle);
     }
   }, [isTxPending]);
@@ -174,8 +176,8 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       .toFixed(0)
       .toString() as any as bigint;
 
+    setIsTxPending(true);
     if (wrappedTokens.includes(token)) {
-      setIsTxPending(true);
       await wrappedTokenAction(
         actionType,
         token,
@@ -191,7 +193,6 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       return;
     }
 
-    setIsTxPending(true);
     await protocolAction(
       actionType,
       token,
@@ -282,7 +283,10 @@ const TokenActions: React.FC<TokenActionsProps> = ({
                 .includes('reverted with the following reason:')
                 ? `(${getErrorMessage(errorMsg.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
                 : '')
-            : errorMsg.split('Request Arguments')[0]}
+            : getErrorMessage(errorMsg.split('Request Arguments')[0]) !=
+                'ERROR_MESSAGE_NOT_FOUND'
+              ? getErrorMessage(errorMsg.split('Request Arguments')[0])
+              : errorMsg.split('Request Arguments')[0]}
         </p>
       ) : (
         ''

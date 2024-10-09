@@ -20,6 +20,9 @@ export function useUserWalletValueUsd() {
             address: asset,
             functionName: 'balanceOf',
             args: [address],
+            query: {
+              refetchInterval: 10000,
+            },
           } as any)
         : undefined,
     ),
@@ -33,6 +36,9 @@ export function useUserWalletValueUsd() {
             address: contracts.oracle,
             functionName: 'getAssetPrice',
             args: [asset],
+            query: {
+              refetchInterval: 10000,
+            },
           }
         : undefined,
     ),
@@ -76,18 +82,24 @@ export function useUserTokenBalance(
   token: string,
   address?: string,
 ): any {
-  const { data } = useReadContract(
+  const { data, refetch } = useReadContract(
     isConnected && address
       ? ({
           abi: erc20Abi,
           address: token,
           functionName: 'balanceOf',
           args: [address],
+          query: {
+            refetchInterval: 10000,
+          },
         } as any)
       : undefined,
   );
 
-  return data;
+  return {
+    data,
+    refetch,
+  };
 }
 
 export function useUserAllowance(
@@ -103,6 +115,9 @@ export function useUserAllowance(
           address: contract,
           functionName: 'allowance',
           args: [owner, spender],
+          query: {
+            refetchInterval: 10000,
+          },
         } as any)
       : undefined,
   );
@@ -127,6 +142,9 @@ export function useUserWrappedTokenAllowanceData(
           address: wrappedTokenProtocolTokens.hToken,
           functionName: 'allowance',
           args: [owner, spender],
+          query: {
+            refetchInterval: 10000,
+          },
         } as any)
       : undefined,
   );
@@ -138,6 +156,9 @@ export function useUserWrappedTokenAllowanceData(
           address: wrappedTokenProtocolTokens.dToken,
           functionName: 'borrowAllowance',
           args: [owner, spender],
+          query: {
+            refetchInterval: 10000,
+          },
         } as any)
       : undefined,
   );

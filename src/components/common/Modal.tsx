@@ -20,6 +20,8 @@ import {
   wrappedTokens,
 } from '../../utils/config';
 
+import { getErrorMessage } from '../../utils/constants/errorCodes';
+
 import {
   getTokenPrecision,
   calculateAvailableBalance,
@@ -53,13 +55,16 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const [allowance, setAllowance] = useState<number>(0);
   const [predictedHealth, setPredictedHealth] = useState<number>(0);
   const [useMaxAmount, setUseMaxAmount] = useState(false);
+  const [isTxPending, setIsTxPending] = useState(false);
+  const [buttonText, setButtonText] = useState(capitalizeString(modalType));
+  const [errorMsg, setErrorMsg] = useState<any>(null);
 
   const publicClient = usePublicClient();
   const { address, isConnected } = useAccount();
-  const { data: hash, writeContractAsync } = useWriteContract();
+  const { data: hash, writeContractAsync, error } = useWriteContract();
   const { data: userEthBalance } = useBalance({ address: address });
 
-  const userWalletTokenBalance = useUserTokenBalance(
+  const { data: userWalletTokenBalance } = useUserTokenBalance(
     isConnected,
     token,
     address,
@@ -79,7 +84,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const { interestRateDataMap } = useProtocolInterestRate();
   const { reserveDataMap } = useProtocolReservesData();
 
-  const userAccountData = useUserAccountData(address);
+  const { userAccountData } = useUserAccountData(address);
   const protocolAssetReserveData = useProtocolAssetReserveData(token);
 
   const userPositionsData = useUserPositionsData(isConnected, address);
@@ -101,6 +106,15 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   };
 
   useEffect(() => {
+    if (isTxPending) {
+      //TODO: add loading icon
+      setButtonText('Sending transaction...');
+    } else {
+      setButtonText(getButtonText());
+    }
+  }, [isTxPending]);
+
+  useEffect(() => {
     updateAvailableAmount();
   }, [userWalletTokenBalance, userEthBalance]);
 
@@ -120,6 +134,20 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   useEffect(() => {
     setUseMaxAmount(progress == 100);
   }, [progress]);
+
+  useEffect(() => {
+    if (error?.message) {
+      setErrorMsg(error?.message);
+    }
+  }, [error?.message]);
+
+  useEffect(() => {
+    if (errorMsg) {
+      setTimeout(() => {
+        setErrorMsg(null);
+      }, 4000);
+    }
+  }, [errorMsg]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
@@ -163,6 +191,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
       .toFixed(0)
       .toString() as any as bigint;
 
+    setIsTxPending(true);
     if (wrappedTokens.includes(token)) {
       await wrappedTokenAction(
         modalType,
@@ -175,6 +204,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         publicClient,
         useMaxAmount,
       );
+      setIsTxPending(false);
       return;
     }
 
@@ -189,9 +219,27 @@ function Modal({ token, modalType, onClose }: ModalProps) {
       publicClient,
       useMaxAmount,
     );
-
+    setIsTxPending(false);
     setAllowance(amount);
     console.log(hash);
+  };
+
+  useEffect(() => {
+    setButtonText(getButtonText());
+  }, [modalType, allowance, amount]);
+
+  const getButtonText = () => {
+    return modalType == 'supply' || modalType == 'repay'
+      ? wrappedTokens.includes(token)
+        ? capitalizeString(modalType)
+        : allowance >= amount
+          ? capitalizeString(modalType)
+          : 'Approve'
+      : modalType == 'borrow' && wrappedTokens.includes(token)
+        ? Number(dTokenAllowance) / Math.pow(10, 18) >= amount
+          ? capitalizeString(modalType)
+          : 'Approve'
+        : capitalizeString(modalType);
   };
 
   return (
@@ -295,6 +343,25 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             </div>
           </div>
           <div className='mb-6'>
+            {errorMsg ? (
+              <div className='flex justify-between mb-2'>
+                <p className='font-lufga font-light text-xs text-[#FF0000] mt-2'>
+                  {errorMsg.includes('Contract Call')
+                    ? errorMsg.split('Contract Call')[0] +
+                      (errorMsg
+                        .split('Contract Call')[0]
+                        .includes('reverted with the following reason:')
+                        ? `(${getErrorMessage(errorMsg.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
+                        : '')
+                    : getErrorMessage(errorMsg.split('Request Arguments')[0]) !=
+                        'ERROR_MESSAGE_NOT_FOUND'
+                      ? getErrorMessage(errorMsg.split('Request Arguments')[0])
+                      : errorMsg.split('Request Arguments')[0]}
+                </p>
+              </div>
+            ) : (
+              ''
+            )}
             <div className='flex justify-between mb-2'>
               <p className='font-lufga font-light text-[#797979]'>Available</p>
               <p className='font-lufga font-light text-[#797979]'>
@@ -326,17 +393,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
               sendTransaction();
             }}
           >
-            {modalType == 'supply' || modalType == 'repay'
-              ? wrappedTokens.includes(token)
-                ? capitalizeString(modalType)
-                : allowance >= amount
-                  ? capitalizeString(modalType)
-                  : 'Approve'
-              : modalType == 'borrow' && wrappedTokens.includes(token)
-                ? Number(dTokenAllowance) / Math.pow(10, 18) >= amount
-                  ? capitalizeString(modalType)
-                  : 'Approve'
-                : capitalizeString(modalType)}
+            {buttonText}
           </button>
           {/* <div className='flex justify-end mb-6'>
             <button className='px-3 py-1.5 flex gap-2 items-center bg-[#050F0D] rounded-full'>
