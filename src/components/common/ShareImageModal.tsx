@@ -5,7 +5,12 @@ import xmarkIcon from '../../assets/icons/xmark-icon.svg';
 import refreshIcon from '../../assets/icons/refresh.svg'
 
 import background from '../../assets/img/shareImg/background.jpeg';
-import circle from '../../assets/img/shareImg/happyLendie.png';
+
+import happyLendie from '../../assets/img/shareImg/cats/happy.png';
+import standingLending from '../../assets/img/shareImg/cats/standing.svg';
+import swagLendie from '../../assets/img/shareImg/cats/swag.svg';
+import winkLendie from '../../assets/img/shareImg/cats/wink.svg';
+
 import { tokenNameMap } from '../../utils/config';
 
 import { CheckboxIndicator } from './Checkbox';
@@ -22,6 +27,16 @@ interface IShareImageModalProps {
   onClose: () => void;
 }
 
+const getDefaultImage = (): string => {
+  const array = [
+    happyLendie,
+    standingLending,
+    swagLendie,
+    winkLendie
+  ]
+  return array[Math.floor(Math.random() * array.length)];
+}
+
 function ShareImageModal({ token, apy, onClose }: IShareImageModalProps) {
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
@@ -29,11 +44,12 @@ function ShareImageModal({ token, apy, onClose }: IShareImageModalProps) {
     }
   };
 
+  const defaultCircleImage = getDefaultImage()
   const [name, setName] = useState<string>('HyperLend user')
   const [fetchTwitterPhoto, setFetchTwitterPhoto] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string>("")
   const [rotationAngle, setRotationAngle] = useState(0); 
-  const [circularImage, setCircularImage] = useState<string>(circle);
+  const [circularImage, setCircularImage] = useState<string>(defaultCircleImage);
 
   const handleNameChange = (e: any) => {
     setName(e.target.value)
@@ -60,7 +76,7 @@ function ShareImageModal({ token, apy, onClose }: IShareImageModalProps) {
       const imageURL = `https://unavatar.io/twitter/${name}`;
       setCircularImage(imageURL);
     } else {
-      setCircularImage(circle); // Reset to default image
+      setCircularImage(defaultCircleImage); // Reset to default image
     }
   }
 
