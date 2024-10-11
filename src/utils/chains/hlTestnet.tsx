@@ -66,6 +66,13 @@ const tokenToGradient: any = {
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': backgroundGradientBlue,
 };
 
+const oraclesMap: any = {
+  '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458':
+    '0x3437aE65ae0C2b80437E55c829fF6C895Eee061c',
+  '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7':
+    '0xc88F13B22443E6dDe99bc702F0130A8edee45174',
+};
+
 const hlTestnet: any = {
   chainName: 'hyperEvmTestnet',
   networkChainId: networkChainId,
@@ -81,6 +88,7 @@ const hlTestnet: any = {
   wrappedTokens: wrappedTokens,
   wrappedTokenProtocolTokens: wrappedTokenProtocolTokens,
   tokenToGradient: tokenToGradient,
+  oraclesMap: oraclesMap,
 };
 
 export default hlTestnet;

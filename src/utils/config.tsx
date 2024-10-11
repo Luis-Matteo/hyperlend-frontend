@@ -72,3 +72,5 @@ export const wrappedTokenProtocolTokens: any =
   arb.wrappedTokenProtocolTokens;
 export const tokenToGradient: any =
   networkConfigs[currentChainId].tokenToGradient || arb.tokenToGradient;
+export const oraclesMap: any =
+  networkConfigs[currentChainId].oraclesMap || arb.oraclesMap;

@@ -20,6 +20,7 @@ import {
   ltvMap,
   liqPenaltyMap,
   networkChainId,
+  oraclesMap,
 } from '../utils/config';
 
 import {
@@ -285,6 +286,11 @@ function TokenDetail() {
       name: 'Token contract',
       link: `https://explorer.hyperlend.finance/token/${token}`,
       value: token,
+    },
+    {
+      name: 'Asset oracle',
+      link: `https://explorer.hyperlend.finance/address/${oraclesMap[token]}`,
+      value: oraclesMap[token],
     },
     {
       name: 'Supply cap',
