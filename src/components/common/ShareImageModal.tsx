@@ -1,12 +1,14 @@
 import { useState } from 'react'
-import { AnimatePresence, motion, progress } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { useRef, useEffect } from 'react';
 import xmarkIcon from '../../assets/icons/xmark-icon.svg';
+import refreshIcon from '../../assets/icons/refresh.svg'
 
 import background from '../../assets/img/shareImg/background.jpeg';
-import circle from '../../assets/img/shareImg/circle.jpg';
+import circle from '../../assets/img/shareImg/happyLendie.png';
 import { tokenNameMap } from '../../utils/config';
 
+import { CheckboxIndicator } from './Checkbox';
 
 interface CanvasProps {
   backgroundImage: string;
@@ -28,9 +30,38 @@ function ShareImageModal({ token, apy, onClose }: IShareImageModalProps) {
   };
 
   const [name, setName] = useState<string>('HyperLend user')
+  const [fetchTwitterPhoto, setFetchTwitterPhoto] = useState<boolean>(false)
+  const [errorMsg, setErrorMsg] = useState<string>("")
+  const [rotationAngle, setRotationAngle] = useState(0); 
+  const [circularImage, setCircularImage] = useState<string>(circle);
 
   const handleNameChange = (e: any) => {
     setName(e.target.value)
+  }
+
+  const handleRotate = () => {
+    setRotationAngle((prevAngle) => prevAngle + 360);
+  };
+
+  useEffect(() => {
+    if (errorMsg) {
+      setTimeout(() => {
+        setErrorMsg('');
+      }, 4000);
+    }
+  }, [errorMsg]);
+
+  useEffect(() => {
+    getTwitterImage()
+  }, [fetchTwitterPhoto, rotationAngle])
+
+  const getTwitterImage = () => {
+    if (fetchTwitterPhoto && name) {
+      const imageURL = `https://unavatar.io/twitter/${name}`;
+      setCircularImage(imageURL);
+    } else {
+      setCircularImage(circle); // Reset to default image
+    }
   }
 
   return (
@@ -58,6 +89,7 @@ function ShareImageModal({ token, apy, onClose }: IShareImageModalProps) {
           </div>
           <div className='text-white'>
             You name: <input
+              autoFocus={true} 
               type='text'
               className='form-control-plaintext text-xl text-secondary border-0 p-0 text-left'
               value={name == "HyperLend user" ? '' : name}
@@ -71,14 +103,46 @@ function ShareImageModal({ token, apy, onClose }: IShareImageModalProps) {
                 width: 'auto',
                 minWidth: '50px',
               }}
+            /> 
+          </div>
+          <br></br>
+          <div className='flex items-center gap-2 text-white text-sm'>
+            Use X (Twitter) profile photo?
+            <CheckboxIndicator 
+              id="fetchTwitterCheckBox"
+              isChecked={fetchTwitterPhoto}
+              setIsChecked={setFetchTwitterPhoto}
+            />
+
+            <motion.img
+              src={refreshIcon}
+              alt="refresh"
+              style={{ cursor: 'pointer' }}
+              onClick={handleRotate}
+              animate={{
+                rotate: rotationAngle,
+              }}
+              transition={{
+                duration: 1,
+                ease: 'easeInOut',
+              }}
             />
           </div>
+          {errorMsg ? (
+              <div className='flex justify-between mb-2'>
+                <p className='font-lufga font-light text-xs text-[#FF0000] mt-2'>
+                  {errorMsg}
+                </p>
+              </div>
+            ) : (
+              ''
+            )}
           <div className='px-6 py-4 bg-[#050F0D] rounded-2xl flex flex-col gap-4 mb-5'>
             <div className='flex justify-between items-center'>
               <div className='flex gap-2 items-center'>
               <CanvasComponent
                 backgroundImage={background}
-                circularImage={circle}
+                circularImage={circularImage}
                 text={`Meet ${name}!\nThey are earning ${apy}% APY\non ${tokenNameMap[token]}`}
               />
               </div>
@@ -113,9 +177,6 @@ const CanvasComponent: React.FC<CanvasProps> = ({ backgroundImage, circularImage
       const backgroundImg = new Image();
       const circularImg = new Image();
 
-      backgroundImg.src = backgroundImage;
-      circularImg.src = circularImage;
-
       backgroundImg.onload = () => {
         ctx.drawImage(backgroundImg, 0, 0, width, height);
 
@@ -143,7 +204,14 @@ const CanvasComponent: React.FC<CanvasProps> = ({ backgroundImage, circularImage
             ctx.fillText(joinThemLines[i], circleX + circleRadius * 2 + 10, circleY - 30 + ((Number(lines.length) + Number(i)) * 40));
           }
         };
+
+        circularImg.onerror = () => {
+          console.log('error')
+        };
+
+        circularImg.src = circularImage;
       };
+      backgroundImg.src = backgroundImage;
     };
 
     loadImages();
