@@ -167,7 +167,7 @@ const CanvasComponent: React.FC<CanvasProps> = ({ backgroundImage, circularImage
     const width = 800;
     const height = 400;
     const circleRadius = 70;
-    const circleX = 40;
+    const circleX = 50;
     const circleY = height / 2;
 
     canvas.width = width;
@@ -189,21 +189,21 @@ const CanvasComponent: React.FC<CanvasProps> = ({ backgroundImage, circularImage
           ctx.clip();
           ctx.drawImage(circularImg, circleX, circleY - circleRadius, circleRadius * 2, circleRadius * 2);
           ctx.restore();
-
-          //add text to the right of the circle
-          ctx.fillStyle = '#000';
-          ctx.font = '40px lufga';
-          let lines = text.split("\n")
-          for (let i in lines){
-            ctx.fillText(lines[i], circleX + circleRadius * 2 + 10, circleY - 30 + (Number(i) * 40));
-          }
-
-          let joinThemLines = `\n\nJoin them at hyperlend.finance`.split("\n")
-          ctx.font = '20px lufga';
-          for (let i in joinThemLines){
-            ctx.fillText(joinThemLines[i], circleX + circleRadius * 2 + 10, circleY - 30 + ((Number(lines.length) + Number(i)) * 40));
-          }
         };
+
+        //add text to the right of the circle
+        ctx.fillStyle = '#000';
+        ctx.font = '40px lufga';
+        let lines = text.split("\n")
+        for (let i in lines){
+          ctx.fillText(lines[i], circleX + circleRadius * 2 + 10, circleY - 30 + (Number(i) * 40));
+        }
+
+        let joinThemLines = `\n\nJoin them at hyperlend.finance`.split("\n")
+        ctx.font = '20px lufga';
+        for (let i in joinThemLines){
+          ctx.fillText(joinThemLines[i], circleX + circleRadius * 2 + 10, circleY - 30 + ((Number(lines.length) + Number(i)) * 40));
+        }
 
         circularImg.onerror = () => {
           console.log('error')

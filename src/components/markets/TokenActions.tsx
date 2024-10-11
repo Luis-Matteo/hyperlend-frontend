@@ -362,7 +362,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
             {' '}
             ${formatNumber(dailyEarning, 3)} 
             &nbsp;
-            <img src={shareIcon} alt='share' onClick={toggleModal} />
+            <img style={{ cursor: 'pointer' }} src={shareIcon} alt='share' onClick={toggleModal} />
           </p>
         </div>
       </div>
