@@ -364,7 +364,7 @@ function TokenDetail() {
               <span className='w-2 h-2 bg-[#2DC24E] rounded-full mr-2'></span>
               <p className='text-xs text-[#797979] font-lufga'>Supply APY</p>
             </div>
-            <div className='flex justify-between gap-4 md:justify-start md:gap-12'>
+            <div className='flex justify-between gap-4 md:justify-start flex-wrap md:gap-12'>
               {(supplyInfos || []).map((supplyInfo, index) => (
                 <div className='font-lufga' key={index}>
                   <p className='text-[9px] pb-2 text-[#E1E1E1]'>
@@ -395,7 +395,7 @@ function TokenDetail() {
               <span className='w-2 h-2 bg-[#302DC2] rounded-full mr-2'></span>
               <p className='text-xs text-[#797979] font-lufga'>Borrow API</p>
             </div>
-            <div className='flex justify-between gap-4 md:justify-start md:gap-12'>
+            <div className='flex justify-between gap-4 flex-wrap md:justify-start md:gap-12'>
               {(borrowInfos || []).map((borrowInfo, index) => (
                 <div className='font-lufga' key={index}>
                   <p className='text-[9px] pb-2 text-[#E1E1E1]'>
@@ -408,7 +408,7 @@ function TokenDetail() {
             <BorrowInfoChart type='borrow' token={token} />
           </CardItem>
           <CardItem className='p-4 lg:p-8 mb-6'>
-            <div className='flex justify-between items-center'>
+            <div className='flex justify-between items-center flex-wrap'>
               <p className='text-[#797979] text-xl font-lufga'>
                 Interest Rate Model
               </p>
