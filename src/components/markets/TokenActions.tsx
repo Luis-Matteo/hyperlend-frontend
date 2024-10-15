@@ -10,7 +10,7 @@ import {
   usePublicClient,
 } from 'wagmi';
 
-import shareIcon from '../../assets/icons/share.svg';
+import shareIcon from '../../assets/icons/share-2.svg';
 import ShareImageModal from '../common/ShareImageModal';
 
 import { formatNumber } from '../../utils/functions';
