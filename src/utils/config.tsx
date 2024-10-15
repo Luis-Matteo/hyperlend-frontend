@@ -35,6 +35,11 @@ export const iconsMap: any = {
   MBTC: wbtcIcon,
 };
 
+export const tokenColorMap: any = {
+  MBTC: 'f7931a',
+  ETH: '497493',
+};
+
 export const stablecoinsList = ['USDC', 'USDT'];
 
 const currentChainId: number = 998;
