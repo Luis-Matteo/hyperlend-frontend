@@ -122,8 +122,8 @@ function Sidebar() {
         </div>
         <div className='flex justify-between'>
           <button className='flex gap-4 items-center' type='button'>
-            <img className='' src={logoutIcon} alt='' />
             <a href='https://docs.hyperlend.finance' target='_blank'>
+              <img className='' src={logoutIcon} alt='' />
               <p className='font-lufga text-grey-light'>Docs</p>
             </a>
           </button>
