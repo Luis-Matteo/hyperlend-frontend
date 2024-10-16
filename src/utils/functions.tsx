@@ -1,7 +1,14 @@
 import { BigNumber } from 'bignumber.js';
 
-function formatNumber(inputNumber: number, decimal: number) {
+function formatNumber(
+  inputNumber: number,
+  decimal: number,
+  replaceNaN: boolean = false,
+) {
   const num = Number(inputNumber);
+
+  if (isNaN(num) && replaceNaN) return '0';
+
   if (inputNumber % 1 === 0) {
     return num.toLocaleString('en-US', {
       minimumFractionDigits: 0,

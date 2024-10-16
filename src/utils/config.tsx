@@ -35,7 +35,8 @@ export const iconsMap: any = {
   MBTC: wbtcIcon,
 };
 
-//make sure to also add them to tailwinf.config.js, otherwise it won't work
+//make sure to also add them to tailwind.config.js,
+//otherwise it won't work (for markets overview page gradient on mobile)
 export const tokenColorMap: any = {
   MBTC: 'f7931a',
   ETH: '497493',

@@ -320,6 +320,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
             {formatNumber(
               Number(availableAmount),
               getTokenPrecision(token, priceDataMap),
+              true,
             )}
           </p>
         </div>
@@ -334,6 +335,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
             {formatNumber(
               Number(protocolBalance),
               getTokenPrecision(token, priceDataMap),
+              true,
             )}
           </p>
         </div>
