@@ -35,6 +35,7 @@ export const iconsMap: any = {
   MBTC: wbtcIcon,
 };
 
+//make sure to also add them to tailwinf.config.js, otherwise it won't work
 export const tokenColorMap: any = {
   MBTC: 'f7931a',
   ETH: '497493',

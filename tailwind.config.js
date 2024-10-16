@@ -1,3 +1,5 @@
+const colors = ['f7931a', '497493'];
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -27,5 +29,6 @@ export default {
       },
     },
   },
+  safelist: colors.map((e) => `to-[#${e}40]`),
   plugins: [],
 };
