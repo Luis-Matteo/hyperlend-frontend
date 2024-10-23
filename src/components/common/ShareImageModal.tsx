@@ -41,7 +41,12 @@ const getDefaultImage = (): string => {
   return array[Math.floor(Math.random() * array.length)];
 };
 
-function ShareImageModal({ token, apy, dailyEarnings, onClose }: IShareImageModalProps) {
+function ShareImageModal({
+  token,
+  apy,
+  dailyEarnings,
+  onClose,
+}: IShareImageModalProps) {
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       onClose();
@@ -186,7 +191,7 @@ const CanvasComponent: React.FC<CanvasProps> = ({
   symbol,
   apy,
   dailyEarnings,
-  tokenIcon
+  tokenIcon,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -197,59 +202,59 @@ const CanvasComponent: React.FC<CanvasProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let multiplier = 2
+    let multiplier = 2;
 
     //measurements
-    let profileImageRadius = 6 * multiplier
-    let profileImageTop = 32 * multiplier
-    let profileImageLeft = 34 * multiplier
+    let profileImageRadius = 6 * multiplier;
+    let profileImageTop = 32 * multiplier;
+    let profileImageLeft = 34 * multiplier;
 
-    let circleTop = 21.5 * multiplier
-    let circleLeft = 29.5 * multiplier
-    let circleSize = 21 * multiplier
+    let circleTop = 21.5 * multiplier;
+    let circleLeft = 29.5 * multiplier;
+    let circleSize = 21 * multiplier;
 
-    let meetTextTop = 34 * multiplier
-    let meetTextLeft = 55 * multiplier
+    let meetTextTop = 34 * multiplier;
+    let meetTextLeft = 55 * multiplier;
 
-    let symbolTop = 61 * multiplier
-    let symbolLeft = 38 * multiplier
+    let symbolTop = 61 * multiplier;
+    let symbolLeft = 38 * multiplier;
 
-    let assetIconTop = 53 * multiplier
-    let assetIconLeft = 26 * multiplier
-    let assetIconSize = 10 * multiplier
+    let assetIconTop = 53 * multiplier;
+    let assetIconLeft = 26 * multiplier;
+    let assetIconSize = 10 * multiplier;
 
-    let offsetLeft = symbol.length + 5
+    let offsetLeft = symbol.length + 5;
 
-    let dailyEarningsTop = 61 * multiplier
-    let dailyEarningsLeft = offsetLeft + 65 * multiplier
+    let dailyEarningsTop = 61 * multiplier;
+    let dailyEarningsLeft = offsetLeft + 65 * multiplier;
 
-    let blackBgLeft = offsetLeft + 58 * multiplier
-    let blackBgTop = 23 * multiplier
-    let blackBgHeight = 70 * multiplier
-    let blackBgLength = offsetLeft + 50 * multiplier
+    let blackBgLeft = offsetLeft + 58 * multiplier;
+    let blackBgTop = 23 * multiplier;
+    let blackBgHeight = 70 * multiplier;
+    let blackBgLength = offsetLeft + 50 * multiplier;
 
-    let apyTop = 108 * multiplier
-    let apyLeft = 29 * multiplier
+    let apyTop = 108 * multiplier;
+    let apyLeft = 29 * multiplier;
 
-    let yieldsTop = 130 * multiplier
-    let yieldsLeft = 30 * multiplier
+    let yieldsTop = 130 * multiplier;
+    let yieldsLeft = 30 * multiplier;
 
-    let linkTop = 142 * multiplier
-    let linkLeft = 30 * multiplier
+    let linkTop = 142 * multiplier;
+    let linkLeft = 30 * multiplier;
 
-    let logoTop = 163 * multiplier
-    let logoLeft = 30 * multiplier
+    let logoTop = 163 * multiplier;
+    let logoLeft = 30 * multiplier;
 
-    let logoImgWidth = 71 * multiplier
-    let logoImgHeight = 14 * multiplier
+    let logoImgWidth = 71 * multiplier;
+    let logoImgHeight = 14 * multiplier;
 
-    let lendieTop = -20 * multiplier
-    let lendieLeft = 147 * multiplier
-    let lendieHeight = 220 * multiplier
-    let lendieWidth = 228 * multiplier
+    let lendieTop = -20 * multiplier;
+    let lendieLeft = 147 * multiplier;
+    let lendieHeight = 220 * multiplier;
+    let lendieWidth = 228 * multiplier;
 
-    const width = 353 * multiplier
-    const height = 198 * multiplier
+    const width = 353 * multiplier;
+    const height = 198 * multiplier;
 
     canvas.width = width;
     canvas.height = height;
@@ -267,13 +272,37 @@ const CanvasComponent: React.FC<CanvasProps> = ({
         ctx.drawImage(backgroundImg, 0, 0, width, height);
 
         lendieImg.src = moneyEyesImage;
-        ctx.drawImage(lendieImg, lendieLeft, lendieTop, lendieWidth, lendieHeight);
+        ctx.drawImage(
+          lendieImg,
+          lendieLeft,
+          lendieTop,
+          lendieWidth,
+          lendieHeight,
+        );
 
         circleImg.src = circleImage;
         ctx.drawImage(circleImg, circleLeft, circleTop, circleSize, circleSize);
 
         blackImg.src = blackBgImage;
-        ctx.drawImage(blackImg, blackBgLeft, blackBgTop, blackBgLength, blackBgHeight);
+        ctx.drawImage(
+          blackImg,
+          blackBgLeft,
+          blackBgTop,
+          blackBgLength,
+          blackBgHeight,
+        );
+
+        logoImg.src = logoImage;
+        ctx.drawImage(logoImg, logoLeft, logoTop, logoImgWidth, logoImgHeight);
+
+        assetImg.src = tokenIcon;
+        ctx.drawImage(
+          assetImg,
+          assetIconLeft,
+          assetIconTop,
+          assetIconSize,
+          assetIconSize,
+        );
 
         circularImg.onload = () => {
           ctx.save();
@@ -299,59 +328,35 @@ const CanvasComponent: React.FC<CanvasProps> = ({
 
         ctx.fillStyle = '#000';
         ctx.font = `300 ${7 * multiplier}px lufga`;
-        ctx.fillText(
-            `Meet ${username}`,
-            meetTextLeft,
-            meetTextTop,
-        );
+        ctx.fillText(`Meet ${username}`, meetTextLeft, meetTextTop);
 
         ctx.fillStyle = '#000';
         ctx.font = `400 ${8 * multiplier}px lufga`;
-        ctx.fillText(
-            symbol,
-            symbolLeft,
-            symbolTop,
-        );
+        ctx.fillText(symbol, symbolLeft, symbolTop);
 
-        // // //add daily earnings
         ctx.fillStyle = '#CAEAE5';
         ctx.font = `500 ${8 * multiplier}px lufga`;
         ctx.fillText(
-            `$${dailyEarnings}/day`,
-            dailyEarningsLeft,
-            dailyEarningsTop,
+          `$${dailyEarnings}/day`,
+          dailyEarningsLeft,
+          dailyEarningsTop,
         );
 
-        // // //add APY earnings
         ctx.fillStyle = '#000';
         ctx.font = `900 ${40 * multiplier}px nexa`;
-        ctx.fillText(
-            `${apy}%`,
-            apyLeft,
-            apyTop,
-        );
+        ctx.fillText(`${apy}%`, apyLeft, apyTop);
 
         ctx.fillStyle = '#000';
         ctx.font = `400 ${5 * multiplier}px lufga`;
         ctx.fillText(
-            `Unlock purrwerful yields trough our lending protocol.`,
-            yieldsLeft,
-            yieldsTop,
+          `Unlock purrwerful yields through our lending protocol.`,
+          yieldsLeft,
+          yieldsTop,
         );
 
         ctx.fillStyle = '#000';
         ctx.font = `800 ${8 * multiplier}px lufga`;
-        ctx.fillText(
-            `hyperlend.finance`,
-            linkLeft,
-            linkTop,
-        );
-        
-        logoImg.src = logoImage;
-        ctx.drawImage(logoImg, logoLeft, logoTop, logoImgWidth, logoImgHeight);
-
-        assetImg.src = tokenIcon;
-        ctx.drawImage(assetImg, assetIconLeft, assetIconTop, assetIconSize, assetIconSize);
+        ctx.fillText(`hyperlend.finance`, linkLeft, linkTop);
 
         circularImg.onerror = () => {
           console.log('error');
