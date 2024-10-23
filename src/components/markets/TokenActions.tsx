@@ -278,13 +278,13 @@ const TokenActions: React.FC<TokenActionsProps> = ({
         <p className='text-xs text-[#FF0000] mt-2'>
           {errorMsg.includes('Contract Call')
             ? errorMsg.split('Contract Call')[0] +
-              (errorMsg
-                .split('Contract Call')[0]
-                .includes('reverted with the following reason:')
-                ? `(${getErrorMessage(errorMsg.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
-                : '')
+            (errorMsg
+              .split('Contract Call')[0]
+              .includes('reverted with the following reason:')
+              ? `(${getErrorMessage(errorMsg.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
+              : '')
             : getErrorMessage(errorMsg.split('Request Arguments')[0]) !=
-                'ERROR_MESSAGE_NOT_FOUND'
+              'ERROR_MESSAGE_NOT_FOUND'
               ? getErrorMessage(errorMsg.split('Request Arguments')[0])
               : errorMsg.split('Request Arguments')[0]}
         </p>

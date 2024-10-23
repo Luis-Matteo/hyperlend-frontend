@@ -4,9 +4,7 @@ import CardItem from '../components/common/CardItem';
 import { useParams } from 'react-router-dom';
 import { useSwitchChain, useAccount, useBalance } from 'wagmi';
 import ReactGA from 'react-ga4';
-
 import { tokenDetailButton } from '../utils/constants/constants';
-
 import { formatNumber, decodeConfig, formatAddress } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../components/charts/InterestRateModelChart';
@@ -322,7 +320,7 @@ function TokenDetail() {
         <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
           {(supplies || []).map((supply, index) => (
             <div className='font-lufga' key={index}>
-              <p className='text-xs pb-4 text-[#E1E1E1]'>{supply.name}</p>
+              <p className={`text-xs pb-4 text-[#E1E1E1]`}>{supply.name}</p>
               <p className='text-3xl text-white'>{supply.value}</p>
             </div>
           ))}

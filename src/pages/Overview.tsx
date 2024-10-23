@@ -294,6 +294,7 @@ function Overview() {
             </div>
           </div>
         </CardItem>
+
         <div className='xl:hidden w-full'>
           {(assets || []).map((item, key) => (
             <CardItem className='items-center' key={key}>
@@ -384,7 +385,9 @@ function Overview() {
             </CardItem>
           ))}
         </div>
+
       </div>
+
       {modalStatus && (
         <Modal
           token={selectedToken || ''}

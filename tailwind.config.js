@@ -8,7 +8,8 @@ export default {
         '4xl': '0 0 40px #252525',
       },
       fontFamily: {
-        lufga: ['Lufga', 'sans-serif'],
+        'lufga': ['Lufga', 'sans-serif'],
+        'nexa': ['Nexa', 'sans-serif'],
       },
       colors: {
         primary: '#050F0D',
