@@ -172,7 +172,7 @@ function ShareImageModal({
                   username={name}
                   symbol={tokenNameMap[token]}
                   apy={apy}
-                  dailyEarnings={dailyEarnings}
+                  dailyEarnings={dailyEarnings == "0" ? "0.000" : dailyEarnings}
                   tokenIcon={iconsMap[tokenNameMap[token]]}
                 />
               </div>
