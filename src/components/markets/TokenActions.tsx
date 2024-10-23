@@ -379,6 +379,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
         <ShareImageModal
           token={token}
           apy={formatNumber(totalApy, 3)}
+          dailyEarnings={formatNumber(dailyEarning, 3)}
           onClose={toggleModal}
         />
       )}
