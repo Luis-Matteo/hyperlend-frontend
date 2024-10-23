@@ -385,7 +385,6 @@ function Overview() {
             </CardItem>
           ))}
         </div>
-
       </div>
 
       {modalStatus && (

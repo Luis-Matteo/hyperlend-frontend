@@ -279,13 +279,13 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                   <p className='text-success text-xs font-lufga'>
                     {modalType == 'supply' || modalType == 'withdraw'
                       ? formatNumber(
-                        interestRateDataMap[token].supply,
-                        getTokenPrecision(token, priceDataMap),
-                      )
+                          interestRateDataMap[token].supply,
+                          getTokenPrecision(token, priceDataMap),
+                        )
                       : formatNumber(
-                        interestRateDataMap[token].borrow,
-                        getTokenPrecision(token, priceDataMap),
-                      )}
+                          interestRateDataMap[token].borrow,
+                          getTokenPrecision(token, priceDataMap),
+                        )}
                     % APY
                   </p>
                 </div>
@@ -348,13 +348,13 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                 <p className='font-lufga font-light text-xs text-[#FF0000] mt-2'>
                   {errorMsg.includes('Contract Call')
                     ? errorMsg.split('Contract Call')[0] +
-                    (errorMsg
-                      .split('Contract Call')[0]
-                      .includes('reverted with the following reason:')
-                      ? `(${getErrorMessage(errorMsg.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
-                      : '')
+                      (errorMsg
+                        .split('Contract Call')[0]
+                        .includes('reverted with the following reason:')
+                        ? `(${getErrorMessage(errorMsg.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
+                        : '')
                     : getErrorMessage(errorMsg.split('Request Arguments')[0]) !=
-                      'ERROR_MESSAGE_NOT_FOUND'
+                        'ERROR_MESSAGE_NOT_FOUND'
                       ? getErrorMessage(errorMsg.split('Request Arguments')[0])
                       : errorMsg.split('Request Arguments')[0]}
                 </p>
@@ -418,8 +418,8 @@ function Modal({ token, modalType, onClose }: ModalProps) {
               <p className='font-lufga text-warning text-xs'>
                 {predictedHealth
                   ? formatNumber(userPositionsData?.healthFactor || 0, 2) +
-                  ' → ' +
-                  formatNumber(predictedHealth, 2)
+                    ' → ' +
+                    formatNumber(predictedHealth, 2)
                   : formatNumber(userPositionsData?.healthFactor || 0, 2)}
               </p>
             </div>
@@ -428,7 +428,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
               <p className='font-lufga text-white text-xs'>
                 {formatNumber(
                   Number(assetReserveData.totalAToken) /
-                  Math.pow(10, tokenDecimalsMap[token]),
+                    Math.pow(10, tokenDecimalsMap[token]),
                   getTokenPrecision(token, priceDataMap),
                 )}
               </p>
