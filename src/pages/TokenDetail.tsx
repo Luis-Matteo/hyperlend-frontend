@@ -399,7 +399,7 @@ function TokenDetail() {
             </div>
             <div className='flex items-center mt-8 mb-8'>
               <span className='w-2 h-2 bg-[#302DC2] rounded-full mr-2'></span>
-              <p className='text-xs text-[#797979] font-lufga'>Borrow API</p>
+              <p className='text-xs text-[#797979] font-lufga'>Borrow APY</p>
             </div>
             <div className='flex justify-between gap-4 md:justify-start md:gap-12'>
               {(borrowInfos || []).map((borrowInfo, index) => (
