@@ -5,6 +5,7 @@
 body {
   background-color: #071311;
 }
+
 @font-face {
   font-family: 'Lufga';
   src: url('./assets/fonts/LufgaRegular.ttf') format('truetype');
@@ -12,10 +13,18 @@ body {
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Nexa';
+  src: url('./assets/fonts/Nexa-Bold.ttf') format('truetype');
+  /* font-weight: 400; */
+  /* font-style: normal; */
+}
+
 *::-webkit-scrollbar {
   width: 6px;
   height: 6px;
-  border-radius: 6px; /* Width of the scrollbar */
+  border-radius: 6px;
+  /* Width of the scrollbar */
 }
 
 *::-webkit-scrollbar-track {

@@ -109,8 +109,9 @@ function MarketControl({
         <div className='flex gap-5'>
           <div className='flex gap-3'>
             <ToggleButton status={stable} setStatus={setStable} />
-            <p className='text-bold text-white font-bold'>
-              Stable<span className='hidden sm:inline-block'>coins</span>
+            <p className='text-bold text-white font-nexa'>
+              Stable
+              <span className='hidden sm:inline-block font-nexa'>coins</span>
             </p>
           </div>
         </div>

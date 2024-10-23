@@ -4,9 +4,7 @@ import CardItem from '../components/common/CardItem';
 import { useParams } from 'react-router-dom';
 import { useSwitchChain, useAccount, useBalance } from 'wagmi';
 import ReactGA from 'react-ga4';
-
 import { tokenDetailButton } from '../utils/constants/constants';
-
 import { formatNumber, decodeConfig, formatAddress } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../components/charts/InterestRateModelChart';
@@ -328,7 +326,7 @@ function TokenDetail() {
         <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
           {(supplies || []).map((supply, index) => (
             <div className='font-lufga' key={index}>
-              <p className='text-xs pb-4 text-[#E1E1E1]'>{supply.name}</p>
+              <p className={`text-xs pb-4 text-[#E1E1E1]`}>{supply.name}</p>
               <p className='text-3xl text-white'>{supply.value}</p>
             </div>
           ))}
@@ -370,7 +368,7 @@ function TokenDetail() {
               <span className='w-2 h-2 bg-[#2DC24E] rounded-full mr-2'></span>
               <p className='text-xs text-[#797979] font-lufga'>Supply APY</p>
             </div>
-            <div className='flex justify-between gap-4 md:justify-start md:gap-12'>
+            <div className='flex justify-between gap-4 md:justify-start flex-wrap md:gap-12'>
               {(supplyInfos || []).map((supplyInfo, index) => (
                 <div className='font-lufga' key={index}>
                   <p className='text-[9px] pb-2 text-[#E1E1E1]'>
@@ -401,7 +399,7 @@ function TokenDetail() {
               <span className='w-2 h-2 bg-[#302DC2] rounded-full mr-2'></span>
               <p className='text-xs text-[#797979] font-lufga'>Borrow APY</p>
             </div>
-            <div className='flex justify-between gap-4 md:justify-start md:gap-12'>
+            <div className='flex justify-between gap-4 flex-wrap md:justify-start md:gap-12'>
               {(borrowInfos || []).map((borrowInfo, index) => (
                 <div className='font-lufga' key={index}>
                   <p className='text-[9px] pb-2 text-[#E1E1E1]'>
@@ -414,7 +412,7 @@ function TokenDetail() {
             <BorrowInfoChart type='borrow' token={token} />
           </CardItem>
           <CardItem className='p-4 lg:p-8 mb-6'>
-            <div className='flex justify-between items-center'>
+            <div className='flex justify-between items-center flex-wrap'>
               <p className='text-[#797979] text-xl font-lufga'>
                 Interest Rate Model
               </p>
