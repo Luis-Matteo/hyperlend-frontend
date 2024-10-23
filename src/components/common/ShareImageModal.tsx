@@ -90,6 +90,8 @@ function ShareImageModal({
     }
   };
 
+  dailyEarnings = '1.129';
+
   return (
     <AnimatePresence>
       <motion.div
@@ -172,7 +174,7 @@ function ShareImageModal({
                   username={name}
                   symbol={tokenNameMap[token]}
                   apy={apy}
-                  dailyEarnings={dailyEarnings == "0" ? "0.000" : dailyEarnings}
+                  dailyEarnings={dailyEarnings == '0' ? '0.000' : dailyEarnings}
                   tokenIcon={iconsMap[tokenNameMap[token]]}
                 />
               </div>
@@ -217,21 +219,23 @@ const CanvasComponent: React.FC<CanvasProps> = ({
     let meetTextLeft = 55 * multiplier;
 
     let symbolTop = 61 * multiplier;
-    let symbolLeft = 38 * multiplier;
+    let symbolLeft = 43 * multiplier;
 
     let assetIconTop = 53 * multiplier;
-    let assetIconLeft = 26 * multiplier;
+    let assetIconLeft = 30 * multiplier;
     let assetIconSize = 10 * multiplier;
 
-    let offsetLeft = symbol.length + 5;
+    let offsetLeft = symbol.length + 12;
 
     let dailyEarningsTop = 61 * multiplier;
-    let dailyEarningsLeft = offsetLeft + 65 * multiplier;
+    let dailyEarningsLeft = offsetLeft + 67 * multiplier;
 
-    let blackBgLeft = offsetLeft + 58 * multiplier;
+    let dailyEarningsOffset = dailyEarnings.length - 3;
+
+    let blackBgLeft = dailyEarningsOffset + offsetLeft + 58 * multiplier;
     let blackBgTop = 23 * multiplier;
     let blackBgHeight = 70 * multiplier;
-    let blackBgLength = offsetLeft + 50 * multiplier;
+    let blackBgLength = offsetLeft + dailyEarningsOffset + 46 * multiplier;
 
     let apyTop = 108 * multiplier;
     let apyLeft = 29 * multiplier;
