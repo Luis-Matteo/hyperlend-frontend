@@ -90,8 +90,6 @@ function ShareImageModal({
     }
   };
 
-  dailyEarnings = '1.129';
-
   return (
     <AnimatePresence>
       <motion.div
