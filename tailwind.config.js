@@ -9,6 +9,7 @@ export default {
       },
       fontFamily: {
         lufga: ['Lufga', 'sans-serif'],
+        nexa: ['Nexa', 'sans-serif'],
       },
       colors: {
         primary: '#050F0D',
