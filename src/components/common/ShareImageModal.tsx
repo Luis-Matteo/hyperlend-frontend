@@ -9,14 +9,13 @@ import logoImage from '../../assets/img/shareImg/logo.svg';
 import circleImage from '../../assets/img/shareImg/circle.svg';
 import blackBgImage from '../../assets/img/shareImg/black-bg.svg';
 import moneyEyesImage from '../../assets/img/shareImg/moneyEyes.svg';
-import ethImage from '../../assets/img/shareImg/eth.svg';
 
 import happyLendie from '../../assets/img/shareImg/cats/happy.png';
 import standingLending from '../../assets/img/shareImg/cats/standing.svg';
 import swagLendie from '../../assets/img/shareImg/cats/swag.svg';
 import winkLendie from '../../assets/img/shareImg/cats/wink.svg';
 
-import { tokenNameMap } from '../../utils/config';
+import { tokenNameMap, iconsMap } from '../../utils/config';
 
 import { CheckboxIndicator } from './Checkbox';
 
@@ -27,6 +26,7 @@ interface CanvasProps {
   symbol: string;
   apy: string;
   dailyEarnings: string;
+  tokenIcon: string;
 }
 
 interface IShareImageModalProps {
@@ -168,6 +168,7 @@ function ShareImageModal({ token, apy, dailyEarnings, onClose }: IShareImageModa
                   symbol={tokenNameMap[token]}
                   apy={apy}
                   dailyEarnings={dailyEarnings}
+                  tokenIcon={iconsMap[tokenNameMap[token]]}
                 />
               </div>
             </div>
@@ -184,7 +185,8 @@ const CanvasComponent: React.FC<CanvasProps> = ({
   username,
   symbol,
   apy,
-  dailyEarnings
+  dailyEarnings,
+  tokenIcon
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -210,7 +212,7 @@ const CanvasComponent: React.FC<CanvasProps> = ({
     let meetTextLeft = 55 * multiplier
 
     let symbolTop = 61 * multiplier
-    let symbolLeft = 36 * multiplier
+    let symbolLeft = 38 * multiplier
 
     let assetIconTop = 53 * multiplier
     let assetIconLeft = 26 * multiplier
@@ -219,9 +221,9 @@ const CanvasComponent: React.FC<CanvasProps> = ({
     let offsetLeft = symbol.length + 5
 
     let dailyEarningsTop = 61 * multiplier
-    let dailyEarningsLeft = offsetLeft + 63 * multiplier
+    let dailyEarningsLeft = offsetLeft + 65 * multiplier
 
-    let blackBgLeft = offsetLeft + 55.5 * multiplier
+    let blackBgLeft = offsetLeft + 58 * multiplier
     let blackBgTop = 23 * multiplier
     let blackBgHeight = 70 * multiplier
     let blackBgLength = offsetLeft + 50 * multiplier
@@ -332,7 +334,7 @@ const CanvasComponent: React.FC<CanvasProps> = ({
         ctx.fillStyle = '#000';
         ctx.font = `400 ${5 * multiplier}px lufga`;
         ctx.fillText(
-            `Unlock powerful yields trough our secure lending protocol.`,
+            `Unlock purrwerful yields trough our lending protocol.`,
             yieldsLeft,
             yieldsTop,
         );
@@ -348,7 +350,7 @@ const CanvasComponent: React.FC<CanvasProps> = ({
         logoImg.src = logoImage;
         ctx.drawImage(logoImg, logoLeft, logoTop, logoImgWidth, logoImgHeight);
 
-        assetImg.src = ethImage;
+        assetImg.src = tokenIcon;
         ctx.drawImage(assetImg, assetIconLeft, assetIconTop, assetIconSize, assetIconSize);
 
         circularImg.onerror = () => {
