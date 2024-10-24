@@ -112,6 +112,10 @@ const Main = () => {
     }
   }, [errorMsg]);
 
+  useEffect(() => {
+    localStorage.setItem("referral-link", link) //for use in share-position image
+  }, [link])
+
   const requestSignature = () => {
     if (!address) {
       setRegistrationProgress('')
