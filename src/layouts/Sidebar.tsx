@@ -8,8 +8,8 @@ import logo from '../assets/icons/logo-text.svg';
 import Status from '../components/header/Status';
 import logoutIcon from '../assets/icons/logout-icon.svg';
 import xmarkIcon from '../assets/icons/xmark-icon.svg';
-// import referralsIcon from '../assets/icons/referralsIcon.svg'
-import { /*toggleModalOpen,*/ toggleSidebar } from '../store/sidebarSlice';
+import referralsIcon from '../assets/icons/referralsIcon.svg'
+import { toggleModalOpen, toggleSidebar } from '../store/sidebarSlice';
 import { useEffect, useRef } from 'react';
 
 import { networkChainId, contracts, abis } from '../utils/config';
@@ -88,6 +88,19 @@ function Sidebar() {
                 <img src={explorerIcon} className='w-5' alt='faucet' />
               </div>
               <p className='font-lufga font-medium text-secondary'>Explorer</p>
+            </button>
+
+            <button
+              className="flex items-center gap-2 rounded-full hover:bg-[#1F2A29]"
+              type="button"
+              onClick={() => dispatch(toggleModalOpen())}
+            >
+              <div className="p-3">
+                <img src={referralsIcon} className="w-5" alt="referrals" />
+              </div>
+              <p className="font-lufga font-medium text-secondary">
+                Referrals
+              </p>
             </button>
 
             {networkChainId == 998 && isConnected ? (

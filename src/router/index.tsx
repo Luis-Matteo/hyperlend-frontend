@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Markets from '../pages/Markets';
 import TokenDetails from '../pages/TokenDetail';
@@ -16,6 +16,11 @@ import { tokenToGradient } from '../utils/config';
 function MainContent() {
   const location = useLocation();
   const modalOpen = useSelector((state: RootState) => state.sidebar.modalOpen);
+
+  const [searchParams] = useSearchParams();
+  if (searchParams.get("ref")){
+    localStorage.setItem("referredBy", searchParams.get("ref") || "null")
+  }
 
   return (
     <main className='bg-primary-light w-full lg:w-[calc(100vw-256px)] relative lg:h-screen'>
