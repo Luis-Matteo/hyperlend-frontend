@@ -22,7 +22,7 @@ function Referrals() {
       onClose();
     }
   };
-  
+
   return (
     <AnimatePresence>
       <motion.div
@@ -71,17 +71,21 @@ function Referrals() {
             }
             {page === 'refer' ? (
               <>
-                <Main/>
+                <Main />
               </>
             ) : (
               <>
                 {!history ? (
                   <Earnings
-                    toggleHistory={() => {setHistory(!history)}}
+                    toggleHistory={() => {
+                      setHistory(!history);
+                    }}
                   />
                 ) : (
                   <History
-                    toggleHistory={() => {setHistory(!history)}}
+                    toggleHistory={() => {
+                      setHistory(!history);
+                    }}
                   />
                 )}
               </>

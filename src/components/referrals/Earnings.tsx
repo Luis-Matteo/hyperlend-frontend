@@ -30,7 +30,7 @@ const Earnings = ({ toggleHistory }: EarningsProps) => {
     90154, 89334, 90297, 90710, 91532, 93429,
   ];
 
-  console.log(day)
+  console.log(day);
 
   return (
     <>
@@ -91,9 +91,7 @@ const Earnings = ({ toggleHistory }: EarningsProps) => {
                   key={item}
                   onClick={() => setDay(item)}
                 >
-                  <p className='text-[#797979] text-xs font-lufga'>
-                    {item}d
-                  </p>
+                  <p className='text-[#797979] text-xs font-lufga'>{item}d</p>
                 </button>
               ))}
             </div>
@@ -115,10 +113,7 @@ const Earnings = ({ toggleHistory }: EarningsProps) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
 export default Earnings;
-
-
-                  

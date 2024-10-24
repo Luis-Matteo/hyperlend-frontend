@@ -80,10 +80,7 @@ const History = ({ toggleHistory }: HistoryProps) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
 export default History;
-
-
-                  

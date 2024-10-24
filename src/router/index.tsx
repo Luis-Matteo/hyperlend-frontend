@@ -1,4 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useSearchParams,
+} from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Markets from '../pages/Markets';
 import TokenDetails from '../pages/TokenDetail';
@@ -18,8 +24,8 @@ function MainContent() {
   const modalOpen = useSelector((state: RootState) => state.sidebar.modalOpen);
 
   const [searchParams] = useSearchParams();
-  if (searchParams.get("ref")){
-    localStorage.setItem("referredBy", searchParams.get("ref") || "null")
+  if (searchParams.get('ref')) {
+    localStorage.setItem('referredBy', searchParams.get('ref') || 'null');
   }
 
   return (
