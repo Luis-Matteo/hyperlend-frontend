@@ -10,9 +10,6 @@ import {
   usePublicClient,
 } from 'wagmi';
 
-import shareIcon from '../../assets/icons/share-2.svg';
-import ShareImageModal from '../common/ShareImageModal';
-
 import { formatNumber } from '../../utils/functions';
 import {
   iconsMap,
@@ -57,8 +54,6 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   const [errorMsg, setErrorMsg] = useState<any>(null);
   const [isTxPending, setIsTxPending] = useState(false);
   const [useMaxAmount, setUseMaxAmount] = useState(false);
-  const [shareImageModalStatus, setShareImageModalStatus] =
-    useState<boolean>(false);
 
   const handleProgessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
@@ -230,12 +225,8 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     setProgress(100);
   };
 
-  const toggleModal = () => {
-    setShareImageModalStatus(!shareImageModalStatus);
-  };
-
   return (
-    <>
+    <div>
       {btnTitle === 'Supply' && (
         <div className='flex justify-between items-center mt-4'>
           <p className='text-base text-[#CAEAE566]'>Collateral</p>
@@ -364,26 +355,11 @@ const TokenActions: React.FC<TokenActionsProps> = ({
           >
             {' '}
             ${formatNumber(dailyEarning, 3)}
-            &nbsp;
-            <img
-              style={{ cursor: 'pointer' }}
-              src={shareIcon}
-              alt='share'
-              onClick={toggleModal}
-            />
           </p>
         </div>
       </div>
       <Button title={buttonText} onClick={() => sendTransaction()} />
-      {shareImageModalStatus && (
-        <ShareImageModal
-          token={token}
-          apy={formatNumber(totalApy, 3)}
-          dailyEarnings={formatNumber(dailyEarning, 3)}
-          onClose={toggleModal}
-        />
-      )}
-    </>
+    </div>
   );
 };
 

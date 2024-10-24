@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useRef, useEffect } from 'react';
-import xmarkIcon from '../../assets/icons/xmark-icon.svg';
 import refreshIcon from '../../assets/icons/refresh.svg';
 
 import background from '../../assets/img/shareImg/background.jpeg';
@@ -14,10 +13,12 @@ import happyLendie from '../../assets/img/shareImg/cats/happy.png';
 import standingLending from '../../assets/img/shareImg/cats/standing.svg';
 import swagLendie from '../../assets/img/shareImg/cats/swag.svg';
 import winkLendie from '../../assets/img/shareImg/cats/wink.svg';
-
+import logo from '../../assets/icons/logo.svg'
 import { tokenNameMap, iconsMap } from '../../utils/config';
 
-import { CheckboxIndicator } from './Checkbox';
+import ToggleButton from './ToggleButton';
+import CardItem from './CardItem';
+import Button from './Button';
 
 interface CanvasProps {
   backgroundImage: string;
@@ -103,81 +104,91 @@ function ShareImageModal({
           initial={{ scale: 0, rotate: '12.5deg' }}
           animate={{ scale: 1, rotate: '0deg' }}
           exit={{ scale: 0, rotate: '0deg' }}
-          className='px-6 py-4 bg-primary-light rounded-2xl'
+          className='shadow-4xl rounded-2xl'
         >
-          <div className='flex justify-between items-center mb-6'>
-            <p className='font-lufga font-light text-[#797979]'>
-              Share your position
-            </p>
-            <button className='' onClick={onClose}>
-              <img src={xmarkIcon} alt='close' />
-            </button>
-          </div>
-          <div className='text-white'>
-            You name:{' '}
-            <input
-              autoFocus={true}
-              type='text'
-              className='form-control-plaintext text-xl text-secondary border-0 p-0 text-left'
-              value={name == 'HyperLend user' ? '' : name}
-              onChange={(e) => {
-                handleNameChange(e);
-              }}
-              style={{
-                background: 'transparent',
-                outline: 'none',
-                boxShadow: 'none',
-                width: 'auto',
-                minWidth: '50px',
-              }}
-            />
-          </div>
-          <br></br>
-          <div className='flex items-center gap-2 text-white text-sm'>
-            Use X (Twitter) profile photo?
-            <CheckboxIndicator
-              id='fetchTwitterCheckBox'
-              isChecked={fetchTwitterPhoto}
-              setIsChecked={setFetchTwitterPhoto}
-            />
-            <motion.img
-              src={refreshIcon}
-              alt='refresh'
-              style={{ cursor: 'pointer' }}
-              onClick={handleRotate}
-              animate={{
-                rotate: rotationAngle,
-              }}
-              transition={{
-                duration: 1,
-                ease: 'easeInOut',
-              }}
-            />
-          </div>
-          {errorMsg ? (
-            <div className='flex justify-between mb-2'>
-              <p className='font-lufga font-light text-xs text-[#FF0000] mt-2'>
-                {errorMsg}
-              </p>
-            </div>
-          ) : (
-            ''
-          )}
-          <div className='px-6 py-4 bg-[#050F0D] rounded-2xl flex flex-col gap-4 mb-5'>
-            <div className='flex justify-between items-center'>
-              <div className='flex gap-2 items-center'>
-                <CanvasComponent
-                  backgroundImage={background}
-                  circularImage={circularImage}
-                  username={name}
-                  symbol={tokenNameMap[token]}
-                  apy={apy}
-                  dailyEarnings={dailyEarnings == '0' ? '0.000' : dailyEarnings}
-                  tokenIcon={iconsMap[tokenNameMap[token]]}
+          <CardItem className='px-10 py-8'>
+            <div className='flex flex-col justify-center items-center gap-5 text-center'>
+              <div className='flex flex-col gap-3 justify-center items-center'>
+                <div className=''>
+                  <img className=''
+                    src={logo} alt="logo" />
+                </div>
+                <p className='font-nexa font-black text-xl text-secondary'>
+                  Share your position
+                </p>
+              </div>
+              <div className='flex flex-col justify-center items-center gap-2'>
+                <p className='font-lufga text-sm font-light text-secondary'>
+                  X (Twitter) username{' '}
+                </p>
+                <input
+                  autoFocus={true}
+                  type='text'
+                  className='form-control-plaintext text-center font-lufga text-xl text-secondary border-0 p-0 border-b-2 border-[#212325]'
+                  value={name == 'HyperLend user' ? '' : name}
+                  onChange={(e) => {
+                    handleNameChange(e);
+                  }}
+                  style={{
+                    background: 'transparent',
+                    outline: 'none',
+                    boxShadow: 'none',
+                    width: 'auto',
+                    minWidth: '50px',
+                  }}
                 />
               </div>
+              <div className='flex justify-center items-center gap-4 text-white text-sm'>
+                <p className=''>
+                  Use X (Twitter) profile photo?
+                </p>
+
+                <ToggleButton
+                  status={fetchTwitterPhoto}
+                  setStatus={setFetchTwitterPhoto} />
+                <motion.img
+                  src={refreshIcon}
+                  alt='refresh'
+                  style={{ cursor: 'pointer' }}
+                  onClick={handleRotate}
+                  animate={{
+                    rotate: rotationAngle,
+                  }}
+                  transition={{
+                    duration: 1,
+                    ease: 'easeInOut',
+                  }}
+                />
+              </div>
+              {errorMsg ? (
+                <div className='flex justify-between mb-2'>
+                  <p className='font-lufga font-light text-xs text-[#FF0000] mt-2'>
+                    {errorMsg}
+                  </p>
+                </div>
+              ) : (
+                ''
+              )}
+              <div className='px-6 py-4 bg-[#050F0D] rounded-2xl flex flex-col gap-4'>
+                <div className='flex justify-between items-center'>
+                  <div className='flex gap-2 items-center'>
+                    <CanvasComponent
+                      backgroundImage={background}
+                      circularImage={circularImage}
+                      username={name}
+                      symbol={tokenNameMap[token]}
+                      apy={apy}
+                      dailyEarnings={dailyEarnings == '0' ? '0.000' : dailyEarnings}
+                      tokenIcon={iconsMap[tokenNameMap[token]]}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+            <Button
+            title='Share'
+            onClick={() =>{}}/>
+          </CardItem>
         </motion.div>
       </motion.div>
     </AnimatePresence>
@@ -341,7 +352,7 @@ const CanvasComponent: React.FC<CanvasProps> = ({
         ctx.fillText(
           `$${dailyEarnings}/day`,
           dailyEarningsLeft,
-          dailyEarningsTop,
+          dailyEarningsTop + 0,
         );
 
         ctx.fillStyle = '#000';

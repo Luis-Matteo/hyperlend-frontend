@@ -9,6 +9,8 @@ import { formatNumber, decodeConfig, formatAddress } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../components/charts/InterestRateModelChart';
 import { TokenActionsProps } from '../utils/types';
+import topRightArrowImage from '../assets/icons/top-right-arrow.svg';
+import ShareImageModal from '../components/common/ShareImageModal';
 
 import {
   tokenNameMap,
@@ -39,10 +41,16 @@ import { calculateAvailableBalance } from '../utils/user/functions/utils';
 import TokenActions from '../components/markets/TokenActions';
 
 function TokenDetail() {
-  let { token } = useParams();
-  token = token || '';
+  const { token = '' } = useParams();
 
   ReactGA.send({ hitType: 'pageview', page: '/token-details', title: token });
+
+  const [shareImageModalStatus, setShareImageModalStatus] =
+  useState<boolean>(false);
+
+  const toggleModal = () => {
+    setShareImageModalStatus(!shareImageModalStatus);
+  };
 
   const [activeButton, setActiveButton] = useState(1);
 
@@ -475,7 +483,7 @@ function TokenDetail() {
           </CardItem>
         </div>
         <div className='w-full lg:w-1/3 lg:min-w-[360px]'>
-          <CardItem className='p-4 lg:p-8 mb-6 font-lufga sticky top-0'>
+          <CardItem className='p-4 lg:p-8 font-lufga sticky top-0'>
             <div className='w-full grid grid-cols-4 text-center'>
               {tokenDetailButton.map((button) => (
                 <button
@@ -495,8 +503,21 @@ function TokenDetail() {
             </div>
             <TokenActions {...actionData} />
           </CardItem>
+          <button className='flex gap-4 items-center p-4 mx-auto'
+          onClick={toggleModal}>
+            <p className='font-lufga text-[#797979]'>Share</p>
+            <img className='' src={topRightArrowImage}/>
+          </button>
         </div>
       </div>
+      {shareImageModalStatus && (
+        <ShareImageModal
+          token={token}
+          apy={formatNumber(actionData?.totalApy, 3)}
+          dailyEarnings={formatNumber(actionData?.dailyEarning, 3)}
+          onClose={toggleModal}
+        />
+      )}
     </div>
   );
 }
