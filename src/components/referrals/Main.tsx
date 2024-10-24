@@ -113,7 +113,10 @@ const Main = () => {
   }, [errorMsg]);
 
   const requestSignature = () => {
-    if (!address) return alert('missing address');
+    if (!address) {
+      setRegistrationProgress('')
+      return alert('missing address');
+    }
     const message = `hyperlend_registration_${address.toLowerCase()}`;
     signMessage({ message });
   };
