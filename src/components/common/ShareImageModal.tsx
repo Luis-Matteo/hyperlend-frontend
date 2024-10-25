@@ -65,7 +65,7 @@ function ShareImageModal({
 
   const getTwitterImage = () => {
     if (fetchTwitterPhoto && name) {
-      setCircularImage(`https://unavatar.io/twitter/${name}`);
+      setCircularImage(`https://api.hyperlend.finance/twitterImage/${name}`);
     } else {
       setCircularImage(getDefaultImage());
     }
