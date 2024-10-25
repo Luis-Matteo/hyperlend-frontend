@@ -20,6 +20,7 @@
     "airbnb": "^0.0.2",
     "apexcharts": "^3.52.0",
     "framer-motion": "^11.3.24",
+    "html-to-image": "^1.11.11",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
     "lucide-react": "^0.429.0",

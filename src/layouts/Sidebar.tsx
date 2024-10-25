@@ -132,11 +132,10 @@ function Sidebar() {
             type='button'
             onClick={() => dispatch(toggleSidebar())}
           >
-            <img className='' src={xmarkIcon} alt='' />
+            <img className='' src={xmarkIcon} alt='twitter' />
           </button>
         </div>
       </div>
-      //{' '}
     </div>
   );
 }
