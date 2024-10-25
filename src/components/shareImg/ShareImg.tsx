@@ -31,7 +31,7 @@ function ShareImg(
             <div className='flex items-center justify-start w-full gap-1'>
               <div className="relative">
                 <img src={circleImage} alt='circle' className='w-[28px] aspect-square' />
-                <img src={circularImage} alt='circle' className='w-[20px] rounded-full aspect-square absolute top-[4px] left-[4px]' />
+                <img src={circularImage} alt='circle' className='w-[16px] rounded-full aspect-square absolute top-[6px] left-[6px]' />
               </div>
               <div className='font-lufga text-[7px] font-[300]'>
                 Meet {username}

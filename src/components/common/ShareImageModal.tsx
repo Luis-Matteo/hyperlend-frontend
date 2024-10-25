@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import React, {  useEffect } from 'react';
+import React, { useEffect } from 'react';
 import refreshIcon from '../../assets/icons/refresh.svg';
 
 import happyLendie from '../../assets/img/share-img/cats/happy.png';
@@ -172,23 +172,27 @@ function ShareImageModal(
                   {
                     shareItems.map((item) => (
                       <ShareImg
-                      catImage={item.catImage}
-                      circularImage={circularImage}
-                      username={name}
-                      symbol={tokenNameMap[token]}
-                      apy={apy}
-                      dailyEarnings={dailyEarnings == '0' ? '0.000' : dailyEarnings}
-                      tokenIcon={iconsMap[tokenNameMap[token]]}
+                        catImage={item.catImage}
+                        circularImage={circularImage}
+                        username={name}
+                        symbol={tokenNameMap[token]}
+                        apy={apy}
+                        dailyEarnings={dailyEarnings == '0' ? '0.000' : dailyEarnings}
+                        tokenIcon={iconsMap[tokenNameMap[token]]}
                       />
                     ))
                   }
                 </div>
               </div>
             </div>
-            <Button
-              title='Share'
-              onClick={() => { }} />
-
+            <div className="flex flex-col md:flex-row gap-4">
+              <Button
+                title='Share'
+                onClick={() => { }} />
+              <Button
+                title='Download Image'
+                onClick={() => { }} />
+            </div>
           </CardItem>
         </motion.div>
       </motion.div>
@@ -201,7 +205,7 @@ export default ShareImageModal;
 
 const shareItems = [
   { catImage: dollarcatImage },
-  { catImage: glasscatImage},
-  { catImage: rabbitcatImage  },
+  { catImage: glasscatImage },
+  { catImage: rabbitcatImage },
   { catImage: bottlecatImage },
 ];
