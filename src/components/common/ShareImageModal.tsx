@@ -80,7 +80,9 @@ function ShareImageModal({
     const scaleFactor = 2;
 
     //clone and scale element
-    const clonedElement  = imageRefs.current[index]!.cloneNode(true) as HTMLElement;
+    const clonedElement = imageRefs.current[index]!.cloneNode(
+      true,
+    ) as HTMLElement;
     //scale
     clonedElement.style.transform = `scale(${scaleFactor})`;
     clonedElement.style.transformOrigin = 'top left';
@@ -92,14 +94,14 @@ function ShareImageModal({
     document.body.appendChild(container);
     // Wait for the browser to render the scaling effect
     await new Promise((resolve) => setTimeout(resolve, 200));
-  
+
     //Loop to fix the empty image bug
     for (let i = 0; i < 2; i++) {
-      toPng(clonedElement, { 
-        height: clonedElement.offsetHeight * scaleFactor, 
-        width: clonedElement.offsetWidth * scaleFactor, 
-        cacheBust: true
-     })
+      toPng(clonedElement, {
+        height: clonedElement.offsetHeight * scaleFactor,
+        width: clonedElement.offsetWidth * scaleFactor,
+        cacheBust: true,
+      })
         .then((dataUrl) => {
           if (i === 1) {
             const link = document.createElement('a');
