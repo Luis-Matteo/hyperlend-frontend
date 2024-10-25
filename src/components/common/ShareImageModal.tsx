@@ -85,7 +85,7 @@ function ShareImageModal({
       })
       .catch((err: any) => {
         console.error('Could not download image', err);
-        alert(`Error downloading image: ${JSON.stringify(err)}`)
+        alert(`Error downloading image: ${JSON.stringify(err)}`);
       });
   };
 
