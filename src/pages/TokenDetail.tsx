@@ -46,7 +46,7 @@ function TokenDetail() {
   ReactGA.send({ hitType: 'pageview', page: '/token-details', title: token });
 
   const [shareImageModalStatus, setShareImageModalStatus] =
-  useState<boolean>(false);
+    useState<boolean>(false);
 
   const toggleModal = () => {
     setShareImageModalStatus(!shareImageModalStatus);
@@ -483,31 +483,33 @@ function TokenDetail() {
           </CardItem>
         </div>
         <div className='w-full lg:w-1/3 lg:min-w-[360px]'>
-          <CardItem className='p-4 lg:p-8 font-lufga sticky top-0'>
-            <div className='w-full grid grid-cols-4 text-center'>
-              {tokenDetailButton.map((button) => (
-                <button
-                  key={button.id}
-                  onClick={() => handleButtonClick(button.id)}
-                >
-                  <p
-                    className={`text-base transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+          <div className='sticky top-0'>
+            <CardItem className='p-4 lg:p-8 font-lufga'>
+              <div className='w-full grid grid-cols-4 text-center'>
+                {tokenDetailButton.map((button) => (
+                  <button
+                    key={button.id}
+                    onClick={() => handleButtonClick(button.id)}
                   >
-                    {button.label}
-                  </p>
-                  <hr
-                    className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#546764]'}`}
-                  />
-                </button>
-              ))}
-            </div>
-            <TokenActions {...actionData} />
-          </CardItem>
-          <button className='flex gap-4 items-center p-4 mx-auto'
-          onClick={toggleModal}>
-            <p className='font-lufga text-[#797979]'>Share</p>
-            <img className='' src={topRightArrowImage}/>
-          </button>
+                    <p
+                      className={`text-base transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                    >
+                      {button.label}
+                    </p>
+                    <hr
+                      className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#546764]'}`}
+                    />
+                  </button>
+                ))}
+              </div>
+              <TokenActions {...actionData} />
+            </CardItem>
+            <button className='flex gap-4 items-center p-4 mx-auto'
+              onClick={toggleModal}>
+              <p className='font-lufga text-[#797979]'>Share</p>
+              <img className='' src={topRightArrowImage} />
+            </button>
+          </div>
         </div>
       </div>
       {shareImageModalStatus && (
