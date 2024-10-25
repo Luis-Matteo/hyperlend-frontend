@@ -16,6 +16,7 @@ import {
   tokenDecimalsMap,
   stablecoinsList,
   networkChainId,
+  tokenColorMap,
 } from '../utils/config';
 
 import { useProtocolPriceData } from '../utils/protocol/prices';
@@ -101,6 +102,8 @@ function Overview() {
         isCollateral: configuration.ltv > 0,
         ltv: configuration.ltv / 100,
         isStable: stablecoinsList.includes(tokenNameMap[token]),
+        color:
+          `to-[#${tokenColorMap[tokenNameMap[token]]}40]` || 'to-[#f7931a40]',
       });
     }
     return assets;
@@ -302,7 +305,9 @@ function Overview() {
                 className='flex flex-col hover:bg-[#1F2A29] cursor-pointer rounded-t-2xl'
                 to={`${item.underlyingAsset}`}
               >
-                <div className='flex items-center gap-2 col-span-2 h-full p-[20px] rounded-t-2xl bg-gradient-to-t from-transparent to-[#f7931a40]'>
+                <div
+                  className={`flex items-center gap-2 col-span-2 h-full p-[20px] rounded-t-2xl bg-gradient-to-t from-transparent ${item.color}`}
+                >
                   <img src={item.icon} alt='symbol' className='w-6 h-6' />
                   <p className=' text-white font-lufga'>{item.symbol}</p>
                 </div>

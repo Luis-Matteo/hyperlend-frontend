@@ -9,6 +9,8 @@ import { formatNumber, decodeConfig, formatAddress } from '../utils/functions';
 import BorrowInfoChart from '../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../components/charts/InterestRateModelChart';
 import { TokenActionsProps } from '../utils/types';
+import topRightArrowImage from '../assets/icons/top-right-arrow.svg';
+import ShareImageModal from '../components/common/ShareImageModal';
 
 import {
   tokenNameMap,
@@ -18,6 +20,7 @@ import {
   ltvMap,
   liqPenaltyMap,
   networkChainId,
+  oraclesMap,
 } from '../utils/config';
 
 import {
@@ -38,10 +41,16 @@ import { calculateAvailableBalance } from '../utils/user/functions/utils';
 import TokenActions from '../components/markets/TokenActions';
 
 function TokenDetail() {
-  let { token } = useParams();
-  token = token || '';
+  const { token = '' } = useParams();
 
   ReactGA.send({ hitType: 'pageview', page: '/token-details', title: token });
+
+  const [shareImageModalStatus, setShareImageModalStatus] =
+    useState<boolean>(false);
+
+  const toggleModal = () => {
+    setShareImageModalStatus(!shareImageModalStatus);
+  };
 
   const [activeButton, setActiveButton] = useState(1);
 
@@ -285,6 +294,11 @@ function TokenDetail() {
       value: token,
     },
     {
+      name: 'Asset oracle',
+      link: `https://explorer.hyperlend.finance/address/${oraclesMap[token]}`,
+      value: oraclesMap[token],
+    },
+    {
       name: 'Supply cap',
       value: `${formatNumber(configuration.supplyCap, 2)} ${tokenNameMap[token]}`,
     },
@@ -391,7 +405,7 @@ function TokenDetail() {
             </div>
             <div className='flex items-center mt-8 mb-8'>
               <span className='w-2 h-2 bg-[#302DC2] rounded-full mr-2'></span>
-              <p className='text-xs text-[#797979] font-lufga'>Borrow API</p>
+              <p className='text-xs text-[#797979] font-lufga'>Borrow APY</p>
             </div>
             <div className='flex justify-between gap-4 flex-wrap md:justify-start md:gap-12'>
               {(borrowInfos || []).map((borrowInfo, index) => (
@@ -469,28 +483,45 @@ function TokenDetail() {
           </CardItem>
         </div>
         <div className='w-full lg:w-1/3 lg:min-w-[360px]'>
-          <CardItem className='p-4 lg:p-8 mb-6 font-lufga sticky top-0'>
-            <div className='w-full grid grid-cols-4 text-center'>
-              {tokenDetailButton.map((button) => (
-                <button
-                  key={button.id}
-                  onClick={() => handleButtonClick(button.id)}
-                >
-                  <p
-                    className={`text-base transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+          <div className='sticky top-0'>
+            <CardItem className='p-4 lg:p-8 font-lufga'>
+              <div className='w-full grid grid-cols-4 text-center'>
+                {tokenDetailButton.map((button) => (
+                  <button
+                    key={button.id}
+                    onClick={() => handleButtonClick(button.id)}
                   >
-                    {button.label}
-                  </p>
-                  <hr
-                    className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#546764]'}`}
-                  />
-                </button>
-              ))}
-            </div>
-            <TokenActions {...actionData} />
-          </CardItem>
+                    <p
+                      className={`text-base transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                    >
+                      {button.label}
+                    </p>
+                    <hr
+                      className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#546764]'}`}
+                    />
+                  </button>
+                ))}
+              </div>
+              <TokenActions {...actionData} />
+            </CardItem>
+            <button
+              className='flex gap-4 items-center p-4 mx-auto'
+              onClick={toggleModal}
+            >
+              <p className='font-lufga text-[#797979]'>Share</p>
+              <img className='' src={topRightArrowImage} />
+            </button>
+          </div>
         </div>
       </div>
+      {shareImageModalStatus && (
+        <ShareImageModal
+          token={token}
+          apy={formatNumber(actionData?.totalApy, 3)}
+          dailyEarnings={formatNumber(actionData?.dailyEarning, 3)}
+          onClose={toggleModal}
+        />
+      )}
     </div>
   );
 }
