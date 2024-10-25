@@ -9,7 +9,7 @@ const Button: React.FC<ButtonProps> = ({ title, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className='bg-[#CAEAE5] w-full p-4 rounded-md mt-4 font-lufga'
+      className='bg-[#CAEAE5] w-full p-4 rounded-md mt-4 font-lufga active:scale-95 duration-200'
     >
       <p className='text-lg text-black font-extrabold'>{title}</p>
     </button>

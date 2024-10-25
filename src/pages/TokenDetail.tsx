@@ -504,8 +504,10 @@ function TokenDetail() {
               </div>
               <TokenActions {...actionData} />
             </CardItem>
-            <button className='flex gap-4 items-center p-4 mx-auto'
-              onClick={toggleModal}>
+            <button
+              className='flex gap-4 items-center p-4 mx-auto'
+              onClick={toggleModal}
+            >
               <p className='font-lufga text-[#797979]'>Share</p>
               <img className='' src={topRightArrowImage} />
             </button>
