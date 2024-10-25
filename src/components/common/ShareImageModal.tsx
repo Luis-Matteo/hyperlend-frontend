@@ -78,20 +78,20 @@ function ShareImageModal({
     if (imageRefs.current[index] === null) return;
 
     //loop to fix the empty image bug
-    for (let i = 0; i < 2; i++){
+    for (let i = 0; i < 2; i++) {
       toPng(imageRefs.current[index]!, { cacheBust: true })
-      .then((dataUrl: any) => {
-        if (i == 1) {
-          const link = document.createElement('a');
-          link.download = 'image.png';
-          link.href = dataUrl;
-          link.click();
-        }
-      })
-      .catch((err: any) => {
-        console.error('Could not download image', err);
-        alert(`Error downloading image: ${JSON.stringify(err)}`);
-      });
+        .then((dataUrl: any) => {
+          if (i == 1) {
+            const link = document.createElement('a');
+            link.download = 'image.png';
+            link.href = dataUrl;
+            link.click();
+          }
+        })
+        .catch((err: any) => {
+          console.error('Could not download image', err);
+          alert(`Error downloading image: ${JSON.stringify(err)}`);
+        });
     }
   };
 
