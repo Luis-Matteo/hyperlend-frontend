@@ -77,18 +77,41 @@ function ShareImageModal({
     if (selectedIndex == null) setSelectedIndex(0);
     if (imageRefs.current[index] === null) return;
 
-    //loop to fix the empty image bug
+    const scaleFactor = 2;
+
+    //clone and scale element
+    const clonedElement = imageRefs.current[index]!.cloneNode(
+      true,
+    ) as HTMLElement;
+    //scale
+    clonedElement.style.transform = `scale(${scaleFactor})`;
+    clonedElement.style.transformOrigin = 'top left';
+    //create a hidden container to hold the scaled clone
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.left = '-9999px';
+    container.appendChild(clonedElement);
+    document.body.appendChild(container);
+    // Wait for the browser to render the scaling effect
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
+    //Loop to fix the empty image bug
     for (let i = 0; i < 2; i++) {
-      toPng(imageRefs.current[index]!, { cacheBust: true })
-        .then((dataUrl: any) => {
-          if (i == 1) {
+      toPng(clonedElement, {
+        height: clonedElement.offsetHeight * scaleFactor,
+        width: clonedElement.offsetWidth * scaleFactor,
+        cacheBust: true,
+      })
+        .then((dataUrl) => {
+          if (i === 1) {
             const link = document.createElement('a');
             link.download = 'image.png';
             link.href = dataUrl;
             link.click();
+            document.body.removeChild(container);
           }
         })
-        .catch((err: any) => {
+        .catch((err) => {
           console.error('Could not download image', err);
           alert(`Error downloading image: ${JSON.stringify(err)}`);
         });
