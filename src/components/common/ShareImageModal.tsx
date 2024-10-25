@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect } from 'react';
 import { toPng } from 'html-to-image';
+
 import Button from './Button';
 import ToggleButton from './ToggleButton';
 import CardItem from './CardItem';
@@ -71,22 +72,27 @@ function ShareImageModal({
     }
   };
 
-  const downloadImage = () => {
+  const downloadImage = async () => {
     const index = selectedIndex || 0;
     if (selectedIndex == null) setSelectedIndex(0);
     if (imageRefs.current[index] === null) return;
 
-    toPng(imageRefs.current[index]!, { cacheBust: true })
+    //loop to fix the empty image bug
+    for (let i = 0; i < 2; i++){
+      toPng(imageRefs.current[index]!, { cacheBust: true })
       .then((dataUrl: any) => {
-        const link = document.createElement('a');
-        link.download = 'image.png';
-        link.href = dataUrl;
-        link.click();
+        if (i == 1) {
+          const link = document.createElement('a');
+          link.download = 'image.png';
+          link.href = dataUrl;
+          link.click();
+        }
       })
       .catch((err: any) => {
         console.error('Could not download image', err);
         alert(`Error downloading image: ${JSON.stringify(err)}`);
       });
+    }
   };
 
   const openTwitterShare = () => {
