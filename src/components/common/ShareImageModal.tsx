@@ -9,6 +9,10 @@ import swagLendie from '../../assets/img/share-img/cats/swag.svg';
 import winkLendie from '../../assets/img/share-img/cats/wink.svg';
 import logo from '../../assets/icons/logo.svg'
 
+import dollarcatImage from '../../assets/img/share-img/dollar-cat.svg'
+import glasscatImage from '../../assets/img/share-img/glass-cat.svg'
+import rabbitcatImage from '../../assets/img/share-img/rabbit-cat.svg'
+import bottlecatImage from '../../assets/img/share-img/bottle-cat.svg'
 import ToggleButton from './ToggleButton';
 import CardItem from './CardItem';
 import Button from './Button';
@@ -196,8 +200,8 @@ function ShareImageModal(
 export default ShareImageModal;
 
 const shareItems = [
-  { catImage: "/src/assets/img/share-img/money-eyes.svg" },
-  { catImage: "/src/assets/img/share-img/money-eyes.svg" },
-  { catImage: "/src/assets/img/share-img/money-eyes.svg" },
-  { catImage: "/src/assets/img/share-img/money-eyes.svg" },
+  { catImage: dollarcatImage },
+  { catImage: glasscatImage},
+  { catImage: rabbitcatImage  },
+  { catImage: bottlecatImage },
 ];

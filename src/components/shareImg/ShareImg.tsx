@@ -25,7 +25,7 @@ function ShareImg(
 
   return (
     <div>
-      <div className='pl-[30px] flex bg-[#CAEAE5] w-[100%] h-auto rounded-md'>
+      <div className='pl-[20px] flex bg-[#CAEAE5] w-[100%] h-auto rounded-md'>
         <div className='my-[25px] flex flex-col w-[30%] z-10'>
           <div className='w-[160%] sm:w-[150%]'>
             <div className='flex items-center justify-start w-full gap-1'>
@@ -62,8 +62,8 @@ function ShareImg(
             </div>
           </div>
         </div>
-        <div className='w-[70%]'>
-          <img src={catImage} className="h-full object-cover float-right" alt='cat' />
+        <div className='w-[70%] flex justify-end overflow-hidden rounded-md'>
+          <img src={catImage} className="max-h-[219px]" alt='cat' />
         </div>
       </div>
     </div>
