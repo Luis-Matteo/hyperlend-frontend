@@ -1,3 +1,5 @@
+const colors = ['f7931a', '497493'];
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -5,7 +7,7 @@ export default {
     extend: {
       boxShadow: {
         custom: '0 0 15px #252525',
-        '4xl': '0 0 40px #252525',
+        '4xl': '0px 0px 40px 20px #252525',
       },
       fontFamily: {
         lufga: ['Lufga', 'sans-serif'],
@@ -28,5 +30,6 @@ export default {
       },
     },
   },
+  safelist: colors.map((e) => `to-[#${e}40]`),
   plugins: [],
 };

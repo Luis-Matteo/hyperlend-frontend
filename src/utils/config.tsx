@@ -35,6 +35,13 @@ export const iconsMap: any = {
   MBTC: wbtcIcon,
 };
 
+//make sure to also add them to tailwind.config.js,
+//otherwise it won't work (for markets overview page gradient on mobile)
+export const tokenColorMap: any = {
+  MBTC: 'f7931a',
+  ETH: '497493',
+};
+
 export const stablecoinsList = ['USDC', 'USDT'];
 
 const currentChainId: number = 998;
@@ -72,3 +79,5 @@ export const wrappedTokenProtocolTokens: any =
   arb.wrappedTokenProtocolTokens;
 export const tokenToGradient: any =
   networkConfigs[currentChainId].tokenToGradient || arb.tokenToGradient;
+export const oraclesMap: any =
+  networkConfigs[currentChainId].oraclesMap || arb.oraclesMap;

@@ -118,7 +118,6 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     }
   }, [errorMsg]);
 
-  //check approval amount on changes
   useEffect(() => {
     if (actionType == 'supply' || actionType == 'repay') {
       const allowance =
@@ -148,7 +147,6 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     }
   }, [amount, btnTitle, hash, userAllowance, txReceipt]);
 
-  //update progress & amount on changes
   useEffect(() => {
     setProgress(
       Number(amount) >= availableAmount
@@ -226,7 +224,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   };
 
   return (
-    <>
+    <div className=''>
       {btnTitle === 'Supply' && (
         <div className='flex justify-between items-center mt-4'>
           <p className='text-base text-[#CAEAE566]'>Collateral</p>
@@ -311,6 +309,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
             {formatNumber(
               Number(availableAmount),
               getTokenPrecision(token, priceDataMap),
+              true,
             )}
           </p>
         </div>
@@ -325,6 +324,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
             {formatNumber(
               Number(protocolBalance),
               getTokenPrecision(token, priceDataMap),
+              true,
             )}
           </p>
         </div>
@@ -349,6 +349,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
           </p>
           <p
             className={`text-base text-lufga ${dailyEarning >= 0 ? 'text-[#2DC24E]' : 'text-red-500'}`}
+            style={{ display: 'flex' }}
           >
             {' '}
             ${formatNumber(dailyEarning, 3)}
@@ -356,7 +357,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
         </div>
       </div>
       <Button title={buttonText} onClick={() => sendTransaction()} />
-    </>
+    </div>
   );
 };
 

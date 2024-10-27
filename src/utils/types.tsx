@@ -94,6 +94,7 @@ export interface AssetDetail {
   isCollateral: boolean;
   ltv: number;
   isStable: boolean;
+  color: string;
 }
 
 export interface TokenActionsProps {
