@@ -2,6 +2,7 @@ import ethIcon from '../assets/icons/coins/eth-icon.svg';
 import usdcIcon from '../assets/icons/coins/usdc-icon.svg';
 import usdtIcon from '../assets/icons/coins/usdt-icon.svg';
 import wbtcIcon from '../assets/icons/coins/wbtc-icon.svg';
+import stHypeIcon from '../assets/icons/coins/sthype-icon.svg';
 
 import arb from './chains/arb';
 import hlTestnet from './chains/hlTestnet';
@@ -33,6 +34,7 @@ export const iconsMap: any = {
   USDC: usdcIcon,
   WBTC: wbtcIcon,
   MBTC: wbtcIcon,
+  stHYPE: stHypeIcon,
 };
 
 //make sure to also add them to tailwind.config.js,
@@ -40,6 +42,7 @@ export const iconsMap: any = {
 export const tokenColorMap: any = {
   MBTC: 'f7931a',
   ETH: '497493',
+  stHYPE: '97fce0',
 };
 
 export const stablecoinsList = ['USDC', 'USDT'];
