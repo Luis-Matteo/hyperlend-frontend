@@ -40,26 +40,26 @@ const Earnings = ({ toggleHistory }: EarningsProps) => {
             <div className='bg-[#1F2A29] rounded-md p-2 flex justify-between items-end w-full'>
               <div className='px-2'>
                 <p className='text-secondary font-lufga text-opacity-40 text-xs font-black'>
-                  Available Credit
+                  Total Points
                 </p>
                 <p className='text-secondary font-lufga text-xl font-black my-2'>
-                  $10,494.93
+                  10,494.93
                 </p>
               </div>
-              <button
+              {/* <button
                 className='inline-block px-7 py-3 bg-secondary text-xs font-black rounded-lg'
                 type='button'
               >
                 Claim
-              </button>
+              </button> */}
             </div>
             <div className='bg-[#1F2A29] rounded-md p-2 flex justify-between items-end'>
               <div className='px-2'>
                 <p className='text-secondary font-lufga text-opacity-40 text-xs font-black'>
-                  Lifetime Earnings
+                  Referral Points
                 </p>
                 <p className='text-secondary font-lufga text-xl font-black my-2'>
-                  $104,494.93
+                  104,494.93
                 </p>
               </div>
             </div>
@@ -67,13 +67,13 @@ const Earnings = ({ toggleHistory }: EarningsProps) => {
           <div className='bg-[#1F2A29] rounded-md p-2 w-full'>
             <div className='px-2 w-full'>
               <p className='text-secondary font-lufga text-opacity-40 text-xs font-black'>
-                Commission Tier
+                Referral Tier
               </p>
               <p className='text-secondary font-lufga text-2xl font-black mt-2 mb-6'>
                 Tier 1
               </p>
               <p className='text-secondary font-lufga text-opacity-40 text-xs font-black mb-3'>
-                Commission Tier
+                Tier Progress
               </p>
               <ProgressBar progress={60} className='h-[7px]' />
             </div>
@@ -82,7 +82,7 @@ const Earnings = ({ toggleHistory }: EarningsProps) => {
         <div className='bg-[#1F2A29] rounded-md p-2 w-full'>
           <div className='px-2 flex justify-between items-center'>
             <p className='text-secondary font-lufga text-opacity-40 text-xs font-black'>
-              Referral Earnings
+              Referral Points History
             </p>
             <div className='flex gap-2'>
               {(days || []).map((item) => (

@@ -27,6 +27,9 @@ function MainContent() {
   if (searchParams.get('ref')) {
     localStorage.setItem('referredBy', searchParams.get('ref') || 'null');
   }
+  if (searchParams.get('r')) {
+    localStorage.setItem('referredBy', searchParams.get('r') || 'null');
+  }
 
   return (
     <main className='bg-primary-light w-full lg:w-[calc(100vw-256px)] relative lg:h-screen'>

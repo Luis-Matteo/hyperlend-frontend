@@ -57,11 +57,11 @@ function Referrals() {
                     className={`px-40 my-4 border transition-colors duration-300 ease-in-out ${page === 'refer' ? 'text-white' : 'text-[#546764]'}`}
                   />
                 </button>
-                <button /*onClick={() => setPage('earn')}*/>
+                <button onClick={() => setPage('earn')}>
                   <p
                     className={`text-xs font-lufga font-black transition-colors duration-300 ease-in-out ${page === 'earn' ? 'text-secondary' : 'text-secondary text-opacity-40 hover:text-white'}`}
                   >
-                    🔒 My Earnings
+                    My Earnings
                   </p>
                   <hr
                     className={`px-40 my-4 border transition-colors duration-300 ease-in-out ${page === 'earn' ? 'text-white' : 'text-[#546764]'}`}
