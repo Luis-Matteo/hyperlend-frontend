@@ -67,11 +67,12 @@ const wrappedTokenProtocolTokens: any = {
 
 import backgroundGradientBlue from '../../assets/img/background-gradient.svg';
 import backgroundGradientOrange from '../../assets/img/background-orange.svg';
+import backgroundGradientStHype from '../../assets/img/background-sthype.svg';
 
 const tokenToGradient: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': backgroundGradientOrange,
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': backgroundGradientBlue,
-  '0x4D6b8f9518b0b92080b5eAAf80bD505734A059Ae': backgroundGradientBlue,
+  '0x4D6b8f9518b0b92080b5eAAf80bD505734A059Ae': backgroundGradientStHype,
 };
 
 const oraclesMap: any = {
