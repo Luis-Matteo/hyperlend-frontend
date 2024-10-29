@@ -29,7 +29,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ onConfirm }) => {
                         </button>
                         <button onClick={() => setAgree((prev) => !prev)} className='text-secondary text-left font-nexa text-sm'>
                             <span className={`w-3 h-3 inline-flex items-center justify-center border-2 mr-2 ${agree ? 'bg-secondary' : ''}`} />
-                            <span className="">I have read and understood, and do hereby agree to be legally bound as a 'User' under the Terms, including all future amendments thereto. This agreement is irrevocable and will apply to all of my uses of the Site without me providing confirmation in each specific instance.</span>
+                            <span className=""> I acknowledge and agree that the Site solely provides information about data on the applicable blockchains. I accept that the Site operators have no custody over my funds, ability or duty to transact on my behalf, or power to reverse my transactions. The Site operators do not endorse or provide any warranty with respect to any tokens.</span>
                         </button>
                     </div>
                     <button
