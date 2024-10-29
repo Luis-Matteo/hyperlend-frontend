@@ -24,17 +24,17 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ onConfirm }) => {
                     <div className='flex flex-col gap-4'>
                         <p className='text-secondary text-sm font-nexa leading-4'>Please check the boxes below to confirm your agreement to the HyperLend Terms and Conditions:</p>
                         <button onClick={() => setRead((prev) => !prev)} className='text-secondary text-left font-nexa text-sm'>
-                            <span className='w-4 h-4 inline-flex items-center justify-center border-2 mr-2'>{read ? "✔" : "\u00A0"}</span>
+                            <span className={`w-3 h-3 inline-flex items-center justify-center border-2 mr-2 ${read ? 'bg-secondary' : ''}`} />
                             <span className="">I have read and understood, and do hereby agree to be legally bound as a 'User' under the Terms, including all future amendments thereto. This agreement is irrevocable and will apply to all of my uses of the Site without me providing confirmation in each specific instance.</span>
                         </button>
                         <button onClick={() => setAgree((prev) => !prev)} className='text-secondary text-left font-nexa text-sm'>
-                            <span className='w-4 h-4 inline-flex items-center justify-center border-2 mr-2'>{agree ? "✔" : "\u00A0"}</span>
+                            <span className={`w-3 h-3 inline-flex items-center justify-center border-2 mr-2 ${agree ? 'bg-secondary' : ''}`} />
                             <span className="">I have read and understood, and do hereby agree to be legally bound as a 'User' under the Terms, including all future amendments thereto. This agreement is irrevocable and will apply to all of my uses of the Site without me providing confirmation in each specific instance.</span>
                         </button>
                     </div>
                     <button
                         type='button'
-                        className={`w-full rounded-lg bg-secondary py-4 font-nexa`}
+                        className={`w-full rounded-lg bg-secondary py-4 font-nexa ${!(read && agree) && 'opacity-60'}`}
                         onClick={onConfirm}
                         disabled={(read && agree) ? false : true}>Confirm</button>
                 </div>
