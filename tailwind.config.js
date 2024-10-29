@@ -7,6 +7,7 @@ export default {
     extend: {
       boxShadow: {
         custom: '0 0 15px #252525',
+        '3xl': '0 0 20px 10px #252525',
         '4xl': '0px 0px 40px 20px #252525',
       },
       fontFamily: {
