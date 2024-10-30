@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
 interface ConfirmModalProps {
-    onConfirm: () => void;
+  onConfirm: () => void;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({ onConfirm }) => {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
-    useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        return () => {
-            document.body.style.overflow = 'auto';
-        };
-    }, []);
-
-    const [read, setRead] = useState(false)
-    const [agree, setAgree] = useState(false)
+  const [read, setRead] = useState(false);
+  const [agree, setAgree] = useState(false);
 
     return (
         <div className="fixed flex justify-center items-center top-0 left-0 w-full z-50 h-screen backdrop-blur-md p-2">
@@ -40,7 +39,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ onConfirm }) => {
                 </div>
             </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default ConfirmModal;

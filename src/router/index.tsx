@@ -20,14 +20,11 @@ function MainContent() {
   const { confirmed, confirm } = useConfirm();
   return (
     <>
-      {
-        !confirmed &&
-        <ConfirmModal onConfirm={confirm} />
-      }
+      {!confirmed && <ConfirmModal onConfirm={confirm} />}
       <main className='bg-primary-light w-full lg:w-[calc(100vw-256px)] relative lg:h-screen inset-0 z-0'>
         <div className='inset-0 px-4 py-8 md:px-6 xl:p-14 z-20 lg:max-h-screen h-full overflow-auto '>
           <Routes>
-            <Route path='/' element={<Navigate to="/dashboard" />} />
+            <Route path='/' element={<Navigate to='/dashboard' />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='markets' element={<Markets />}>
               <Route path='' element={<Overview />} />
