@@ -55,7 +55,7 @@ const navLinksTop: NavLinkProps[] = [
     icon: lendborrowIcon,
     disabled: false,
   },
-  {
+  /*{
     id: 'analytics',
     title: 'Analytics',
     url: '/analytics',
@@ -68,7 +68,7 @@ const navLinksTop: NavLinkProps[] = [
     url: '/hyperloop',
     icon: hyperloopIcon,
     disabled: false,
-  },
+  },*/
 ];
 
 const navLinksDown: NavLinkProps[] = [
