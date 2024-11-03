@@ -91,7 +91,7 @@ function Sidebar() {
             </button>
 
             <button
-              className='flex items-center gap-2 rounded-full hover:bg-[#1F2A29]'
+              className='flex items-center gap-2 rounded-full'
               type='button'
               onClick={() => dispatch(toggleModalOpen())}
             >

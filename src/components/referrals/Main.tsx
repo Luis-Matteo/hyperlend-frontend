@@ -113,12 +113,12 @@ const Main = () => {
   }, [errorMsg]);
 
   useEffect(() => {
-    localStorage.setItem("referral-link", link) //for use in share-position image
-  }, [link])
+    localStorage.setItem('referral-link', link); //for use in share-position image
+  }, [link]);
 
   const requestSignature = () => {
     if (!address) {
-      setRegistrationProgress('')
+      setRegistrationProgress('');
       return alert('missing address');
     }
     const message = `hyperlend_registration_${address.toLowerCase()}`;
