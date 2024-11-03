@@ -10,7 +10,21 @@ export function claimFaucet(userAddress?: string) {
     .then((data) => {
       if (data.status == 'ok') {
         alert('ETH claimed');
-      } else alert(data.response);
+      } else if (data.status == 'err') {
+        fetch('https://api.hyperlend.finance/ethFaucet', requestOptions)
+          .then((res) => res.json())
+          .then((d) => {
+            if (d.status == 'ok') {
+              alert('ETH claimed');
+            } else if (d.status == 'err') {
+              alert(d.response);
+            }
+          })
+          .catch((err) => {
+            alert(err);
+            console.error(err);
+          });
+      }
     })
     .catch((error) => {
       alert(error);
