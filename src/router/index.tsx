@@ -31,7 +31,7 @@ function MainContent() {
   if (searchParams.get('r')) {
     localStorage.setItem('referredBy', searchParams.get('r') || 'null');
   }
-        
+
   const { confirmed, confirm } = useConfirm();
   return (
     <>
