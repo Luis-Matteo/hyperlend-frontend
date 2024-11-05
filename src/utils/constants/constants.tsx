@@ -119,10 +119,10 @@ const assetsInfos = [
 ];
 
 const tokenDetailButton = [
-  { id: 1, label: 'Supply' },
-  { id: 2, label: 'Withdraw' },
-  { id: 3, label: 'Borrow' },
-  { id: 4, label: 'Repay' },
+  { id: 1, label: 'supply' },
+  { id: 2, label: 'withdraw' },
+  { id: 3, label: 'borrow' },
+  { id: 4, label: 'repay' },
 ];
 
 // export { navLinks, assetsInfos };
