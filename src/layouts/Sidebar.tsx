@@ -78,42 +78,63 @@ function Sidebar() {
             ))}
 
             <button
-              className='flex items-center gap-2 rounded-full'
-              type='button'
+              className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
               onClick={() => {
                 window.open('https://explorer.hyperlend.finance', '_blank');
               }}
+              key={'openExplorer'}
+              type='button'
             >
-              <div className='px-3'>
-                <img src={explorerIcon} className='w-5' alt='faucet' />
+              <div
+                className={`transition-all duration-300 ease-in-out transform px-3`}
+              >
+                <img src={explorerIcon} className='w-5' alt={'explorer'} />
               </div>
-              <p className='font-lufga font-medium text-secondary'>Explorer</p>
+              <p
+                className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
+              >
+                Explorer
+              </p>
             </button>
 
             <button
-              className='flex items-center gap-2 rounded-full'
-              type='button'
+              className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
               onClick={() => dispatch(toggleModalOpen())}
+              key={'openReferrals'}
+              type='button'
             >
-              <div className='p-3'>
-                <img src={referralsIcon} className='w-5' alt='referrals' />
+              <div
+                className={`transition-all duration-300 ease-in-out transform px-3`}
+              >
+                <img src={referralsIcon} className='w-5' alt={'referrals'} />
               </div>
-              <p className='font-lufga font-medium text-secondary'>Referrals</p>
+              <p
+                className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
+              >
+                Referrals
+              </p>
             </button>
 
             {networkChainId == 998 && isConnected ? (
               <button
-                className='flex items-center gap-2 rounded-full'
-                type='button'
+                className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
                 onClick={() => {
                   claimFaucet(address);
                   sendClaimTx();
                 }}
+                key={'openFaucet'}
+                type='button'
               >
-                <div className='px-3 '>
-                  <img src={faucetIcon} className='w-5' alt='faucet' />
+                <div
+                  className={`transition-all duration-300 ease-in-out transform px-3`}
+                >
+                  <img src={faucetIcon} className='w-5' alt={'faucet'} />
                 </div>
-                <p className='font-lufga font-medium text-secondary'>Faucet</p>
+                <p
+                  className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
+                >
+                  Faucet
+                </p>
               </button>
             ) : (
               ''
