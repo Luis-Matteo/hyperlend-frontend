@@ -119,7 +119,7 @@ const Main = () => {
   const requestSignature = () => {
     if (!address) {
       setRegistrationProgress('');
-      return alert('missing address');
+      return alert('Please connect your wallet to proceed');
     }
     const message = `hyperlend_registration_${address.toLowerCase()}`;
     signMessage({ message });
@@ -183,7 +183,7 @@ const Main = () => {
             <div className='flex justify-between mb-2'>
               <p className='font-lufga font-light text-xs text-[#FF0000] mt-2'>
                 {errorMsg == 'n.connector.getChainId is not a function'
-                  ? 'Please connect and unlock your wallet first'
+                  ? 'Please connect and unlock your wallet to create a referral link.'
                   : errorMsg}
               </p>
             </div>
