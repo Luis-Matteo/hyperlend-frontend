@@ -1,4 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useSearchParams,
+} from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Markets from '../pages/Markets';
 import TokenDetails from '../pages/TokenDetail';
@@ -17,6 +23,15 @@ import ConfirmModal from '../components/ConfirmModal';
 function MainContent() {
   const location = useLocation();
   const modalOpen = useSelector((state: RootState) => state.sidebar.modalOpen);
+
+  const [searchParams] = useSearchParams();
+  if (searchParams.get('ref')) {
+    localStorage.setItem('referredBy', searchParams.get('ref') || 'null');
+  }
+  if (searchParams.get('r')) {
+    localStorage.setItem('referredBy', searchParams.get('r') || 'null');
+  }
+
   const { confirmed, confirm } = useConfirm();
   return (
     <>
