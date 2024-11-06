@@ -182,7 +182,9 @@ const Main = () => {
           {errorMsg ? (
             <div className='flex justify-between mb-2'>
               <p className='font-lufga font-light text-xs text-[#FF0000] mt-2'>
-                {errorMsg}
+                {errorMsg == 'n.connector.getChainId is not a function'
+                  ? 'Please connect and unlock your wallet first'
+                  : errorMsg}
               </p>
             </div>
           ) : (
