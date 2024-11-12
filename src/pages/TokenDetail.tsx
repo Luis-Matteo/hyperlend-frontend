@@ -39,6 +39,11 @@ import { useUserTokenBalance } from '../utils/user/wallet';
 import { calculateAvailableBalance } from '../utils/user/functions/utils';
 
 import TokenActions from '../components/markets/TokenActions';
+import AnimateModal, { AnimateModalProps } from '../components/markets/AnimateModal';
+
+type AnimateModalStatus = AnimateModalProps & {
+  isOpen: boolean;
+};
 
 function TokenDetail() {
   const { token = '' } = useParams();
@@ -47,6 +52,28 @@ function TokenDetail() {
 
   const [shareImageModalStatus, setShareImageModalStatus] =
     useState<boolean>(false);
+
+  const [animateModalStatus, setAnimateModalStatus] = useState<AnimateModalStatus>({
+    isOpen: false,
+    type: 'completed',
+    actionType: 'supply',
+    txLink: '',
+    onClick: undefined,
+  });
+
+  const openAnimateModal = (type: 'loading' | 'completed' | 'failed', actionType: 'supply' | 'borrow' | 'repay' | 'withdraw', txLink?: string) => {
+    setAnimateModalStatus({
+      isOpen: true,
+      type: type,
+      actionType: actionType,
+      txLink: txLink,
+      onClick: () => setAnimateModalStatus((prevState) => ({
+        ...prevState,
+        isOpen: false,
+      })),
+    });
+  };
+
 
   const toggleModal = () => {
     setShareImageModalStatus(!shareImageModalStatus);
@@ -492,7 +519,7 @@ function TokenDetail() {
                     onClick={() => handleButtonClick(button.id)}
                   >
                     <p
-                      className={`text-base transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                      className={`text-base capitalize transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
                     >
                       {button.label}
                     </p>
@@ -506,9 +533,16 @@ function TokenDetail() {
             </CardItem>
             <button
               className='flex gap-4 items-center p-4 mx-auto'
-              onClick={toggleModal}
+              onClick={() => setShareImageModalStatus(true)}
             >
               <p className='font-lufga text-[#797979]'>Share</p>
+              <img className='' src={topRightArrowImage} />
+            </button>
+            <button
+              className='flex gap-4 items-center p-4 mx-auto'
+              onClick={() => openAnimateModal('completed', tokenDetailButton[activeButton - 1].label as 'supply' | 'borrow' | 'repay' | 'withdraw', 'https://example.com')}
+            >
+              <p className='font-lufga text-[#797979]'>Animate</p>
               <img className='' src={topRightArrowImage} />
             </button>
           </div>
@@ -520,6 +554,14 @@ function TokenDetail() {
           apy={formatNumber(actionData?.totalApy, 3)}
           dailyEarnings={formatNumber(actionData?.dailyEarning, 3)}
           onClose={toggleModal}
+        />
+      )}
+      {animateModalStatus.isOpen && (
+        <AnimateModal
+          type={animateModalStatus.type}
+          actionType={animateModalStatus.actionType}
+          txLink={animateModalStatus.txLink}
+          onClick={animateModalStatus.onClick}
         />
       )}
     </div>
