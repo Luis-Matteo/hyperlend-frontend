@@ -29,7 +29,7 @@ export const ConfirmProvider: React.FC<ConfirmProviderProps> = ({
     setConfirmed(true);
     localStorage.setItem('confirmed', 'true');
     if (!localStorage.getItem('guideCompleted')) {
-      setGuided(1); 
+      setGuided(1);
     }
   };
 
@@ -38,7 +38,7 @@ export const ConfirmProvider: React.FC<ConfirmProviderProps> = ({
       setGuided((prev) => prev + 1);
     } else {
       localStorage.setItem('guideCompleted', 'true');
-      setGuided(0); 
+      setGuided(0);
     }
   };
 
@@ -47,7 +47,9 @@ export const ConfirmProvider: React.FC<ConfirmProviderProps> = ({
     setGuided(0);
   };
   return (
-    <ConfirmContext.Provider value={{ confirmed, confirm, guided, nextStep, closeGuide }}>
+    <ConfirmContext.Provider
+      value={{ confirmed, confirm, guided, nextStep, closeGuide }}
+    >
       {children}
     </ConfirmContext.Provider>
   );
