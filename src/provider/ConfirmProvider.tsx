@@ -3,6 +3,9 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface ConfirmContextType {
   confirmed: boolean;
   confirm: () => void;
+  guided: number;
+  nextStep: () => void;
+  closeGuide: () => void;
 }
 
 const ConfirmContext = createContext<ConfirmContextType | undefined>(undefined);
@@ -18,13 +21,35 @@ export const ConfirmProvider: React.FC<ConfirmProviderProps> = ({
     return localStorage.getItem('confirmed') === 'true';
   });
 
+  const [guided, setGuided] = useState<number>(() => {
+    return localStorage.getItem('guideCompleted') === 'true' ? 0 : 1;
+  });
+
   const confirm = () => {
     setConfirmed(true);
     localStorage.setItem('confirmed', 'true');
+    if (!localStorage.getItem('guideCompleted')) {
+      setGuided(1);
+    }
   };
 
+  const nextStep = () => {
+    if (guided < 4) {
+      setGuided((prev) => prev + 1);
+    } else {
+      localStorage.setItem('guideCompleted', 'true');
+      setGuided(0);
+    }
+  };
+
+  const closeGuide = () => {
+    localStorage.setItem('guideCompleted', 'true');
+    setGuided(0);
+  };
   return (
-    <ConfirmContext.Provider value={{ confirmed, confirm }}>
+    <ConfirmContext.Provider
+      value={{ confirmed, confirm, guided, nextStep, closeGuide }}
+    >
       {children}
     </ConfirmContext.Provider>
   );

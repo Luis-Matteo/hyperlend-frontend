@@ -211,7 +211,7 @@ function Dashboard() {
                   <div className='overflow-auto max-h-[200px]'>
                     {(supplied || []).map((item: any, index: any) => (
                       <Link
-                        className='flex flex-col hover:bg-[#1F2A29] cursor-pointer rounded-t-2xl'
+                        className='flex flex-col hover:bg-[#1F2A29] cursor-pointer'
                         to={`/markets/${item.underlyingAsset}`}
                       >
                         <div
