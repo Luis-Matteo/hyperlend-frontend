@@ -17,7 +17,6 @@ import backgroundImage from '../assets/img/background.svg';
 import { useLocation } from 'react-router-dom';
 import backgroundGradientOrange from '../assets/img/background-orange.svg';
 import { tokenToGradient } from '../utils/config';
-import { useConfirm } from '../provider/ConfirmProvider';
 import ConfirmModal from '../components/ConfirmModal';
 
 function MainContent() {
@@ -32,10 +31,9 @@ function MainContent() {
     localStorage.setItem('referredBy', searchParams.get('r') || 'null');
   }
 
-  const { confirmed, confirm } = useConfirm();
   return (
     <>
-      {!confirmed && <ConfirmModal onConfirm={confirm} />}
+      <ConfirmModal />
       <main className='bg-primary-light w-full lg:w-[calc(100vw-256px)] relative lg:h-screen inset-0 z-0'>
         <div className='inset-0 px-4 py-8 md:px-6 xl:p-14 z-20 lg:max-h-screen h-full overflow-auto '>
           <Routes>
