@@ -22,7 +22,7 @@ function AnimateModal({
   actionType,
   txLink,
   onClick,
-  extraDetails
+  extraDetails,
 }: AnimateModalProps) {
   const background = {
     loading: 'bg-[#071311] shadow-[0px_0px_32px_0px_#4D605D80]',
@@ -82,15 +82,13 @@ function AnimateModal({
             </h5>
             <p className='mx-11 text-center text-xs text-secondary font-lufga mt-2'>
               {content}
-              {
-                extraDetails &&
-                (
-                  <>
-                  <br></br><br></br>
+              {extraDetails && (
+                <>
+                  <br></br>
+                  <br></br>
                   {extraDetails}
-                  </>
-                )
-              }
+                </>
+              )}
             </p>
             {txLink && (
               <a
