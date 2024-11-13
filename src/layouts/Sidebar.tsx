@@ -8,8 +8,8 @@ import logo from '../assets/icons/logo-text.svg';
 import Status from '../components/header/Status';
 import logoutIcon from '../assets/icons/logout-icon.svg';
 import xmarkIcon from '../assets/icons/xmark-icon.svg';
-// import referralsIcon from '../assets/icons/referralsIcon.svg'
-import { /*toggleModalOpen,*/ toggleSidebar } from '../store/sidebarSlice';
+import referralsIcon from '../assets/icons/referralsIcon.svg';
+import { toggleModalOpen, toggleSidebar } from '../store/sidebarSlice';
 import { useEffect, useRef } from 'react';
 
 import { networkChainId, contracts, abis } from '../utils/config';
@@ -78,31 +78,63 @@ function Sidebar() {
             ))}
 
             <button
-              className='flex items-center gap-2 rounded-full'
-              type='button'
+              className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
               onClick={() => {
                 window.open('https://explorer.hyperlend.finance', '_blank');
               }}
+              key={'openExplorer'}
+              type='button'
             >
-              <div className='px-3'>
-                <img src={explorerIcon} className='w-5' alt='faucet' />
+              <div
+                className={`transition-all duration-300 ease-in-out transform px-3`}
+              >
+                <img src={explorerIcon} className='w-5' alt={'explorer'} />
               </div>
-              <p className='font-lufga font-medium text-secondary'>Explorer</p>
+              <p
+                className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
+              >
+                Explorer
+              </p>
+            </button>
+
+            <button
+              className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
+              onClick={() => dispatch(toggleModalOpen())}
+              key={'openReferrals'}
+              type='button'
+            >
+              <div
+                className={`transition-all duration-300 ease-in-out transform px-3`}
+              >
+                <img src={referralsIcon} className='w-5' alt={'referrals'} />
+              </div>
+              <p
+                className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
+              >
+                Referrals
+              </p>
             </button>
 
             {networkChainId == 998 && isConnected ? (
               <button
-                className='flex items-center gap-2 rounded-full'
-                type='button'
+                className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
                 onClick={() => {
                   claimFaucet(address);
                   sendClaimTx();
                 }}
+                key={'openFaucet'}
+                type='button'
               >
-                <div className='px-3 '>
-                  <img src={faucetIcon} className='w-5' alt='faucet' />
+                <div
+                  className={`transition-all duration-300 ease-in-out transform px-3`}
+                >
+                  <img src={faucetIcon} className='w-5' alt={'faucet'} />
                 </div>
-                <p className='font-lufga font-medium text-secondary'>Faucet</p>
+                <p
+                  className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
+                >
+                  Faucet
+                </p>
               </button>
             ) : (
               ''

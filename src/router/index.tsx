@@ -1,4 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useSearchParams,
+} from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Markets from '../pages/Markets';
 import TokenDetails from '../pages/TokenDetail';
@@ -11,16 +17,23 @@ import backgroundImage from '../assets/img/background.svg';
 import { useLocation } from 'react-router-dom';
 import backgroundGradientOrange from '../assets/img/background-orange.svg';
 import { tokenToGradient } from '../utils/config';
-import { useConfirm } from '../provider/ConfirmProvider';
 import ConfirmModal from '../components/ConfirmModal';
 
 function MainContent() {
   const location = useLocation();
   const modalOpen = useSelector((state: RootState) => state.sidebar.modalOpen);
-  const { confirmed, confirm } = useConfirm();
+
+  const [searchParams] = useSearchParams();
+  if (searchParams.get('ref')) {
+    localStorage.setItem('referredBy', searchParams.get('ref') || 'null');
+  }
+  if (searchParams.get('r')) {
+    localStorage.setItem('referredBy', searchParams.get('r') || 'null');
+  }
+
   return (
     <>
-      {!confirmed && <ConfirmModal onConfirm={confirm} />}
+      <ConfirmModal />
       <main className='bg-primary-light w-full lg:w-[calc(100vw-256px)] relative lg:h-screen inset-0 z-0'>
         <div className='inset-0 px-4 py-8 md:px-6 xl:p-14 z-20 lg:max-h-screen h-full overflow-auto '>
           <Routes>
