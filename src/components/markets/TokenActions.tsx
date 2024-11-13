@@ -31,6 +31,13 @@ import {
 import { getTokenPrecision } from '../../utils/user/functions/utils';
 import { useProtocolPriceData } from '../../utils/protocol/prices';
 
+import AnimateModal, {
+  AnimateModalProps,
+} from '../../components/markets/AnimateModal';
+type AnimateModalStatus = AnimateModalProps & {
+  isOpen: boolean;
+};
+
 const TokenActions: React.FC<TokenActionsProps> = ({
   availableAmountTitle,
   availableAmount,
@@ -54,6 +61,37 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   const [errorMsg, setErrorMsg] = useState<any>(null);
   const [isTxPending, setIsTxPending] = useState(false);
   const [useMaxAmount, setUseMaxAmount] = useState(false);
+  const [lastConfirmedTxHash, setLastConfirmedTxHash] = useState<string>("")
+
+  const [animateModalStatus, setAnimateModalStatus] =
+    useState<AnimateModalStatus>({
+      isOpen: false,
+      type: 'completed',
+      actionType: 'supply',
+      txLink: '',
+      extraDetails: '',
+      onClick: undefined,
+    });
+
+  const openAnimateModal = (
+    type: 'loading' | 'completed' | 'failed',
+    actionType: 'supply' | 'borrow' | 'repay' | 'withdraw' | 'approve',
+    txLink?: string,
+    extraDetails?: string
+  ) => {
+    setAnimateModalStatus({
+      isOpen: true,
+      type: type,
+      actionType: actionType,
+      txLink: txLink,
+      extraDetails: extraDetails,
+      onClick: () =>
+        setAnimateModalStatus((prevState) => ({
+          ...prevState,
+          isOpen: false,
+        })),
+      });
+  };
 
   const handleProgessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
@@ -73,9 +111,10 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   const publicClient = usePublicClient();
   const { address, isConnected } = useAccount();
   const { data: hash, writeContractAsync, error } = useWriteContract();
-  const { data: txReceipt } = useWaitForTransactionReceipt({
+  const txReceiptResult = useWaitForTransactionReceipt({
     hash: hash,
-  });
+  })
+
 
   const userAllowanceBn = useUserAllowance(
     isConnected,
@@ -104,9 +143,36 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     }
   }, [isTxPending]);
 
+  function parseErrorMsg(errorMessage: string){
+    if (!errorMessage) return "";
+
+    return errorMessage.includes('Contract Call')
+      ? errorMessage.split('Contract Call')[0] +
+        (errorMessage
+          .split('Contract Call')[0]
+          .includes('reverted with the following reason:')
+          ? `(${getErrorMessage(errorMessage.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
+          : '')
+      : getErrorMessage(errorMessage.split('Request Arguments')[0]) !=
+          'ERROR_MESSAGE_NOT_FOUND'
+        ? getErrorMessage(errorMessage.split('Request Arguments')[0])
+        : errorMessage.split('Request Arguments')[0] as unknown as string
+  }
+
   useEffect(() => {
     if (error?.message) {
       setErrorMsg(error?.message);
+      openAnimateModal(
+        'failed',
+        btnTitle.toLowerCase() as
+          | 'supply'
+          | 'borrow'
+          | 'repay'
+          | 'withdraw'
+          | 'approve',
+        "",
+        parseErrorMsg(error?.message)
+      );
     }
   }, [error?.message]);
 
@@ -145,7 +211,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
         setButtonText(btnTitle);
       }
     }
-  }, [amount, btnTitle, hash, userAllowance, txReceipt]);
+  }, [amount, btnTitle, hash, userAllowance, txReceiptResult]);
 
   useEffect(() => {
     setProgress(
@@ -166,6 +232,23 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   useEffect(() => {
     setUseMaxAmount(progress == 100);
   }, [progress]);
+
+  useEffect(() => {
+    if (txReceiptResult.data && txReceiptResult.data.status == "success" && txReceiptResult.data.transactionHash != lastConfirmedTxHash){
+      setLastConfirmedTxHash(txReceiptResult.data.transactionHash);
+      openAnimateModal(
+        'completed',
+        btnTitle.toLowerCase() as
+          | 'supply'
+          | 'borrow'
+          | 'repay'
+          | 'withdraw'
+          | 'approve',
+        "https://explorer.hyperlend.finance/tx/" + txReceiptResult.data.transactionHash,
+        ""
+      );
+    }
+  }, [txReceiptResult])
 
   const sendTransaction = async () => {
     const bgIntAmount = parseFloat(
@@ -272,23 +355,13 @@ const TokenActions: React.FC<TokenActionsProps> = ({
           </button>
         </div>
       </div>
-      {errorMsg ? (
+      {/* {errorMsg ? (
         <p className='text-xs text-[#FF0000] mt-2'>
-          {errorMsg.includes('Contract Call')
-            ? errorMsg.split('Contract Call')[0] +
-              (errorMsg
-                .split('Contract Call')[0]
-                .includes('reverted with the following reason:')
-                ? `(${getErrorMessage(errorMsg.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
-                : '')
-            : getErrorMessage(errorMsg.split('Request Arguments')[0]) !=
-                'ERROR_MESSAGE_NOT_FOUND'
-              ? getErrorMessage(errorMsg.split('Request Arguments')[0])
-              : errorMsg.split('Request Arguments')[0]}
+          {parseErrorMsg(errorMsg)}
         </p>
       ) : (
         ''
-      )}
+      )} */}
       <div className='relative my-2 '>
         <ProgressBar progress={progress} control={true} className='h-1.5' />
         <input
@@ -357,6 +430,15 @@ const TokenActions: React.FC<TokenActionsProps> = ({
         </div>
       </div>
       <Button title={buttonText} onClick={() => sendTransaction()} />
+      {animateModalStatus.isOpen && (
+        <AnimateModal
+          type={animateModalStatus.type}
+          actionType={animateModalStatus.actionType}
+          txLink={animateModalStatus.txLink}
+          extraDetails={animateModalStatus.extraDetails}
+          onClick={animateModalStatus.onClick}
+        />
+      )}
     </div>
   );
 };

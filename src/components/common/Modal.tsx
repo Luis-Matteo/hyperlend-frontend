@@ -9,6 +9,7 @@ import {
   useWriteContract,
   useBalance,
   usePublicClient,
+  useWaitForTransactionReceipt
 } from 'wagmi';
 
 import { ModalProps } from '../../utils/types';
@@ -46,6 +47,13 @@ import { protocolAction } from '../../utils/user/functions/actions';
 
 import { useProtocolReservesData } from '../../utils/protocol/reserves';
 
+import AnimateModal, {
+  AnimateModalProps,
+} from '../../components/markets/AnimateModal';
+type AnimateModalStatus = AnimateModalProps & {
+  isOpen: boolean;
+};
+
 function Modal({ token, modalType, onClose }: ModalProps) {
   const [amount, setAmount] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
@@ -58,6 +66,37 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const [isTxPending, setIsTxPending] = useState(false);
   const [buttonText, setButtonText] = useState(capitalizeString(modalType));
   const [errorMsg, setErrorMsg] = useState<any>(null);
+  const [lastConfirmedTxHash, setLastConfirmedTxHash] = useState<string>("")
+
+  const [animateModalStatus, setAnimateModalStatus] =
+    useState<AnimateModalStatus>({
+      isOpen: false,
+      type: 'completed',
+      actionType: 'supply',
+      txLink: '',
+      extraDetails: '',
+      onClick: undefined,
+    });
+
+  const openAnimateModal = (
+    type: 'loading' | 'completed' | 'failed',
+    actionType: 'supply' | 'borrow' | 'repay' | 'withdraw' | 'approve',
+    txLink?: string,
+    extraDetails?: string
+  ) => {
+    setAnimateModalStatus({
+      isOpen: true,
+      type: type,
+      actionType: actionType,
+      txLink: txLink,
+      extraDetails: extraDetails,
+      onClick: () =>
+        setAnimateModalStatus((prevState) => ({
+          ...prevState,
+          isOpen: false,
+        })),
+      });
+  };
 
   const publicClient = usePublicClient();
   const { address, isConnected } = useAccount();
@@ -90,6 +129,10 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const userPositionsData = useUserPositionsData(isConnected, address);
   const assetReserveData = useProtocolAssetReserveData(token);
 
+  const txReceiptResult = useWaitForTransactionReceipt({
+    hash: hash,
+  })
+
   const updateAvailableAmount = () => {
     const avBalance = calculateAvailableBalance(
       token,
@@ -104,6 +147,22 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     );
     setAvailableBalance(avBalance);
   };
+
+  const parseErrorMsg = (errorMessage: string) => {
+    if (!errorMessage) return "";
+
+    return errorMessage.includes('Contract Call')
+      ? errorMessage.split('Contract Call')[0] +
+        (errorMessage
+          .split('Contract Call')[0]
+          .includes('reverted with the following reason:')
+          ? `(${getErrorMessage(errorMessage.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
+          : '')
+      : getErrorMessage(errorMessage.split('Request Arguments')[0]) !=
+          'ERROR_MESSAGE_NOT_FOUND'
+        ? getErrorMessage(errorMessage.split('Request Arguments')[0])
+        : errorMessage.split('Request Arguments')[0] as unknown as string
+  }
 
   useEffect(() => {
     if (isTxPending) {
@@ -138,6 +197,17 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   useEffect(() => {
     if (error?.message) {
       setErrorMsg(error?.message);
+      openAnimateModal(
+        'failed',
+        modalType.toLowerCase() as
+          | 'supply'
+          | 'borrow'
+          | 'repay'
+          | 'withdraw'
+          | 'approve',
+        "",
+        parseErrorMsg(error?.message)
+      );
     }
   }, [error?.message]);
 
@@ -148,6 +218,23 @@ function Modal({ token, modalType, onClose }: ModalProps) {
       }, 4000);
     }
   }, [errorMsg]);
+
+  useEffect(() => {
+    if (txReceiptResult.data && txReceiptResult.data.status == "success" && txReceiptResult.data.transactionHash != lastConfirmedTxHash){
+      setLastConfirmedTxHash(txReceiptResult.data.transactionHash);
+      openAnimateModal(
+        'completed',
+        modalType.toLowerCase() as
+          | 'supply'
+          | 'borrow'
+          | 'repay'
+          | 'withdraw'
+          | 'approve',
+        "https://explorer.hyperlend.finance/tx/" + txReceiptResult.data.transactionHash,
+        ""
+      );
+    }
+  }, [txReceiptResult])
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
@@ -343,25 +430,17 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             </div>
           </div>
           <div className='mb-6'>
-            {errorMsg ? (
+            {/* {errorMsg ? (
               <div className='flex justify-between mb-2'>
                 <p className='font-lufga font-light text-xs text-[#FF0000] mt-2'>
-                  {errorMsg.includes('Contract Call')
-                    ? errorMsg.split('Contract Call')[0] +
-                      (errorMsg
-                        .split('Contract Call')[0]
-                        .includes('reverted with the following reason:')
-                        ? `(${getErrorMessage(errorMsg.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
-                        : '')
-                    : getErrorMessage(errorMsg.split('Request Arguments')[0]) !=
-                        'ERROR_MESSAGE_NOT_FOUND'
-                      ? getErrorMessage(errorMsg.split('Request Arguments')[0])
-                      : errorMsg.split('Request Arguments')[0]}
+                  {
+                    parseErrorMsg(errorMsg)
+                  }
                 </p>
               </div>
             ) : (
               ''
-            )}
+            )} */}
             <div className='flex justify-between mb-2'>
               <p className='font-lufga font-light text-[#797979]'>Available</p>
               <p className='font-lufga font-light text-[#797979]'>
@@ -439,6 +518,15 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             </div>
           </div>
         </motion.div>
+        {animateModalStatus.isOpen && (
+            <AnimateModal
+              type={animateModalStatus.type}
+              actionType={animateModalStatus.actionType}
+              txLink={animateModalStatus.txLink}
+              extraDetails={animateModalStatus.extraDetails}
+              onClick={animateModalStatus.onClick}
+            />
+          )}
       </motion.div>
     </AnimatePresence>
   );
