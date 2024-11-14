@@ -168,6 +168,17 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     if (isTxPending) {
       //TODO: add loading icon
       setButtonText('Sending transaction...');
+      openAnimateModal(
+        'loading',
+        modalType.toLowerCase() as
+          | 'supply'
+          | 'borrow'
+          | 'repay'
+          | 'withdraw'
+          | 'approve',
+        '',
+        "",
+      );
     } else {
       setButtonText(getButtonText());
     }

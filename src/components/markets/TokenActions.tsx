@@ -136,6 +136,17 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     if (isTxPending) {
       //TODO: add loading icon
       setButtonText('Sending transaction...');
+      openAnimateModal(
+        'loading',
+        btnTitle.toLowerCase() as
+          | 'supply'
+          | 'borrow'
+          | 'repay'
+          | 'withdraw'
+          | 'approve',
+        '',
+        "",
+      );
     } else {
       handleDataFromActions('refetch');
       setButtonText(btnTitle);
