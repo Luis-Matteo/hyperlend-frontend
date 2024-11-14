@@ -17,6 +17,13 @@ const ConfirmModal: React.FC = () => {
   }, []);
   const [read, setRead] = useState(false);
   const [agree, setAgree] = useState(false);
+
+  const [isFirstImageLoaded, setIsFirstImageLoaded] = useState(false);
+  const [isSecondImageLoaded, setIsSecondImageLoaded] = useState(false);
+  const [isThirdImageLoaded, setIsThirdImageLoaded] = useState(false);
+  const [isFourImageLoaded, setIsFourImageLoaded] = useState(false);
+
+
   if (!confirmed) {
     return (
       <div className='fixed flex justify-center items-center top-0 left-0 w-full z-50 h-screen backdrop-blur-md p-2'>
@@ -74,14 +81,20 @@ const ConfirmModal: React.FC = () => {
       </div>
     );
   }
-  console.log(guided);
+  console.log(isFirstImageLoaded);
   return (
     guided > 0 && (
       <div className='hidden xl:block fixed top-0 left-0 w-full z-50 h-screen backdrop-blur-md p-2'>
         {guided === 1 && (
           <div className='mt-[134px] ml-[302px] '>
-            <div className='w-[478px] text-center'>
-              <img className='w-[478px]' src={healthFactorImage} alt='guide' />
+            <div className={`${isFirstImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 w-[478px] text-center`}>
+              <img
+                className='w-[478px]'
+                src={healthFactorImage}
+                alt='guide'
+                loading='lazy'
+                onLoad={() => setIsFirstImageLoaded(true)}
+              />
               <div className='flex flex-col items-center relative z-10 -top-2'>
                 <div className='w-4 h-4 rounded-full bg-transparent border-2 border-secondary'></div>
                 <div className='w-0.5 h-12 bg-secondary'></div>
@@ -114,7 +127,7 @@ const ConfirmModal: React.FC = () => {
         )}
         {guided === 2 && (
           <div className='flex justify-end'>
-            <div className='w-full flex justify-end items-start mr-[64px] mt-[120px]'>
+            <div className={`${isSecondImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 w-full flex justify-end items-start mr-[64px] mt-[120px]`}>
               <div className='bg-primary max-w-[260px] px-4 py-3 block relative -top-4 rounded-md text-left'>
                 <p className='font-lufga text-[13px] text-secondary'>
                   Deposit Collateral
@@ -153,13 +166,15 @@ const ConfirmModal: React.FC = () => {
                 className='w-[calc(100%-820px)]'
                 src={collateralImage}
                 alt='guide'
+                loading='lazy'
+                onLoad={() => setIsSecondImageLoaded(true)}
               />
             </div>
           </div>
         )}
         {guided === 3 && (
           <div className='ml-[302px] mt-[260px]'>
-            <div className='w-full flex flex-col justify-center items-center '>
+            <div className={`${isThirdImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 w-full flex flex-col justify-center items-center`}>
               <div className='bg-primary max-w-[260px] px-4 py-3 block rounded-md text-left'>
                 <p className='font-lufga text-[13px] text-secondary'>
                   Monitor Your Net Worth
@@ -191,13 +206,15 @@ const ConfirmModal: React.FC = () => {
                 className='w-[calc(100%-60px)] relative -top-4 mr-[64px]'
                 src={statusViewImage}
                 alt='guide'
+                loading='lazy'
+                onLoad={()=>setIsThirdImageLoaded(true)}
               />
             </div>
           </div>
         )}
         {guided === 4 && (
           <div className='ml-[302px] mt-[472px] mr-[64px]'>
-            <div className='w-full flex flex-col justify-center items-center '>
+            <div className={`${isFourImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300  w-full flex flex-col justify-center items-center`}>
               <div className='bg-primary max-w-[260px] px-4 py-3 block rounded-md text-left'>
                 <p className='font-lufga text-[13px] text-secondary'>
                   Monitor Your Net Worth
@@ -220,8 +237,19 @@ const ConfirmModal: React.FC = () => {
                 <div className='w-4 h-4 rounded-full bg-transparent border-2 border-secondary'></div>
               </div>
               <div className='w-[calc(100%-28px)] flex justify-between gap-6 relative -top-4 '>
-                <img className='w-full' src={suppliedImage} alt='guide' />
-                <img className='w-full' src={borrowedImage} alt='guide' />
+                <img
+                  className='w-full'
+                  src={suppliedImage}
+                  alt='guide'
+                  loading='lazy'
+                  onLoad={()=>setIsFourImageLoaded(true)}
+                />
+                <img
+                  className='w-full'
+                  src={borrowedImage}
+                  alt='guide'
+                  loading='lazy'
+                />
               </div>
             </div>
           </div>
