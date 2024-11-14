@@ -23,7 +23,6 @@ const ConfirmModal: React.FC = () => {
   const [isThirdImageLoaded, setIsThirdImageLoaded] = useState(false);
   const [isFourImageLoaded, setIsFourImageLoaded] = useState(false);
 
-
   if (!confirmed) {
     return (
       <div className='fixed flex justify-center items-center top-0 left-0 w-full z-50 h-screen backdrop-blur-md p-2'>
@@ -87,7 +86,9 @@ const ConfirmModal: React.FC = () => {
       <div className='hidden xl:block fixed top-0 left-0 w-full z-50 h-screen backdrop-blur-md p-2'>
         {guided === 1 && (
           <div className='mt-[134px] ml-[302px] '>
-            <div className={`${isFirstImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 w-[478px] text-center`}>
+            <div
+              className={`${isFirstImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 w-[478px] text-center`}
+            >
               <img
                 className='w-[478px]'
                 src={healthFactorImage}
@@ -127,7 +128,9 @@ const ConfirmModal: React.FC = () => {
         )}
         {guided === 2 && (
           <div className='flex justify-end'>
-            <div className={`${isSecondImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 w-full flex justify-end items-start mr-[64px] mt-[120px]`}>
+            <div
+              className={`${isSecondImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 w-full flex justify-end items-start mr-[64px] mt-[120px]`}
+            >
               <div className='bg-primary max-w-[260px] px-4 py-3 block relative -top-4 rounded-md text-left'>
                 <p className='font-lufga text-[13px] text-secondary'>
                   Deposit Collateral
@@ -174,7 +177,9 @@ const ConfirmModal: React.FC = () => {
         )}
         {guided === 3 && (
           <div className='ml-[302px] mt-[260px]'>
-            <div className={`${isThirdImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 w-full flex flex-col justify-center items-center`}>
+            <div
+              className={`${isThirdImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 w-full flex flex-col justify-center items-center`}
+            >
               <div className='bg-primary max-w-[260px] px-4 py-3 block rounded-md text-left'>
                 <p className='font-lufga text-[13px] text-secondary'>
                   Monitor Your Net Worth
@@ -207,14 +212,16 @@ const ConfirmModal: React.FC = () => {
                 src={statusViewImage}
                 alt='guide'
                 loading='lazy'
-                onLoad={()=>setIsThirdImageLoaded(true)}
+                onLoad={() => setIsThirdImageLoaded(true)}
               />
             </div>
           </div>
         )}
         {guided === 4 && (
           <div className='ml-[302px] mt-[472px] mr-[64px]'>
-            <div className={`${isFourImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300  w-full flex flex-col justify-center items-center`}>
+            <div
+              className={`${isFourImageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300  w-full flex flex-col justify-center items-center`}
+            >
               <div className='bg-primary max-w-[260px] px-4 py-3 block rounded-md text-left'>
                 <p className='font-lufga text-[13px] text-secondary'>
                   Monitor Your Net Worth
@@ -242,7 +249,7 @@ const ConfirmModal: React.FC = () => {
                   src={suppliedImage}
                   alt='guide'
                   loading='lazy'
-                  onLoad={()=>setIsFourImageLoaded(true)}
+                  onLoad={() => setIsFourImageLoaded(true)}
                 />
                 <img
                   className='w-full'
