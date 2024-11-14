@@ -177,7 +177,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
           | 'withdraw'
           | 'approve',
         '',
-        "",
+        '',
       );
     } else {
       setButtonText(getButtonText());

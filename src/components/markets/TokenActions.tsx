@@ -145,7 +145,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
           | 'withdraw'
           | 'approve',
         '',
-        "",
+        '',
       );
     } else {
       handleDataFromActions('refetch');
