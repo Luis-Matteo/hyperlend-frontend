@@ -9,12 +9,19 @@ import borrowedImage from '../assets/img/guide/borrowed.svg';
 const ConfirmModal: React.FC = () => {
   const { confirmed, guided, confirm, nextStep, closeGuide } = useConfirm();
   console.log(guided);
+
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
+    if (!confirmed || guided > 0) {
+      document.body.style.overflow = 'hidden';
+    } else {
       document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto'; // Cleanup on unmount
     };
-  }, []);
+  }, [confirmed, guided]);
+
   const [read, setRead] = useState(false);
   const [agree, setAgree] = useState(false);
 
