@@ -1,26 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useConfirm } from '../provider/ConfirmProvider';
 import healthFactorImage from '../assets/img/guide/health-factor.svg';
 import collateralImage from '../assets/img/guide/collateral.svg';
 import statusViewImage from '../assets/img/guide/status-view.svg';
 import suppliedImage from '../assets/img/guide/supplied.svg';
 import borrowedImage from '../assets/img/guide/borrowed.svg';
+import welcomeImage from '../assets/img/guide/welcome.svg';
 
 const ConfirmModal: React.FC = () => {
-  const { confirmed, guided, confirm, nextStep, closeGuide } = useConfirm();
-  console.log(guided);
-
-  useEffect(() => {
-    if (!confirmed || guided > 0) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-
-    return () => {
-      document.body.style.overflow = 'auto'; // Cleanup on unmount
-    };
-  }, [confirmed, guided]);
+  const {
+    confirmed,
+    guided,
+    preGuidedConfirm,
+    gotoGuide,
+    skipGuide,
+    confirm,
+    nextStep,
+    closeGuide,
+  } = useConfirm();
 
   const [read, setRead] = useState(false);
   const [agree, setAgree] = useState(false);
@@ -87,7 +84,41 @@ const ConfirmModal: React.FC = () => {
       </div>
     );
   }
-  console.log(isFirstImageLoaded);
+  if (!preGuidedConfirm) {
+    return (
+      <div className='fixed flex justify-center items-center top-0 left-0 w-full z-50 h-screen backdrop-blur-md p-2'>
+        <div className='bg-primary px-11 pt-20 pb-10 shadow-3xl rounded-lg'>
+          <div className='flex flex-col items-center gap-12 max-w-[345px]'>
+            <img className='' src={welcomeImage} alt='welcome' />
+            <div className='text-center'>
+              <h3 className='text-secondary font-nexa font-black'>
+                Welcome to HyperLend!
+              </h3>
+              <p className='text-secondary text-sm font-nexa leading-4'>
+                Would you like a quick tour to get familiar with the features
+                and make the most out of your experience?
+              </p>
+            </div>
+            <div className='flex justify-center gap-12 mt-3'>
+              <button
+                onClick={skipGuide}
+                className='text-secondary text-opacity-30 font-lufga'
+              >
+                Skip for Now
+              </button>
+              <button
+                onClick={gotoGuide}
+                className='text-secondary text-opacity-50 font-lufga'
+              >
+                Take a Quick Tour
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     guided > 0 && (
       <div className='hidden xl:block fixed top-0 left-0 w-full z-50 h-screen backdrop-blur-md p-2'>
