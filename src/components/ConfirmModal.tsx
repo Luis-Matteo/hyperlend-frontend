@@ -86,7 +86,7 @@ const ConfirmModal: React.FC = () => {
   }
   if (!preGuidedConfirm) {
     return (
-      <div className='fixed flex justify-center items-center top-0 left-0 w-full z-50 h-screen backdrop-blur-md p-2'>
+      <div className='hidden xl:flex fixed justify-center items-center top-0 left-0 w-full z-50 h-screen backdrop-blur-md p-2'>
         <div className='bg-primary px-11 pt-20 pb-10 shadow-3xl rounded-lg'>
           <div className='flex flex-col items-center gap-12 max-w-[345px]'>
             <img className='' src={welcomeImage} alt='welcome' />
