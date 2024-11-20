@@ -298,9 +298,9 @@ function Overview() {
           </div>
         </CardItem>
 
-        <div className='xl:hidden w-full'>
+        <div className='xl:hidden w-full flex flex-col gap-4'>
           {(assets || []).map((item, key) => (
-            <CardItem className='items-center' key={key}>
+            <CardItem className='' key={key}>
               <Link
                 className='flex flex-col hover:bg-[#1F2A29] cursor-pointer rounded-t-2xl'
                 to={`${item.underlyingAsset}`}
@@ -367,7 +367,7 @@ function Overview() {
               </Link>
               <div className='grid grid-cols-2 gap-4 p-[24px]'>
                 <button
-                  className='w-full py-2 text-secondary font-lufga rounded-xl font-bold hover:text-gray-light'
+                  className='w-full py-2 text-secondary font-lufga rounded-xl font-bold hover:text-gray'
                   onClick={() => {
                     setModalStatus(true);
                     setModalType('supply');
@@ -377,7 +377,7 @@ function Overview() {
                   Supply
                 </button>
                 <button
-                  className='w-full py-2 text-secondary font-lufga rounded-xl font-bold hover:text-gray-light'
+                  className='w-full py-2 text-secondary font-lufga rounded-xl font-bold hover:text-gray'
                   onClick={() => {
                     setModalStatus(true);
                     setModalType('borrow');
