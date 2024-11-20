@@ -129,7 +129,7 @@ function getAvailableBorrow(params: any): any {
 
   const availableAfterCap =
     borrowCap != 0 && totalBorrowed + availableBorrowBaseToken > borrowCap
-      ? (borrowCap - totalBorrowed)
+      ? borrowCap - totalBorrowed
       : availableBorrowBaseToken;
 
   return availableAfterCap > availableLiquidity
