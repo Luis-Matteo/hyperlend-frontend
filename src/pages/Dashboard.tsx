@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   useSwitchChain,
   useAccount,
@@ -26,10 +26,12 @@ import { useUserPositionsData } from '../utils/user/positions';
 import { useUserWalletValueUsd } from '../utils/user/wallet';
 import { useUserPortfolioHistory } from '../utils/user/history';
 import { Link } from 'react-router-dom';
+import { useConfirm } from '../provider/ConfirmProvider';
 
 function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
 
+  const { guided, closeGuide, nextStep } = useConfirm();
   const { data: hash, writeContractAsync } = useWriteContract();
   const { switchChain } = useSwitchChain();
   const { address, chainId, isConnected } = useAccount();
@@ -81,13 +83,55 @@ function Dashboard() {
     console.log(hash);
   };
 
+  const divRefs = [
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+  ];
+
+  const [divDimensions, setDivDimensions] = useState<
+    { width: number; height: number }[]
+  >([
+    { width: 0, height: 0 },
+    { width: 0, height: 0 },
+    { width: 0, height: 0 },
+    { width: 0, height: 0 },
+  ]);
+
+  // Update widths and heights
+  const updateDimensions = () => {
+    const newDimensions = divRefs.map((ref) => ({
+      width: ref.current?.offsetWidth || 0,
+      height: ref.current?.offsetHeight || 0,
+    }));
+    setDivDimensions(newDimensions);
+  };
+
+  console.log(divDimensions);
+  useEffect(() => {
+    // Update the dimensions immediately when the component mounts
+    updateDimensions();
+
+    // Add resize event listener to update dimensions during window resizing
+    window.addEventListener('resize', updateDimensions);
+
+    // Clean up event listener when the component unmounts
+    return () => {
+      window.removeEventListener('resize', updateDimensions);
+    };
+  }, []);
+
   return (
     <>
       <div className='flex flex-col'>
         <Navbar pageTitle='Dashboard' />
-        <div className='pt-8 flex flex-col gap-4'>
+        <div className='pt-8 flex flex-col gap-4 relative'>
           <div className='flex flex-col md:flex-row gap-4 justify-between'>
-            <CardItem className='px-4 lg:px-8 py-4 h-72 max-w-[480px] w-full overflow-hidden md:mb-0 mx-auto'>
+            <CardItem
+              ref={divRefs[0]}
+              className={`px-4 lg:px-8 py-4 h-72 max-w-[480px] w-full overflow-hidden md:mb-0 mx-auto ${guided > 0 && guided !== 1 ? 'lg:blur-[8px]' : ''}`}
+            >
               <div className=''>
                 <div className='flex gap-2 items-center'>
                   <SectionTitle title='Health Factor' />
@@ -110,7 +154,11 @@ function Dashboard() {
                 </div>
               </div>
             </CardItem>
-            <CardItem className='py-4 lg:py-6 px-4 lg:px-7 md:w-full'>
+
+            <CardItem
+              ref={divRefs[1]}
+              className={`py-4 lg:py-6 px-4 lg:px-7 md:w-full ${guided > 0 && guided !== 2 ? 'lg:blur-[8px]' : ''}`}
+            >
               <SectionTitle
                 title='Your Positions'
                 className='mb-8 font-lufga'
@@ -133,7 +181,10 @@ function Dashboard() {
               </div>
             </CardItem>
           </div>
-          <CardItem className='py-4 lg:py-6 px-4 lg:px-7 order-first lg:order-none'>
+          <CardItem
+            ref={divRefs[2]}
+            className={`py-4 lg:py-6 px-4 lg:px-7 order-first lg:order-none ${guided > 0 && guided !== 3 ? 'lg:blur-[8px]' : ''}`}
+          >
             <div className='flex flex-col lg:flex-row gap-4 xl:gap-12 2xl:gap-24 justify-between items-center'>
               <div className='flex gap-4 justify-between items-center w-full lg:flex-1'>
                 <div className='flex flex-col gap-4'>
@@ -187,7 +238,10 @@ function Dashboard() {
               </div>
             </div>
           </CardItem>
-          <div className='lg:flex gap-5 justify-between '>
+          <div
+            ref={divRefs[3]}
+            className={`lg:flex gap-5 justify-between ${guided > 0 && guided !== 4 ? 'lg:blur-[8px]' : ''}`}
+          >
             <CardItem className='py-4 lg:py-6 px-2 md:px-4 xl:px-7 flex-1 mb-4 lg:mb-0'>
               <div className='max-h-[250px]'>
                 <p className='text-white font-lufga text-2xl pb-4'>Supplied</p>
@@ -335,6 +389,164 @@ function Dashboard() {
               </div>
             </CardItem>
           </div>
+          {guided === 1 && (
+            <div
+              className='hidden lg:block absolute -translate-x-1/2'
+              style={{
+                top: divDimensions[0].height + 32,
+                left: divDimensions[0].width / 2,
+              }}
+            >
+              <div className='flex flex-col items-center relative z-10 -top-2'>
+                <div className='w-4 h-4 rounded-full bg-transparent border-2 border-secondary'></div>
+                <div className='w-0.5 h-12 bg-secondary'></div>
+                <div className='w-4 h-4 rounded-full bg-transparent border-2 border-secondary'></div>
+              </div>
+              <div className='bg-primary px-4 py-3 inline-block relative -top-4 rounded-md text-left'>
+                <p className='font-lufga text-[13px] text-secondary'>
+                  Check Your Health Factor
+                </p>
+                <p className='font-lufga text-[11px] text-secondary'>
+                  Keep this high to reduce liquidation risk.
+                </p>
+                <div className='flex justify-center gap-12 mt-3'>
+                  <button
+                    onClick={closeGuide}
+                    className='text-secondary text-opacity-30 font-lufga'
+                  >
+                    Skip All
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className='text-secondary text-opacity-50 font-lufga'
+                  >
+                    Next ({guided}/4)
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {guided === 2 && (
+            <div
+              className='hidden lg:flex justify-end absolute '
+              style={{
+                right: divDimensions[1].width - 16,
+              }}
+            >
+              <div className='bg-primary max-w-[260px] px-4 py-3 block relative -top-4 rounded-md text-left'>
+                <p className='font-lufga text-[13px] text-secondary'>
+                  Deposit Collateral
+                </p>
+                <p className='font-lufga text-[11px] text-secondary'>
+                  The assets you've provided as collateral to secure your loans
+                  on the platform.
+                </p>
+                <p className='font-lufga text-[13px] text-secondary mt-3'>
+                  Borrow
+                </p>
+                <p className='font-lufga text-[11px] text-secondary'>
+                  The assets you've borrowed using your deposited collateral.
+                </p>
+                <div className='flex justify-center gap-12 mt-3'>
+                  <button
+                    onClick={closeGuide}
+                    className='text-secondary text-opacity-30 font-lufga'
+                  >
+                    Skip All
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className='text-secondary text-opacity-50 font-lufga'
+                  >
+                    Next ({guided}/4)
+                  </button>
+                </div>
+              </div>
+              <div className='flex items-center relative z-10 mt-24 -top-2 -left-2'>
+                <div className='w-4 h-4 rounded-full bg-transparent border-2 border-secondary'></div>
+                <div className='h-0.5 w-12 bg-secondary'></div>
+                <div className='w-4 h-4 rounded-full bg-transparent border-2 border-secondary'></div>
+              </div>
+            </div>
+          )}
+          {guided === 3 && (
+            <div
+              className='hidden lg:block absolute max-w-[260px] -translate-x-1/2'
+              style={{
+                top: divDimensions[0].height - 128,
+                left: divDimensions[2].width / 3,
+              }}
+            >
+              <div className='bg-primary max-w-[260px] px-4 py-3 block rounded-md text-left'>
+                <p className='font-lufga text-[13px] text-secondary'>
+                  Monitor Your Net Worth
+                </p>
+                <p className='font-lufga text-[11px] text-secondary'>
+                  Track your balance and APY changes over time.
+                </p>
+                <div className='flex justify-center gap-12 mt-3'>
+                  <button
+                    onClick={closeGuide}
+                    className='text-secondary text-opacity-30 font-lufga'
+                  >
+                    Skip All
+                  </button>
+                  <button
+                    onClick={nextStep}
+                    className='text-secondary text-opacity-50 font-lufga'
+                  >
+                    Next ({guided}/4)
+                  </button>
+                </div>
+              </div>
+              <div className='flex flex-col items-center relative z-10 -top-2'>
+                <div className='w-4 h-4 rounded-full bg-transparent border-2 border-secondary'></div>
+                <div className='w-0.5 h-12 bg-secondary'></div>
+                <div className='w-4 h-4 rounded-full bg-transparent border-2 border-secondary'></div>
+              </div>
+            </div>
+          )}
+          {guided === 4 && (
+            <div
+              className='hidden lg:block absolute max-w-[260px] -translate-x-1/2'
+              style={{
+                top: divDimensions[0].height + divDimensions[1].height - 212,
+                left: divDimensions[2].width / 2,
+              }}
+            >
+              <div className='bg-primary max-w-[260px] px-4 py-3 block rounded-md text-left'>
+                <p className='font-lufga text-[13px] text-secondary'>
+                  Monitor Your Net Worth
+                </p>
+                <p className='font-lufga text-[11px] text-secondary'>
+                  Track your balance and APY changes over time.
+                </p>
+                <div className='flex justify-center gap-12 mt-3'>
+                  <button
+                    onClick={closeGuide}
+                    className='text-secondary font-lufga'
+                  >
+                    Complete
+                  </button>
+                </div>
+              </div>
+              <div className='flex flex-col items-center relative z-10 -top-2'>
+                <div className='w-4 h-4 rounded-full bg-transparent border-2 border-secondary'></div>
+                <div className='w-0.5 h-6 bg-secondary' />
+                <div className='w-60 h-0.5 bg-secondary' />
+                <div className='flex justify-between w-full'>
+                  <div className='flex flex-col items-center'>
+                    <div className='w-0.5 h-8 bg-secondary' />
+                    <div className='w-4 h-4 rounded-full bg-transparent border-2 border-secondary'></div>
+                  </div>
+                  <div className='flex flex-col items-center'>
+                    <div className='w-0.5 h-8 bg-secondary' />
+                    <div className='w-4 h-4 rounded-full bg-transparent border-2 border-secondary' />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       {modalStatus && (

@@ -18,8 +18,10 @@ import { useLocation } from 'react-router-dom';
 import backgroundGradientOrange from '../assets/img/background-orange.svg';
 import { tokenToGradient } from '../utils/config';
 import ConfirmModal from '../components/ConfirmModal';
+import { useConfirm } from '../provider/ConfirmProvider';
 
 function MainContent() {
+  const { guided } = useConfirm();
   const location = useLocation();
   const modalOpen = useSelector((state: RootState) => state.sidebar.modalOpen);
 
@@ -46,7 +48,9 @@ function MainContent() {
           </Routes>
           {modalOpen && <Referrals />}
         </div>
-        <div className='absolute top-0 right-0 w-full h-screen -z-10'>
+        <div
+          className={`absolute top-0 right-0 w-full h-screen -z-10 ${guided > 0 ? 'lg:blur-[8px]' : ''}`}
+        >
           {location.pathname.match(/^\/markets\/[^/]+$/) ? (
             <img
               className='w-full'

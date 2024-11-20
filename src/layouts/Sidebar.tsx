@@ -17,10 +17,11 @@ import { useAccount, useWriteContract } from 'wagmi';
 import faucetIcon from '../assets/icons/faucet-color.svg';
 import { claimFaucet } from '../utils/protocol/faucet';
 import explorerIcon from '../assets/icons/explorer-icon.svg';
+import { useConfirm } from '../provider/ConfirmProvider';
 
 function Sidebar() {
   const { isConnected, address } = useAccount();
-
+  const { guided } = useConfirm();
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state: RootState) => state.sidebar.isOpen);
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -55,7 +56,7 @@ function Sidebar() {
   return (
     <div
       ref={sidebarRef}
-      className={`bg-primary transition-transform duration-300 absolute z-30 lg:relative ${isSidebarOpen ? 'translate-x-0 shadow-custom' : '-translate-x-full lg:translate-x-0'}`}
+      className={`bg-primary transition-transform duration-300 absolute z-30 lg:relative ${isSidebarOpen ? 'translate-x-0 shadow-custom' : '-translate-x-full lg:translate-x-0'} ${guided > 0 ? 'lg:blur-[8px]' : ''}`}
     >
       <div className='w-64 p-10 flex-col justify-between flex h-screen'>
         <div className=''>
