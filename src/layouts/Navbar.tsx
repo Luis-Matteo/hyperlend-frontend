@@ -4,7 +4,7 @@ import { toggleSidebar } from '../store/sidebarSlice';
 import hamburgerIcon from '../assets/icons/hamburger-icon.svg';
 
 type NavbarProps = {
-  pageTitle: string;
+  pageTitle?: string;
   pageIcon?: string;
 };
 
@@ -28,11 +28,13 @@ function Navbar({ pageTitle, pageIcon }: NavbarProps) {
           ) : (
             ''
           )}
-          <h2
-            className={` ${pageTitle == 'MBTC' ? 'text-orange-400' : 'text-blue-300'} font-lufga text-3xl text-white`}
-          >
-            {pageTitle}
-          </h2>
+          {pageTitle && (
+            <h2
+              className={` ${pageTitle == 'MBTC' ? 'text-orange-400' : 'text-blue-300'} font-lufga text-3xl text-white`}
+            >
+              {pageTitle}
+            </h2>
+          )}
         </div>
         <div className='flex items-center gap-4'>
           {/* <div className="p-1 bg-primary hidden md:flex rounded-full gap-2">
