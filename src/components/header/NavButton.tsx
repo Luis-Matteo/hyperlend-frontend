@@ -43,7 +43,7 @@ function NavButton({
   return (
     <button
       className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform ${
-        currentRoute === url ? 'bg-secondary p-1 rounded-full' : ''
+        currentRoute.includes(url) ? 'bg-secondary p-1 rounded-full' : ''
       }`}
       onClick={() => {
         navigate(url);
@@ -56,14 +56,14 @@ function NavButton({
     >
       <div
         className={`transition-all duration-300 ease-in-out transform ${
-          currentRoute === url ? 'p-2 bg-grey rounded-full' : 'px-3'
+          currentRoute.includes(url) ? 'p-2 bg-grey rounded-full' : 'px-3'
         }`}
       >
         <img src={icon} className='w-5' alt={title} />
       </div>
       <p
         className={`font-lufga font-medium transition-colors duration-300 ease-in-out ${
-          currentRoute === url ? '' : 'text-secondary'
+          currentRoute.includes(url) ? '' : 'text-secondary'
         }`}
       >
         {title}

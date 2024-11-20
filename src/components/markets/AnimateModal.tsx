@@ -32,10 +32,10 @@ function AnimateModal({
       'bg-gradient-to-b from-[#071311] via-[#00000000] via-[60%] to-[#FF0D0D33] shadow-[0px_0px_32px_0px_#FF0D0D4D]',
   }[type];
 
-  const textColor = {
-    loading: '[#071311]',
-    completed: '[#CAEAE5]',
-    failed: '[#EACACB]',
+  const color = {
+    loading: 'bg-[#071311]',
+    completed: 'bg-[#CAEAE5]',
+    failed: 'bg-[#EACACB]',
   }[type];
 
   const animationData = {
@@ -103,7 +103,7 @@ function AnimateModal({
           {onClick && (
             <div className='absolute bottom-0 left-0 p-5 w-full'>
               <button
-                className={`w-full py-4 rounded-lg font-nexa bg-${textColor}`}
+                className={`w-full py-4 rounded-lg font-nexa ${color}`}
                 onClick={onClick}
               >
                 {type == 'completed' ? 'Done' : 'Try Again'}
