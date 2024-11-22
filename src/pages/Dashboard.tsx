@@ -25,13 +25,14 @@ import { contracts, abis, networkChainId } from '../utils/config';
 import { useUserPositionsData } from '../utils/user/positions';
 import { useUserWalletValueUsd } from '../utils/user/wallet';
 import { useUserPortfolioHistory } from '../utils/user/history';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useConfirm } from '../provider/ConfirmProvider';
 
 function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
 
   const { guided, closeGuide, nextStep } = useConfirm();
+  const navigate = useNavigate()
   const { data: hash, writeContractAsync } = useWriteContract();
   const { switchChain } = useSwitchChain();
   const { address, chainId, isConnected } = useAccount();
@@ -264,59 +265,58 @@ function Dashboard() {
                   </div>
                   <div className='overflow-auto max-h-[200px]'>
                     {(supplied || []).map((item: any, index: any) => (
-                      <Link
-                        className='flex flex-col hover:bg-[#1F2A29] cursor-pointer'
-                        to={`/markets/${item.underlyingAsset}`}
+                      <button
+                        className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-[#1F2A29]'
+                        key={index}
+                        onClick={() => navigate(`/markets/${item.underlyingAsset}`)}
+
                       >
+                        <div className='text-white font-lufga flex gap-2 justify-center'>
+                          <img
+                            className='w-4 sm:w-6 lg:w-4 xl:w-6'
+                            src={item.icon}
+                            alt=''
+                          />
+                          <p className='text-xs sm:text-base lg:text-xs xl:text-base'>
+                            {item.assetName}
+                          </p>
+                        </div>
+                        <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
+                          {formatNumber(item.balance, 3)}
+                        </div>
+                        <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
+                          ${formatNumber(item.value, 2)}
+                        </div>
+                        <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
+                          {formatNumber(item.apr, 2)}%
+                        </div>
                         <div
-                          className=' grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center'
-                          key={index}
+                          className={`text-xs sm:text-base lg:text-xs xl:text-base ${item.isCollateralEnabled ? 'text-success font-lufga' : 'text-secondary font-lufga'}`}
                         >
-                          <div className='text-white font-lufga flex gap-2 justify-center'>
-                            <img
-                              className='w-4 sm:w-6 lg:w-4 xl:w-6'
-                              src={item.icon}
-                              alt=''
-                            />
-                            <p className='text-xs sm:text-base lg:text-xs xl:text-base'>
-                              {item.assetName}
-                            </p>
-                          </div>
-                          <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
-                            {formatNumber(item.balance, 3)}
-                          </div>
-                          <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
-                            ${formatNumber(item.value, 2)}
-                          </div>
-                          <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
-                            {formatNumber(item.apr, 2)}%
-                          </div>
-                          <div
-                            className={`text-xs sm:text-base lg:text-xs xl:text-base ${item.isCollateralEnabled ? 'text-success font-lufga' : 'text-secondary font-lufga'}`}
-                          >
-                            <button
-                              onClick={() => {
-                                sendToggleCollateralTx(
-                                  item.underlyingAsset,
-                                  item.isCollateralEnabled,
-                                );
-                              }}
-                            >
-                              {item.isCollateralEnabled ? '✓' : '─'}
-                            </button>
-                          </div>
                           <button
-                            className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-base'
                             onClick={() => {
-                              setModalStatus(true);
-                              setModalToken(item.underlyingAsset);
-                              setModalType('supply');
+                              sendToggleCollateralTx(
+                                item.underlyingAsset,
+                                item.isCollateralEnabled,
+                              );
                             }}
                           >
-                            Supply
+                            {item.isCollateralEnabled ? '✓' : '─'}
                           </button>
                         </div>
-                      </Link>
+                        <button
+                          className='w-full py-2 bg-secondary font-lufga rounded-xl font-bold'
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setModalStatus(true);
+                            setModalToken(item.underlyingAsset);
+                            setModalType('supply');
+                          }}
+                        >
+                          Supply
+                        </button>
+                      </button>
+                      // </Link>
                     ))}
                   </div>
                 </div>
@@ -344,9 +344,10 @@ function Dashboard() {
                   </div>
                   <div className='overflow-auto max-h-[200px]'>
                     {(borrowed || []).map((item: any, index: any) => (
-                      <div
-                        className=' grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center'
+                      <button
+                        className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-[#1F2A29]'
                         key={index}
+                        onClick={() => navigate(`/markets/${item.underlyingAsset}`)}
                       >
                         <div className='text-white font-lufga flex gap-2 justify-center'>
                           <img
@@ -372,8 +373,9 @@ function Dashboard() {
                         </div>
                         <div>
                           <button
-                            className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-base'
-                            onClick={() => {
+                            className='w-full py-2 bg-secondary font-lufga rounded-xl font-bold'
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setModalStatus(true);
                               setModalToken(item.underlyingAsset);
                               setModalType('repay');
@@ -382,7 +384,7 @@ function Dashboard() {
                             Repay
                           </button>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
