@@ -109,7 +109,6 @@ function Dashboard() {
     setDivDimensions(newDimensions);
   };
 
-  console.log(divDimensions);
   useEffect(() => {
     // Update the dimensions immediately when the component mounts
     updateDimensions();
