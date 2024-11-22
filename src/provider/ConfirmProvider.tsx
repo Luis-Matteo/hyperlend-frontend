@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ConfirmContextType {
   confirmed: boolean;
@@ -20,6 +21,7 @@ interface ConfirmProviderProps {
 export const ConfirmProvider: React.FC<ConfirmProviderProps> = ({
   children,
 }) => {
+  const navigate = useNavigate()
   // Initialize `confirmed` and `preGuidedConfirm` from localStorage
   const [confirmed, setConfirmed] = useState<boolean>(() => {
     return localStorage.getItem('confirmed') === 'true';
@@ -68,6 +70,26 @@ export const ConfirmProvider: React.FC<ConfirmProviderProps> = ({
     setGuided(0); // Reset the guide
     localStorage.setItem('guideCompleted', 'true');
   };
+
+  useEffect(() => {
+    // Check if the screen width is less than 1024px
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        if (!confirmed || !(guided === 0)) {
+          navigate('/dashboard'); // Redirect to /dashboard if not confirmed and guide is not completed
+        }
+      }
+    };
+
+    handleResize(); // Call on mount to check initial screen width
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [confirmed, guided, navigate]);
 
   return (
     <ConfirmContext.Provider
