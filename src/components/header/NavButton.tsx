@@ -1,5 +1,8 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import lockIcon from '../../assets/icons/lock-icon.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { toggleSidebar } from '../../store/sidebarSlice';
 
 interface NavButtonProps {
   id: string;
@@ -19,7 +22,8 @@ function NavButton({
   const location = useLocation();
   const currentRoute = location.pathname;
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const isSidebarOpen = useSelector((state: RootState) => state.sidebar.isOpen);
   if (disabled) {
     return (
       <button
@@ -41,7 +45,12 @@ function NavButton({
       className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform ${
         currentRoute.includes(url) ? 'bg-secondary p-1 rounded-full' : ''
       }`}
-      onClick={() => navigate(url)}
+      onClick={() => {
+        navigate(url);
+        if (isSidebarOpen) {
+          dispatch(toggleSidebar());
+        }
+      }}
       key={id}
       type='button'
     >

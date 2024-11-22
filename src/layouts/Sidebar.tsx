@@ -56,7 +56,7 @@ function Sidebar() {
   return (
     <div
       ref={sidebarRef}
-      className={`bg-primary transition-transform duration-300 absolute z-30 lg:relative ${isSidebarOpen ? 'translate-x-0 shadow-custom' : '-translate-x-full lg:translate-x-0'} ${guided > 0 ? 'lg:blur-[8px]' : ''}`}
+      className={`bg-primary transition-transform duration-300 fixed z-30 lg:relative ${isSidebarOpen ? 'translate-x-0 shadow-custom' : '-translate-x-full lg:translate-x-0'} ${guided > 0 ? 'lg:blur-[8px]' : ''}`}
     >
       <div className='w-64 p-10 flex-col justify-between flex h-screen'>
         <div className=''>
