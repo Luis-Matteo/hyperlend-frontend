@@ -23,6 +23,7 @@ import HyperloopSetting from '../pages/HyperloopSetting';
 import HyperloopSearch from '../pages/HyperloopSearch';
 import { useConfirm } from '../provider/ConfirmProvider';
 import NotFound from '../pages/NotFound';
+import Analytics from '../pages/analytics/Analytics';
 
 function MainContent() {
   const { guided } = useConfirm();
@@ -50,6 +51,7 @@ function MainContent() {
               <Route path='' element={<Overview />} />
               <Route path=':token' element={<TokenDetails />} />
             </Route>
+            <Route path='analytics' element={<Analytics />} />
             <Route path='hyperloop' element={<Hyperloop />}>
               <Route path='' element={<HyperloopOverview />} />
               <Route path='setting' element={<HyperloopSetting />} />
