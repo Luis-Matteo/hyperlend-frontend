@@ -2,6 +2,7 @@
 import { useDispatch } from 'react-redux';
 import { toggleSidebar } from '../store/sidebarSlice';
 import hamburgerIcon from '../assets/icons/hamburger-icon.svg';
+import { useConfirm } from '../provider/ConfirmProvider';
 
 type NavbarProps = {
   pageTitle?: string;
@@ -11,10 +12,10 @@ type NavbarProps = {
 function Navbar({ pageTitle, pageIcon }: NavbarProps) {
   const dispatch = useDispatch();
 
-  // const [searchText, setSearchText] = useState<string>('');
+  const { guided } = useConfirm();
 
   return (
-    <div>
+    <div className={`${guided > 0 ? 'lg:blur-[8px]' : ''}`}>
       <button
         className='font-lufga text-white lg:hidden mb-6'
         onClick={() => dispatch(toggleSidebar())}

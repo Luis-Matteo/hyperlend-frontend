@@ -134,7 +134,6 @@ const TokenActions: React.FC<TokenActionsProps> = ({
 
   useEffect(() => {
     if (isTxPending) {
-      //TODO: add loading icon
       setButtonText('Sending transaction...');
       openAnimateModal(
         'loading',

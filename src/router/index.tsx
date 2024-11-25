@@ -1,5 +1,4 @@
 import {
-  BrowserRouter,
   Navigate,
   Route,
   Routes,
@@ -22,10 +21,14 @@ import Hyperloop from '../pages/Hyperloop';
 import HyperloopOverview from '../pages/HyperloopOverview';
 import HyperloopSetting from '../pages/HyperloopSetting';
 import HyperloopSearch from '../pages/HyperloopSearch';
+import { useConfirm } from '../provider/ConfirmProvider';
+import NotFound from '../pages/NotFound';
 
 function MainContent() {
+  const { guided } = useConfirm();
   const location = useLocation();
   const modalOpen = useSelector((state: RootState) => state.sidebar.modalOpen);
+  const is404 = location.pathname === '/404';
 
   const [searchParams] = useSearchParams();
   if (searchParams.get('ref')) {
@@ -38,7 +41,7 @@ function MainContent() {
   return (
     <>
       <ConfirmModal />
-      <main className='bg-primary-light w-full lg:w-[calc(100vw-256px)] relative lg:h-screen inset-0 z-0'>
+      <main className={`bg-primary-light w-full relative lg:h-screen inset-0 z-0 ${!is404 ? "lg:w-[calc(100vw-256px)]" : ""}`}>
         <div className='inset-0 px-4 py-8 md:px-6 xl:p-14 z-20 lg:max-h-screen h-full overflow-auto '>
           <Routes>
             <Route path='/' element={<Navigate to='/dashboard' />} />
@@ -52,10 +55,14 @@ function MainContent() {
               <Route path='setting' element={<HyperloopSetting />} />
               <Route path='search' element={<HyperloopSearch />} />
             </Route>
+            <Route path='404' element={<NotFound />} />
+            <Route path='*' element={<Navigate to='/404' />} />
           </Routes>
           {modalOpen && <Referrals />}
         </div>
-        <div className='absolute top-0 right-0 w-full h-screen -z-10'>
+        <div
+          className={`absolute top-0 right-0 w-full h-screen -z-10 ${guided > 0 ? 'lg:blur-[8px]' : ''}`}
+        >
           {location.pathname.match(/^\/markets\/[^/]+$/) ? (
             <img
               className='w-full'
@@ -75,15 +82,17 @@ function MainContent() {
   );
 }
 
-function Router() {
+export default function Router() {
+
+  const location = useLocation();
+  const is404 = location.pathname === '/404';
+
   return (
-    <BrowserRouter>
-      <div className='flex'>
-        <Sidebar />
-        <MainContent />
-      </div>
-    </BrowserRouter>
+
+    <div className='flex'>
+      {!is404 && <Sidebar />}
+      <MainContent />
+    </div>
+
   );
 }
-
-export default Router;

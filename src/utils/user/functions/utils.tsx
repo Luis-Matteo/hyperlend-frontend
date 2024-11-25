@@ -133,8 +133,8 @@ function getAvailableBorrow(params: any): any {
       : availableBorrowBaseToken;
 
   return availableAfterCap > availableLiquidity
-    ? availableLiquidity
-    : availableAfterCap;
+    ? availableLiquidity * 0.995 //0.5% lower to give some space if price changes/rounding errors
+    : availableAfterCap * 0.995;
 }
 
 function getAvailableRepay(params: any) {
