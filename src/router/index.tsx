@@ -17,6 +17,10 @@ import { useLocation } from 'react-router-dom';
 import backgroundGradientOrange from '../assets/img/background-orange.svg';
 import { tokenToGradient } from '../utils/config';
 import ConfirmModal from '../components/ConfirmModal';
+import Hyperloop from '../pages/Hyperloop';
+import HyperloopOverview from '../pages/HyperloopOverview';
+import HyperloopSetting from '../pages/HyperloopSetting';
+import HyperloopSearch from '../pages/HyperloopSearch';
 import { useConfirm } from '../provider/ConfirmProvider';
 import NotFound from '../pages/NotFound';
 
@@ -45,6 +49,11 @@ function MainContent() {
             <Route path='markets' element={<Markets />}>
               <Route path='' element={<Overview />} />
               <Route path=':token' element={<TokenDetails />} />
+            </Route>
+            <Route path='hyperloop' element={<Hyperloop />}>
+              <Route path='' element={<HyperloopOverview />} />
+              <Route path='setting' element={<HyperloopSetting />} />
+              <Route path='search' element={<HyperloopSearch />} />
             </Route>
             <Route path='404' element={<NotFound />} />
             <Route path='*' element={<Navigate to='/404' />} />
