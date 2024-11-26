@@ -35,7 +35,7 @@ const PolarAreaChart = ({ data }: PolarAreaChartProps) => {
 
     return (
 
-        <div className='flex justify-center items-center gap-10 mt-8'>
+        <div className='flex flex-col sm:flex-row justify-center items-center gap-4 mt-8'>
             <div className='flex flex-col gap-4'>
                 {
                     data.map((item) => (
@@ -49,7 +49,7 @@ const PolarAreaChart = ({ data }: PolarAreaChartProps) => {
                     ))
                 }
             </div>
-            <ReactApexChart options={options} series={series} type="polarArea" />;
+            <ReactApexChart options={options} series={series} type="polarArea" />
         </div>
     )
 };

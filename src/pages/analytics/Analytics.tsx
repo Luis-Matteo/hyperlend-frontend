@@ -1,5 +1,6 @@
 
 import BorderCard from '../../components/analytics/BorderCard';
+import LineChart from '../../components/analytics/LineChart';
 import PolarAreaChart from '../../components/analytics/PolarArea';
 import Navbar from '../../layouts/Navbar';
 
@@ -72,12 +73,13 @@ const usersActivity = [
 
 ]
 
+const lineChartData = [10, 40, 50, 60, 80, 20, 30, 50, 30, 30, 30, 30, 40, 70, 100]
 function Analytics() {
     return (
         <>
             <div className='w-full'>
                 <Navbar pageTitle='Data Analytics' />
-                <div className='grid grid-cols-2 h-full gap-4 mt-24'>
+                <div className='grid grid-cols-1 xl:grid-cols-2 h-full gap-4 mt-24'>
                     <BorderCard
                         title='TVL Composition'>
                         <PolarAreaChart
@@ -88,9 +90,38 @@ function Analytics() {
                         <PolarAreaChart
                             data={usersActivity} />
                     </BorderCard>
+                    <BorderCard
+                        title='TVL'>
+                        <LineChart
+                            data={lineChartData} />
+                    </BorderCard>
+                    <BorderCard
+                        title='Total Users'>
+                        <LineChart
+                            data={lineChartData} />
+                    </BorderCard>
+                    <BorderCard
+                        title='Total Deposits'>
+                        <LineChart
+                            data={lineChartData} />
+                    </BorderCard>
+                    <BorderCard
+                        title='Total Borrowed'>
+                        <LineChart
+                            data={lineChartData} />
+                    </BorderCard>
+                </div>
+                <div className='mt-4'>
+                    <BorderCard
+                        title='Liquidations'>
+                        <LineChart
+                            data={lineChartData}
+                            xgrid={false}
+                            ygrid={true} />
+                    </BorderCard>
                 </div>
             </div>
-            
+
         </>
     );
 }
