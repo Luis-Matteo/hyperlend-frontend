@@ -290,12 +290,12 @@ function TokenDetail() {
   const marketDetails = [
     {
       name: 'Token contract',
-      link: `https://explorer.hyperlend.finance/token/${token}`,
+      link: `https://testnet.purrsec.com/address/${token}`,
       value: token,
     },
     {
       name: 'Asset oracle',
-      link: `https://explorer.hyperlend.finance/address/${oraclesMap[token]}`,
+      link: `https://testnet.purrsec.com/address/${oraclesMap[token]}`,
       value: oraclesMap[token],
     },
     {
