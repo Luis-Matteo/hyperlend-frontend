@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../layouts/Navbar';
-import CardItem from '../components/common/CardItem';
+import Navbar from '../../layouts/Navbar';
+import CardItem from '../../components/common/CardItem';
 import { useParams } from 'react-router-dom';
 import { useSwitchChain, useAccount, useBalance } from 'wagmi';
 import ReactGA from 'react-ga4';
-import { tokenDetailButton } from '../utils/constants/constants';
-import { formatNumber, decodeConfig, formatAddress } from '../utils/functions';
-import BorrowInfoChart from '../components/charts/BorrowInfoChart';
-import InterestRateModelChart from '../components/charts/InterestRateModelChart';
-import { TokenActionsProps } from '../utils/types';
-import topRightArrowImage from '../assets/icons/top-right-arrow.svg';
-import ShareImageModal from '../components/common/ShareImageModal';
+import { tokenDetailButton } from '../../utils/constants/constants';
+import { formatNumber, decodeConfig, formatAddress } from '../../utils/functions';
+import BorrowInfoChart from '../../components/charts/BorrowInfoChart';
+import InterestRateModelChart from '../../components/charts/InterestRateModelChart';
+import { TokenActionsProps } from '../../utils/types';
+import topRightArrowImage from '../../assets/icons/top-right-arrow.svg';
+import ShareImageModal from '../../components/common/ShareImageModal';
 
 import {
   tokenNameMap,
@@ -21,24 +21,24 @@ import {
   liqPenaltyMap,
   networkChainId,
   oraclesMap,
-} from '../utils/config';
+} from '../../utils/config';
 
 import {
   useUserPositionsData,
   useUserAccountData,
-} from '../utils/user/positions';
+} from '../../utils/user/positions';
 
-import { useProtocolPriceData } from '../utils/protocol/prices';
-import { useProtocolInterestRate } from '../utils/protocol/interestRates';
-import { useProtocolAssetReserveData } from '../utils/protocol/reserves';
+import { useProtocolPriceData } from '../../utils/protocol/prices';
+import { useProtocolInterestRate } from '../../utils/protocol/interestRates';
+import { useProtocolAssetReserveData } from '../../utils/protocol/reserves';
 
-import { useProtocolReservesData } from '../utils/protocol/reserves';
+import { useProtocolReservesData } from '../../utils/protocol/reserves';
 
-import { useUserTokenBalance } from '../utils/user/wallet';
+import { useUserTokenBalance } from '../../utils/user/wallet';
 
-import { calculateAvailableBalance } from '../utils/user/functions/utils';
+import { calculateAvailableBalance } from '../../utils/user/functions/utils';
 
-import TokenActions from '../components/markets/TokenActions';
+import TokenActions from '../../components/markets/TokenActions';
 
 function TokenDetail() {
   const { token = '' } = useParams();

@@ -5,13 +5,13 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
-import Markets from '../pages/Markets';
-import TokenDetails from '../pages/TokenDetail';
+import Markets from '../pages/markets/Markets';
+import TokenDetails from '../pages/markets/TokenDetail';
 import Sidebar from '../layouts/Sidebar';
-import Overview from '../pages/Overview';
+import Overview from '../pages/markets/Overview';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import Referrals from '../pages/Referrals';
+import Referrals from '../pages/markets/Referrals';
 import backgroundImage from '../assets/img/background.svg';
 import { useLocation } from 'react-router-dom';
 import backgroundGradientOrange from '../assets/img/background-orange.svg';
