@@ -1,5 +1,6 @@
 
 import BorderCard from '../../components/analytics/BorderCard';
+import ColumnChart from '../../components/analytics/ColumnChart';
 import LineChart from '../../components/analytics/LineChart';
 import PolarAreaChart from '../../components/analytics/PolarArea';
 import Navbar from '../../layouts/Navbar';
@@ -74,6 +75,66 @@ const usersActivity = [
 ]
 
 const lineChartData = [10, 40, 50, 60, 80, 20, 30, 50, 30, 30, 30, 30, 40, 70, 100]
+
+
+
+const apy = [
+    {
+        name: "BTC",
+        value: 25,
+    },
+    {
+        name: "ETH",
+        value: 11,
+    },
+    {
+        name: "USDT",
+        value: 12,
+    },
+
+    {
+        name: "USDC",
+        value: 13,
+    },
+    {
+        name: "BTC",
+        value: 14,
+    },
+    {
+        name: "BTC",
+        value: 15,
+    },
+    {
+        name: "BTC",
+        value: 10,
+    },
+    {
+        name: "BTC",
+        value: 14,
+    },
+    {
+        name: "BTC",
+        value: 15,
+    },
+    {
+        name: "BTC",
+        value: 10,
+    },
+    {
+        name: "BTC",
+        value: 14,
+    },
+    {
+        name: "BTC",
+        value: 15,
+    },
+    {
+        name: "BTC",
+        value: 10,
+    },
+]
+
+
 function Analytics() {
     return (
         <>
@@ -109,6 +170,16 @@ function Analytics() {
                         title='Total Borrowed'>
                         <LineChart
                             data={lineChartData} />
+                    </BorderCard>
+                    <BorderCard
+                        title='APY'>
+                        <ColumnChart
+                            data={apy} />
+                    </BorderCard>
+                    <BorderCard
+                        title='Utilization Rate'>
+                        <ColumnChart
+                            data={apy} />
                     </BorderCard>
                 </div>
                 <div className='mt-4'>
