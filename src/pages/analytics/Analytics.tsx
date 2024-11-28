@@ -4,136 +4,9 @@ import ColumnChart from '../../components/analytics/ColumnChart';
 import LineChart from '../../components/analytics/LineChart';
 import PolarAreaChart from '../../components/analytics/PolarArea';
 import Navbar from '../../layouts/Navbar';
-
-const tvlcomposition = [
-    {
-        name: "BTC",
-        value: 25,
-        color: "#CAEAE5",
-    },
-    {
-        name: "ETH",
-        value: 11,
-        color: "#CAEAE5CC",
-    },
-    {
-        name: "USDT",
-        value: 12,
-        color: "#CAEAE5B2",
-    },
-
-    {
-        name: "USDC",
-        value: 13,
-        color: "#CAEAE5B2",
-    },
-    {
-        name: "BTC",
-        value: 14,
-        color: "#CAEAE580",
-    },
-    {
-        name: "BTC",
-        value: 15,
-        color: "#CAEAE566",
-    },
-    {
-        name: "BTC",
-        value: 10,
-        color: "#CAEAE54D",
-    },
-]
-
-const usersActivity = [
-    {
-        name: "Supply",
-        value: 25,
-        color: "#CAEAE5",
-    },
-    {
-        name: "Borrow",
-        value: 11,
-        color: "#CAEAE5CC",
-    },
-    {
-        name: "Withdraw",
-        value: 12,
-        color: "#CAEAE5B2",
-    },
-
-    {
-        name: "Repay",
-        value: 13,
-        color: "#CAEAE5B2",
-    },
-    {
-        name: "Liquidation",
-        value: 14,
-        color: "#CAEAE580",
-    },
-
-]
-
-const lineChartData = [10, 40, 50, 60, 80, 20, 30, 50, 30, 30, 30, 30, 40, 70, 100]
-
-
-
-const apy = [
-    {
-        name: "BTC",
-        value: 25,
-    },
-    {
-        name: "ETH",
-        value: 11,
-    },
-    {
-        name: "USDT",
-        value: 12,
-    },
-
-    {
-        name: "USDC",
-        value: 13,
-    },
-    {
-        name: "BTC",
-        value: 14,
-    },
-    {
-        name: "BTC",
-        value: 15,
-    },
-    {
-        name: "BTC",
-        value: 10,
-    },
-    {
-        name: "BTC",
-        value: 14,
-    },
-    {
-        name: "BTC",
-        value: 15,
-    },
-    {
-        name: "BTC",
-        value: 10,
-    },
-    {
-        name: "BTC",
-        value: 14,
-    },
-    {
-        name: "BTC",
-        value: 15,
-    },
-    {
-        name: "BTC",
-        value: 10,
-    },
-]
-
+import { apy, depositers, lineChartData, usersActivity } from '../../utils/constants/analytics';
+import { tvlcomposition } from '../../utils/constants/analytics';
+import { formatAddress, formatNumber } from '../../utils/functions';
 
 function Analytics() {
     return (
@@ -189,6 +62,42 @@ function Analytics() {
                             data={lineChartData}
                             xgrid={false}
                             ygrid={true} />
+                    </BorderCard>
+                </div>
+                <div className='grid grid-cols-1 xl:grid-cols-2 h-full gap-4 mt-4'>
+                    <BorderCard
+                        title='Largest Depositors'>
+                        <div className='flex justify-between mt-8 mb-3'>
+                            <p className='text-secondary font-lufga'>Address</p>
+                            <p className='text-secondary font-lufga'>Amount</p>
+                        </div>
+                        <div className='flex flex-col'>
+                            {
+                                depositers.map((item, index) => (
+                                    <div key={index} className='flex justify-between py-3 border-t-[1px] border-[#212325]'>
+                                        <p className='text-secondary text-opacity-70 font-lufga'>{formatAddress(item.address)}</p>
+                                        <p className='text-secondary font-lufga'>${formatNumber(item.amount, 2)}</p>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </BorderCard>
+                    <BorderCard
+                        title='Largest Borrowers'>
+                        <div className='flex justify-between mt-8 mb-3'>
+                            <p className='text-secondary font-lufga'>Address</p>
+                            <p className='text-secondary font-lufga'>Amount</p>
+                        </div>
+                        <div className='flex flex-col'>
+                            {
+                                depositers.map((item, index) => (
+                                    <div key={index} className='flex justify-between py-3 border-t-[1px] border-[#212325]'>
+                                        <p className='text-secondary text-opacity-70 font-lufga'>{formatAddress(item.address)}</p>
+                                        <p className='text-secondary font-lufga'>${formatNumber(item.amount, 2)}</p>
+                                    </div>
+                                ))
+                            }
+                        </div>
                     </BorderCard>
                 </div>
             </div>
