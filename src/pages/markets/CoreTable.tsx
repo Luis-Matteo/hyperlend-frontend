@@ -113,6 +113,8 @@ function CoreTable({ stable, searchText, setModalStatus, setModalType, setSelect
         }
     }, [account]);
 
+
+    console.log(assets)
     return (
         <>
             <CardItem className='md:py-6 md:px-7 hidden xl:block'>
@@ -233,32 +235,32 @@ function CoreTable({ stable, searchText, setModalStatus, setModalType, setSelect
                                             {item.symbol}
                                         </p>
                                     </div>
-                                    <div className='text-white font-lufga w-[13%]'>
+                                    <div className='text-white font-lufga w-[13%] text-sm'>
                                         <p className=''>{formatUnit(item.totalSupplied)}</p>
                                         <p className=''>${formatUnit(item.totalSuppliedUsd)}</p>
                                     </div>
-                                    <div className='text-white font-lufga w-[11%]'>
+                                    <div className='text-white font-lufga w-[11%] text-sm'>
                                         {formatNumber(item.supplyApy, 2)}%
                                     </div>
-                                    <div className='text-white font-lufga w-[13%]'>
+                                    <div className='text-white font-lufga w-[13%] text-sm'>
                                         <p className=''>{formatUnit(item.totalBorrowed)}</p>
                                         <p className=''>${formatUnit(item.totalBorrowedUsd)}</p>
                                     </div>
-                                    <div className='text-white font-lufga w-[11%]'>
+                                    <div className='text-white font-lufga w-[11%] text-sm'>
                                         {formatNumber(item.borrowApy, 2)}%
                                     </div>
-                                    <div className='text-white font-lufga w-[16%]'>
+                                    <div className='text-white font-lufga w-[16%] text-sm'>
                                         <p className=''>{formatUnit(item.totalLiquidityToken)}</p>
                                         <p className=''>${formatUnit(item.totalLiquidtyUsd)}</p>
                                     </div>
-                                    <div className='text-white font-lufga w-[9%]'>
+                                    <div className='text-white font-lufga w-[9%] text-sm'>
                                         {item.isCollateral ? (
                                             <div className='text-success'>✓</div>
                                         ) : (
                                             '─'
                                         )}
                                     </div>
-                                    <div className='text-white font-lufga'>
+                                    <div className='text-white font-lufga text-sm'>
                                         {formatNumber(item.ltv, 2)}%
                                     </div>
                                 </Link>

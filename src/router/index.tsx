@@ -8,7 +8,6 @@ import Dashboard from '../pages/Dashboard';
 import Markets from '../pages/markets/Markets';
 import TokenDetails from '../pages/markets/TokenDetail';
 import Sidebar from '../layouts/Sidebar';
-import Overview from '../pages/markets/Overview';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import Referrals from '../pages/markets/Referrals';
@@ -23,6 +22,7 @@ import HyperloopSetting from '../pages/HyperloopSetting';
 import HyperloopSearch from '../pages/HyperloopSearch';
 import { useConfirm } from '../provider/ConfirmProvider';
 import NotFound from '../pages/NotFound';
+import MarketOverview from '../pages/markets/MarketOverview';
 
 function MainContent() {
   const { guided } = useConfirm();
@@ -47,7 +47,7 @@ function MainContent() {
             <Route path='/' element={<Navigate to='/dashboard' />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='markets' element={<Markets />}>
-              <Route path='' element={<Overview />} />
+              <Route path='' element={<MarketOverview />} />
               <Route path=':token' element={<TokenDetails />} />
             </Route>
             <Route path='hyperloop' element={<Hyperloop />}>

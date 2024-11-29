@@ -7,9 +7,10 @@ import ReactGA from 'react-ga4';
 
 import { ModalType } from '../../utils/types';
 import CoreTable from './CoreTable';
+import IsolatedTable from './IsolatedTable';
 
 
-function Overview() {
+function MarketOverview() {
   ReactGA.send({ hitType: 'pageview', page: '/markets' });
 
   const [status, setStatus] = useState<string>('core');
@@ -44,6 +45,16 @@ function Overview() {
           setSelectedToken={setSelectedToken}
         />
       }
+      {
+        status === 'isolated' &&
+        <IsolatedTable
+          stable={stable}
+          searchText={searchText}
+          setModalStatus={setModalStatus}
+          setModalType={setModalType}
+          setSelectedToken={setSelectedToken}
+        />
+      }
       {modalStatus && (
         <Modal
           token={selectedToken || ''}
@@ -55,4 +66,4 @@ function Overview() {
   );
 }
 
-export default Overview;
+export default MarketOverview;
