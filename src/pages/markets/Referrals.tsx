@@ -39,8 +39,7 @@ function Referrals() {
           exit={{ scale: 0, rotate: '0deg' }}
           className='relative px-10 py-8 bg-primary-light rounded-2xl shadow-4xl'
         >
-          <button className='absolute right-8 top-8'
-            onClick={onClose}>
+          <button className='absolute right-8 top-8' onClick={onClose}>
             <img className='' src={xmarkIcon} alt='close' />
           </button>
           <div className='flex flex-col justify-center items-center gap-3 mb-7'>

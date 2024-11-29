@@ -5,7 +5,11 @@ import { useParams } from 'react-router-dom';
 import { useSwitchChain, useAccount, useBalance } from 'wagmi';
 import ReactGA from 'react-ga4';
 import { tokenDetailButton } from '../../utils/constants/constants';
-import { formatNumber, decodeConfig, formatAddress } from '../../utils/functions';
+import {
+  formatNumber,
+  decodeConfig,
+  formatAddress,
+} from '../../utils/functions';
 import BorrowInfoChart from '../../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../../components/charts/InterestRateModelChart';
 import { TokenActionsProps } from '../../utils/types';

@@ -3,29 +3,29 @@ import { useReadContracts } from 'wagmi';
 import { normalizeBN, RAY, rayDiv, rayMul } from '@aave/math-utils';
 import { BigNumber } from 'bignumber.js';
 
-import {
-  contracts,
-  abis,
-  tokenToRateStrategyMap,
-} from '../../config';
+import { contracts, abis, tokenToRateStrategyMap } from '../../config';
 
 export function useProtocolInterestRate(reserveDataMap: any) {
-
   const getInterestRateData = useCallback(() => {
     if (!reserveDataMap) {
-      return {}
+      return {};
     }
-    
+
     const newObject: Record<string, any> = {};
     Object.keys(reserveDataMap).forEach((key) => {
       newObject[key] = {
-        supply: Number(reserveDataMap[key].interestRate.ratePerSec) * (60 * 60 * 24 * 365) / 1e16, 
-        borrow: Number(reserveDataMap[key].interestRate.ratePerSec) * (60 * 60 * 24 * 365) / 1e16
-      }
+        supply:
+          (Number(reserveDataMap[key].interestRate.ratePerSec) *
+            (60 * 60 * 24 * 365)) /
+          1e16,
+        borrow:
+          (Number(reserveDataMap[key].interestRate.ratePerSec) *
+            (60 * 60 * 24 * 365)) /
+          1e16,
+      };
     });
     return newObject;
-
-  }, [reserveDataMap])
+  }, [reserveDataMap]);
 
   const interestRateDataMap = useMemo(
     () => getInterestRateData(),

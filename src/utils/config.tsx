@@ -30,7 +30,7 @@ export const abis: Record<string, any> = {
   variableDebtToken: variableDebtTokenAbi,
   isolatedPool: isolatedPoolAbi,
   isolatedPairRegistry: isolatedPairRegistryAbi,
-  uiDataProviderIsolated: uiDataProviderIsolatedAbi
+  uiDataProviderIsolated: uiDataProviderIsolatedAbi,
 };
 
 export const iconsMap: any = {

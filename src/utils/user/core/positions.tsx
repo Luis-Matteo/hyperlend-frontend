@@ -1,7 +1,11 @@
 import { useReadContract } from 'wagmi';
 
 import { calculateApy } from '../../functions';
-import { UserReserveData, UserPositionData, UserPositionsData } from '../../types';
+import {
+  UserReserveData,
+  UserPositionData,
+  UserPositionsData,
+} from '../../types';
 import {
   contracts,
   tokenNameMap,
