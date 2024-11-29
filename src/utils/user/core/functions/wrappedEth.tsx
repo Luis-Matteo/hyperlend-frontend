@@ -1,6 +1,6 @@
 import { erc20Abi } from 'viem';
 
-import { contracts, wrappedTokenProtocolTokens, abis } from '../../config';
+import { contracts, wrappedTokenProtocolTokens, abis } from '../../../config';
 
 const functionNames: any = {
   supply: 'depositETH',

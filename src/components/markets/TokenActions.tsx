@@ -23,13 +23,13 @@ import {
   useUserWrappedTokenAllowanceData,
 } from '../../utils/user/wallet';
 import { getErrorMessage } from '../../utils/constants/errorCodes';
-import { wrappedTokenAction } from '../../utils/user/functions/wrappedEth';
+import { wrappedTokenAction } from '../../utils/user/core/functions/wrappedEth';
 import {
   protocolAction,
   updateCollateralAction,
-} from '../../utils/user/functions/actions';
-import { getTokenPrecision } from '../../utils/user/functions/utils';
-import { useProtocolPriceData } from '../../utils/protocol/prices';
+} from '../../utils/user/core/functions/actions';
+import { getTokenPrecision } from '../../utils/user/core/functions/utils';
+import { useProtocolPriceData } from '../../utils/protocol/core/prices';
 
 import AnimateModal, {
   AnimateModalProps,

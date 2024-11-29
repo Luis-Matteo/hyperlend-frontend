@@ -12,10 +12,10 @@ import {
     tokenColorMap,
 } from '../../utils/config';
 
-import { useProtocolPriceData } from '../../utils/protocol/prices';
-import { useProtocolInterestRate } from '../../utils/protocol/interestRates';
-import { useProtocolAssetReserveData } from '../../utils/protocol/reserves';
-import { useProtocolReservesData } from '../../utils/protocol/reserves';
+import { useProtocolPriceData } from '../../utils/protocol/core/prices';
+import { useProtocolInterestRate } from '../../utils/protocol/core/interestRates';
+import { useProtocolAssetReserveData } from '../../utils/protocol/core/reserves';
+import { useProtocolReservesData } from '../../utils/protocol/core/reserves';
 import { useAccount, useSwitchChain } from "wagmi";
 import { AssetDetail, ModalType } from "../../utils/types";
 import { filterString } from "../../utils/functions";

@@ -12,6 +12,9 @@ const contracts: any = {
   },
   faucet: '0x941559AF458A9a0448b411a26047584b506283A7',
   wrappedTokenGatewayV3: '0xd2b21707d7a574D6A744FB600826770F9FBA6f80',
+  //isolated pools
+  isolatedPairRegistry: '0xB6aE067434D36684006b4561328eF4fA8016ee22',
+  uiDataProviderIsolated: '0x2A5De9A2efE50a9BDAF75b086649f446C0d75135'
 };
 
 const tokenFullNameMap: any = {

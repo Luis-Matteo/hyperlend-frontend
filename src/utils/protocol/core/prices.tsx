@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react';
 import { useReadContracts } from 'wagmi';
 
-import { contracts, assetAddresses, abis } from '../config';
+import { contracts, assetAddresses, abis } from '../../config';
 
 export function useProtocolPriceData() {
   const {

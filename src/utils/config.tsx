@@ -14,6 +14,9 @@ import rateStrategyAbi from '../abis/RateStrategyAbi.json';
 import faucetAbi from '../abis/FaucetAbi.json';
 import wrappedTokenGatewayV3Abi from '../abis/WrappedTokenGatewayV3Abi.json';
 import variableDebtTokenAbi from '../abis/VariableDebtTokenAbi.json';
+import isolatedPoolAbi from '../abis/IsolatedPoolAbi.json';
+import isolatedPairRegistryAbi from '../abis/IsolatedPairRegistryAbi.json';
+import uiDataProviderIsolatedAbi from '../abis/UiDataProviderIsolatedAbi.json';
 
 export const abis: Record<string, any> = {
   dataProvider: DataProviderAbi,
@@ -25,6 +28,9 @@ export const abis: Record<string, any> = {
   faucet: faucetAbi,
   wrappedTokenGatewayV3: wrappedTokenGatewayV3Abi,
   variableDebtToken: variableDebtTokenAbi,
+  isolatedPool: isolatedPoolAbi,
+  isolatedPairRegistry: isolatedPairRegistryAbi,
+  uiDataProviderIsolated: uiDataProviderIsolatedAbi
 };
 
 export const iconsMap: any = {

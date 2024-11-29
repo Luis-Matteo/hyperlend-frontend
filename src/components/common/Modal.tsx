@@ -27,25 +27,25 @@ import {
   getTokenPrecision,
   calculateAvailableBalance,
   calculatePredictedHealthFactor,
-} from '../../utils/user/functions/utils';
+} from '../../utils/user/core/functions/utils';
 
-import { useProtocolPriceData } from '../../utils/protocol/prices';
-import { useProtocolInterestRate } from '../../utils/protocol/interestRates';
-import { useProtocolAssetReserveData } from '../../utils/protocol/reserves';
+import { useProtocolPriceData } from '../../utils/protocol/core/prices';
+import { useProtocolInterestRate } from '../../utils/protocol/core/interestRates';
+import { useProtocolAssetReserveData } from '../../utils/protocol/core/reserves';
 
 import {
   useUserPositionsData,
   useUserAccountData,
-} from '../../utils/user/positions';
+} from '../../utils/user/core/positions';
 import {
   useUserWrappedTokenAllowanceData,
   useUserAllowance,
   useUserTokenBalance,
 } from '../../utils/user/wallet';
-import { wrappedTokenAction } from '../../utils/user/functions/wrappedEth';
-import { protocolAction } from '../../utils/user/functions/actions';
+import { wrappedTokenAction } from '../../utils/user/core/functions/wrappedEth';
+import { protocolAction } from '../../utils/user/core/functions/actions';
 
-import { useProtocolReservesData } from '../../utils/protocol/reserves';
+import { useProtocolReservesData } from '../../utils/protocol/core/reserves';
 
 import AnimateModal, {
   AnimateModalProps,

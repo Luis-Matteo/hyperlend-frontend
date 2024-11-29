@@ -1,6 +1,6 @@
 import { erc20Abi } from 'viem';
 
-import { contracts, abis } from '../../config';
+import { contracts, abis } from '../../../config';
 
 export async function protocolAction(
   actionType: string,

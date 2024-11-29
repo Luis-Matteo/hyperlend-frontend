@@ -1,5 +1,5 @@
-import { tokenDecimalsMap, wrappedTokens, liqMap } from '../../config';
-import { normalizeDecimalsAmount, decodeConfig } from '../../functions';
+import { tokenDecimalsMap, wrappedTokens, liqMap } from '../../../config';
+import { normalizeDecimalsAmount, decodeConfig } from '../../../functions';
 
 //return precision for token amount worth $0.01
 export function getTokenPrecision(token: string, priceDataMap: any): any {

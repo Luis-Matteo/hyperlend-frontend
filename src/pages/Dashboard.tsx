@@ -22,7 +22,7 @@ import { ModalType } from '../utils/types';
 
 import { getUserPoints } from '../utils/user/points';
 import { contracts, abis, networkChainId } from '../utils/config';
-import { useUserPositionsData } from '../utils/user/positions';
+import { useUserPositionsData } from '../utils/user/core/positions';
 import { useUserWalletValueUsd } from '../utils/user/wallet';
 import { useUserPortfolioHistory } from '../utils/user/history';
 import { useNavigate } from 'react-router-dom';

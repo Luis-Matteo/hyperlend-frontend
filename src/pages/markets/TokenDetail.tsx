@@ -26,17 +26,17 @@ import {
 import {
   useUserPositionsData,
   useUserAccountData,
-} from '../../utils/user/positions';
+} from '../../utils/user/core/positions';
 
-import { useProtocolPriceData } from '../../utils/protocol/prices';
-import { useProtocolInterestRate } from '../../utils/protocol/interestRates';
-import { useProtocolAssetReserveData } from '../../utils/protocol/reserves';
+import { useProtocolPriceData } from '../../utils/protocol/core/prices';
+import { useProtocolInterestRate } from '../../utils/protocol/core/interestRates';
+import { useProtocolAssetReserveData } from '../../utils/protocol/core/reserves';
 
-import { useProtocolReservesData } from '../../utils/protocol/reserves';
+import { useProtocolReservesData } from '../../utils/protocol/core/reserves';
 
 import { useUserTokenBalance } from '../../utils/user/wallet';
 
-import { calculateAvailableBalance } from '../../utils/user/functions/utils';
+import { calculateAvailableBalance } from '../../utils/user/core/functions/utils';
 
 import TokenActions from '../../components/markets/TokenActions';
 
