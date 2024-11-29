@@ -20,16 +20,19 @@ const contracts: any = {
 const tokenFullNameMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 'MockBitcoin',
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 'Ethereum',
+  '0x4D6b8f9518b0b92080b5eAAf80bD505734A059Ae': 'ThunderHead Staked HYPE',
 };
 
 const tokenNameMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 'MBTC',
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 'ETH',
+  '0x4D6b8f9518b0b92080b5eAAf80bD505734A059Ae': 'stHYPE',
 };
 
 const tokenToRateStrategyMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 'volatileOne', //btc
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 'volatileOne',
+  '0x4D6b8f9518b0b92080b5eAAf80bD505734A059Ae': 'volatileOne',
 };
 
 const assetAddresses = Object.keys(tokenNameMap);
@@ -37,21 +40,25 @@ const assetAddresses = Object.keys(tokenNameMap);
 const tokenDecimalsMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 8,
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 18,
+  '0x4D6b8f9518b0b92080b5eAAf80bD505734A059Ae': 18,
 };
 
 const ltvMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 0.75,
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 0.75,
+  '0x4D6b8f9518b0b92080b5eAAf80bD505734A059Ae': 0.5,
 };
 
 const liqMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 0.8,
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 0.8,
+  '0x4D6b8f9518b0b92080b5eAAf80bD505734A059Ae': 0.65,
 };
 
 const liqPenaltyMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 0.1,
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 0.1,
+  '0x4D6b8f9518b0b92080b5eAAf80bD505734A059Ae': 0.1,
 };
 
 const wrappedTokens = ['0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7'];
@@ -63,10 +70,12 @@ const wrappedTokenProtocolTokens: any = {
 
 import backgroundGradientBlue from '../../assets/img/background-gradient.svg';
 import backgroundGradientOrange from '../../assets/img/background-orange.svg';
+import backgroundGradientStHype from '../../assets/img/background-sthype.svg';
 
 const tokenToGradient: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': backgroundGradientOrange,
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': backgroundGradientBlue,
+  '0x4D6b8f9518b0b92080b5eAAf80bD505734A059Ae': backgroundGradientStHype,
 };
 
 const oraclesMap: any = {
@@ -74,6 +83,8 @@ const oraclesMap: any = {
     '0x3437aE65ae0C2b80437E55c829fF6C895Eee061c',
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7':
     '0xc88F13B22443E6dDe99bc702F0130A8edee45174',
+  '0x4D6b8f9518b0b92080b5eAAf80bD505734A059Ae':
+    '0x713c630Cbb3A37b45bA3921125abb3D0D4F4d8ef',
 };
 
 const hlTestnet: any = {

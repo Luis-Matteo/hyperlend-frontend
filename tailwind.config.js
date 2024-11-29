@@ -1,4 +1,4 @@
-const colors = ['f7931a', '497493'];
+const colors = ['f7931a', '497493', '97fce0'];
 
 /** @type {import('tailwindcss').Config} */
 export default {
