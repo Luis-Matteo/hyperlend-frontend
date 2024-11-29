@@ -81,7 +81,7 @@ function Sidebar() {
             <button
               className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
               onClick={() => {
-                window.open('https://explorer.hyperlend.finance', '_blank');
+                window.open('https://testnet.purrsec.com', '_blank');
               }}
               key={'openExplorer'}
               type='button'

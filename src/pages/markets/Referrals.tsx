@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
-import { toggleModalOpen } from '../store/sidebarSlice';
-import logo from '../assets/icons/logo.svg';
+import { toggleModalOpen } from '../../store/sidebarSlice';
+import logo from '../../assets/icons/logo.svg';
 
-import Main from '../components/referrals/Main';
-import Earnings from '../components/referrals/Earnings';
-import History from '../components/referrals/History';
+import Main from '../../components/referrals/Main';
+import Earnings from '../../components/referrals/Earnings';
+import History from '../../components/referrals/History';
+import xmarkIcon from '../../assets/icons/xmark-icon.svg';
 
 function Referrals() {
   const dispatch = useDispatch();
@@ -36,8 +37,12 @@ function Referrals() {
           initial={{ scale: 0, rotate: '12.5deg' }}
           animate={{ scale: 1, rotate: '0deg' }}
           exit={{ scale: 0, rotate: '0deg' }}
-          className='px-10 py-8 bg-primary-light rounded-2xl shadow-4xl'
+          className='relative px-10 py-8 bg-primary-light rounded-2xl shadow-4xl'
         >
+          <button className='absolute right-8 top-8'
+            onClick={onClose}>
+            <img className='' src={xmarkIcon} alt='close' />
+          </button>
           <div className='flex flex-col justify-center items-center gap-3 mb-7'>
             <img src={logo} alt='logo' />
             <p className='font-lufga text-xl font-black text-secondary'>

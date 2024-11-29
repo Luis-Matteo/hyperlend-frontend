@@ -36,7 +36,7 @@ const hyperEvmTestnet = defineChain({
   blockExplorers: {
     default: {
       name: 'HyperEVM testnet explorer',
-      url: 'https://explorer.hyperlend.finance/',
+      url: 'https://testnet.purrsec.com/',
     },
   },
   contracts: {
