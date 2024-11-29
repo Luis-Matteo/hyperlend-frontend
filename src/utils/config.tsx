@@ -18,6 +18,7 @@ import variableDebtTokenAbi from '../abis/VariableDebtTokenAbi.json';
 import isolatedPoolAbi from '../abis/IsolatedPoolAbi.json';
 import isolatedPairRegistryAbi from '../abis/IsolatedPairRegistryAbi.json';
 import uiDataProviderIsolatedAbi from '../abis/UiDataProviderIsolatedAbi.json';
+import chainlinkAbi from '../abis/ChainlinkAbi.json';
 
 export const abis: Record<string, any> = {
   dataProvider: DataProviderAbi,
@@ -32,6 +33,7 @@ export const abis: Record<string, any> = {
   isolatedPool: isolatedPoolAbi,
   isolatedPairRegistry: isolatedPairRegistryAbi,
   uiDataProviderIsolated: uiDataProviderIsolatedAbi,
+  chainlink: chainlinkAbi
 };
 
 export const iconsMap: any = {

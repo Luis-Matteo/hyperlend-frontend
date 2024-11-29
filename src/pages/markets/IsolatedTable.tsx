@@ -1,11 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import CardItem from '../../components/common/CardItem';
-import { formatUnit } from '../../utils/functions';
-import { networkChainId } from '../../utils/config';
+import { formatUnit, calculateApyIsolated } from '../../utils/functions';
 
 import { useAccount, useSwitchChain } from 'wagmi';
 import { ModalType } from '../../utils/types';
-import { mockIsolatedMarkets } from '../../utils/mocks/markets';
+
+import {
+  tokenNameMap,
+  tokenFullNameMap,
+  iconsMap,
+  tokenDecimalsMap,
+  stablecoinsList,
+  networkChainId,
+  tokenColorMap,
+} from '../../utils/config';
+
+import { useProtocolPairsData } from "../../utils/protocol/isolated/pairs";
+import { useAssetPrice } from "../../utils/protocol/isolated/prices";
 
 interface CoreTableProps {
   stable: boolean;
@@ -14,9 +25,120 @@ interface CoreTableProps {
   setModalType: React.Dispatch<React.SetStateAction<ModalType>>;
   setSelectedToken: React.Dispatch<React.SetStateAction<string>>;
 }
+
+interface IsolatedPairInfo {
+  asset: string;
+  assetName: string,
+  assetSymbol: string,
+  assetIcon: string,
+  collateralName: string,
+  collateralSymbol: string,
+  collateralIcon: string,
+  totalAssets: number,
+  totalAssetsUsd: number,
+  supplyApy: number,
+  totalBorrowed: number,
+  totalBorrowedUsd: number,
+  borrowApy: number,
+  totalCollateral: number,
+  totalCollateralUsd: number,
+  availableLiquidity: number,
+  availableLiquidityUsd: number,
+  utilization: number,
+  ltv: number,
+}
+
+  // pair: '',
+  // asset: '',
+  // collateral: '',
+  // decimals: 0n,
+  // exchangeRate: {
+  //   oracle: '',
+  //   highExchangeRate: 0n,
+  //   lastTimestamp: 0n,
+  //   lowExchangeRate: 0n,
+  //   maxOracleDeviation: 0n,
+  //   chainlinkAssetAddress: 0x,
+  //   chainlinkCollateralAddress: 0x
+  // },
+  // interestRate: {
+  //   lastBlock: 0,
+  //   feeToProtocolRate: 0,
+  //   lastTimestamp: 0n,
+  //   ratePerSec: 0n,
+  // },
+  // ltv: 0n,
+  // name: '',
+  // symbol: '0',
+  // totalAsset: 0n,
+  // totalBorrow: 0n,
+  // totalCollateral: 0n,
+
 function IsolatedTable({}: CoreTableProps) {
   const account = useAccount();
   const { switchChain } = useSwitchChain();
+
+  const pairs = useProtocolPairsData();
+
+  // Extract all oracle addresses from pairs
+  const oracleAddresses = useMemo(() => {
+    if (!pairs || !pairs.pairsDataMap) return [];
+    return Object.keys(pairs.pairsDataMap).flatMap(pair => [
+      pairs.pairsDataMap[(pair as string)].exchangeRate.chainlinkAssetAddress,
+      pairs.pairsDataMap[(pair as string)].exchangeRate.chainlinkCollateralAddress,
+    ]);
+  }, [pairs]);
+  const { priceDataMap } = useAssetPrice(oracleAddresses);
+
+  let markets: IsolatedPairInfo[] = []
+  if (pairs && pairs.pairsDataMap) {
+    const pairInfo = pairs.pairsDataMap;
+
+    for (let pairAddress of Object.keys(pairs.pairsDataMap)){
+      const pair = pairInfo[pairAddress]
+
+      const assetPriceUsd = priceDataMap[pair.exchangeRate.chainlinkAssetAddress] || 0n;
+      const collateralPriceUsd = priceDataMap[pair.exchangeRate.chainlinkCollateralAddress] || 0n;
+      const assetPriceUsdNormalized = Number(assetPriceUsd) / Math.pow(10, 8);
+      const collateralPriceUsdNormalized = Number(collateralPriceUsd) / Math.pow(10, 8);
+
+      const totalAssets = Number(pair.totalAsset) / Math.pow(10, tokenDecimalsMap[pair.asset])
+      const totalCollateral = Number(pair.totalCollateral) / Math.pow(10, tokenDecimalsMap[pair.collateral])
+      const totalBorrow = Number(pair.totalBorrow) / Math.pow(10, tokenDecimalsMap[pair.asset])
+
+      const UTIL_PREC = 100000n;
+      const utilizationRateBn = pair.totalAsset == 0n ? 0n : (UTIL_PREC * pair.totalBorrow) / pair.totalAsset;
+      const utilization = Number(utilizationRateBn) / Number(UTIL_PREC)
+      
+      const borrowApy = calculateApyIsolated(pair.interestRate.ratePerSec)
+      const supplyApy = borrowApy * utilization * (1 - Number(pair.interestRate.feeToProtocolRate) / 100000)
+
+      const availableLiquidity = Number(pair.availableLiquidity) / Math.pow(10, tokenDecimalsMap[pair.asset])
+      const availableLiquidityUsd = availableLiquidity * assetPriceUsdNormalized
+
+      markets.push({
+        asset: pair.asset,
+        assetName: tokenFullNameMap[pair.asset],
+        assetSymbol: tokenNameMap[pair.asset],
+        assetIcon: iconsMap[tokenNameMap[pair.asset]],
+        collateralName: tokenFullNameMap[pair.collateral],
+        collateralSymbol: tokenNameMap[pair.collateral],
+        collateralIcon: iconsMap[tokenNameMap[pair.collateral]],
+        totalAssets: totalAssets,
+        totalAssetsUsd: totalAssets * assetPriceUsdNormalized,
+        supplyApy: supplyApy,
+        totalBorrowed: totalBorrow,
+        totalBorrowedUsd: totalBorrow * assetPriceUsdNormalized,
+        borrowApy: borrowApy,
+        totalCollateral: totalCollateral,
+        totalCollateralUsd: totalCollateral * collateralPriceUsdNormalized,
+        availableLiquidity: availableLiquidity,
+        availableLiquidityUsd: availableLiquidityUsd,
+        utilization: utilization,
+        ltv: Number(pair.ltv) / 1000,
+      })
+    }
+  }
 
   useEffect(() => {
     if (account.isConnected && account.chainId != networkChainId) {
@@ -65,7 +187,7 @@ function IsolatedTable({}: CoreTableProps) {
             </div>
           </div>
           <div className='lg:max-h-[calc(100vh-346px)] xl:max-h-[calc(100vh-394px)] h-full overflow-auto hidden xl:block'>
-            {(mockIsolatedMarkets || []).map((item, key) => (
+            {(markets || []).map((item, key) => (
               <div
                 className='flex justify-between items-center xl:gap-2 2xl:gap-8 py-[14px] px-2 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer'
                 key={key}
@@ -98,11 +220,10 @@ function IsolatedTable({}: CoreTableProps) {
                         <p className=''>${formatUnit(item.totalAssetsUsd)}</p>
                       </div>
                     </div>
-                    <div className='text-white font-lufga w-[12%] flex justify-center'>
-                      <div className='text-sm'>
-                        <p className=''>{formatUnit(item.supplyApy)}</p>
-                        <p className=''>${formatUnit(item.supplyApyUsd)}</p>
-                      </div>
+                    <div className='font-lufga w-[12%] flex justify-center'>
+                      <p className='text-sm text-success'>
+                        {item.supplyApy.toFixed(2)}%
+                      </p>
                     </div>
                     <div className='text-white font-lufga w-[14%] flex justify-center'>
                       <div className='text-right text-sm'>
@@ -148,7 +269,7 @@ function IsolatedTable({}: CoreTableProps) {
       </CardItem>
 
       <div className='xl:hidden w-full flex flex-col gap-4'>
-        {(mockIsolatedMarkets || []).map((item, key) => (
+        {(markets || []).map((item, key) => (
           <CardItem className='' key={key}>
             <div className='flex flex-col hover:bg-[#1F2A29] cursor-pointer rounded-t-2xl'>
               <div

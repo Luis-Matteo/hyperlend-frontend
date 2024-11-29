@@ -4,7 +4,7 @@ import { useReadContracts, useReadContract } from 'wagmi';
 import { Reserve, ReservesData } from '../../types';
 import { contracts, assetAddresses, abis } from '../../config';
 
-export function useProtocolReservesData(): any {
+export function useProtocolPairsData(): any {
   let {
     data: availablePoolsResults, //get all deployed pairs
   } = useReadContract({
@@ -35,7 +35,7 @@ export function useProtocolReservesData(): any {
     ),
   });
 
-  const getReservesData = useCallback(() => {
+  const getPairsData = useCallback(() => {
     if (!pairResults) {
       return (availablePoolsResults as `0x${string}`[]).reduce(
         (acc, asset) => {
@@ -50,6 +50,8 @@ export function useProtocolReservesData(): any {
               lastTimestamp: 0n,
               lowExchangeRate: 0n,
               maxOracleDeviation: 0n,
+              chainlinkAssetAddress: '',
+              chainlinkCollateralAddress: ''
             },
             interestRate: {
               lastBlock: 0,
@@ -63,6 +65,7 @@ export function useProtocolReservesData(): any {
             totalAsset: 0n,
             totalBorrow: 0n,
             totalCollateral: 0n,
+            availableLiquidit: 0n
           };
           return acc;
         },
@@ -76,7 +79,7 @@ export function useProtocolReservesData(): any {
         if (result && result.status === 'success') {
           acc[asset] = result.result as any;
         } else {
-          console.error(`Failed to get reserve data for asset: ${asset}`);
+          console.error(`Failed to get pair data for asset: ${asset}`);
         }
         return acc;
       },
@@ -84,7 +87,7 @@ export function useProtocolReservesData(): any {
     );
   }, [pairResults, availablePoolsResults]);
 
-  const reserveDataMap = useMemo(() => getReservesData(), [getReservesData]);
+  const pairsDataMap = useMemo(() => getPairsData(), [getPairsData]);
 
-  return { reserveDataMap, isLoading, isError };
+  return { pairsDataMap, isLoading, isError };
 }

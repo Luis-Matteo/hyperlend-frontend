@@ -56,6 +56,14 @@ function calculateApy(currentRate: BigInt) {
   return apy * 100;
 }
 
+export function calculateApyIsolated(ratePerSec: BigInt) {
+  const secondsPerYear = 31536000;
+  const rateBN = new BigNumber(ratePerSec.toString());
+  const rateDecimal = Number(rateBN.div(1e18));
+  const apy = (Math.pow(Math.E, rateDecimal) - 1) * secondsPerYear;
+  return apy * 100;
+}
+
 export function decodeConfig(configNumber: bigint) {
   // bit 0-15: LTV
   // bit 16-31: Liquidation threshold

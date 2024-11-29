@@ -119,11 +119,26 @@
                 "internalType": "uint256",
                 "name": "highExchangeRate",
                 "type": "uint256"
+              },
+              {
+                "internalType": "address",
+                "name": "chainlinkAssetAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "chainlinkCollateralAddress",
+                "type": "address"
               }
             ],
             "internalType": "struct UiDataProviderIsolated.ExchangeRateInfo",
             "name": "exchangeRate",
             "type": "tuple"
+          },
+          {
+            "internalType": "uint256",
+            "name": "availableLiquidity",
+            "type": "uint256"
           }
         ],
         "internalType": "struct UiDataProviderIsolated.PairData",
