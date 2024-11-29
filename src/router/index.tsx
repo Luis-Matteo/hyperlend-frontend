@@ -5,13 +5,12 @@ import {
   useSearchParams,
 } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
-import Markets from '../pages/Markets';
-import TokenDetails from '../pages/TokenDetail';
+import Markets from '../pages/markets/Markets';
+import TokenDetails from '../pages/markets/TokenDetail';
 import Sidebar from '../layouts/Sidebar';
-import Overview from '../pages/Overview';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import Referrals from '../pages/Referrals';
+import Referrals from '../pages/markets/Referrals';
 import backgroundImage from '../assets/img/background.svg';
 import { useLocation } from 'react-router-dom';
 import backgroundGradientOrange from '../assets/img/background-orange.svg';
@@ -23,6 +22,7 @@ import HyperloopSetting from '../pages/HyperloopSetting';
 import HyperloopSearch from '../pages/HyperloopSearch';
 import { useConfirm } from '../provider/ConfirmProvider';
 import NotFound from '../pages/NotFound';
+import MarketOverview from '../pages/markets/MarketOverview';
 
 function MainContent() {
   const { guided } = useConfirm();
@@ -47,7 +47,7 @@ function MainContent() {
             <Route path='/' element={<Navigate to='/dashboard' />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='markets' element={<Markets />}>
-              <Route path='' element={<Overview />} />
+              <Route path='' element={<MarketOverview />} />
               <Route path=':token' element={<TokenDetails />} />
             </Route>
             <Route path='hyperloop' element={<Hyperloop />}>

@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../layouts/Navbar';
-import CardItem from '../components/common/CardItem';
+import Navbar from '../../layouts/Navbar';
+import CardItem from '../../components/common/CardItem';
 import { useParams } from 'react-router-dom';
 import { useSwitchChain, useAccount, useBalance } from 'wagmi';
 import ReactGA from 'react-ga4';
-import { tokenDetailButton } from '../utils/constants/constants';
-import { formatNumber, decodeConfig, formatAddress } from '../utils/functions';
-import BorrowInfoChart from '../components/charts/BorrowInfoChart';
-import InterestRateModelChart from '../components/charts/InterestRateModelChart';
-import { TokenActionsProps } from '../utils/types';
-import topRightArrowImage from '../assets/icons/top-right-arrow.svg';
-import ShareImageModal from '../components/common/ShareImageModal';
+import { tokenDetailButton } from '../../utils/constants/constants';
+import { formatNumber, decodeConfig, formatAddress } from '../../utils/functions';
+import BorrowInfoChart from '../../components/charts/BorrowInfoChart';
+import InterestRateModelChart from '../../components/charts/InterestRateModelChart';
+import { TokenActionsProps } from '../../utils/types';
+import topRightArrowImage from '../../assets/icons/top-right-arrow.svg';
+import ShareImageModal from '../../components/common/ShareImageModal';
 
 import {
   tokenNameMap,
@@ -21,24 +21,24 @@ import {
   liqPenaltyMap,
   networkChainId,
   oraclesMap,
-} from '../utils/config';
+} from '../../utils/config';
 
 import {
   useUserPositionsData,
   useUserAccountData,
-} from '../utils/user/positions';
+} from '../../utils/user/positions';
 
-import { useProtocolPriceData } from '../utils/protocol/prices';
-import { useProtocolInterestRate } from '../utils/protocol/interestRates';
-import { useProtocolAssetReserveData } from '../utils/protocol/reserves';
+import { useProtocolPriceData } from '../../utils/protocol/prices';
+import { useProtocolInterestRate } from '../../utils/protocol/interestRates';
+import { useProtocolAssetReserveData } from '../../utils/protocol/reserves';
 
-import { useProtocolReservesData } from '../utils/protocol/reserves';
+import { useProtocolReservesData } from '../../utils/protocol/reserves';
 
-import { useUserTokenBalance } from '../utils/user/wallet';
+import { useUserTokenBalance } from '../../utils/user/wallet';
 
-import { calculateAvailableBalance } from '../utils/user/functions/utils';
+import { calculateAvailableBalance } from '../../utils/user/functions/utils';
 
-import TokenActions from '../components/markets/TokenActions';
+import TokenActions from '../../components/markets/TokenActions';
 
 function TokenDetail() {
   const { token = '' } = useParams();
@@ -376,10 +376,10 @@ function TokenDetail() {
               <span className='w-2 h-2 bg-[#2DC24E] rounded-full mr-2'></span>
               <p className='text-xs text-[#797979] font-lufga'>Supply APY</p>
             </div>
-            <div className='flex justify-between gap-4 md:justify-start flex-wrap md:gap-12'>
+            <div className='flex justify-between gap-8 md:gap-12 w-full overflow-auto'>
               {(supplyInfos || []).map((supplyInfo, index) => (
                 <div className='font-lufga' key={index}>
-                  <p className='text-[9px] pb-2 text-[#E1E1E1]'>
+                  <p className='text-[9px] pb-2 text-[#E1E1E1] whitespace-nowrap'>
                     {supplyInfo.name}
                   </p>
                   <p className='text-2xl text-white'>{supplyInfo.value}</p>
@@ -407,10 +407,10 @@ function TokenDetail() {
               <span className='w-2 h-2 bg-[#302DC2] rounded-full mr-2'></span>
               <p className='text-xs text-[#797979] font-lufga'>Borrow APY</p>
             </div>
-            <div className='flex justify-between gap-4 flex-wrap md:justify-start md:gap-12'>
+            <div className='flex justify-between gap-8 md:gap-12 w-full overflow-auto'>
               {(borrowInfos || []).map((borrowInfo, index) => (
                 <div className='font-lufga' key={index}>
-                  <p className='text-[9px] pb-2 text-[#E1E1E1]'>
+                  <p className='text-[9px] pb-2 text-[#E1E1E1] whitespace-nowrap'>
                     {borrowInfo.name}
                   </p>
                   <p className='text-2xl text-white'>{borrowInfo.value}</p>
