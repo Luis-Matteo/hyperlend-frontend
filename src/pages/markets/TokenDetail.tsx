@@ -376,10 +376,10 @@ function TokenDetail() {
               <span className='w-2 h-2 bg-[#2DC24E] rounded-full mr-2'></span>
               <p className='text-xs text-[#797979] font-lufga'>Supply APY</p>
             </div>
-            <div className='flex justify-between gap-4 md:justify-start flex-wrap md:gap-12'>
+            <div className='flex justify-between gap-8 md:gap-12 w-full overflow-auto'>
               {(supplyInfos || []).map((supplyInfo, index) => (
                 <div className='font-lufga' key={index}>
-                  <p className='text-[9px] pb-2 text-[#E1E1E1]'>
+                  <p className='text-[9px] pb-2 text-[#E1E1E1] whitespace-nowrap'>
                     {supplyInfo.name}
                   </p>
                   <p className='text-2xl text-white'>{supplyInfo.value}</p>
@@ -407,10 +407,10 @@ function TokenDetail() {
               <span className='w-2 h-2 bg-[#302DC2] rounded-full mr-2'></span>
               <p className='text-xs text-[#797979] font-lufga'>Borrow APY</p>
             </div>
-            <div className='flex justify-between gap-4 flex-wrap md:justify-start md:gap-12'>
+            <div className='flex justify-between gap-8 md:gap-12 w-full overflow-auto'>
               {(borrowInfos || []).map((borrowInfo, index) => (
                 <div className='font-lufga' key={index}>
-                  <p className='text-[9px] pb-2 text-[#E1E1E1]'>
+                  <p className='text-[9px] pb-2 text-[#E1E1E1] whitespace-nowrap'>
                     {borrowInfo.name}
                   </p>
                   <p className='text-2xl text-white'>{borrowInfo.value}</p>
