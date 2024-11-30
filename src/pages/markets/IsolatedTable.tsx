@@ -46,32 +46,6 @@ interface IsolatedPairInfo {
   ltv: number;
 }
 
-// pair: '',
-// asset: '',
-// collateral: '',
-// decimals: 0n,
-// exchangeRate: {
-//   oracle: '',
-//   highExchangeRate: 0n,
-//   lastTimestamp: 0n,
-//   lowExchangeRate: 0n,
-//   maxOracleDeviation: 0n,
-//   chainlinkAssetAddress: 0x,
-//   chainlinkCollateralAddress: 0x
-// },
-// interestRate: {
-//   lastBlock: 0,
-//   feeToProtocolRate: 0,
-//   lastTimestamp: 0n,
-//   ratePerSec: 0n,
-// },
-// ltv: 0n,
-// name: '',
-// symbol: '0',
-// totalAsset: 0n,
-// totalBorrow: 0n,
-// totalCollateral: 0n,
-
 function IsolatedTable({}: CoreTableProps) {
   const account = useAccount();
   const { switchChain } = useSwitchChain();
@@ -149,7 +123,7 @@ function IsolatedTable({}: CoreTableProps) {
         totalCollateralUsd: totalCollateral * collateralPriceUsdNormalized,
         availableLiquidity: availableLiquidity,
         availableLiquidityUsd: availableLiquidityUsd,
-        utilization: utilization,
+        utilization: utilization * 100,
         ltv: Number(pair.ltv) / 1000,
       });
     }

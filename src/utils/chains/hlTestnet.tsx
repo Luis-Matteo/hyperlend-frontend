@@ -14,7 +14,7 @@ const contracts: any = {
   wrappedTokenGatewayV3: '0xd2b21707d7a574D6A744FB600826770F9FBA6f80',
   //isolated pools
   isolatedPairRegistry: '0xB6aE067434D36684006b4561328eF4fA8016ee22',
-  uiDataProviderIsolated: '0x8e2DAa81c53B9AAf4C0C1641F9a104Ad3ac4446C',
+  uiDataProviderIsolated: '0x150e7f4E59C7d2bB5ec78A8D3C1B941338412076',
 };
 
 const tokenFullNameMap: any = {

@@ -294,6 +294,11 @@ function Modal({ token, modalType, onClose }: ModalProps) {
       .toFixed(0)
       .toString() as any as bigint;
 
+    if (amount == 0){
+        setErrorMsg("Amount should be greater than 0");
+        return;
+    }
+
     setIsTxPending(true);
     if (wrappedTokens.includes(token)) {
       await wrappedTokenAction(
@@ -446,7 +451,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             </div>
           </div>
           <div className='mb-6'>
-            {/* {errorMsg ? (
+            {errorMsg ? (
               <div className='flex justify-between mb-2'>
                 <p className='font-lufga font-light text-xs text-[#FF0000] mt-2'>
                   {
@@ -456,7 +461,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
               </div>
             ) : (
               ''
-            )} */}
+            )}
             <div className='flex justify-between mb-2'>
               <p className='font-lufga font-light text-[#797979]'>Available</p>
               <p className='font-lufga font-light text-[#797979]'>
