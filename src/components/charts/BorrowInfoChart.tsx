@@ -51,11 +51,11 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type }) => {
   });
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '20px 20px 20px 0px' }}>
       <ResponsiveContainer width='100%' height={300}>
         <LineChart
           data={data}
-          margin={{ left: 20, right: 20, top: 20, bottom: 0 }}
+          margin={{ left: 0, right: 20, top: 20, bottom: 0 }}
         >
           <XAxis
             dataKey='time'
@@ -64,8 +64,8 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type }) => {
           />
           <YAxis
             tickFormatter={(value) => (value === 0 ? '' : value)} // Skip displaying the '0' value
-            // domain={[10, 100]} // Set the Y-axis domain from 10 to 100
-            // ticks={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} // Define ticks manually
+          // domain={[10, 100]} // Set the Y-axis domain from 10 to 100
+          // ticks={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} // Define ticks manually
           />
           <Tooltip content={<CustomTooltip />} />
           <Line

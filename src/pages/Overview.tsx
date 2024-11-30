@@ -241,8 +241,8 @@ function Overview() {
                       </p>
                     </div>
                     <div className='text-white font-lufga w-[13%]'>
-                      <p className=''>{formatUnit(item.totalSupplied)}</p>
-                      <p className=''>${formatUnit(item.totalSuppliedUsd)}</p>
+                      <p className='text-lg'>{formatUnit(item.totalSupplied)}</p>
+                      <p className='text-sm text-gray-500' style={{ color: 'grey' }}>${formatUnit(item.totalSuppliedUsd)}</p>
                     </div>
                     <div className='text-white font-lufga w-[11%]'>
                       {formatNumber(item.supplyApy, 2)}%
