@@ -51,7 +51,7 @@ export function useProtocolPairsData(): any {
               lowExchangeRate: 0n,
               maxOracleDeviation: 0n,
               chainlinkAssetAddress: '',
-              chainlinkCollateralAddress: ''
+              chainlinkCollateralAddress: '',
             },
             interestRate: {
               lastBlock: 0,
@@ -65,7 +65,7 @@ export function useProtocolPairsData(): any {
             totalAsset: 0n,
             totalBorrow: 0n,
             totalCollateral: 0n,
-            availableLiquidit: 0n
+            availableLiquidit: 0n,
           };
           return acc;
         },

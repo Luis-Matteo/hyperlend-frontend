@@ -10,13 +10,11 @@ import {
   tokenFullNameMap,
   iconsMap,
   tokenDecimalsMap,
-  stablecoinsList,
   networkChainId,
-  tokenColorMap,
 } from '../../utils/config';
 
-import { useProtocolPairsData } from "../../utils/protocol/isolated/pairs";
-import { useAssetPrice } from "../../utils/protocol/isolated/prices";
+import { useProtocolPairsData } from '../../utils/protocol/isolated/pairs';
+import { useAssetPrice } from '../../utils/protocol/isolated/prices';
 
 interface CoreTableProps {
   stable: boolean;
@@ -28,51 +26,51 @@ interface CoreTableProps {
 
 interface IsolatedPairInfo {
   asset: string;
-  assetName: string,
-  assetSymbol: string,
-  assetIcon: string,
-  collateralName: string,
-  collateralSymbol: string,
-  collateralIcon: string,
-  totalAssets: number,
-  totalAssetsUsd: number,
-  supplyApy: number,
-  totalBorrowed: number,
-  totalBorrowedUsd: number,
-  borrowApy: number,
-  totalCollateral: number,
-  totalCollateralUsd: number,
-  availableLiquidity: number,
-  availableLiquidityUsd: number,
-  utilization: number,
-  ltv: number,
+  assetName: string;
+  assetSymbol: string;
+  assetIcon: string;
+  collateralName: string;
+  collateralSymbol: string;
+  collateralIcon: string;
+  totalAssets: number;
+  totalAssetsUsd: number;
+  supplyApy: number;
+  totalBorrowed: number;
+  totalBorrowedUsd: number;
+  borrowApy: number;
+  totalCollateral: number;
+  totalCollateralUsd: number;
+  availableLiquidity: number;
+  availableLiquidityUsd: number;
+  utilization: number;
+  ltv: number;
 }
 
-  // pair: '',
-  // asset: '',
-  // collateral: '',
-  // decimals: 0n,
-  // exchangeRate: {
-  //   oracle: '',
-  //   highExchangeRate: 0n,
-  //   lastTimestamp: 0n,
-  //   lowExchangeRate: 0n,
-  //   maxOracleDeviation: 0n,
-  //   chainlinkAssetAddress: 0x,
-  //   chainlinkCollateralAddress: 0x
-  // },
-  // interestRate: {
-  //   lastBlock: 0,
-  //   feeToProtocolRate: 0,
-  //   lastTimestamp: 0n,
-  //   ratePerSec: 0n,
-  // },
-  // ltv: 0n,
-  // name: '',
-  // symbol: '0',
-  // totalAsset: 0n,
-  // totalBorrow: 0n,
-  // totalCollateral: 0n,
+// pair: '',
+// asset: '',
+// collateral: '',
+// decimals: 0n,
+// exchangeRate: {
+//   oracle: '',
+//   highExchangeRate: 0n,
+//   lastTimestamp: 0n,
+//   lowExchangeRate: 0n,
+//   maxOracleDeviation: 0n,
+//   chainlinkAssetAddress: 0x,
+//   chainlinkCollateralAddress: 0x
+// },
+// interestRate: {
+//   lastBlock: 0,
+//   feeToProtocolRate: 0,
+//   lastTimestamp: 0n,
+//   ratePerSec: 0n,
+// },
+// ltv: 0n,
+// name: '',
+// symbol: '0',
+// totalAsset: 0n,
+// totalBorrow: 0n,
+// totalCollateral: 0n,
 
 function IsolatedTable({}: CoreTableProps) {
   const account = useAccount();
@@ -83,38 +81,55 @@ function IsolatedTable({}: CoreTableProps) {
   // Extract all oracle addresses from pairs
   const oracleAddresses = useMemo(() => {
     if (!pairs || !pairs.pairsDataMap) return [];
-    return Object.keys(pairs.pairsDataMap).flatMap(pair => [
-      pairs.pairsDataMap[(pair as string)].exchangeRate.chainlinkAssetAddress,
-      pairs.pairsDataMap[(pair as string)].exchangeRate.chainlinkCollateralAddress,
+    return Object.keys(pairs.pairsDataMap).flatMap((pair) => [
+      pairs.pairsDataMap[pair as string].exchangeRate.chainlinkAssetAddress,
+      pairs.pairsDataMap[pair as string].exchangeRate
+        .chainlinkCollateralAddress,
     ]);
   }, [pairs]);
   const { priceDataMap } = useAssetPrice(oracleAddresses);
 
-  let markets: IsolatedPairInfo[] = []
+  let markets: IsolatedPairInfo[] = [];
   if (pairs && pairs.pairsDataMap) {
     const pairInfo = pairs.pairsDataMap;
 
-    for (let pairAddress of Object.keys(pairs.pairsDataMap)){
-      const pair = pairInfo[pairAddress]
+    for (let pairAddress of Object.keys(pairs.pairsDataMap)) {
+      const pair = pairInfo[pairAddress];
 
-      const assetPriceUsd = priceDataMap[pair.exchangeRate.chainlinkAssetAddress] || 0n;
-      const collateralPriceUsd = priceDataMap[pair.exchangeRate.chainlinkCollateralAddress] || 0n;
+      const assetPriceUsd =
+        priceDataMap[pair.exchangeRate.chainlinkAssetAddress] || 0n;
+      const collateralPriceUsd =
+        priceDataMap[pair.exchangeRate.chainlinkCollateralAddress] || 0n;
       const assetPriceUsdNormalized = Number(assetPriceUsd) / Math.pow(10, 8);
-      const collateralPriceUsdNormalized = Number(collateralPriceUsd) / Math.pow(10, 8);
+      const collateralPriceUsdNormalized =
+        Number(collateralPriceUsd) / Math.pow(10, 8);
 
-      const totalAssets = Number(pair.totalAsset) / Math.pow(10, tokenDecimalsMap[pair.asset])
-      const totalCollateral = Number(pair.totalCollateral) / Math.pow(10, tokenDecimalsMap[pair.collateral])
-      const totalBorrow = Number(pair.totalBorrow) / Math.pow(10, tokenDecimalsMap[pair.asset])
+      const totalAssets =
+        Number(pair.totalAsset) / Math.pow(10, tokenDecimalsMap[pair.asset]);
+      const totalCollateral =
+        Number(pair.totalCollateral) /
+        Math.pow(10, tokenDecimalsMap[pair.collateral]);
+      const totalBorrow =
+        Number(pair.totalBorrow) / Math.pow(10, tokenDecimalsMap[pair.asset]);
 
       const UTIL_PREC = 100000n;
-      const utilizationRateBn = pair.totalAsset == 0n ? 0n : (UTIL_PREC * pair.totalBorrow) / pair.totalAsset;
-      const utilization = Number(utilizationRateBn) / Number(UTIL_PREC)
-      
-      const borrowApy = calculateApyIsolated(pair.interestRate.ratePerSec)
-      const supplyApy = borrowApy * utilization * (1 - Number(pair.interestRate.feeToProtocolRate) / 100000)
+      const utilizationRateBn =
+        pair.totalAsset == 0n
+          ? 0n
+          : (UTIL_PREC * pair.totalBorrow) / pair.totalAsset;
+      const utilization = Number(utilizationRateBn) / Number(UTIL_PREC);
 
-      const availableLiquidity = Number(pair.availableLiquidity) / Math.pow(10, tokenDecimalsMap[pair.asset])
-      const availableLiquidityUsd = availableLiquidity * assetPriceUsdNormalized
+      const borrowApy = calculateApyIsolated(pair.interestRate.ratePerSec);
+      const supplyApy =
+        borrowApy *
+        utilization *
+        (1 - Number(pair.interestRate.feeToProtocolRate) / 100000);
+
+      const availableLiquidity =
+        Number(pair.availableLiquidity) /
+        Math.pow(10, tokenDecimalsMap[pair.asset]);
+      const availableLiquidityUsd =
+        availableLiquidity * assetPriceUsdNormalized;
 
       markets.push({
         asset: pair.asset,
@@ -136,7 +151,7 @@ function IsolatedTable({}: CoreTableProps) {
         availableLiquidityUsd: availableLiquidityUsd,
         utilization: utilization,
         ltv: Number(pair.ltv) / 1000,
-      })
+      });
     }
   }
 

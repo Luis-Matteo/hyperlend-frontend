@@ -19,7 +19,7 @@ export function useAssetPrice(chainlinkOracles: `0x${string}`[]) {
 
   const getPricesData = useCallback(() => {
     if (!priceDataResults) {
-      return {}
+      return {};
     }
 
     return chainlinkOracles.reduce(

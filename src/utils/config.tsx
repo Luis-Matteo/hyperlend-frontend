@@ -33,7 +33,7 @@ export const abis: Record<string, any> = {
   isolatedPool: isolatedPoolAbi,
   isolatedPairRegistry: isolatedPairRegistryAbi,
   uiDataProviderIsolated: uiDataProviderIsolatedAbi,
-  chainlink: chainlinkAbi
+  chainlink: chainlinkAbi,
 };
 
 export const iconsMap: any = {
