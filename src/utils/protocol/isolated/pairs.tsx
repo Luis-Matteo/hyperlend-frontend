@@ -1,8 +1,7 @@
 import { useMemo, useCallback } from 'react';
 import { useReadContracts, useReadContract } from 'wagmi';
 
-import { Reserve, ReservesData } from '../../types';
-import { contracts, assetAddresses, abis } from '../../config';
+import { contracts, abis } from '../../config';
 
 export function useProtocolPairsData(): any {
   let {
