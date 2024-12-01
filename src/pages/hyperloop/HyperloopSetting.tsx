@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Button from '../components/common/Button';
+import Button from '../../components/common/Button';
 
-import gearIcon from '../assets/icons/gear-icon.svg';
-import leftArrowIcon from '../assets/icons/left-arrow.svg';
+import gearIcon from '../../assets/icons/gear-icon.svg';
+import leftArrowIcon from '../../assets/icons/left-arrow.svg';
 
 const slippageList = [
   {
