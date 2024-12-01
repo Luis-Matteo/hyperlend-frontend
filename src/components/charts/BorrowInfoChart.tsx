@@ -45,7 +45,11 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type }) => {
   const data = rawData.map((e: any) => {
     const rate = type == 'supply' ? e.liquidityRate : e.borrowRate;
     return {
-      time: new Date(e.timestamp).toLocaleDateString('en-US'), // change date to numbers
+      time: new Date(e.timestamp).toLocaleDateString('en-US', {
+        year: '2-digit',
+        month: 'numeric',
+        day: 'numeric',
+      }), // change date to numbers
       rate: formatNumber(calculateApy(rate), 2),
     };
   });
