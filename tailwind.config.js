@@ -25,6 +25,7 @@ export default {
         'grey-light': '#E1E1E1',
         success: '#2DC24E',
         warning: '#FFD542',
+        error: '#FF4245',
       },
       blur: {
         xs: '2px',
