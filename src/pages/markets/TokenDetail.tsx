@@ -329,6 +329,7 @@ function TokenDetail() {
       <Navbar
         pageTitle={tokenNameMap[token]}
         pageIcon={iconsMap[tokenNameMap[token]]}
+        back={true}
       />
       <CardItem className='p-4 lg:p-12 my-6 hidden lg:block'>
         <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
