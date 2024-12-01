@@ -249,14 +249,14 @@ function Overview() {
                     </div>
                     <div className='text-white font-lufga w-[13%]'>
                       <p className=''>{formatUnit(item.totalBorrowed)}</p>
-                      <p className=''>${formatUnit(item.totalBorrowedUsd)}</p>
+                      <p className='text-sm text-gray-500' style={{ color: 'grey' }}>${formatUnit(item.totalBorrowedUsd)}</p>
                     </div>
                     <div className='text-white font-lufga w-[11%]'>
                       {formatNumber(item.borrowApy, 2)}%
                     </div>
                     <div className='text-white font-lufga w-[16%]'>
                       <p className=''>{formatUnit(item.totalLiquidityToken)}</p>
-                      <p className=''>${formatUnit(item.totalLiquidtyUsd)}</p>
+                      <p className='text-sm text-gray-500' style={{ color: 'grey' }}>${formatUnit(item.totalLiquidtyUsd)}</p>
                     </div>
                     <div className='text-white font-lufga w-[9%]'>
                       {item.isCollateral ? (

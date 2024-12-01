@@ -424,8 +424,8 @@ function TokenDetail() {
             </div>
             <BorrowInfoChart type='borrow' token={token} />
           </CardItem>
-          <CardItem className='p-4 lg:p-8 mb-6'>
-            <div className='flex justify-between items-center flex-wrap'>
+          <CardItem className='pr-4 lg:pr-8 pt-4 lg:pt-8 pb-4 lg:pb-8 mb-6'>
+            <div className='pl-4 lg:pl-8 flex justify-between items-center'>
               <p className='text-[#797979] text-xl font-lufga'>
                 Interest Rate Model
               </p>
@@ -444,12 +444,14 @@ function TokenDetail() {
                 </div>
               </ul>
             </div>
-            <InterestRateModelChart
-              token={token}
-              currentUtilization={
-                (totalBorrowedTokens / totalSuppliedTokens) * 100
-              }
-            />
+            <div className='mt-6'>
+              <InterestRateModelChart
+                token={token}
+                currentUtilization={
+                  (totalBorrowedTokens / totalSuppliedTokens) * 100
+                }
+              />
+            </div>
           </CardItem>
           <CardItem className='p-4 lg:p-8 mb-6'>
             <div className='flex justify-between items-center mb-8'>
