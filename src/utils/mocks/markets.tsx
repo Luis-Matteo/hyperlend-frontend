@@ -1,5 +1,6 @@
 const mockIsolatedMarkets = [
     {
+        underlyingAsset: "0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458",
         assetName: "Ethereum",
         assetSymbol: "ETH",
         assetIcon: "/src/assets/icons/coins/eth-icon.svg",
@@ -21,6 +22,7 @@ const mockIsolatedMarkets = [
         ltv: 75,
     },
     {
+        underlyingAsset: "0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458",
         assetName: "Ethereum",
         assetSymbol: "ETH",
         assetIcon: "/src/assets/icons/coins/eth-icon.svg",
@@ -42,6 +44,7 @@ const mockIsolatedMarkets = [
         ltv: 75,
     },
     {
+        underlyingAsset: "0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458",
         assetName: "Ethereum",
         assetSymbol: "ETH",
         assetIcon: "/src/assets/icons/coins/eth-icon.svg",

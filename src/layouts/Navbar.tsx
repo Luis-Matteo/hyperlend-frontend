@@ -1,4 +1,4 @@
-// import { useState } from 'react';
+import { ReactNode } from 'react';
 import { useDispatch } from 'react-redux';
 import { toggleSidebar } from '../store/sidebarSlice';
 import hamburgerIcon from '../assets/icons/hamburger-icon.svg';
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import backIcon from '../assets/icons/left-arrow-white.svg';
 type NavbarProps = {
   pageTitle?: string;
-  pageIcon?: string;
+  pageIcon?: ReactNode;
   back?: boolean;
 };
 
@@ -31,11 +31,7 @@ function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
               <img src={backIcon} className='w-6 h-6' alt='back' />
             </button>
           )}
-          {pageIcon ? (
-            <img src={pageIcon} height='30px' width='30px' alt='' />
-          ) : (
-            ''
-          )}
+          {pageIcon && pageIcon}
           {pageTitle && (
             <h2
               className={` ${pageTitle == 'MBTC' ? 'text-orange-400' : 'text-blue-300'} font-lufga text-3xl text-white`}
