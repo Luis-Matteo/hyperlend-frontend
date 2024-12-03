@@ -66,6 +66,8 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type }) => {
             dataKey='time'
             fontSize={15}
             padding={{ left: 30, right: 0 }} // Add padding to the left
+            fontFamily='lufga'
+            fontWeight='regular'
           />
           <YAxis
             tickFormatter={(value) => (value === 0 ? '' : value)} // Skip displaying the '0' value
