@@ -72,11 +72,11 @@ function Loop() {
                         {selectedDepositToken ? (
                             <div className='flex gap-4 items-center'>
                                 <img className='w-6 h-6 ' src={selectedDepositToken.icon} />
-                                <div className='flex flex-col w-full'>
+                                <div className='text-left'>
                                     <p className='text-secondary font-lufga'>
                                         {selectedDepositToken.title}
                                     </p>
-                                    <p className='text-success font-lufga text-[13px]'>
+                                    <p className='text-success font-lufga text-[13px] leading-none'>
                                         {selectedDepositToken.amount}%
                                     </p>
                                 </div>
@@ -148,11 +148,11 @@ function Loop() {
                         {selectedBorrowToken ? (
                             <div className='flex gap-4 items-center'>
                                 <img className='w-6 h-6 ' src={selectedBorrowToken.icon} />
-                                <div className='flex flex-col w-full'>
+                                <div className='text-left'>
                                     <p className='text-secondary font-lufga'>
                                         {selectedBorrowToken.title}
                                     </p>
-                                    <p className='text-success font-lufga text-[13px]'>
+                                    <p className='text-success font-lufga text-[13px] leading-none'>
                                         {selectedBorrowToken.amount}%
                                     </p>
                                 </div>
