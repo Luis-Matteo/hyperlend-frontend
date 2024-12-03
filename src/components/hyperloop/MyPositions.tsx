@@ -45,8 +45,8 @@ function MyPositions() {
                 {
                     selectedPair ?
                         <div className='w-full'>
-                            <div className='relative flex justify-center items-center'>
-                                <button className='absolute left-0 flex gap-2 items-center'
+                            <div className='relative flex justify-between items-center'>
+                                <button className='left-0 flex gap-2 items-center'
                                     onClick={() => setSelectedPair(null)}>
                                     <img src={leftArrowIcon} alt="left-arrow" />
                                     <p className='text-secondary/40 text-sm font-nexa'>Back</p>
@@ -58,6 +58,7 @@ function MyPositions() {
                                     </div>
                                     <p className='text-secondary text-lg font-lufga'>{pairs.find(item => item.id == selectedPair)?.token1.name} / {pairs.find(item => item.id == selectedPair)?.token2.name}</p>
                                 </div>
+                                <div className='sm:block hidden'/>
                             </div>
                             <div className='flex flex-col gap-3 mt-8'>
                                 <div className='p-5 bg-[#071311] rounded-2xl'>
@@ -66,7 +67,7 @@ function MyPositions() {
                                         <div className='translate-y-20 top-0'>
                                             <Factor healthFactor={1.2} />
                                         </div>
-                                    </  div>
+                                    </div>
                                 </div>
                                 <div className='w-full py-6 bg-[#071311] rounded-2xl flex flex-col justify-center items-center gap-2'>
                                     <p className='text-secondary font-lufga'>${formatNumber(98915548, 2)}</p>

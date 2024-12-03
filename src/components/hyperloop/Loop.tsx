@@ -66,7 +66,7 @@ function Loop() {
                 </div>
                 <div className='relative w-[175px] bg-[#081916] rounded-lg'>
                     <button
-                        className='w-full flex justify-between items-center px-6 text-base h-[54px] rounded-lg text-[#CAEAE566]'
+                        className='w-full flex justify-between items-center px-2 sm:px-6 text-base h-[54px] rounded-lg text-[#CAEAE566]'
                         onClick={() => setDepositOpen((prev) => !prev)}
                     >
                         {selectedDepositToken ? (
@@ -142,7 +142,7 @@ function Loop() {
                 </div>
                 <div className='relative w-[175px] bg-[#081916] rounded-lg'>
                     <button
-                        className='w-full flex justify-between items-center px-6 text-base h-[54px] rounded-lg text-[#CAEAE566]'
+                        className='w-full flex justify-between items-center px-2 sm:px-6 text-base h-[54px] rounded-lg text-[#CAEAE566]'
                         onClick={() => setBorrowOpen((prev) => !prev)}
                     >
                         {selectedBorrowToken ? (
