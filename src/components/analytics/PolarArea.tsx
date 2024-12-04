@@ -38,8 +38,8 @@ const PolarAreaChart = ({ data }: PolarAreaChartProps) => {
         <div className='flex flex-col sm:flex-row justify-center items-center gap-4 mt-8'>
             <div className='flex flex-col gap-4'>
                 {
-                    data.map((item) => (
-                        <div className='flex items-center gap-2'>
+                    data.map((item, index) => (
+                        <div className='flex items-center gap-2' key={index}>
                             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
                             <div className='flex justify-between items-center w-28'>
                                 <p className='text-sm font-lufga text-[#D4D4D4]'>{item.name}</p>

@@ -8,6 +8,7 @@ import {
 import { useAccount, useSwitchChain } from "wagmi";
 import { ModalType } from "../../utils/types";
 import { mockIsolatedMarkets } from "../../utils/mocks/markets";
+import { Link } from "react-router-dom";
 
 
 interface CoreTableProps {
@@ -74,8 +75,9 @@ function IsolatedTable({ }: CoreTableProps) {
                                 className='flex justify-between items-center xl:gap-2 2xl:gap-8 py-[14px] px-2 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer'
                                 key={key}
                             >
-                                <div
+                                <Link       
                                     className='flex flex-1 gap-2 items-center'
+                                    to={`${item.underlyingAsset}?isolated=true`}
                                 >
                                     <div className='flex items-center gap-2 h-full w-[80px] 2xl:w-[120px]'>
                                         <img
@@ -138,7 +140,7 @@ function IsolatedTable({ }: CoreTableProps) {
                                             <p className='text-sm'>{item.ltv}%</p>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             </div>
                         ))}
                     </div>
@@ -164,15 +166,6 @@ function IsolatedTable({ }: CoreTableProps) {
                                 </div>
                             </div>
                             <div className='flex flex-col gap-[30px] p-[24px] border-y-[1px] border-[#212325]'>
-                                {/* <p className='text-[#B1B5C3] font-medium font-lufga text-sm md:text-base '>
-                                    Total Assets:{' '}
-                                    <span className='text-white'>
-                                        {formatUnit(item.totalAssets)}{' '}
-                                    </span>
-                                    <span className='text-xs'>
-                                        (${formatUnit(item.totalAssetsUsd)})
-                                    </span>
-                                </p> */}
                                 <div className='grid grid-cols-2 gap-[30px]'>
                                     <div className='flex flex-col gap-[14px]'>
                                         <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>
