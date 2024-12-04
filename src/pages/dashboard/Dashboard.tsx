@@ -130,7 +130,7 @@ function Dashboard() {
           <div className='flex flex-col md:flex-row gap-4 justify-between'>
             <CardItem
               ref={divRefs[0]}
-              className={`px-4 lg:px-8 py-4 h-72 max-w-[480px] w-full overflow-hidden md:mb-0 mx-auto ${guided > 0 && guided !== 1 ? 'lg:blur-[8px]' : ''}`}
+              className={`px-4 lg:px-8 pt-4 md:max-w-[480px] w-full overflow-hidden md:mb-0 mx-auto ${guided > 0 && guided !== 1 ? 'lg:blur-[8px]' : ''}`}
             >
               <div className=''>
                 <div className='flex gap-2 items-center'>
@@ -154,7 +154,6 @@ function Dashboard() {
                 </div>
               </div>
             </CardItem>
-
             <CardItem
               ref={divRefs[1]}
               className={`py-4 lg:py-6 px-4 lg:px-7 md:w-full ${guided > 0 && guided !== 2 ? 'lg:blur-[8px]' : ''}`}
