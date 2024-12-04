@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
-import { toggleModalOpen } from '../store/sidebarSlice';
-import logo from '../assets/icons/logo.svg';
+import { toggleModalOpen } from '../../store/sidebarSlice';
+import logo from '../../assets/icons/logo.svg';
 
-import Main from '../components/referrals/Main';
-import Earnings from '../components/referrals/Earnings';
-import History from '../components/referrals/History';
-import xmarkIcon from '../assets/icons/xmark-icon.svg';
+import Main from '../../components/referrals/Main';
+import Earnings from '../../components/referrals/Earnings';
+import History from '../../components/referrals/History';
+import xmarkIcon from '../../assets/icons/xmark-icon.svg';
 
 function Referrals() {
   const dispatch = useDispatch();

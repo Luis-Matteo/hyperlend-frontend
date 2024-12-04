@@ -1,17 +1,19 @@
-// import { useState } from 'react';
+import { ReactNode } from 'react';
 import { useDispatch } from 'react-redux';
 import { toggleSidebar } from '../store/sidebarSlice';
 import hamburgerIcon from '../assets/icons/hamburger-icon.svg';
 import { useConfirm } from '../provider/ConfirmProvider';
-
+import { useNavigate } from 'react-router-dom';
+import backIcon from '../assets/icons/left-arrow-white.svg';
 type NavbarProps = {
-  pageTitle: string;
-  pageIcon?: string;
+  pageTitle?: string;
+  pageIcon?: ReactNode;
+  back?: boolean;
 };
 
-function Navbar({ pageTitle, pageIcon }: NavbarProps) {
+function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const { guided } = useConfirm();
 
   return (
@@ -24,16 +26,19 @@ function Navbar({ pageTitle, pageIcon }: NavbarProps) {
       </button>
       <div className='w-full flex justify-between items-center'>
         <div className='flex gap-2 items-center'>
-          {pageIcon ? (
-            <img src={pageIcon} height='30px' width='30px' alt='' />
-          ) : (
-            ''
+          {back && (
+            <button onClick={() => navigate(-1)}>
+              <img src={backIcon} className='w-6 h-6' alt='back' />
+            </button>
           )}
-          <h2
-            className={` ${pageTitle == 'MBTC' ? 'text-orange-400' : 'text-blue-300'} font-lufga text-3xl text-white`}
-          >
-            {pageTitle}
-          </h2>
+          {pageIcon && pageIcon}
+          {pageTitle && (
+            <h2
+              className={` ${pageTitle == 'MBTC' ? 'text-orange-400' : 'text-blue-300'} font-lufga text-3xl text-white`}
+            >
+              {pageTitle}
+            </h2>
+          )}
         </div>
         <div className='flex items-center gap-4'>
           {/* <div className="p-1 bg-primary hidden md:flex rounded-full gap-2">

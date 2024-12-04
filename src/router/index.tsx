@@ -4,21 +4,26 @@ import {
   Routes,
   useSearchParams,
 } from 'react-router-dom';
-import Dashboard from '../pages/Dashboard';
-import Markets from '../pages/Markets';
-import TokenDetails from '../pages/TokenDetail';
+import Dashboard from '../pages/dashboard/Dashboard';
+import Markets from '../pages/markets/Markets';
+import TokenDetails from '../pages/markets/TokenDetail';
 import Sidebar from '../layouts/Sidebar';
-import Overview from '../pages/Overview';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import Referrals from '../pages/Referrals';
+import Referrals from '../pages/markets/Referrals';
 import backgroundImage from '../assets/img/background.svg';
 import { useLocation } from 'react-router-dom';
 import backgroundGradientOrange from '../assets/img/background-orange.svg';
 import { tokenToGradient } from '../utils/config';
 import ConfirmModal from '../components/ConfirmModal';
+import Hyperloop from '../pages/hyperloop/Hyperloop';
+import HyperloopOverview from '../pages/hyperloop/HyperloopOverview';
+import HyperloopSetting from '../pages/hyperloop/HyperloopSetting';
+import HyperloopSearch from '../pages/hyperloop/HyperloopSearch';
 import { useConfirm } from '../provider/ConfirmProvider';
-import NotFound from '../pages/NotFound';
+import NotFound from '../pages/not-found/NotFound';
+import Analytics from '../pages/analytics/Analytics';
+import MarketOverview from '../pages/markets/MarketOverview';
 
 function MainContent() {
   const { guided } = useConfirm();
@@ -43,8 +48,14 @@ function MainContent() {
             <Route path='/' element={<Navigate to='/dashboard' />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='markets' element={<Markets />}>
-              <Route path='' element={<Overview />} />
+              <Route path='' element={<MarketOverview />} />
               <Route path=':token' element={<TokenDetails />} />
+            </Route>
+            <Route path='analytics' element={<Analytics />} />
+            <Route path='hyperloop' element={<Hyperloop />}>
+              <Route path='' element={<HyperloopOverview />} />
+              <Route path='setting' element={<HyperloopSetting />} />
+              <Route path='search' element={<HyperloopSearch />} />
             </Route>
             <Route path='404' element={<NotFound />} />
             <Route path='*' element={<Navigate to='/404' />} />
