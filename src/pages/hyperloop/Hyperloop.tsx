@@ -1,7 +1,7 @@
-import Navbar from '../layouts/Navbar';
-import CardItem from '../components/common/CardItem';
+import Navbar from '../../layouts/Navbar';
+import CardItem from '../../components/common/CardItem';
 
-import hyperloopIcon from '../assets/icons/hyperloop-icon.svg';
+import hyperloopIcon from '../../assets/icons/hyperloop-icon.svg';
 import { Outlet } from 'react-router-dom';
 
 function Hyperloop() {

@@ -100,7 +100,7 @@ function AnimateModal({
               </a>
             )}
           </div>
-          {onClick && (
+          {(onClick && type !== "loading") && (
             <div className='absolute bottom-0 left-0 p-5 w-full'>
               <button
                 className={`w-full py-4 rounded-lg font-nexa ${color}`}

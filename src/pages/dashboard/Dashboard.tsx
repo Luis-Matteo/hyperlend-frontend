@@ -7,32 +7,32 @@ import {
 } from 'wagmi';
 import ReactGA from 'react-ga4';
 
-import Modal from '../components/common/Modal';
-import CardItem from '../components/common/CardItem';
-import InfoItem from '../components/common/InfoItem';
-import SectionTitle from '../components/common/SectionTitle';
+import Modal from '../../components/common/Modal';
+import CardItem from '../../components/common/CardItem';
+import InfoItem from '../../components/common/InfoItem';
+import SectionTitle from '../../components/common/SectionTitle';
 
-import Navbar from '../layouts/Navbar';
-import Factor from '../components/dashboard/Factor';
-import MyChart from '../components/dashboard/Chart';
-import PositionBar from '../components/dashboard/PositionBar';
+import Navbar from '../../layouts/Navbar';
+import Factor from '../../components/dashboard/Factor';
+import MyChart from '../../components/dashboard/Chart';
+import PositionBar from '../../components/dashboard/PositionBar';
 
-import { formatNumber } from '../utils/functions';
-import { ModalType } from '../utils/types';
+import { formatNumber } from '../../utils/functions';
+import { ModalType } from '../../utils/types';
 
-import { getUserPoints } from '../utils/user/points';
-import { contracts, abis, networkChainId } from '../utils/config';
-import { useUserPositionsData } from '../utils/user/core/positions';
-import { useUserWalletValueUsd } from '../utils/user/wallet';
-import { useUserPortfolioHistory } from '../utils/user/history';
+import { getUserPoints } from '../../utils/user/points';
+import { contracts, abis, networkChainId } from '../../utils/config';
+import { useUserPositionsData } from '../../utils/user/positions';
+import { useUserWalletValueUsd } from '../../utils/user/wallet';
+import { useUserPortfolioHistory } from '../../utils/user/history';
 import { useNavigate } from 'react-router-dom';
-import { useConfirm } from '../provider/ConfirmProvider';
+import { useConfirm } from '../../provider/ConfirmProvider';
 
 function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
 
   const { guided, closeGuide, nextStep } = useConfirm();
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const { data: hash, writeContractAsync } = useWriteContract();
   const { switchChain } = useSwitchChain();
   const { address, chainId, isConnected } = useAccount();
@@ -267,9 +267,8 @@ function Dashboard() {
                       <button
                         className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-[#1F2A29]'
                         key={index}
-                        onClick={() =>
-                          navigate(`/markets/${item.underlyingAsset}`)
-                        }
+                        onClick={() => navigate(`/markets/${item.underlyingAsset}`)}
+
                       >
                         <div className='text-white font-lufga flex gap-2 justify-center'>
                           <img
@@ -347,9 +346,7 @@ function Dashboard() {
                       <button
                         className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-[#1F2A29]'
                         key={index}
-                        onClick={() =>
-                          navigate(`/markets/${item.underlyingAsset}`)
-                        }
+                        onClick={() => navigate(`/markets/${item.underlyingAsset}`)}
                       >
                         <div className='text-white font-lufga flex gap-2 justify-center'>
                           <img
