@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import ethIcon from '../assets/icons/coins/eth-icon.svg';
-import wbtcIcon from '../assets/icons/coins/wbtc-icon.svg';
-import magnifyIcon from '../assets/icons/magnify-dark-icon.svg';
-import xmarkIcon from '../assets/icons/xmark-dark-icon.svg';
+import ethIcon from '../../assets/icons/coins/eth-icon.svg';
+import wbtcIcon from '../../assets/icons/coins/wbtc-icon.svg';
+import magnifyIcon from '../../assets/icons/magnify-dark-icon.svg';
+import xmarkIcon from '../../assets/icons/xmark-dark-icon.svg';
 
 const tokenList = [
   {

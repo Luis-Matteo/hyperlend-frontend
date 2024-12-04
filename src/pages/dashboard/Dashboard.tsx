@@ -7,26 +7,26 @@ import {
 } from 'wagmi';
 import ReactGA from 'react-ga4';
 
-import Modal from '../components/common/Modal';
-import CardItem from '../components/common/CardItem';
-import InfoItem from '../components/common/InfoItem';
-import SectionTitle from '../components/common/SectionTitle';
+import Modal from '../../components/common/Modal';
+import CardItem from '../../components/common/CardItem';
+import InfoItem from '../../components/common/InfoItem';
+import SectionTitle from '../../components/common/SectionTitle';
 
-import Navbar from '../layouts/Navbar';
-import Factor from '../components/dashboard/Factor';
-import MyChart from '../components/dashboard/Chart';
-import PositionBar from '../components/dashboard/PositionBar';
+import Navbar from '../../layouts/Navbar';
+import Factor from '../../components/dashboard/Factor';
+import MyChart from '../../components/dashboard/Chart';
+import PositionBar from '../../components/dashboard/PositionBar';
 
-import { formatNumber } from '../utils/functions';
-import { ModalType } from '../utils/types';
+import { formatNumber } from '../../utils/functions';
+import { ModalType } from '../../utils/types';
 
-import { getUserPoints } from '../utils/user/points';
-import { contracts, abis, networkChainId } from '../utils/config';
-import { useUserPositionsData } from '../utils/user/positions';
-import { useUserWalletValueUsd } from '../utils/user/wallet';
-import { useUserPortfolioHistory } from '../utils/user/history';
+import { getUserPoints } from '../../utils/user/points';
+import { contracts, abis, networkChainId } from '../../utils/config';
+import { useUserPositionsData } from '../../utils/user/positions';
+import { useUserWalletValueUsd } from '../../utils/user/wallet';
+import { useUserPortfolioHistory } from '../../utils/user/history';
 import { useNavigate } from 'react-router-dom';
-import { useConfirm } from '../provider/ConfirmProvider';
+import { useConfirm } from '../../provider/ConfirmProvider';
 
 function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
