@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react';
 import { useReadContracts, useReadContract } from 'wagmi';
 
-import { contracts, abis } from '../../config';
+import { contracts, abis, excludeIsolatedPairs } from '../../config';
 
 export function useProtocolPairsData(): any {
   let {
@@ -75,10 +75,10 @@ export function useProtocolPairsData(): any {
     return (availablePoolsResults as `0x${string}`[]).reduce(
       (acc, asset, index) => {
         const result = pairResults[index];
-        if (result && result.status === 'success') {
+        if (result && result.status === 'success' && !excludeIsolatedPairs.includes((result.result as any).pair)) {
           acc[asset] = result.result as any;
         } else {
-          console.error(`Failed to get pair data for asset: ${asset}`);
+          console.error(`Failed to get pair data for asset or pair is excluded: ${asset}`);
         }
         return acc;
       },

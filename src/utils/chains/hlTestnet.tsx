@@ -87,6 +87,11 @@ const oraclesMap: any = {
     '0x713c630Cbb3A37b45bA3921125abb3D0D4F4d8ef',
 };
 
+const excludeIsolatedPairs = [
+  "0xB1ed098b6b7Ae18b0Aa822c90a1E0371c7fDb96D", //old ETH-stHYPE
+  "" //old stHYPE-ETH
+]
+
 const hlTestnet: any = {
   chainName: 'hyperEvmTestnet',
   networkChainId: networkChainId,
@@ -103,6 +108,7 @@ const hlTestnet: any = {
   wrappedTokenProtocolTokens: wrappedTokenProtocolTokens,
   tokenToGradient: tokenToGradient,
   oraclesMap: oraclesMap,
+  excludeIsolatedPairs: excludeIsolatedPairs
 };
 
 export default hlTestnet;
