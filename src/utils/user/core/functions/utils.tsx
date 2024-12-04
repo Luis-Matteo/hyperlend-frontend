@@ -53,12 +53,14 @@ export function calculateAvailableBalance(
 }
 
 function getAvailableSupply(params: any) {
-  const supplyCap = decodeConfig(
+  let supplyCap = decodeConfig(
     params.reserveDataMap[params.token].configuration.data,
   ).supplyCap;
+
   const totalSupplied =
     Number(params.assetReserveData.totalAToken) /
     Math.pow(10, tokenDecimalsMap[params.token]);
+
   const userAmount = normalizeDecimalsAmount(
     wrappedTokens.includes(params.token)
       ? Number(params.userEthBalance?.value)
@@ -66,6 +68,8 @@ function getAvailableSupply(params: any) {
     params.token,
     tokenDecimalsMap,
   );
+
+  if (supplyCap == 0) supplyCap = Infinity
 
   return totalSupplied + userAmount > supplyCap
     ? supplyCap - totalSupplied
@@ -110,7 +114,7 @@ function getAvailableWithdraw(params: any) {
 }
 
 function getAvailableBorrow(params: any): any {
-  const borrowCap = decodeConfig(
+  let borrowCap = decodeConfig(
     params.reserveDataMap[params.token].configuration.data,
   ).borrowCap;
 
@@ -126,6 +130,8 @@ function getAvailableBorrow(params: any): any {
   const [, , availableBorrowsBase] = params.userAccountData; //in usd, 10**8 decimals
   const availableBorrowBaseToken =
     Number(availableBorrowsBase) / Number(tokenPrice);
+
+  if (borrowCap == 0) borrowCap = Infinity
 
   const availableAfterCap =
     borrowCap != 0 && totalBorrowed + availableBorrowBaseToken > borrowCap
