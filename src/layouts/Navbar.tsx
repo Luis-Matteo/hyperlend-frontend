@@ -5,6 +5,8 @@ import hamburgerIcon from '../assets/icons/hamburger-icon.svg';
 import { useConfirm } from '../provider/ConfirmProvider';
 import { useNavigate } from 'react-router-dom';
 import backIcon from '../assets/icons/left-arrow-white.svg';
+import ConnectButton from '../components/header/ConnectButton';
+
 type NavbarProps = {
   pageTitle?: string | ReactNode;
   pageIcon?: ReactNode;
@@ -26,7 +28,7 @@ function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
           <img src={hamburgerIcon} alt='' />
         </button>
         <div className=''>
-          <w3m-button />
+          <ConnectButton />
         </div>
       </div>
       <div className='w-full flex justify-between items-center'>
@@ -57,7 +59,7 @@ function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
               onChange={(e) => { setSearchText(e.target.value); console.log(searchText); }}
             />
           </div> */}
-          <w3m-button />
+          <ConnectButton />
         </div>
       </div>
     </div>
