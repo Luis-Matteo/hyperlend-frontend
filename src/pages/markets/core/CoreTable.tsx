@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
-import CardItem from '../../components/common/CardItem';
-import { decodeConfig, formatNumber, formatUnit } from '../../utils/functions';
-import InfoItem from '../../components/common/InfoItem';
+import CardItem from '../../../components/common/CardItem';
+import { decodeConfig, formatNumber, formatUnit } from '../../../utils/functions';
+import InfoItem from '../../../components/common/InfoItem';
 import {
   tokenNameMap,
   tokenFullNameMap,
@@ -10,15 +10,15 @@ import {
   stablecoinsList,
   networkChainId,
   tokenColorMap,
-} from '../../utils/config';
+} from '../../../utils/config';
 
-import { useProtocolPriceData } from '../../utils/protocol/core/prices';
-import { useProtocolInterestRate } from '../../utils/protocol/core/interestRates';
-import { useProtocolAssetReserveData } from '../../utils/protocol/core/reserves';
-import { useProtocolReservesData } from '../../utils/protocol/core/reserves';
+import { useProtocolPriceData } from '../../../utils/protocol/core/prices';
+import { useProtocolInterestRate } from '../../../utils/protocol/core/interestRates';
+import { useProtocolAssetReserveData } from '../../../utils/protocol/core/reserves';
+import { useProtocolReservesData } from '../../../utils/protocol/core/reserves';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { AssetDetail, ModalType } from '../../utils/types';
-import { filterString } from '../../utils/functions';
+import { AssetDetail, ModalType } from '../../../utils/types';
+import { filterString } from '../../../utils/functions';
 import { Link } from 'react-router-dom';
 
 interface CoreTableProps {

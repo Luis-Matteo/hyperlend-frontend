@@ -13,7 +13,7 @@ const contracts: any = {
   faucet: '0x941559AF458A9a0448b411a26047584b506283A7',
   wrappedTokenGatewayV3: '0xd2b21707d7a574D6A744FB600826770F9FBA6f80',
   //isolated pools
-  isolatedPairRegistry: '0xB6aE067434D36684006b4561328eF4fA8016ee22',
+  isolatedPairRegistry: '0x274396Ec36D17dAbC018d9437D5a4C0D0fD503D0',
   uiDataProviderIsolated: '0x150e7f4E59C7d2bB5ec78A8D3C1B941338412076',
 };
 
@@ -89,7 +89,7 @@ const oraclesMap: any = {
 
 const excludeIsolatedPairs = [
   "0xB1ed098b6b7Ae18b0Aa822c90a1E0371c7fDb96D", //old ETH-stHYPE
-  "" //old stHYPE-ETH
+  "0xf1039C557e8B599dc26e0CCdA24De015Fb59Ec6f" //old stHYPE-ETH
 ]
 
 const hlTestnet: any = {

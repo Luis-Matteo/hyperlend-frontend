@@ -1,65 +1,53 @@
-import { useState, useEffect } from 'react';
-import Navbar from '../../layouts/Navbar';
-import CardItem from '../../components/common/CardItem';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
+import Navbar from '../../../layouts/Navbar';
+import CardItem from '../../../components/common/CardItem';
+import { useParams } from 'react-router-dom';
 import { useSwitchChain, useAccount, useBalance } from 'wagmi';
 import ReactGA from 'react-ga4';
-import { tokenDetailButton } from '../../utils/constants/constants';
+import { tokenDetailButton } from '../../../utils/constants/constants';
 import {
   formatNumber,
-  decodeConfig,
   formatAddress,
-} from '../../utils/functions';
-import BorrowInfoChart from '../../components/charts/BorrowInfoChart';
-import InterestRateModelChart from '../../components/charts/InterestRateModelChart';
-import { TokenActionsProps } from '../../utils/types';
-import topRightArrowImage from '../../assets/icons/top-right-arrow.svg';
-import ShareImageModal from '../../components/common/ShareImageModal';
+  calculateApyIsolated
+} from '../../../utils/functions';
+import BorrowInfoChart from '../../../components/charts/BorrowInfoChart';
+import InterestRateModelChart from '../../../components/charts/InterestRateModelChart';
+import { TokenActionsProps } from '../../../utils/types';
+import topRightArrowImage from '../../../assets/icons/top-right-arrow.svg';
+import ShareImageModal from '../../../components/common/ShareImageModal';
+import TokenActions from '../../../components/markets/TokenActions';
+import Button from '../../../components/common/Button';
 
 import {
   tokenNameMap,
   iconsMap,
   tokenDecimalsMap,
-  liqMap,
-  ltvMap,
-  liqPenaltyMap,
   networkChainId,
-  oraclesMap,
-} from '../../utils/config';
+  tokenFullNameMap
+} from '../../../utils/config';
 
 import {
   useUserPositionsData,
   useUserAccountData,
-} from '../../utils/user/core/positions';
+} from '../../../utils/user/core/positions';
 
-import { useProtocolPriceData } from '../../utils/protocol/core/prices';
-import { useProtocolInterestRate } from '../../utils/protocol/core/interestRates';
-import { useProtocolAssetReserveData } from '../../utils/protocol/core/reserves';
+import { useUserTokenBalance } from '../../../utils/user/wallet';
 
-import { useProtocolReservesData } from '../../utils/protocol/core/reserves';
+import { useProtocolPairsData, preparePairData } from '../../../utils/protocol/isolated/pairs';
+import { useAssetPrice } from '../../../utils/protocol/isolated/prices';
 
-import { useUserTokenBalance } from '../../utils/user/wallet';
-
-import { calculateAvailableBalance, getTokenPrecision } from '../../utils/user/functions/utils';
-
-import TokenActions from '../../components/markets/TokenActions';
-import { mockIsolatedMarkets } from '../../utils/mocks/markets';
-import Button from '../../components/common/Button';
+import { getTokenPrecision } from '../../../utils/user/core/functions/utils';
 
 function TokenDetail() {
-  const { token = '' } = useParams();
-  const [searchParams] = useSearchParams();
-  const isolated = searchParams.get('isolated') === 'true';
+  const { pairAddress = '' } = useParams();
+  ReactGA.send({ hitType: 'pageview', page: '/token-details-isolated', title: pairAddress });
+
   const [collateralAmount, setCollateralAmount] = useState(0);
-
-  const availableAmount = 9481;
-
   const [collateral, setCollateral] = useState('add');
-
-  ReactGA.send({ hitType: 'pageview', page: '/token-details', title: token });
-
   const [shareImageModalStatus, setShareImageModalStatus] =
     useState<boolean>(false);
+
+  const availableAmount = 9481;
 
   const toggleModal = () => {
     setShareImageModalStatus(!shareImageModalStatus);
@@ -76,10 +64,26 @@ function TokenDetail() {
     }
   }, [isConnected, chainId]);
 
+  //get info for this pair
+  const pairs = useProtocolPairsData(pairAddress);
+
+  // Extract all oracle addresses from pairs
+  const oracleAddresses = useMemo(() => {
+    if (!pairs || !pairs.pairsDataMap) return [];
+    return Object.keys(pairs.pairsDataMap).flatMap((pair) => [
+      pairs.pairsDataMap[pair as string].exchangeRate.chainlinkAssetAddress,
+      pairs.pairsDataMap[pair as string].exchangeRate
+        .chainlinkCollateralAddress,
+    ]);
+  }, [pairs]);
+  const { priceDataMap } = useAssetPrice(oracleAddresses);
+
+  const market = preparePairData(pairs.pairsDataMap[pairAddress], priceDataMap);
+
   //refetch on update
   const { data: userWalletTokenBalance } = useUserTokenBalance(
     isConnected,
-    token,
+    market.asset,
     address,
   );
   const { data: userEthBalance } = useBalance({
@@ -89,40 +93,34 @@ function TokenDetail() {
 
   const userPositionsData = useUserPositionsData(isConnected, address);
 
-  const protocolAssetReserveData = useProtocolAssetReserveData(token);
-  const { reserveDataMap } = useProtocolReservesData();
-  const { priceDataMap } = useProtocolPriceData();
-  const { interestRateDataMap } = useProtocolInterestRate();
-
-  const supplied = userPositionsData.supplied.find(
-    (e) => e.underlyingAsset == token,
-  );
-  const borrowed = userPositionsData.borrowed.find(
-    (e) => e.underlyingAsset == token,
-  );
-
   function handleDataFromActions(data: any) {
     console.log(data);
   }
 
   const getAvailableAmount: any = (actionType: string) => {
-    return calculateAvailableBalance(
-      token,
-      userPositionsData,
-      userAccountData,
-      priceDataMap,
-      protocolAssetReserveData,
-      reserveDataMap,
-      userEthBalance,
-      userWalletTokenBalance,
-      actionType,
-    );
+    // return calculateAvailableBalance(
+    //   token,
+    //   userPositionsData,
+    //   userAccountData,
+    //   priceDataMap,
+    //   protocolAssetReserveData,
+    //   reserveDataMap,
+    //   userEthBalance,
+    //   userWalletTokenBalance,
+    //   actionType,
+    // );
+    return 0;
   };
+
+  const interestRateDataMap = {
+    supply: 0,
+    borrow: 0
+  }
 
   const getDailyEarnings: any = (actionType: string) => {
     if (actionType == 'supply' || actionType == 'withdraw') {
       return (
-        ((supplied?.value || 0) * (interestRateDataMap[token].supply / 100)) /
+        ((market.totalAssetsUsd || 0) * (interestRateDataMap.supply / 100)) /
         365
       );
     }
@@ -130,24 +128,31 @@ function TokenDetail() {
     if (actionType == 'borrow' || actionType == 'repay') {
       return (
         (-1 *
-          (borrowed?.value || 0) *
-          (interestRateDataMap[token].borrow / 100)) /
+          (market.totalBorrowedUsd || 0) *
+          (interestRateDataMap.borrow / 100)) /
         365
       );
     }
   };
 
+  const supplied = {
+    balance: 0
+  }
+  const borrowed = {
+    balance: 0
+  }
+
   const [actionData, setActionData] = useState<TokenActionsProps>({
     availableAmountTitle: 'Suppliable',
     availableAmount: getAvailableAmount('supply'),
-    totalApy: interestRateDataMap[token].supply,
+    totalApy: interestRateDataMap.supply,
     percentBtn: 100,
-    protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
+    protocolBalanceTitle: `Supplied balance (${market.assetName})`,
     protocolBalance: supplied?.balance || 0,
     dailyEarning: getDailyEarnings('supply'),
     btnTitle: 'Supply',
-    token: token,
-    isCollateralEnabled: supplied?.isCollateralEnabled || false,
+    token: market.asset,
+    isCollateralEnabled: false,
     handleDataFromActions: handleDataFromActions,
   });
 
@@ -174,14 +179,14 @@ function TokenDetail() {
         newActionData = {
           availableAmountTitle: 'Suppliable',
           availableAmount: getAvailableAmount('supply'),
-          totalApy: interestRateDataMap[token].supply,
+          totalApy: interestRateDataMap.supply,
           percentBtn: 100,
-          protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
+          protocolBalanceTitle: `Supplied balance (${market.assetName})`,
           protocolBalance: supplied?.balance || 0,
           dailyEarning: getDailyEarnings('supply'),
           btnTitle: 'Supply',
-          token: token,
-          isCollateralEnabled: supplied?.isCollateralEnabled || false,
+          token: market.asset,
+          isCollateralEnabled: false,
           handleDataFromActions: handleDataFromActions,
         };
         break;
@@ -189,13 +194,13 @@ function TokenDetail() {
         newActionData = {
           availableAmountTitle: 'Withdrawable',
           availableAmount: getAvailableAmount('withdraw'),
-          totalApy: interestRateDataMap[token].supply,
+          totalApy: interestRateDataMap.supply,
           percentBtn: 100,
-          protocolBalanceTitle: `Supplied balance (${tokenNameMap[token]})`,
+          protocolBalanceTitle: `Supplied balance (${market.assetName})`,
           protocolBalance: supplied?.balance || 0,
           dailyEarning: getDailyEarnings('withdraw'),
           btnTitle: 'Withdraw',
-          token: token,
+          token:  market.asset,
           isCollateralEnabled: false, //not used
           handleDataFromActions: handleDataFromActions,
         };
@@ -204,13 +209,13 @@ function TokenDetail() {
         newActionData = {
           availableAmountTitle: 'Borrowable',
           availableAmount: getAvailableAmount('borrow'),
-          totalApy: interestRateDataMap[token].borrow,
+          totalApy: interestRateDataMap.borrow,
           percentBtn: 100,
-          protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
+          protocolBalanceTitle: `Total borrowed (${market.assetName})`,
           protocolBalance: borrowed?.balance || 0,
           dailyEarning: getDailyEarnings('borrow'),
           btnTitle: 'Borrow',
-          token: token,
+          token: market.asset,
           isCollateralEnabled: false, //not used
           handleDataFromActions: handleDataFromActions,
         };
@@ -219,13 +224,13 @@ function TokenDetail() {
         newActionData = {
           availableAmountTitle: 'Repayable',
           availableAmount: getAvailableAmount('repay'),
-          totalApy: interestRateDataMap[token].borrow,
+          totalApy: interestRateDataMap.borrow,
           percentBtn: 100,
-          protocolBalanceTitle: `Total borrowed (${tokenNameMap[token]})`,
+          protocolBalanceTitle: `Total borrowed (${market.assetName})`,
           protocolBalance: borrowed?.balance || 0,
           dailyEarning: getDailyEarnings('repay'),
           btnTitle: 'Repay',
-          token: token,
+          token: market.asset,
           isCollateralEnabled: false,
           handleDataFromActions: handleDataFromActions,
         };
@@ -239,22 +244,21 @@ function TokenDetail() {
     }
   };
 
-  const tokenPrice = Number(priceDataMap[token]) / Math.pow(10, 8);
-  const totalSuppliedTokens =
-    Number(protocolAssetReserveData.totalAToken) /
-    Math.pow(10, tokenDecimalsMap[token]);
-  const totalBorrowedTokens =
-    Number(protocolAssetReserveData.totalVariableDebt) /
-    Math.pow(10, tokenDecimalsMap[token]);
+  const tokenPrice = Number(assetPriceUsd) / Math.pow(10, 8);
+  const totalSuppliedTokens = Number(market.totalAssets)
+  const totalBorrowedTokens =Number(market.totalBorrowed)
   const totalLiquidityToken = totalSuppliedTokens - totalBorrowedTokens;
-  const configuration = decodeConfig(reserveDataMap[token].configuration.data);
+  const configuration = {
+    supplyCap: 0,
+    borrowCap: 0
+  }
 
   const supplies = [
     {
       name: 'Reserves',
       value: formatNumber(totalLiquidityToken, 4),
     },
-    ...(isolated ? [
+    [
       {
         name: 'Asset Price',
         value: `Asset Price`,
@@ -263,12 +267,7 @@ function TokenDetail() {
         name: 'Collateral Price',
         value: `Collateral Price`,
       },
-    ] : [
-      {
-        name: 'Price',
-        value: `$${formatNumber(tokenPrice, 2)}`,
-      },
-    ]),
+    ],
     {
       name: 'Liquidity',
       value: `$${formatNumber(totalLiquidityToken * tokenPrice, 2)}`,
@@ -281,7 +280,7 @@ function TokenDetail() {
 
   const supplyInfos = [
     {
-      name: `Total supply (${tokenNameMap[token]})`,
+      name: `Total supply (${market.assetName})`,
       value: `${formatNumber(totalSuppliedTokens, 2)}`,
     },
     {
@@ -290,17 +289,17 @@ function TokenDetail() {
     },
     {
       name: 'APY',
-      value: `${formatNumber(interestRateDataMap[token].supply, 2)}%`,
+      value: `${formatNumber(interestRateDataMap.supply, 2)}%`,
     },
     {
       name: 'LTV',
-      value: `${ltvMap[token] * 100}%`,
+      value: `${market.ltv}%`,
     },
   ];
 
   const borrowInfos = [
     {
-      name: `Total borrrow (${tokenNameMap[token]})`,
+      name: `Total borrrow (${market.assetName})`,
       value: `${formatNumber(totalBorrowedTokens, 2)}`,
     },
     {
@@ -309,32 +308,32 @@ function TokenDetail() {
     },
     {
       name: 'APY',
-      value: `${formatNumber(interestRateDataMap[token].borrow, 2)}%`,
+      value: `${formatNumber(interestRateDataMap.borrow, 2)}%`,
     },
     {
       name: 'Liquidation Threshold',
-      value: `${liqMap[token] * 100}%`,
+      value: `${market.ltv * 100}%`,
     },
     {
       name: 'Liquidation Penalty',
-      value: `${liqPenaltyMap[token] * 100}%`,
+      value: `${market.liquidationPenalty * 100}%`,
     },
   ];
 
   const marketDetails = [
     {
       name: 'Token contract',
-      link: `https://testnet.purrsec.com/address/${token}`,
-      value: token,
+      link: `https://testnet.purrsec.com/address/${market.asset}`,
+      value: market.asset,
     },
     {
       name: 'Asset oracle',
-      link: `https://testnet.purrsec.com/address/${oraclesMap[token]}`,
-      value: oraclesMap[token],
+      link: `https://testnet.purrsec.com/address/${pair.exchangeRate.oracle}`,
+      value: pair.exchangeRate.oracle,
     },
     {
       name: 'Supply cap',
-      value: `${formatNumber(configuration.supplyCap, 2)} ${tokenNameMap[token]}`,
+      value: `${formatNumber(configuration.supplyCap, 2)} ${market.assetName}`,
     },
     {
       name: 'Supply cap reached',
@@ -342,7 +341,7 @@ function TokenDetail() {
     },
     {
       name: 'Borrow cap',
-      value: `${configuration.borrowCap > 0 ? formatNumber(configuration.borrowCap, 2) : '∞'} ${tokenNameMap[token]}`,
+      value: `${configuration.borrowCap > 0 ? formatNumber(configuration.borrowCap, 2) : '∞'} ${market.assetName}`,
     },
     {
       name: 'Borrow cap reached',
@@ -350,29 +349,23 @@ function TokenDetail() {
     },
     {
       name: 'Collateral factor',
-      value: `${formatNumber(configuration.ltv / 100, 4)}%`,
+      value: `${formatNumber(market.ltv / 100, 4)}%`,
     },
     {
       name: 'Reserve factor',
-      value: `${formatNumber(configuration.reserveFactor / 100, 4)}%`,
+      value: `${formatNumber(pair.interestRate.feeToProtocolRate / 100, 4)}%`,
     },
   ];
 
   return (
     <div className='w-full'>
       <Navbar
-        pageTitle={isolated ?
-          `${mockIsolatedMarkets[0].assetSymbol} / ${mockIsolatedMarkets[0].collateralSymbol}` :
-          tokenNameMap[token]
-        }
+        pageTitle={`${market.assetSymbol} / ${market.collateralSymbol}`}
         pageIcon={
-          isolated ?
-            <div className='flex -space-x-3'>
-              <img src={mockIsolatedMarkets[0].assetIcon} height='30px' width='30px' alt='' />
-              <img src={mockIsolatedMarkets[0].collateralIcon} height='30px' width='30px' alt='' />
-            </div>
-            :
-            <img src={iconsMap[tokenNameMap[token]]} height='30px' width='30px' alt='' />
+          <div className='flex -space-x-3'>
+            <img src={market.assetIcon} height='30px' width='30px' alt='' />
+            <img src={market.collateralIcon} height='30px' width='30px' alt='' />
+          </div>
         }
         back={true}
       />
@@ -432,7 +425,7 @@ function TokenDetail() {
                 </div>
               ))}
             </div>
-            <BorrowInfoChart type='supply' token={token} />
+            <BorrowInfoChart type='supply' token={pairAddress} />
           </CardItem>
           <CardItem className='p-4 lg:p-8 mb-6'>
             <div className='flex justify-between items-center'>
@@ -463,7 +456,7 @@ function TokenDetail() {
                 </div>
               ))}
             </div>
-            <BorrowInfoChart type='borrow' token={token} />
+            <BorrowInfoChart type='borrow' token={pairAddress} />
           </CardItem>
           <CardItem className='p-4 lg:p-8 mb-6'>
             <div className='flex justify-between items-center flex-wrap'>
@@ -486,7 +479,7 @@ function TokenDetail() {
               </ul>
             </div>
             <InterestRateModelChart
-              token={token}
+              token={pairAddress}
               currentUtilization={
                 (totalBorrowedTokens / totalSuppliedTokens) * 100
               }
@@ -583,7 +576,7 @@ function TokenDetail() {
                   <div className='flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4'>
                     <div className='flex gap-3 items-center p-3'>
                       <img
-                        src={iconsMap[tokenNameMap[token]]}
+                        src={iconsMap[tokenNameMap[market.collateralName]]}
                         height={'30px'}
                         width={'30px'}
                         alt='coinIcon'
@@ -629,9 +622,9 @@ function TokenDetail() {
                       <p className='text-base font-lufga text-[#CAEAE5]'>
                         {formatNumber(
                           Number(availableAmount),
-                          getTokenPrecision(token, priceDataMap),
+                          getTokenPrecision(market.collateral, priceDataMap),
                           true,
-                        )} {tokenNameMap[token]}
+                        )} {market.collateralName}
                       </p>
                     </div>
                   </div>
@@ -655,7 +648,7 @@ function TokenDetail() {
       {
         shareImageModalStatus && (
           <ShareImageModal
-            token={token}
+            token={market.collateralName}
             apy={formatNumber(actionData?.totalApy, 3)}
             dailyEarnings={formatNumber(actionData?.dailyEarning, 3)}
             onClose={toggleModal}
