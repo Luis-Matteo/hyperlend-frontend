@@ -492,7 +492,7 @@ function TokenDetail() {
                     onClick={() => handleButtonClick(button.id)}
                   >
                     <p
-                      className={`text-base transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                      className={`text-base capitalize transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
                     >
                       {button.label}
                     </p>
@@ -506,7 +506,7 @@ function TokenDetail() {
             </CardItem>
             <button
               className='flex gap-4 items-center p-4 mx-auto'
-              onClick={toggleModal}
+              onClick={() => setShareImageModalStatus(true)}
             >
               <p className='font-lufga text-[#797979]'>Share</p>
               <img className='' src={topRightArrowImage} />

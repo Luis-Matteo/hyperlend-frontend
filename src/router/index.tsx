@@ -1,4 +1,9 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import {
+  Navigate,
+  Route,
+  Routes,
+  useSearchParams,
+} from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Markets from '../pages/Markets';
 import TokenDetails from '../pages/TokenDetail';
@@ -11,17 +16,28 @@ import backgroundImage from '../assets/img/background.svg';
 import { useLocation } from 'react-router-dom';
 import backgroundGradientOrange from '../assets/img/background-orange.svg';
 import { tokenToGradient } from '../utils/config';
-import { useConfirm } from '../provider/ConfirmProvider';
 import ConfirmModal from '../components/ConfirmModal';
+import { useConfirm } from '../provider/ConfirmProvider';
+import NotFound from '../pages/NotFound';
 
 function MainContent() {
+  const { guided } = useConfirm();
   const location = useLocation();
   const modalOpen = useSelector((state: RootState) => state.sidebar.modalOpen);
-  const { confirmed, confirm } = useConfirm();
+  const is404 = location.pathname === '/404';
+
+  const [searchParams] = useSearchParams();
+  if (searchParams.get('ref')) {
+    localStorage.setItem('referredBy', searchParams.get('ref') || 'null');
+  }
+  if (searchParams.get('r')) {
+    localStorage.setItem('referredBy', searchParams.get('r') || 'null');
+  }
+
   return (
     <>
-      {!confirmed && <ConfirmModal onConfirm={confirm} />}
-      <main className='bg-primary-light w-full lg:w-[calc(100vw-256px)] relative lg:h-screen inset-0 z-0'>
+      <ConfirmModal />
+      <main className={`bg-primary-light w-full relative lg:h-screen inset-0 z-0 ${!is404 ? "lg:w-[calc(100vw-256px)]" : ""}`}>
         <div className='inset-0 px-4 py-8 md:px-6 xl:p-14 z-20 lg:max-h-screen h-full overflow-auto '>
           <Routes>
             <Route path='/' element={<Navigate to='/dashboard' />} />
@@ -30,10 +46,14 @@ function MainContent() {
               <Route path='' element={<Overview />} />
               <Route path=':token' element={<TokenDetails />} />
             </Route>
+            <Route path='404' element={<NotFound />} />
+            <Route path='*' element={<Navigate to='/404' />} />
           </Routes>
           {modalOpen && <Referrals />}
         </div>
-        <div className='absolute top-0 right-0 w-full h-screen -z-10'>
+        <div
+          className={`absolute top-0 right-0 w-full h-screen -z-10 ${guided > 0 ? 'lg:blur-[8px]' : ''}`}
+        >
           {location.pathname.match(/^\/markets\/[^/]+$/) ? (
             <img
               className='w-full'
@@ -53,15 +73,17 @@ function MainContent() {
   );
 }
 
-function Router() {
+export default function Router() {
+
+  const location = useLocation();
+  const is404 = location.pathname === '/404';
+
   return (
-    <BrowserRouter>
-      <div className='flex'>
-        <Sidebar />
-        <MainContent />
-      </div>
-    </BrowserRouter>
+
+    <div className='flex'>
+      {!is404 && <Sidebar />}
+      <MainContent />
+    </div>
+
   );
 }
-
-export default Router;

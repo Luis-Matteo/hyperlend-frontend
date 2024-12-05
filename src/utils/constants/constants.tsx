@@ -1,6 +1,6 @@
 import dashboardIcon from '../../assets/icons/dashboard-icon.svg';
 import lendborrowIcon from '../../assets/icons/lend-borrow-icon.svg';
-import analyticsIcon from '../../assets/icons/analytics-icon.svg';
+// import analyticsIcon from '../../assets/icons/analytics-icon.svg';
 // import hyperloopIcon from '../../assets/icons/hyperloop-icon.svg';
 
 type NavLinkProps = {
@@ -55,20 +55,20 @@ const navLinksTop: NavLinkProps[] = [
     icon: lendborrowIcon,
     disabled: false,
   },
-  {
+  /*{
     id: 'analytics',
     title: 'Analytics',
     url: '/analytics',
     icon: analyticsIcon,
     disabled: false,
   },
-  //   {
-  //     id: 'hyperloop',
-  //     title: 'HyperLoop',
-  //     url: '/hyperloop',
-  //     icon: hyperloopIcon,
-  //     disabled: false,
-  //   },
+  {
+    id: 'hyperloop',
+    title: 'HyperLoop',
+    url: '/hyperloop',
+    icon: hyperloopIcon,
+    disabled: false,
+  },*/
 ];
 
 const navLinksDown: NavLinkProps[] = [
@@ -119,10 +119,10 @@ const assetsInfos = [
 ];
 
 const tokenDetailButton = [
-  { id: 1, label: 'Supply' },
-  { id: 2, label: 'Withdraw' },
-  { id: 3, label: 'Borrow' },
-  { id: 4, label: 'Repay' },
+  { id: 1, label: 'supply' },
+  { id: 2, label: 'withdraw' },
+  { id: 3, label: 'borrow' },
+  { id: 4, label: 'repay' },
 ];
 
 // export { navLinks, assetsInfos };
