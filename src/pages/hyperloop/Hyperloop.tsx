@@ -19,7 +19,7 @@ function Hyperloop() {
               Maximize gains by making your deposits work harder.
             </p>
           </div>
-          <CardItem className='p-6'>
+          <CardItem className='p-4 md:p-6'>
             <Outlet />
           </CardItem>
         </div>

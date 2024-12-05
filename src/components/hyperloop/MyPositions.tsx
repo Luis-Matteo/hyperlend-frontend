@@ -58,15 +58,13 @@ function MyPositions() {
                                     </div>
                                     <p className='text-secondary text-lg font-lufga'>{pairs.find(item => item.id == selectedPair)?.token1.name} / {pairs.find(item => item.id == selectedPair)?.token2.name}</p>
                                 </div>
-                                <div className='sm:block hidden'/>
+                                <div className='sm:block hidden' />
                             </div>
                             <div className='flex flex-col gap-3 mt-8'>
-                                <div className='p-5 bg-[#071311] rounded-2xl'>
-                                    <p className='text-sm italic text-[#E1E1E1]'>Health Factor</p>
-                                    <div className='relative flex text-center justify-center items-end overflow-hidden'>
-                                        <div className='translate-y-20 top-0'>
-                                            <Factor healthFactor={1.2} />
-                                        </div>
+                                <div className='bg-[#071311] rounded-2xl'>
+                                    <p className='px-5 pt-5 text-sm italic text-[#E1E1E1]'>Health Factor</p>
+                                    <div className='flex justify-center'>
+                                        <Factor healthFactor={1.2} />
                                     </div>
                                 </div>
                                 <div className='w-full py-6 bg-[#071311] rounded-2xl flex flex-col justify-center items-center gap-2'>
