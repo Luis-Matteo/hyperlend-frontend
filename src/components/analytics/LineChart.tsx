@@ -1,14 +1,22 @@
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
+import React from 'react';
 // import { formatNumber } from '../../utils/functions';
+interface DataPoint {
+    value: number;
+    date: string;
+}
 
 interface ChartProps {
-    data: number[];
+    data: DataPoint[];
     xgrid?: boolean;
     ygrid?: boolean;
 }
 
-const LineChart = ({ data, xgrid = true, ygrid }: ChartProps) => {
+const LineChart = React.memo(({ data, xgrid = true, ygrid }: ChartProps) => {
+    const seriesData = data.map((item) => item.value);
+    const categories = data.map((item) => item.date);
+
     const options: ApexOptions = {
         chart: {
             id: 'basic-line',
@@ -20,20 +28,31 @@ const LineChart = ({ data, xgrid = true, ygrid }: ChartProps) => {
             },
         },
         xaxis: {
+            categories,
             labels: {
-                show: false, // Hide x-axis labels
+                rotate: -45, // Rotate labels for better readability
+                style: {
+                    colors: '#D4D4D4',
+                    fontSize: '12px',
+                },
             },
             axisBorder: {
                 show: true, // Hide x-axis border
+                color: '#356152',
             },
             axisTicks: {
-                show: false, // Hide x-axis ticks
+                show: true, // Hide x-axis ticks
+                color: '#356152',
             },
             tickAmount: 5
         },
         yaxis: {
             labels: {
-                show: true, // Hide y-axis labels
+                style: {
+                    colors: '#D4D4D4',
+                    fontSize: '12px',
+                },
+                formatter: (value) => `${value.toLocaleString()}`,
             },
             axisBorder: {
                 show: false, // Hide y-axis border
@@ -92,10 +111,10 @@ const LineChart = ({ data, xgrid = true, ygrid }: ChartProps) => {
             colors: ['#CAEAE5'], // Line color
         },
         tooltip: {
-            // custom: function({series, seriesIndex, dataPointIndex}: any) {
-            //     return `<div>$${formatNumber(series[seriesIndex][dataPointIndex], 2)}</div>`;
-            // }
-            enabled: false,
+            enabled: true,
+            y: {
+                formatter: (value) => `${value.toLocaleString()}`, // Format tooltip values
+            },
         },
         legend: {
             show: false, // Hide the series label (legend)
@@ -134,8 +153,8 @@ const LineChart = ({ data, xgrid = true, ygrid }: ChartProps) => {
 
     const series = [
         {
-            name: 'series-1',
-            data: data,
+            name: 'Total TVL',
+            data: seriesData,
         },
     ];
 
@@ -148,6 +167,6 @@ const LineChart = ({ data, xgrid = true, ygrid }: ChartProps) => {
             height={250}
         />
     );
-};
+});
 
 export default LineChart;

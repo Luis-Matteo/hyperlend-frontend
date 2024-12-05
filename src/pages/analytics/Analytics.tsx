@@ -1,14 +1,124 @@
 
+import { useEffect, useState } from 'react';
 import BorderCard from '../../components/analytics/BorderCard';
 import ColumnChart from '../../components/analytics/ColumnChart';
 import LineChart from '../../components/analytics/LineChart';
 import PolarAreaChart from '../../components/analytics/PolarArea';
 import Navbar from '../../layouts/Navbar';
-import { apy, depositers, lineChartData, usersActivity } from '../../utils/constants/analytics';
-import { tvlcomposition } from '../../utils/constants/analytics';
+import { apy } from '../../utils/constants/analytics';
 import { formatAddress, formatNumber } from '../../utils/functions';
+import { useAccount } from 'wagmi';
+import { colorList } from '../../utils/constants/colorList';
+import { LargestUsers } from '../../utils/types';
 
 function Analytics() {
+    const { chainId } = useAccount();
+    const [tvlList, setTvlList] = useState<{ name: any; value: number; color: string; }[]>([]);
+    const [usersActivityList, setUsersActivityList] = useState<{ name: any; value: number; color: string; }[]>([]);
+    const [depositors, setDepositors] = useState([]);
+    const [borrowers, setBorrowers] = useState([]);
+    const [dailyTVL, setDailyTVL] = useState([]);
+    const [dailyUsers, setDailyUsers] = useState([]);
+    const [dailyDeposits, setDailyDeposits] = useState([]);
+    const [dailyBorrows, setDailyBorrows] = useState([]);
+    const [dailyLiquidation, setDailyLiquidations] = useState([]);
+    const backendUrl = import.meta.env.VITE_BACKEND_API;
+
+    useEffect(() => {
+        const chain = chainId === 998 ? "hyperEvmTestnet" : "arbitrum"
+        // Get TVL Composition
+        fetch(`${backendUrl}/analytics/tvl-composition?chain=${chain}`)
+        .then((response) => response.json())
+        .then((result) => {
+            if(result.success) {
+                const updatedTvlList = result.data.map((item: any, index: number) => ({
+                    name: item.assetSymbol,
+                    value: Number(item.tvlComp),
+                    color: colorList[index]
+                }));
+                setTvlList(updatedTvlList);
+            }
+        })
+        .catch((error) => console.error(error));
+
+        // Get Users Activity
+        fetch(`${backendUrl}/analytics/users-activity?chain=${chain}`)
+        .then((response) => response.json())
+        .then((result) => {
+            if(result.success) {
+                const list = result.data.map((item: any, index: number) => ({
+                    name: item.event === "LiquidationCall" ? "Liquidation" : item.event,
+                    value: Number(item.composition),
+                    color: colorList[index]
+                }));
+                setUsersActivityList(list);
+            }
+        })
+        .catch((error) => console.error(error));
+
+        // Get Largest Users
+        fetch(`${backendUrl}/analytics/largest-users?chain=${chain}`)
+        .then((response) => response.json())
+        .then((result) => {
+            if(result.success) {
+                setDepositors(result.depositors);
+                setBorrowers(result.borrowers);
+            }
+        })
+        .catch((error) => console.error(error));
+
+        // Get Daily TVL
+        fetch(`${backendUrl}/analytics/daily-tvl?chain=${chain}&startDate=2024-11-10&endDate=2024-11-28`)
+        .then((response) => response.json())
+        .then((result) => {
+            if(result.success) {
+                setDailyTVL(result.data)
+            }
+        })
+        .catch((error) => console.error(error));
+
+        // Get Daily Users
+        fetch(`${backendUrl}/analytics/daily-users?chain=${chain}&startDate=2024-11-10&endDate=2024-12-06`)
+        .then((response) => response.json())
+        .then((result) => {
+            if(result.success) {
+                setDailyUsers(result.data)
+            }
+        })
+        .catch((error) => console.error(error));
+
+        // Get Daily Volume - Supply
+        fetch(`${backendUrl}/analytics/daily-volume?chain=${chain}&startDate=2024-12-01&endDate=2024-12-06&type=Supply`)
+        .then((response) => response.json())
+        .then((result) => {
+            if(result.success) {
+                setDailyDeposits(result.data)
+            }
+        })
+        .catch((error) => console.error(error));
+
+        // Get Daily Volume - Borrow
+        fetch(`${backendUrl}/analytics/daily-volume?chain=${chain}&startDate=2024-12-01&endDate=2024-12-06&type=Borrow`)
+        .then((response) => response.json())
+        .then((result) => {
+            if(result.success) {
+                setDailyBorrows(result.data)
+            }
+        })
+        .catch((error) => console.error(error));
+
+        // Get Daily Volume - Liquidations
+        fetch(`${backendUrl}/analytics/daily-volume?chain=${chain}&startDate=2024-12-01&endDate=2024-12-06&type=LiquidationCall`)
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            if(result.success) {
+                setDailyLiquidations(result.data)
+            }
+        })
+        .catch((error) => console.error(error));
+    }, [chainId])
+
     return (
         <>
             <div className='w-full'>
@@ -16,33 +126,32 @@ function Analytics() {
                 <div className='grid grid-cols-1 xl:grid-cols-2 h-full gap-4 mt-24'>
                     <BorderCard
                         title='TVL Composition'>
-                        <PolarAreaChart
-                            data={tvlcomposition} />
+                            <PolarAreaChart data={tvlList} />
                     </BorderCard>
                     <BorderCard
                         title='Users Activity'>
                         <PolarAreaChart
-                            data={usersActivity} />
+                            data={usersActivityList} />
                     </BorderCard>
                     <BorderCard
                         title='TVL'>
                         <LineChart
-                            data={lineChartData} />
+                            data={dailyTVL} />
                     </BorderCard>
                     <BorderCard
                         title='Total Users'>
                         <LineChart
-                            data={lineChartData} />
+                            data={dailyUsers} />
                     </BorderCard>
                     <BorderCard
                         title='Total Deposits'>
                         <LineChart
-                            data={lineChartData} />
+                            data={dailyDeposits} />
                     </BorderCard>
                     <BorderCard
                         title='Total Borrowed'>
                         <LineChart
-                            data={lineChartData} />
+                            data={dailyBorrows} />
                     </BorderCard>
                     <BorderCard
                         title='APY'>
@@ -59,7 +168,7 @@ function Analytics() {
                     <BorderCard
                         title='Liquidations'>
                         <LineChart
-                            data={lineChartData}
+                            data={dailyLiquidation}
                             xgrid={false}
                             ygrid={true} />
                     </BorderCard>
@@ -73,10 +182,10 @@ function Analytics() {
                         </div>
                         <div className='flex flex-col'>
                             {
-                                depositers.map((item, index) => (
+                                depositors.map((item: LargestUsers, index) => (
                                     <div key={index} className='flex justify-between py-3 border-t-[1px] border-[#212325]'>
-                                        <p className='text-secondary text-opacity-70 font-lufga'>{formatAddress(item.address)}</p>
-                                        <p className='text-secondary font-lufga'>${formatNumber(item.amount, 2)}</p>
+                                        <p className='text-secondary text-opacity-70 font-lufga'>{formatAddress(item.user)}</p>
+                                        <p className='text-secondary font-lufga'>${formatNumber(item.totalUSD, 2)}</p>
                                     </div>
                                 ))
                             }
@@ -90,10 +199,10 @@ function Analytics() {
                         </div>
                         <div className='flex flex-col'>
                             {
-                                depositers.map((item, index) => (
+                                borrowers.map((item: LargestUsers, index) => (
                                     <div key={index} className='flex justify-between py-3 border-t-[1px] border-[#212325]'>
-                                        <p className='text-secondary text-opacity-70 font-lufga'>{formatAddress(item.address)}</p>
-                                        <p className='text-secondary font-lufga'>${formatNumber(item.amount, 2)}</p>
+                                        <p className='text-secondary text-opacity-70 font-lufga'>{formatAddress(item.user)}</p>
+                                        <p className='text-secondary font-lufga'>${formatNumber(item.totalUSD, 2)}</p>
                                     </div>
                                 ))
                             }
