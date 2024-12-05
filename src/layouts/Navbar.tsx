@@ -5,8 +5,10 @@ import hamburgerIcon from '../assets/icons/hamburger-icon.svg';
 import { useConfirm } from '../provider/ConfirmProvider';
 import { useNavigate } from 'react-router-dom';
 import backIcon from '../assets/icons/left-arrow-white.svg';
+import ConnectButton from '../components/header/ConnectButton';
+
 type NavbarProps = {
-  pageTitle?: string;
+  pageTitle?: string | ReactNode;
   pageIcon?: ReactNode;
   back?: boolean;
 };
@@ -18,12 +20,17 @@ function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
 
   return (
     <div className={`${guided > 0 ? 'lg:blur-[8px]' : ''}`}>
-      <button
-        className='font-lufga text-white lg:hidden mb-6'
-        onClick={() => dispatch(toggleSidebar())}
-      >
-        <img src={hamburgerIcon} alt='' />
-      </button>
+      <div className="flex justify-between items-center lg:hidden mb-6">
+        <button
+          className='font-lufga text-white'
+          onClick={() => dispatch(toggleSidebar())}
+        >
+          <img src={hamburgerIcon} alt='' />
+        </button>
+        <div className=''>
+          <ConnectButton />
+        </div>
+      </div>
       <div className='w-full flex justify-between items-center'>
         <div className='flex gap-2 items-center'>
           {back && (
@@ -32,15 +39,16 @@ function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
             </button>
           )}
           {pageIcon && pageIcon}
-          {pageTitle && (
-            <h2
-              className={` ${pageTitle == 'MBTC' ? 'text-orange-400' : 'text-blue-300'} font-lufga text-3xl text-white`}
-            >
-              {pageTitle}
-            </h2>
-          )}
+          {pageTitle &&
+            (
+              <h2
+                className={` ${pageTitle == 'MBTC' ? 'text-orange-400' : 'text-blue-300'} font-lufga text-3xl text-white`}
+              >
+                {pageTitle}
+              </h2>
+            )}
         </div>
-        <div className='flex items-center gap-4'>
+        <div className='hidden lg:block'>
           {/* <div className="p-1 bg-primary hidden md:flex rounded-full gap-2">
             <div className="p-2 bg-gray-dark rounded-full">
               <img src={magnifyIcon} alt="" />
@@ -51,7 +59,7 @@ function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
               onChange={(e) => { setSearchText(e.target.value); console.log(searchText); }}
             />
           </div> */}
-          <w3m-button />
+          <ConnectButton />
         </div>
       </div>
     </div>
