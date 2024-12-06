@@ -1,3 +1,6 @@
+
+/* Custom CSS */
+import '../assets/css/custom-styles.css';
 // import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toggleSidebar } from '../store/sidebarSlice';

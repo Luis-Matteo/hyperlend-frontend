@@ -54,6 +54,7 @@ const config = defaultWagmiConfig({
   projectId,
   metadata,
   enableInjected,
+  
 });
 
 // 3. Create modal
@@ -61,7 +62,10 @@ createWeb3Modal({
   metadata,
   wagmiConfig: config,
   projectId,
-  enableAnalytics: true, // Optional - defaults to your Cloud configuration
+  enableAnalytics: true, 
+  themeVariables: {
+    '--w3m-accent': '#CAEAE5'
+  }// Optional - defaults to your Cloud configuration
 });
 
 export function AppKitProvider({ children }: { children: ReactNode }) {
