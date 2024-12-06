@@ -45,27 +45,34 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type }) => {
   const data = rawData.map((e: any) => {
     const rate = type == 'supply' ? e.liquidityRate : e.borrowRate;
     return {
-      time: new Date(e.timestamp).toDateString(),
+      time: new Date(e.timestamp).toLocaleDateString('en-US', {
+        year: '2-digit',
+        month: 'numeric',
+        day: 'numeric',
+      }), // change date to numbers
       rate: formatNumber(calculateApy(rate), 2),
     };
   });
+  
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '20px 20px 20px 0px' }}>
       <ResponsiveContainer width='100%' height={300}>
         <LineChart
           data={data}
-          margin={{ left: 20, right: 20, top: 20, bottom: 0 }}
+          margin={{ left: 0, right: 20, top: 20, bottom: 0 }}
         >
           <XAxis
             dataKey='time'
             fontSize={15}
             padding={{ left: 30, right: 0 }} // Add padding to the left
+            fontFamily='lufga'
+            fontWeight='regular'
           />
           <YAxis
             tickFormatter={(value) => (value === 0 ? '' : value)} // Skip displaying the '0' value
-            // domain={[10, 100]} // Set the Y-axis domain from 10 to 100
-            // ticks={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} // Define ticks manually
+          // domain={[10, 100]} // Set the Y-axis domain from 10 to 100
+          // ticks={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} // Define ticks manually
           />
           <Tooltip content={<CustomTooltip />} />
           <Line

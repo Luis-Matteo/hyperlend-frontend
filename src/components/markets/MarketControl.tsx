@@ -37,18 +37,16 @@ function MarketControl({
         <div className='bg-[#081916] rounded-full p-1'>
           <button
             type='button'
-            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold transition-all duration-500 ${
-              status === 'core' ? 'bg-secondary' : ' text-white'
-            }`}
+            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold transition-all duration-500 ${status === 'core' ? 'bg-secondary' : ' text-white'
+              }`}
             onClick={() => setStatus('core')}
           >
             Core
           </button>
           <button
             type='button'
-            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold transition-all duration-500 ${
-              status === 'isolated' ? 'bg-secondary' : ' text-white'
-            }`}
+            className={`py-2 px-4 font-lufga rounded-full text-xs font-bold transition-all duration-500 ${status === 'isolated' ? 'bg-secondary' : ' text-white'
+              }`}
             // onClick={() => setStatus('isolated')}
             style={{
               color: '#36454F',
@@ -57,16 +55,14 @@ function MarketControl({
             Isolated
           </button>
         </div>
-        <div className='bg-[#081916] rounded-full hidden md:flex gap-2'>
+        <div className='bg-[#081916] rounded-full hidden md:flex gap-5 w-full md:w-[500px] lg:w-[600px] p-2'>
           <div className='p-2 rounded-full'>
-            <img src={magnifyIcon} alt='' />
+            <img src={magnifyIcon} alt='Search Icon' />
           </div>
           <input
-            className='bg-[#081916] rounded-full text-white font-lufga italic focus:outline-0'
+            className='bg-[#081916] rounded-full text-white font-lufga font-normal px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#28A745] w-full'
             placeholder='Search your coins...'
-            onChange={(e) => {
-              setSearchText(e.target.value);
-            }}
+            onChange={(e) => setSearchText(e.target.value)}
           />
         </div>
         <div className='md:hidden flex items-center'>
