@@ -2,6 +2,7 @@ import dashboardIcon from '../../assets/icons/dashboard-icon.svg';
 import lendborrowIcon from '../../assets/icons/lend-borrow-icon.svg';
 import analyticsIcon from '../../assets/icons/analytics-icon.svg';
 import hyperloopIcon from '../../assets/icons/hyperloop-icon.svg';
+import hypervaultIcon from '../../assets/icons/hypervault-icon.svg';
 
 type NavLinkProps = {
   id: string;
@@ -53,6 +54,13 @@ const navLinksTop: NavLinkProps[] = [
     title: 'Markets',
     url: '/markets',
     icon: lendborrowIcon,
+    disabled: false,
+  },
+  {
+    id: 'hypervault',
+    title: 'HyperVault',
+    url: '/hypervault',
+    icon: hypervaultIcon,
     disabled: false,
   },
   {
