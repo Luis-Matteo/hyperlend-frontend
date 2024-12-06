@@ -2,7 +2,10 @@ const colors = ['f7931a', '497493'];
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.{js,ts}",],
   theme: {
     extend: {
       boxShadow: {
@@ -25,6 +28,7 @@ export default {
         'grey-light': '#E1E1E1',
         success: '#2DC24E',
         warning: '#FFD542',
+        error: '#FF4245',
       },
       blur: {
         xs: '2px',

@@ -4,7 +4,7 @@ import {
   Routes,
   useSearchParams,
 } from 'react-router-dom';
-import Dashboard from '../pages/Dashboard';
+import Dashboard from '../pages/dashboard/Dashboard';
 import Markets from '../pages/markets/Markets';
 import TokenDetails from '../pages/markets/TokenDetail';
 import Sidebar from '../layouts/Sidebar';
@@ -16,12 +16,12 @@ import { useLocation } from 'react-router-dom';
 import backgroundGradientOrange from '../assets/img/background-orange.svg';
 import { tokenToGradient } from '../utils/config';
 import ConfirmModal from '../components/ConfirmModal';
-import Hyperloop from '../pages/Hyperloop';
-import HyperloopOverview from '../pages/HyperloopOverview';
-import HyperloopSetting from '../pages/HyperloopSetting';
-import HyperloopSearch from '../pages/HyperloopSearch';
+import Hyperloop from '../pages/hyperloop/Hyperloop';
+import HyperloopOverview from '../pages/hyperloop/HyperloopOverview';
+import HyperloopSetting from '../pages/hyperloop/HyperloopSetting';
+import HyperloopSearch from '../pages/hyperloop/HyperloopSearch';
 import { useConfirm } from '../provider/ConfirmProvider';
-import NotFound from '../pages/NotFound';
+import NotFound from '../pages/not-found/NotFound';
 import Analytics from '../pages/analytics/Analytics';
 import MarketOverview from '../pages/markets/MarketOverview';
 
