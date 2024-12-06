@@ -2,9 +2,9 @@ import { formatNumber } from '../../utils/functions';
 import { Hypervault } from '../../utils/interfaces';
 
 const tagConfig = {
-    'new': { textColor: 'text-[#2DC24E]', borderColor: 'border-[#2DC24E]', icon: '/src/assets/img/tags/new.svg' },
-    'hot': { textColor: 'text-[#C2BD2D]', borderColor: 'border-[#C2BD2D]', icon: '/src/assets/img/tags/hot.svg' },
-    'risk': { textColor: 'text-[#FF4245]', borderColor: 'border-[#FF4245]', icon: '/src/assets/img/tags/risk.svg' }
+    'new': { textColor: 'text-[#2DC24E]', borderColor: 'border-[#2DC24E]', icon: './assets/img/tags/new.svg' },
+    'hot': { textColor: 'text-[#C2BD2D]', borderColor: 'border-[#C2BD2D]', icon: './assets/img/tags/hot.svg' },
+    'risk': { textColor: 'text-[#FF4245]', borderColor: 'border-[#FF4245]', icon: './assets/img/tags/risk.svg' }
 };
 
 function HypervaultCard({
