@@ -67,6 +67,7 @@ function TokenDetail() {
   //get info for this pair
   const pairs = useProtocolPairsData(pairAddress);
 
+
   // Extract all oracle addresses from pairs
   const oracleAddresses = useMemo(() => {
     if (!pairs || !pairs.pairsDataMap) return [];
@@ -79,6 +80,7 @@ function TokenDetail() {
   const { priceDataMap } = useAssetPrice(oracleAddresses);
 
   const market = preparePairData(pairs.pairsDataMap[pairAddress], priceDataMap);
+  const pair = pairs.pairsDataMap[pairAddress];
 
   //refetch on update
   const { data: userWalletTokenBalance } = useUserTokenBalance(
@@ -141,6 +143,8 @@ function TokenDetail() {
   const borrowed = {
     balance: 0
   }
+
+  const assetPriceUsd = 500000000
 
   const [actionData, setActionData] = useState<TokenActionsProps>({
     availableAmountTitle: 'Suppliable',
@@ -258,16 +262,14 @@ function TokenDetail() {
       name: 'Reserves',
       value: formatNumber(totalLiquidityToken, 4),
     },
-    [
-      {
-        name: 'Asset Price',
-        value: `Asset Price`,
-      },
-      {
-        name: 'Collateral Price',
-        value: `Collateral Price`,
-      },
-    ],
+    {
+      name: 'Asset Price',
+      value: `Asset Price`,
+    },
+    {
+      name: 'Collateral Price',
+      value: `Collateral Price`,
+    },
     {
       name: 'Liquidity',
       value: `$${formatNumber(totalLiquidityToken * tokenPrice, 2)}`,
@@ -544,97 +546,94 @@ function TokenDetail() {
               </div>
               <TokenActions {...actionData} />
             </CardItem>
-            {
-              isolated && (
-                <CardItem className='p-4 lg:p-8 mt-4'>
-                  <div className='w-full grid grid-cols-2 text-center'>
-                    <button
-                      onClick={() => setCollateral('add')}
-                    >
-                      <p
-                        className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateral === 'add' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
-                      >
-                        Add collateral
-                      </p>
-                      <hr
-                        className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateral === 'add' ? 'text-white' : 'text-[#546764]'}`}
-                      />
-                    </button>
-                    <button
-                      onClick={() => setCollateral('remove')}
-                    >
-                      <p
-                        className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateral === 'remove' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
-                      >
-                        Remove collateral
-                      </p>
-                      <hr
-                        className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateral === 'remove' ? 'text-white' : 'text-[#546764]'}`}
-                      />
-                    </button>
-                  </div>
-                  <div className='flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4'>
-                    <div className='flex gap-3 items-center p-3'>
-                      <img
-                        src={iconsMap[tokenNameMap[market.collateralName]]}
-                        height={'30px'}
-                        width={'30px'}
-                        alt='coinIcon'
-                      />
-                      <p className='text-base text-[#CAEAE566] w-[120px]'>
-                        <input
-                          type='number'
-                          className='form-control-plaintext text-xl text-secondary border-0 p-0 text-left min-w-[120px]'
-                          value={collateralAmount}
-                          onChange={(e) => {
-                            setCollateralAmount(
-                              Number(e.target.value) >= availableAmount
-                                ? availableAmount
-                                : Number(e.target.value),
-                            );
-                          }}
-                          style={{
-                            background: 'transparent',
-                            outline: 'none',
-                            boxShadow: 'none',
-                            width: 'auto',
-                            minWidth: '50px',
-                          }}
-                        />
-                      </p>
-                    </div>
-                    <div className='bg-[#081916] px-4 py-3 rounded'>
-                      <button
-                        className='text-base text-[#CAEAE566]'
-                        onClick={() => {
-                          setCollateralAmount(availableAmount);
-                        }}
-                      >
-                        MAX
-                      </button>
-                    </div>
-                  </div>
-                  <div className='mt-4'>
-                    <div className='flex justify-between items-center'>
-                      <p className='text-base font-lufga text-[#4B5E5B]'>
-                        Suppliable amount
-                      </p>
-                      <p className='text-base font-lufga text-[#CAEAE5]'>
-                        {formatNumber(
-                          Number(availableAmount),
-                          getTokenPrecision(market.collateral, priceDataMap),
-                          true,
-                        )} {market.collateralName}
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    title={`${collateral} collateral`}
-                    variant='secondary'
-                    onClick={handleCollateral}
+            <CardItem className='p-4 lg:p-8 mt-4'>
+              <div className='w-full grid grid-cols-2 text-center'>
+                <button
+                  onClick={() => setCollateral('add')}
+                >
+                  <p
+                    className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateral === 'add' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                  >
+                    Add collateral
+                  </p>
+                  <hr
+                    className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateral === 'add' ? 'text-white' : 'text-[#546764]'}`}
                   />
-                </CardItem>
-              )}
+                </button>
+                <button
+                  onClick={() => setCollateral('remove')}
+                >
+                  <p
+                    className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateral === 'remove' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                  >
+                    Remove collateral
+                  </p>
+                  <hr
+                    className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateral === 'remove' ? 'text-white' : 'text-[#546764]'}`}
+                  />
+                </button>
+              </div>
+              <div className='flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4'>
+                <div className='flex gap-3 items-center p-3'>
+                  <img
+                    src={iconsMap[tokenNameMap[market.collateralName]]}
+                    height={'30px'}
+                    width={'30px'}
+                    alt='coinIcon'
+                  />
+                  <p className='text-base text-[#CAEAE566] w-[120px]'>
+                    <input
+                      type='number'
+                      className='form-control-plaintext text-xl text-secondary border-0 p-0 text-left min-w-[120px]'
+                      value={collateralAmount}
+                      onChange={(e) => {
+                        setCollateralAmount(
+                          Number(e.target.value) >= availableAmount
+                            ? availableAmount
+                            : Number(e.target.value),
+                        );
+                      }}
+                      style={{
+                        background: 'transparent',
+                        outline: 'none',
+                        boxShadow: 'none',
+                        width: 'auto',
+                        minWidth: '50px',
+                      }}
+                    />
+                  </p>
+                </div>
+                <div className='bg-[#081916] px-4 py-3 rounded'>
+                  <button
+                    className='text-base text-[#CAEAE566]'
+                    onClick={() => {
+                      setCollateralAmount(availableAmount);
+                    }}
+                  >
+                    MAX
+                  </button>
+                </div>
+              </div>
+              <div className='mt-4'>
+                <div className='flex justify-between items-center'>
+                  <p className='text-base font-lufga text-[#4B5E5B]'>
+                    Suppliable amount
+                  </p>
+                  <p className='text-base font-lufga text-[#CAEAE5]'>
+                    {formatNumber(
+                      Number(availableAmount),
+                      getTokenPrecision(market.collateral, priceDataMap),
+                      true,
+                    )} {market.collateralName}
+                  </p>
+                </div>
+              </div>
+              <Button
+                title={`${collateral} collateral`}
+                variant='secondary'
+                onClick={handleCollateral}
+              />
+            </CardItem>
             <button
               className='flex gap-4 items-center px-4 py-2 my-4 mx-auto'
               onClick={() => setShareImageModalStatus(true)}
