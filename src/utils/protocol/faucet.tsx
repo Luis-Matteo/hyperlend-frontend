@@ -17,7 +17,11 @@ export function claimFaucet(userAddress?: string) {
             if (d.status == 'ok') {
               alert('ETH claimed');
             } else if (d.status == 'err') {
-              alert(d.response);
+              if (d.response == "user_already_claimed_eth"){
+                alert("User can only claim faucet once per wallet!")
+              } else {
+                alert(d.response);
+              }
             }
           })
           .catch((err) => {
