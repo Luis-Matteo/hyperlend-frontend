@@ -1,9 +1,4 @@
-import {
-  Navigate,
-  Route,
-  Routes,
-  useSearchParams,
-} from 'react-router-dom';
+import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Markets from '../pages/Markets';
 import TokenDetails from '../pages/TokenDetail';
@@ -37,7 +32,9 @@ function MainContent() {
   return (
     <>
       <ConfirmModal />
-      <main className={`bg-primary-light w-full relative lg:h-screen inset-0 z-0 ${!is404 ? "lg:w-[calc(100vw-256px)]" : ""}`}>
+      <main
+        className={`bg-primary-light w-full relative lg:h-screen inset-0 z-0 ${!is404 ? 'lg:w-[calc(100vw-256px)]' : ''}`}
+      >
         <div className='inset-0 px-4 py-8 md:px-6 xl:p-14 z-20 lg:max-h-screen h-full overflow-auto '>
           <Routes>
             <Route path='/' element={<Navigate to='/dashboard' />} />
@@ -74,16 +71,13 @@ function MainContent() {
 }
 
 export default function Router() {
-
   const location = useLocation();
   const is404 = location.pathname === '/404';
 
   return (
-
     <div className='flex'>
       {!is404 && <Sidebar />}
       <MainContent />
     </div>
-
   );
 }

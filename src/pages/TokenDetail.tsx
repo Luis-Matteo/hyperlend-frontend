@@ -392,7 +392,6 @@ function TokenDetail() {
             <BorrowInfoChart type='supply' token={token} />
           </CardItem>
 
-
           <CardItem className='pr-4 lg:pr-8 pt-4 lg:pt-8 pb-4 lg:pb-8 mb-6'>
             <div className='pl-4 lg:pl-8 flex justify-between items-center'>
               <p className='text-[#797979] text-xl font-lufga'>Borrow Info</p>

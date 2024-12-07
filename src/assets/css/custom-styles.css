@@ -1,8 +1,7 @@
-.two-line-text{
-    color: grey !important;
-  }
+.two-line-text {
+  color: grey !important;
+}
 
-
-  w3m-button {
-    --wui-color-inverse-100: #000000; /* Black */
-  }
+w3m-button {
+  --wui-color-inverse-100: #000000; /* Black */
+}

@@ -95,7 +95,13 @@ const TokenActions: React.FC<TokenActionsProps> = ({
 
   const handleProgessChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setProgress(Number(event.target.value));
-    setAmount((availableAmount * Number(event.target.value)) / 100);
+    setAmount(
+      Number(
+        parseFloat(
+          ((availableAmount * Number(event.target.value)) / 100).toString(),
+        ).toFixed(4),
+      ),
+    );
   };
 
   const handleDirectInputChange = (
@@ -103,8 +109,8 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   ) => {
     setAmount(
       Number(event.target.value) >= availableAmount
-        ? availableAmount
-        : Number(event.target.value),
+        ? Number(parseFloat(availableAmount.toString()).toFixed(4))
+        : Number(parseFloat(event.target.value.toString()).toFixed(4)),
     );
   };
 
