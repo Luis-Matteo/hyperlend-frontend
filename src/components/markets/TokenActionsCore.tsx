@@ -33,7 +33,7 @@ import { useProtocolPriceData } from '../../utils/protocol/core/prices';
 
 import AnimateModal, {
   AnimateModalProps,
-} from '../../components/markets/AnimateModal';
+} from './AnimateModal';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };

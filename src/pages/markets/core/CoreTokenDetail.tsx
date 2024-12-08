@@ -42,7 +42,7 @@ import { useUserTokenBalance } from '../../../utils/user/wallet';
 
 import { calculateAvailableBalance, getTokenPrecision } from '../../../utils/user/core/functions/utils';
 
-import TokenActions from '../../../components/markets/TokenActions';
+import TokenActions from '../../../components/markets/TokenActionsCore';
 import { mockIsolatedMarkets } from '../../../utils/mocks/markets';
 import Button from '../../../components/common/Button';
 
