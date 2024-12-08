@@ -20,7 +20,7 @@ function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
 
   return (
     <div className={`${guided > 0 ? 'lg:blur-[8px]' : ''}`}>
-      <div className="flex justify-between items-center lg:hidden mb-6">
+      <div className='flex justify-between items-center lg:hidden mb-6'>
         <button
           className='font-lufga text-white'
           onClick={() => dispatch(toggleSidebar())}
@@ -39,14 +39,13 @@ function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
             </button>
           )}
           {pageIcon && pageIcon}
-          {pageTitle &&
-            (
-              <h2
-                className={` ${pageTitle == 'MBTC' ? 'text-orange-400' : 'text-blue-300'} font-lufga text-3xl text-white`}
-              >
-                {pageTitle}
-              </h2>
-            )}
+          {pageTitle && (
+            <h2
+              className={` ${pageTitle == 'MBTC' ? 'text-orange-400' : 'text-blue-300'} font-lufga text-3xl text-white`}
+            >
+              {pageTitle}
+            </h2>
+          )}
         </div>
         <div className='hidden lg:block'>
           {/* <div className="p-1 bg-primary hidden md:flex rounded-full gap-2">

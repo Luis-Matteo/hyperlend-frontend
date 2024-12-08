@@ -32,7 +32,7 @@ function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
 
   const { guided, closeGuide, nextStep } = useConfirm();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { data: hash, writeContractAsync } = useWriteContract();
   const { switchChain } = useSwitchChain();
   const { address, chainId, isConnected } = useAccount();
@@ -267,8 +267,9 @@ function Dashboard() {
                       <button
                         className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-[#1F2A29]'
                         key={index}
-                        onClick={() => navigate(`/markets/${item.underlyingAsset}`)}
-
+                        onClick={() =>
+                          navigate(`/markets/${item.underlyingAsset}`)
+                        }
                       >
                         <div className='text-white font-lufga flex gap-2 justify-center'>
                           <img
@@ -346,7 +347,9 @@ function Dashboard() {
                       <button
                         className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-[#1F2A29]'
                         key={index}
-                        onClick={() => navigate(`/markets/${item.underlyingAsset}`)}
+                        onClick={() =>
+                          navigate(`/markets/${item.underlyingAsset}`)
+                        }
                       >
                         <div className='text-white font-lufga flex gap-2 justify-center'>
                           <img

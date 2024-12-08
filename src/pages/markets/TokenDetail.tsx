@@ -5,7 +5,11 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { useSwitchChain, useAccount, useBalance } from 'wagmi';
 import ReactGA from 'react-ga4';
 import { tokenDetailButton } from '../../utils/constants/constants';
-import { formatNumber, decodeConfig, formatAddress } from '../../utils/functions';
+import {
+  formatNumber,
+  decodeConfig,
+  formatAddress,
+} from '../../utils/functions';
 import BorrowInfoChart from '../../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../../components/charts/InterestRateModelChart';
 import { TokenActionsProps } from '../../utils/types';
@@ -36,7 +40,10 @@ import { useProtocolReservesData } from '../../utils/protocol/reserves';
 
 import { useUserTokenBalance } from '../../utils/user/wallet';
 
-import { calculateAvailableBalance, getTokenPrecision } from '../../utils/user/functions/utils';
+import {
+  calculateAvailableBalance,
+  getTokenPrecision,
+} from '../../utils/user/functions/utils';
 
 import TokenActions from '../../components/markets/TokenActions';
 import { mockIsolatedMarkets } from '../../utils/mocks/markets';
@@ -159,7 +166,7 @@ function TokenDetail() {
     } else {
       console.log('no collateral');
     }
-  }
+  };
 
   const handleButtonClick = (button: number) => {
     setActiveButton(button);
@@ -250,21 +257,23 @@ function TokenDetail() {
       name: 'Reserves',
       value: formatNumber(totalLiquidityToken, 4),
     },
-    ...(isolated ? [
-      {
-        name: 'Asset Price',
-        value: `Asset Price`,
-      },
-      {
-        name: 'Collateral Price',
-        value: `Collateral Price`,
-      },
-    ] : [
-      {
-        name: 'Price',
-        value: `$${formatNumber(tokenPrice, 2)}`,
-      },
-    ]),
+    ...(isolated
+      ? [
+          {
+            name: 'Asset Price',
+            value: `Asset Price`,
+          },
+          {
+            name: 'Collateral Price',
+            value: `Collateral Price`,
+          },
+        ]
+      : [
+          {
+            name: 'Price',
+            value: `$${formatNumber(tokenPrice, 2)}`,
+          },
+        ]),
     {
       name: 'Liquidity',
       value: `$${formatNumber(totalLiquidityToken * tokenPrice, 2)}`,
@@ -357,18 +366,35 @@ function TokenDetail() {
   return (
     <div className='w-full'>
       <Navbar
-        pageTitle={isolated ?
-          `${mockIsolatedMarkets[0].assetSymbol} / ${mockIsolatedMarkets[0].collateralSymbol}` :
-          tokenNameMap[token]
+        pageTitle={
+          isolated
+            ? `${mockIsolatedMarkets[0].assetSymbol} / ${mockIsolatedMarkets[0].collateralSymbol}`
+            : tokenNameMap[token]
         }
         pageIcon={
-          isolated ?
+          isolated ? (
             <div className='flex -space-x-3'>
-              <img src={mockIsolatedMarkets[0].assetIcon} height='30px' width='30px' alt='' />
-              <img src={mockIsolatedMarkets[0].collateralIcon} height='30px' width='30px' alt='' />
+              <img
+                src={mockIsolatedMarkets[0].assetIcon}
+                height='30px'
+                width='30px'
+                alt=''
+              />
+              <img
+                src={mockIsolatedMarkets[0].collateralIcon}
+                height='30px'
+                width='30px'
+                alt=''
+              />
             </div>
-            :
-            <img src={iconsMap[tokenNameMap[token]]} height='30px' width='30px' alt='' />
+          ) : (
+            <img
+              src={iconsMap[tokenNameMap[token]]}
+              height='30px'
+              width='30px'
+              alt=''
+            />
+          )
         }
         back={true}
       />
@@ -377,7 +403,9 @@ function TokenDetail() {
           {(supplies || []).map((supply, index) => (
             <div className='font-lufga' key={index}>
               <p className={`text-xs pb-4 text-[#E1E1E1]`}>{supply.name}</p>
-              <p className='text-2xl text-white whitespace-nowrap'>{supply.value}</p>
+              <p className='text-2xl text-white whitespace-nowrap'>
+                {supply.value}
+              </p>
             </div>
           ))}
         </div>
@@ -547,97 +575,93 @@ function TokenDetail() {
               </div>
               <TokenActions {...actionData} />
             </CardItem>
-            {
-              isolated && (
-                <CardItem className='p-4 lg:p-8 mt-4'>
-                  <div className='w-full grid grid-cols-2 text-center'>
-                    <button
-                      onClick={() => setCollateral('add')}
+            {isolated && (
+              <CardItem className='p-4 lg:p-8 mt-4'>
+                <div className='w-full grid grid-cols-2 text-center'>
+                  <button onClick={() => setCollateral('add')}>
+                    <p
+                      className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateral === 'add' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
                     >
-                      <p
-                        className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateral === 'add' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
-                      >
-                        Add collateral
-                      </p>
-                      <hr
-                        className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateral === 'add' ? 'text-white' : 'text-[#546764]'}`}
-                      />
-                    </button>
-                    <button
-                      onClick={() => setCollateral('remove')}
+                      Add collateral
+                    </p>
+                    <hr
+                      className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateral === 'add' ? 'text-white' : 'text-[#546764]'}`}
+                    />
+                  </button>
+                  <button onClick={() => setCollateral('remove')}>
+                    <p
+                      className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateral === 'remove' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
                     >
-                      <p
-                        className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateral === 'remove' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
-                      >
-                        Remove collateral
-                      </p>
-                      <hr
-                        className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateral === 'remove' ? 'text-white' : 'text-[#546764]'}`}
-                      />
-                    </button>
-                  </div>
-                  <div className='flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4'>
-                    <div className='flex gap-3 items-center p-3'>
-                      <img
-                        src={iconsMap[tokenNameMap[token]]}
-                        height={'30px'}
-                        width={'30px'}
-                        alt='coinIcon'
-                      />
-                      <p className='text-base text-[#CAEAE566] w-[120px]'>
-                        <input
-                          type='number'
-                          className='form-control-plaintext text-xl text-secondary border-0 p-0 text-left min-w-[120px]'
-                          value={collateralAmount}
-                          onChange={(e) => {
-                            setCollateralAmount(
-                              Number(e.target.value) >= availableAmount
-                                ? availableAmount
-                                : Number(e.target.value),
-                            );
-                          }}
-                          style={{
-                            background: 'transparent',
-                            outline: 'none',
-                            boxShadow: 'none',
-                            width: 'auto',
-                            minWidth: '50px',
-                          }}
-                        />
-                      </p>
-                    </div>
-                    <div className='bg-[#081916] px-4 py-3 rounded'>
-                      <button
-                        className='text-base text-[#CAEAE566]'
-                        onClick={() => {
-                          setCollateralAmount(availableAmount);
+                      Remove collateral
+                    </p>
+                    <hr
+                      className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateral === 'remove' ? 'text-white' : 'text-[#546764]'}`}
+                    />
+                  </button>
+                </div>
+                <div className='flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4'>
+                  <div className='flex gap-3 items-center p-3'>
+                    <img
+                      src={iconsMap[tokenNameMap[token]]}
+                      height={'30px'}
+                      width={'30px'}
+                      alt='coinIcon'
+                    />
+                    <p className='text-base text-[#CAEAE566] w-[120px]'>
+                      <input
+                        type='number'
+                        className='form-control-plaintext text-xl text-secondary border-0 p-0 text-left min-w-[120px]'
+                        value={collateralAmount}
+                        onChange={(e) => {
+                          setCollateralAmount(
+                            Number(e.target.value) >= availableAmount
+                              ? availableAmount
+                              : Number(e.target.value),
+                          );
                         }}
-                      >
-                        MAX
-                      </button>
-                    </div>
+                        style={{
+                          background: 'transparent',
+                          outline: 'none',
+                          boxShadow: 'none',
+                          width: 'auto',
+                          minWidth: '50px',
+                        }}
+                      />
+                    </p>
                   </div>
-                  <div className='mt-4'>
-                    <div className='flex justify-between items-center'>
-                      <p className='text-base font-lufga text-[#4B5E5B]'>
-                        Suppliable amount
-                      </p>
-                      <p className='text-base font-lufga text-[#CAEAE5]'>
-                        {formatNumber(
-                          Number(availableAmount),
-                          getTokenPrecision(token, priceDataMap),
-                          true,
-                        )} {tokenNameMap[token]}
-                      </p>
-                    </div>
+                  <div className='bg-[#081916] px-4 py-3 rounded'>
+                    <button
+                      className='text-base text-[#CAEAE566]'
+                      onClick={() => {
+                        setCollateralAmount(availableAmount);
+                      }}
+                    >
+                      MAX
+                    </button>
                   </div>
-                  <Button
-                    title={`${collateral} collateral`}
-                    variant='secondary'
-                    onClick={handleCollateral}
-                  />
-                </CardItem>
-              )}
+                </div>
+                <div className='mt-4'>
+                  <div className='flex justify-between items-center'>
+                    <p className='text-base font-lufga text-[#4B5E5B]'>
+                      Suppliable amount
+                    </p>
+                    <p className='text-base font-lufga text-[#CAEAE5]'>
+                      {formatNumber(
+                        Number(availableAmount),
+                        getTokenPrecision(token, priceDataMap),
+                        true,
+                      )}{' '}
+                      {tokenNameMap[token]}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  title={`${collateral} collateral`}
+                  variant='secondary'
+                  onClick={handleCollateral}
+                />
+              </CardItem>
+            )}
             <button
               className='flex gap-4 items-center px-4 py-2 my-4 mx-auto'
               onClick={() => setShareImageModalStatus(true)}
@@ -648,17 +672,15 @@ function TokenDetail() {
           </div>
         </div>
       </div>
-      {
-        shareImageModalStatus && (
-          <ShareImageModal
-            token={token}
-            apy={formatNumber(actionData?.totalApy, 3)}
-            dailyEarnings={formatNumber(actionData?.dailyEarning, 3)}
-            onClose={toggleModal}
-          />
-        )
-      }
-    </div >
+      {shareImageModalStatus && (
+        <ShareImageModal
+          token={token}
+          apy={formatNumber(actionData?.totalApy, 3)}
+          dailyEarnings={formatNumber(actionData?.dailyEarning, 3)}
+          onClose={toggleModal}
+        />
+      )}
+    </div>
   );
 }
 

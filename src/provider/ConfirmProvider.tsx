@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface ConfirmContextType {
@@ -21,7 +27,7 @@ interface ConfirmProviderProps {
 export const ConfirmProvider: React.FC<ConfirmProviderProps> = ({
   children,
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // Initialize `confirmed` and `preGuidedConfirm` from localStorage
   const [confirmed, setConfirmed] = useState<boolean>(() => {
     return localStorage.getItem('confirmed') === 'true';

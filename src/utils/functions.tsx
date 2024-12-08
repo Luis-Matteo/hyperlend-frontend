@@ -186,15 +186,15 @@ export type WeeklyData = {
 
 function getWeeklyData(dailyData: DailyData[]): WeeklyData[] {
   const weeklyData: WeeklyData[] = [];
-  
+
   let weekStartDate: string | null = null;
   let weeklyValue = 0;
   let currentWeekDay = 0;
-  
+
   for (let i = 0; i < dailyData.length; i++) {
     const dayData = dailyData[i];
     const currentDate = new Date(dayData.date);
-    
+
     if (currentWeekDay === 0) {
       if (weekStartDate !== null) {
         weeklyData.push({
@@ -202,13 +202,13 @@ function getWeeklyData(dailyData: DailyData[]): WeeklyData[] {
           value: weeklyValue,
         });
       }
-      
+
       weekStartDate = currentDate.toISOString().split('T')[0];
       weeklyValue = 0; // Reset the weekly sum
     }
 
     weeklyValue += dayData.value;
-    
+
     currentWeekDay = (currentWeekDay + 1) % 7;
   }
 
@@ -229,5 +229,5 @@ export {
   calculateApy,
   copyToClipboard,
   normalizeDecimalsAmount,
-  getWeeklyData
+  getWeeklyData,
 };
