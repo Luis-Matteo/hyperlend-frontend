@@ -9,11 +9,12 @@ interface DataPoint {
 
 interface ChartProps {
     data: DataPoint[];
+    tip?: string;
     xgrid?: boolean;
     ygrid?: boolean;
 }
 
-const LineChart = React.memo(({ data, xgrid = true, ygrid }: ChartProps) => {
+const LineChart = React.memo(({ data, tip, xgrid = true, ygrid }: ChartProps) => {
     const seriesData = data.map((item) => item.value);
     const categories = data.map((item) => item.date);
 
@@ -153,7 +154,7 @@ const LineChart = React.memo(({ data, xgrid = true, ygrid }: ChartProps) => {
 
     const series = [
         {
-            name: 'Total TVL',
+            name: `Total ${tip}`,
             data: seriesData,
         },
     ];

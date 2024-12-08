@@ -4,12 +4,16 @@ import ColumnChart from '../../components/analytics/ColumnChart';
 import LineChart from '../../components/analytics/LineChart';
 import PolarAreaChart from '../../components/analytics/PolarArea';
 import Navbar from '../../layouts/Navbar';
-import { apy } from '../../utils/constants/analytics';
-import { formatAddress, formatNumber } from '../../utils/functions';
+import { formatAddress, formatNumber, getWeeklyData, WeeklyData } from '../../utils/functions';
 import { useAccount } from 'wagmi';
 import { colorList } from '../../utils/constants/colorList';
 import { LargestUsers } from '../../utils/types';
 import Datepicker, { DateValueType } from 'react-tailwindcss-datepicker';
+
+interface APYData {
+    name: string;
+    value: number;
+}
 
 function Analytics() {
     const { chainId } = useAccount();
@@ -18,19 +22,34 @@ function Analytics() {
     const [depositors, setDepositors] = useState([]);
     const [borrowers, setBorrowers] = useState([]);
     const [dailyTVL, setDailyTVL] = useState([]);
+    const [weeklyTVL, setWeeklyTVL] = useState<WeeklyData[]>([]);
     const [dailyUsers, setDailyUsers] = useState([]);
+    const [weeklyUsers, setWeeklyUsers] = useState<WeeklyData[]>([]);
     const [dailyDeposits, setDailyDeposits] = useState([]);
+    const [weeklyDeposits, setWeeklyDeposits] = useState<WeeklyData[]>([]);
     const [dailyBorrows, setDailyBorrows] = useState([]);
+    const [weeklyBorrows, setWeeklyBorrows] = useState<WeeklyData[]>([]);
     const [dailyLiquidation, setDailyLiquidations] = useState([]);
+    const [weeklyLiquidation, setWeeklyLiquidations] = useState<WeeklyData[]>([]);
+    const [apyList, setAPYList] = useState<APYData[]>([]);
+    const [rateList, setRateList] = useState<APYData[]>([]);
     const backendUrl = import.meta.env.VITE_BACKEND_API;
     const [period, setPeriod] = useState<string>('daily')
-    const [value, setValue] = useState<DateValueType>({
-        startDate: null,
-        endDate: null
+
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7); 
+
+    const [dateRange, setDateRange] = useState<DateValueType>({
+        startDate: sevenDaysAgo,
+        endDate: new Date()
     });
 
     useEffect(() => {
         const chain = chainId === 998 ? "hyperEvmTestnet" : "arbitrum"
+        const startDate = dateRange?.startDate?.toISOString().split('T')[0];
+        const endDate = dateRange?.endDate?.toISOString().split('T')[0];
+        const today = new Date();
+
         // Get TVL Composition
         fetch(`${backendUrl}/analytics/tvl-composition?chain=${chain}`)
         .then((response) => response.json())
@@ -73,56 +92,104 @@ function Analytics() {
         .catch((error) => console.error(error));
 
         // Get Daily TVL
-        fetch(`${backendUrl}/analytics/daily-tvl?chain=${chain}&startDate=2024-11-10&endDate=2024-11-28`)
+        fetch(`${backendUrl}/analytics/daily-tvl?chain=${chain}&startDate=${startDate}&endDate=${endDate}`)
         .then((response) => response.json())
         .then((result) => {
             if(result.success) {
                 setDailyTVL(result.data)
+                const weeklyData = getWeeklyData(result.data);
+                setWeeklyTVL(weeklyData)
             }
         })
         .catch((error) => console.error(error));
 
         // Get Daily Users
-        fetch(`${backendUrl}/analytics/daily-users?chain=${chain}&startDate=2024-11-10&endDate=2024-12-06`)
+        fetch(`${backendUrl}/analytics/daily-users?chain=${chain}&startDate=${startDate}&endDate=${endDate}`)
         .then((response) => response.json())
         .then((result) => {
             if(result.success) {
                 setDailyUsers(result.data)
+                const weeklyData = getWeeklyData(result.data);
+                setWeeklyUsers(weeklyData)
             }
         })
         .catch((error) => console.error(error));
 
         // Get Daily Volume - Supply
-        fetch(`${backendUrl}/analytics/daily-volume?chain=${chain}&startDate=2024-12-01&endDate=2024-12-06&type=Supply`)
+        fetch(`${backendUrl}/analytics/daily-volume?chain=${chain}&startDate=${startDate}&endDate=${endDate}&type=Supply`)
         .then((response) => response.json())
         .then((result) => {
             if(result.success) {
                 setDailyDeposits(result.data)
+                const weeklyData = getWeeklyData(result.data);
+                setWeeklyDeposits(weeklyData);
             }
         })
         .catch((error) => console.error(error));
 
         // Get Daily Volume - Borrow
-        fetch(`${backendUrl}/analytics/daily-volume?chain=${chain}&startDate=2024-12-01&endDate=2024-12-06&type=Borrow`)
+        fetch(`${backendUrl}/analytics/daily-volume?chain=${chain}&startDate=${startDate}&endDate=${endDate}&type=Borrow`)
         .then((response) => response.json())
         .then((result) => {
             if(result.success) {
                 setDailyBorrows(result.data)
+                const weeklyData = getWeeklyData(result.data);
+                setWeeklyBorrows(weeklyData)
             }
         })
         .catch((error) => console.error(error));
 
         // Get Daily Volume - Liquidations
-        fetch(`${backendUrl}/analytics/daily-volume?chain=${chain}&startDate=2024-12-01&endDate=2024-12-06&type=LiquidationCall`)
+        fetch(`${backendUrl}/analytics/daily-volume?chain=${chain}&startDate=${startDate}&endDate=${endDate}&type=LiquidationCall`)
         .then((response) => response.json())
         .then((result) => {
-            console.log(result);
             if(result.success) {
                 setDailyLiquidations(result.data)
+                const weeklyData = getWeeklyData(result.data);
+                setWeeklyLiquidations(weeklyData)
             }
         })
         .catch((error) => console.error(error));
-    }, [chainId])
+
+        // Get APY
+        fetch(`${backendUrl}/analytics/apy?chain=${chain}&date=${today.toISOString().split('T')[0]}`)
+        .then((response) => response.json())
+        .then((result) => {
+            if(result.success) {
+                let supplyList: APYData[] = [];
+                let borrowList: APYData[] = [];
+                result.data.forEach((item: any) => {
+                    supplyList.push({
+                        name: item.assetSymbol,
+                        value: item.supplyAPY.toFixed(2)
+                    })
+                    borrowList.push({
+                        name: item.assetSymbol,
+                        value: item.borrowAPY.toFixed(2)
+                    })
+                });
+                setAPYList([...supplyList, ...borrowList])
+            }
+        })
+        .catch((error) => console.error(error));
+
+        // Get APY
+        fetch(`${backendUrl}/analytics/rate?chain=${chain}&date=${today.toISOString().split('T')[0]}`)
+        .then((response) => response.json())
+        .then((result) => {
+            if(result.success) {
+                let list: APYData[] = [];
+                result.data.forEach((item: any) => {
+                    list.push({
+                        name: item.assetSymbol,
+                        value: Number(item.rate)
+                    })
+                });
+                setRateList(list)
+            }
+        })
+        .catch((error) => console.error(error));
+    }, [chainId, dateRange])
 
     return (
         <>
@@ -141,8 +208,8 @@ function Analytics() {
                     </button>
                     <div className='relative'>
                         <Datepicker
-                            value={value}
-                            onChange={(newValue: DateValueType) => setValue(newValue)}
+                            value={dateRange}
+                            onChange={(newValue: DateValueType) => setDateRange(newValue)}
                             useRange={false}
                             inputClassName={"relative transition-all duration-300 py-3 pl-4 pr-14 w-full border-2 border-secondary/60 rounded-lg bg-primary-light text-secondary/60 font-lufga placeholder-gray-400 disabled:cursor-not-allowed "}
                             toggleClassName={"absolute right-0 h-full px-3 text-secondary/60 focus:outline-none disabled:opacity-40 disabled:cursor-not-allowed"}
@@ -163,41 +230,46 @@ function Analytics() {
                     <BorderCard
                         title='TVL'>
                         <LineChart
-                            data={dailyTVL} />
+                            data={period === "daily" ? dailyTVL : weeklyTVL}
+                            tip="TVL" />
                     </BorderCard>
                     <BorderCard
                         title='Total Users'>
                         <LineChart
-                            data={dailyUsers} />
+                            data={period === "daily" ? dailyUsers : weeklyUsers} 
+                            tip="Users" />
                     </BorderCard>
                     <BorderCard
                         title='Total Deposits'>
                         <LineChart
-                            data={dailyDeposits} />
+                            data={period === "daily" ? dailyDeposits : weeklyDeposits} 
+                            tip="Deposits" />
                     </BorderCard>
                     <BorderCard
                         title='Total Borrowed'>
                         <LineChart
-                            data={dailyBorrows} />
+                            data={period === "daily" ? dailyBorrows : weeklyBorrows} 
+                            tip="Borrows"/>
                     </BorderCard>
                     <BorderCard
                         title='APY'>
                         <ColumnChart
-                            data={apy} />
+                            data={apyList} />
                     </BorderCard>
                     <BorderCard
                         title='Utilization Rate'>
                         <ColumnChart
-                            data={apy} />
+                            data={rateList} />
                     </BorderCard>
                 </div>
                 <div className='mt-4'>
                     <BorderCard
                         title='Liquidations'>
                         <LineChart
-                            data={dailyLiquidation}
+                            data={period === "daily" ? dailyLiquidation : weeklyLiquidation}
                             xgrid={false}
-                            ygrid={true} />
+                            ygrid={true} 
+                            tip="Liquidiations"/>
                     </BorderCard>
                 </div>
                 <div className='grid grid-cols-1 xl:grid-cols-2 h-full gap-4 mt-4'>
