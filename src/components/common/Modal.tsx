@@ -252,7 +252,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
           | 'repay'
           | 'withdraw'
           | 'approve',
-        'https://explorer.hyperlend.finance/tx/' +
+        'https://testnet.purrsec.com/tx/' +
           txReceiptResult.data.transactionHash,
         '',
       );

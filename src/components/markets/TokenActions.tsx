@@ -263,7 +263,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
           | 'repay'
           | 'withdraw'
           | 'approve',
-        'https://explorer.hyperlend.finance/tx/' +
+        'https://testnet.purrsec.com/tx/' +
           txReceiptResult.data.transactionHash,
         '',
       );
