@@ -27,6 +27,7 @@ import { useUserWalletValueUsd } from '../../utils/user/wallet';
 import { useUserPortfolioHistory } from '../../utils/user/history';
 import { useNavigate } from 'react-router-dom';
 import { useConfirm } from '../../provider/ConfirmProvider';
+import { motion } from 'framer-motion';
 
 function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
@@ -124,10 +125,24 @@ function Dashboard() {
 
   return (
     <>
-      <div className='flex flex-col'>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className='flex flex-col'
+      >
         <Navbar pageTitle='Dashboard' />
-        <div className='pt-8 flex flex-col gap-4 relative'>
-          <div className='flex flex-col md:flex-row gap-4 justify-between'>
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className='pt-8 flex flex-col gap-4 relative'
+        >
+          <motion.div
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className='flex flex-col md:flex-row gap-4 justify-between'
+          >
             <CardItem
               ref={divRefs[0]}
               className={`px-4 lg:px-8 pt-4 md:max-w-[480px] w-full overflow-hidden md:mb-0 mx-auto ${guided > 0 && guided !== 1 ? 'lg:blur-[8px]' : ''}`}
@@ -154,6 +169,7 @@ function Dashboard() {
                 </div>
               </div>
             </CardItem>
+
             <CardItem
               ref={divRefs[1]}
               className={`py-4 lg:py-6 px-4 lg:px-7 md:w-full ${guided > 0 && guided !== 2 ? 'lg:blur-[8px]' : ''}`}
@@ -179,66 +195,77 @@ function Dashboard() {
                 </div>
               </div>
             </CardItem>
-          </div>
-          <CardItem
-            ref={divRefs[2]}
-            className={`py-4 lg:py-6 px-4 lg:px-7 order-first lg:order-none ${guided > 0 && guided !== 3 ? 'lg:blur-[8px]' : ''}`}
+          </motion.div>
+
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.5 }}
           >
-            <div className='flex flex-col lg:flex-row gap-4 xl:gap-12 2xl:gap-24 justify-between items-center'>
-              <div className='flex gap-4 justify-between items-center w-full lg:flex-1'>
-                <div className='flex flex-col gap-4'>
-                  <SectionTitle title='Current Net Worth' />
-                  <p className='text-white text-[28px] font-medium font-lufga'>
-                    ${formatNumber(totalBalanceUsd, 2)}
-                  </p>
-                  <p
-                    className={
-                      totalBalanceChange >= 0
-                        ? 'text-success text-sm font-lufga'
-                        : 'text-red-500 text-sm font-lufga'
-                    }
-                  >
-                    {`${totalBalanceChange >= 0 ? '+' : '-'}`}$
-                    {formatNumber(Math.abs(totalBalanceChange), 2)} (
-                    {`${totalBalanceChangePercentage >= 0 ? '+' : '-'}`}
-                    {formatNumber(Math.abs(totalBalanceChangePercentage), 2)}
-                    %)
-                  </p>
+            <CardItem
+              ref={divRefs[2]}
+              className={`py-4 lg:py-6 px-4 lg:px-7 order-first lg:order-none ${guided > 0 && guided !== 3 ? 'lg:blur-[8px]' : ''}`}
+            >
+              <div className='flex flex-col lg:flex-row gap-4 xl:gap-12 2xl:gap-24 justify-between items-center'>
+                <div className='flex gap-4 justify-between items-center w-full lg:flex-1'>
+                  <div className='flex flex-col gap-4'>
+                    <SectionTitle title='Current Net Worth' />
+                    <p className='text-white text-[28px] font-medium font-lufga'>
+                      ${formatNumber(totalBalanceUsd, 2)}
+                    </p>
+                    <p
+                      className={
+                        totalBalanceChange >= 0
+                          ? 'text-success text-sm font-lufga'
+                          : 'text-red-500 text-sm font-lufga'
+                      }
+                    >
+                      {`${totalBalanceChange >= 0 ? '+' : '-'}`}$
+                      {formatNumber(Math.abs(totalBalanceChange), 2)} (
+                      {`${totalBalanceChangePercentage >= 0 ? '+' : '-'}`}
+                      {formatNumber(Math.abs(totalBalanceChangePercentage), 2)}
+                      %)
+                    </p>
+                  </div>
+                  <div className='flex flex-col gap-4'>
+                    <SectionTitle title='Total APY' />
+                    <p className='text-white text-[28px] font-medium font-lufga'>
+                      {formatNumber(netApy, 1)}%
+                    </p>
+                    <p className='text-success text-sm font-lufga'>&nbsp;</p>
+                  </div>
+                  <div className='flex flex-col gap-4 blur-xs'>
+                    <SectionTitle title='Total Points' />
+                    <p className='text-white text-[28px] font-medium font-lufga'>
+                      {formatNumber(totalPoints, 2)}
+                    </p>
+                    <p
+                      className={
+                        pointsIncrease >= 0
+                          ? 'text-success text-sm font-lufga'
+                          : 'text-red-500 text-sm font-lufga'
+                      }
+                    >
+                      {`${pointsIncrease >= 0 ? '+' : '-'}`}
+                      {formatNumber(Math.abs(pointsIncrease), 2)} (
+                      {`${pointsPercentIncrease >= 0 ? '+' : '-'}`}
+                      {formatNumber(Math.abs(pointsPercentIncrease), 2)}
+                      %)
+                    </p>
+                  </div>
                 </div>
-                <div className='flex flex-col gap-4'>
-                  <SectionTitle title='Total APY' />
-                  <p className='text-white text-[28px] font-medium font-lufga'>
-                    {formatNumber(netApy, 1)}%
-                  </p>
-                  <p className='text-success text-sm font-lufga'>&nbsp;</p>
-                </div>
-                <div className='flex flex-col gap-4 blur-xs'>
-                  <SectionTitle title='Total Points' />
-                  <p className='text-white text-[28px] font-medium font-lufga'>
-                    {formatNumber(totalPoints, 2)}
-                  </p>
-                  <p
-                    className={
-                      pointsIncrease >= 0
-                        ? 'text-success text-sm font-lufga'
-                        : 'text-red-500 text-sm font-lufga'
-                    }
-                  >
-                    {`${pointsIncrease >= 0 ? '+' : '-'}`}
-                    {formatNumber(Math.abs(pointsIncrease), 2)} (
-                    {`${pointsPercentIncrease >= 0 ? '+' : '-'}`}
-                    {formatNumber(Math.abs(pointsPercentIncrease), 2)}
-                    %)
-                  </p>
+                <div className='w-full lg:w-[400px] xl:w-[500px] 2xl:w-1/2 h-[150px]'>
+                  <MyChart data={historicalNetWorth} />
                 </div>
               </div>
-              <div className='w-full lg:w-[400px] xl:w-[500px] 2xl:w-1/2 h-[150px]'>
-                <MyChart data={historicalNetWorth} />
-              </div>
-            </div>
-          </CardItem>
-          <div
+            </CardItem>
+          </motion.div>
+
+          <motion.div
             ref={divRefs[3]}
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6 }}
             className={`lg:flex gap-5 justify-between ${guided > 0 && guided !== 4 ? 'lg:blur-[8px]' : ''}`}
           >
             <CardItem className='py-4 lg:py-6 px-2 md:px-4 xl:px-7 flex-1 mb-4 lg:mb-0'>
@@ -388,7 +415,7 @@ function Dashboard() {
                 </div>
               </div>
             </CardItem>
-          </div>
+          </motion.div>
           {guided === 1 && (
             <div
               className='hidden lg:block absolute -translate-x-1/2'
@@ -547,8 +574,8 @@ function Dashboard() {
               </div>
             </div>
           )}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
       {modalStatus && (
         <Modal token={modalToken} modalType={modalType} onClose={closeModal} />
       )}
