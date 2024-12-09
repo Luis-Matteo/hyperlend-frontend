@@ -6,6 +6,7 @@ import { useConfirm } from '../provider/ConfirmProvider';
 import { useNavigate } from 'react-router-dom';
 import backIcon from '../assets/icons/left-arrow-white.svg';
 import ConnectButton from '../components/header/ConnectButton';
+import { motion } from 'framer-motion';
 
 type NavbarProps = {
   pageTitle?: string | ReactNode;
@@ -19,32 +20,63 @@ function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
   const { guided } = useConfirm();
 
   return (
-    <div className={`${guided > 0 ? 'lg:blur-[8px]' : ''}`}>
-      <div className='flex justify-between items-center lg:hidden mb-6'>
-        <button
+
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className={`${guided > 0 ? 'lg:blur-[8px]' : ''}`}
+    >
+      <div className="flex justify-between items-center lg:hidden mb-6">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
           className='font-lufga text-white'
           onClick={() => dispatch(toggleSidebar())}
         >
           <img src={hamburgerIcon} alt='' />
-        </button>
+        </motion.button>
         <div className=''>
           <ConnectButton />
         </div>
       </div>
-      <div className='w-full flex justify-between items-center'>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className='w-full flex justify-between items-center'
+      >
         <div className='flex gap-2 items-center'>
           {back && (
-            <button onClick={() => navigate(-1)}>
+            <motion.button
+              onClick={() => navigate(-1)}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
               <img src={backIcon} className='w-6 h-6' alt='back' />
-            </button>
+            </motion.button>
           )}
-          {pageIcon && pageIcon}
+          {pageIcon && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              {pageIcon}
+            </motion.div>
+          )}
           {pageTitle && (
-            <h2
-              className={` ${pageTitle == 'MBTC' ? 'text-orange-400' : 'text-blue-300'} font-lufga text-3xl text-white`}
+            <motion.h2
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+              className={`${pageTitle == 'MBTC' ? 'text-orange-400' : 'text-blue-300'} font-lufga text-3xl text-white`}
             >
               {pageTitle}
-            </h2>
+            </motion.h2>
           )}
         </div>
         <div className='hidden lg:block'>
@@ -60,8 +92,8 @@ function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
           </div> */}
           <ConnectButton />
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

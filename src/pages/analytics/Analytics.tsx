@@ -14,6 +14,7 @@ import { useAccount } from 'wagmi';
 import { colorList } from '../../utils/constants/colorList';
 import { LargestUsers } from '../../utils/types';
 import Datepicker, { DateValueType } from 'react-tailwindcss-datepicker';
+import { motion } from 'framer-motion';
 
 interface APYData {
   name: string;

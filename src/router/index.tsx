@@ -19,6 +19,7 @@ import { useConfirm } from '../provider/ConfirmProvider';
 import NotFound from '../pages/not-found/NotFound';
 import Analytics from '../pages/analytics/Analytics';
 import MarketOverview from '../pages/markets/MarketOverview';
+import Hypervault from '../pages/hypervault/Hypervault';
 
 function MainContent() {
   const { guided } = useConfirm();
@@ -48,6 +49,7 @@ function MainContent() {
               <Route path='' element={<MarketOverview />} />
               <Route path=':token' element={<TokenDetails />} />
             </Route>
+            <Route path='hypervault' element={<Hypervault />} />
             <Route path='analytics' element={<Analytics />} />
             <Route path='hyperloop' element={<Hyperloop />}>
               <Route path='' element={<HyperloopOverview />} />
