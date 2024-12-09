@@ -168,10 +168,6 @@ function TokenDetail() {
   const totalSuppliedTokens = Number(market.totalAssets);
   const totalBorrowedTokens = Number(market.totalBorrowed);
   const totalLiquidityToken = totalSuppliedTokens - totalBorrowedTokens;
-  const configuration = {
-    supplyCap: 0,
-    borrowCap: 0,
-  };
 
   //refetch on update
   const { data: userWalletTokenBalance } = useUserTokenBalance(
@@ -482,22 +478,6 @@ function TokenDetail() {
       name: 'Oracle',
       link: `https://testnet.purrsec.com/address/${pair.exchangeRate.oracle}`,
       value: pair.exchangeRate.oracle,
-    },
-    {
-      name: 'Supply cap',
-      value: `${configuration.supplyCap > 0 ? formatNumber(configuration.supplyCap, 2) : '∞'} ${market.assetSymbol}`,
-    },
-    {
-      name: 'Supply cap reached',
-      value: `${configuration.supplyCap > 0 ? formatNumber((totalBorrowedTokens / configuration.supplyCap) * 100, 2) : 0}%`,
-    },
-    {
-      name: 'Borrow cap',
-      value: `${configuration.borrowCap > 0 ? formatNumber(configuration.borrowCap, 2) : '∞'} ${market.assetSymbol}`,
-    },
-    {
-      name: 'Borrow cap reached',
-      value: `${configuration.borrowCap > 0 ? formatNumber((totalBorrowedTokens / configuration.borrowCap) * 100, 2) : 0}%`,
     },
     {
       name: 'Collateral factor',
