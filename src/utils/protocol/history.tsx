@@ -17,8 +17,11 @@ export function useInterestRateHistory(token: string) {
         let values = json
           ? json.map((e: any) => ({
               timestamp: e.timestamp,
-              liquidityRate: e[token].currentLiquidityRate,
-              borrowRate: e[token].currentVariableBorrowRate,
+              liquidityRate: e[token]?.currentLiquidityRate || "0",
+              borrowRate: e[token]?.currentVariableBorrowRate || "0",
+              ratePerSec: e[token]?.ratePerSec || "0",
+              utilizationRate: e[token]?.utilizationRate || "0",
+              feeToProtocolRate: e[token]?.feeToProtocolRate || "0"
             }))
           : [];
         values.sort((a: any, b: any) => a.timestamp - b.timestamp);
