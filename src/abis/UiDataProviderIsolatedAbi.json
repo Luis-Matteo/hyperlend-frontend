@@ -148,5 +148,66 @@
     ],
     "stateMutability": "view",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_pair",
+        "type": "address"
+      }
+    ],
+    "name": "getUserData",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "user",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "pair",
+            "type": "address"
+          },
+          {
+            "internalType": "uint8",
+            "name": "decimals",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "userAssets",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "userCollateral",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "userBorrow",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxWithdraw",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct UiDataProviderIsolated.UserData",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   }
 ]

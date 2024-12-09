@@ -12,16 +12,19 @@ export async function protocolAction(
   writeContractAsync: any,
   publicClient: any,
   useMaxAmount: boolean,
+  pairAddress: string,
 ) {
   try {
-    if (actionType == 'supply' || actionType == 'repay') {
+    if (!userAddress || userAddress == "0x0000000000000000000000000000000000000000") throw new Error("Missing user address");
+
+    if (actionType == 'supply' || actionType == 'repay' || actionType == "addCollateral") {
       if (allowance < amount) {
         const approveResult = await writeContractAsync({
           address: token as any,
           abi: erc20Abi,
           functionName: 'approve',
           args: [
-            contracts.pool,
+            pairAddress,
             '115792089237316195423570985008687907853269984665640564039457584007913129639935',
           ],
         });
@@ -32,44 +35,36 @@ export async function protocolAction(
     }
 
     const functionParams: any = {
-      supply: [token, bgIntAmount, userAddress, 0], //asset, amount, onBehalfOf, refCode
-      withdraw: [token, bgIntAmount, userAddress], //asset, amount, to
-      borrow: [token, bgIntAmount, 2, 0, userAddress], //asset, amount, interestRateMode (2 = variable), refCode, onBehalfOf
-      repay: [token, bgIntAmount, 2, userAddress], //asset, amount, interestRateMode, onBehalfOf
+      deposit: [bgIntAmount, userAddress], //amount, receiver
+      withdraw: [bgIntAmount, userAddress, userAddress], //amount, receiver, owner
+      borrowAsset: [bgIntAmount, 0, userAddress],  //_borrowAmount, _collateralAmount, receiver
+      repayAsset: [bgIntAmount, userAddress], //shares, borrower
+      addCollateral: [bgIntAmount, userAddress], //uint256 _collateralAmount, address _borrower
+      removeCollateral: [bgIntAmount, userAddress] //uint256 _collateralAmount, address _receiver
     };
 
     if (useMaxAmount && (actionType == 'withdraw' || actionType == 'repay')) {
-      functionParams[actionType][1] =
-        '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+      // functionParams[actionType][1] =
+      //   '115792089237316195423570985008687907853269984665640564039457584007913129639935';
+    }
+
+    const functionNameConvert: any = {
+      supply: "deposit",
+      withdraw: "withdraw",
+      repay: "repayAsset",
+      borrow: "borrowAsset",
+      addCollateral: "addCollateral",
+      removeCollateral: "removeCollateral"
     }
 
     const txResult = await writeContractAsync({
-      address: contracts.pool,
-      abi: abis.pool,
-      functionName: actionType,
-      args: functionParams[actionType],
+      address: pairAddress,
+      abi: abis.isolatedPool,
+      functionName: functionNameConvert[actionType],
+      args: functionParams[functionNameConvert[actionType]],
     });
     await publicClient.waitForTransactionReceipt({ hash: txResult.hash });
   } catch (error) {
     console.error('An error occurred in protocolAction:', error);
-  }
-}
-
-export async function updateCollateralAction(
-  token: string,
-  currentCollateralStatus: boolean,
-  writeContractAsync: any,
-  publicClient: any,
-) {
-  try {
-    const txResult = await writeContractAsync({
-      address: contracts.pool,
-      abi: abis.pool,
-      functionName: 'setUserUseReserveAsCollateral',
-      args: [token, !currentCollateralStatus],
-    });
-    await publicClient.waitForTransactionReceipt({ hash: txResult.hash });
-  } catch (error) {
-    console.error('An error occurred in updateCollateral:', error);
   }
 }

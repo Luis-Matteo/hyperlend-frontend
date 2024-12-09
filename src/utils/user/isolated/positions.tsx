@@ -24,7 +24,7 @@ import { useGetUserBalanceHistory } from '../history';
 export function useUserPositionData(
   isConnected: boolean,
   address: `0x${string}` | undefined,
-  pair: `0x${string}` | undefined,
+  pair: string | undefined,
 ): any {
   const { data: userPairData } = useReadContract({
     abi: abis.uiPoolDataProvider,
@@ -60,12 +60,12 @@ export function useUserPositionData(
   return null;
 }
 
-export function useUserAccountData(address?: string) {
+export function useUserAccountData(pair: string, address?: string) {
   const { data: userAccountData, refetch } = useReadContract({
-    abi: abis.pool,
-    address: contracts.pool,
-    functionName: 'getUserAccountData',
-    args: [address || '0x0000000000000000000000000000000000000000'],
+    abi: abis.uiDataProviderIsolated,
+    address: contracts.uiDataProviderIsolated,
+    functionName: 'getUserData',
+    args: [address || '0x0000000000000000000000000000000000000000', pair],
     query: {
       refetchInterval: 10000,
     },

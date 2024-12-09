@@ -16,12 +16,14 @@ export function getTokenPrecision(token: string, priceDataMap: any): any {
 
 //calculate current users available balance based on action type
 export function calculateAvailableBalance(
-  token: string,
+  asset: string,
+  collateral: string,
+  assetUsdPrice: number,
+  collateralUsdPrice: number,
+  ltv: number,
   userPositionsData: any,
   userAccountData: any,
   priceDataMap: any,
-  assetReserveData: any,
-  reserveDataMap: any,
   userEthBalance: any,
   userWalletTokenBalance: any,
   actionType: string,
@@ -29,12 +31,14 @@ export function calculateAvailableBalance(
   if (!userAccountData) userAccountData = [0, 0, 0, 0, 0];
 
   const params = {
-    token: token,
+    asset: asset,
+    collateral: collateral,
+    assetUsdPrice: assetUsdPrice,
+    collateralUsdPrice: collateralUsdPrice,
+    ltv: ltv,
     userPositionsData: userPositionsData,
     userAccountData: userAccountData,
     priceDataMap: priceDataMap,
-    assetReserveData: assetReserveData,
-    reserveDataMap: reserveDataMap,
     userEthBalance: userEthBalance,
     userWalletTokenBalance: userWalletTokenBalance,
     actionType: actionType,
@@ -54,11 +58,8 @@ export function calculateAvailableBalance(
 
 function getAvailableSupply(params: any) {
   const userAmount = normalizeDecimalsAmount(
-    // wrappedTokens.includes(params.token)
-    //   ? Number(params.userEthBalance?.value)
-    //   : Number(params.userWalletTokenBalance),
     Number(params.userWalletTokenBalance),
-    params.token,
+    params.asset,
     tokenDecimalsMap,
   );
 
@@ -66,84 +67,29 @@ function getAvailableSupply(params: any) {
 }
 
 function getAvailableWithdraw(params: any) {
-  const [totalCollateralBase, totalDebtBase, , , currentLiquidationThreshold] =
-    params.userAccountData;
-
-  const totalSupplied =
-    Number(params.assetReserveData.totalAToken) /
-    Math.pow(10, tokenDecimalsMap[params.token]);
-  const totalBorrowed =
-    Number(params.assetReserveData.totalVariableDebt) /
-    Math.pow(10, tokenDecimalsMap[params.token]);
-  const availableLiquidity = totalSupplied - totalBorrowed;
-
-  const supplied = params.userPositionsData.supplied.find(
-    (e: any) => e.underlyingAsset == params.token,
+  const userAmount = normalizeDecimalsAmount(
+    Number(params.userAccountData.userAssets),
+    params.asset,
+    tokenDecimalsMap,
   );
-  const tokenPriceUsd =
-    Number(params.priceDataMap[params.token]) / Math.pow(10, 8);
-  const userBalanceToken = supplied?.balance;
-  const userBalanceValueUsd = userBalanceToken * tokenPriceUsd;
-
-  if (userBalanceToken == 0) return 0;
-
-  const maxWithdrawableUsd =
-    (Number(totalCollateralBase) -
-      Number(totalDebtBase) / (Number(currentLiquidationThreshold) / 10000)) /
-    Math.pow(10, 8);
-  const maxWithdrawableAmountUsd =
-    maxWithdrawableUsd > userBalanceValueUsd
-      ? userBalanceValueUsd
-      : maxWithdrawableUsd;
-
-  const maxWithdrawableAmountToken = maxWithdrawableAmountUsd / tokenPriceUsd;
-  return maxWithdrawableAmountToken > availableLiquidity
-    ? availableLiquidity
-    : maxWithdrawableAmountToken;
+  
+  return userAmount;
 }
 
 function getAvailableBorrow(params: any): any {
-  let borrowCap = decodeConfig(
-    params.reserveDataMap[params.token].configuration.data,
-  ).borrowCap;
-
-  const totalSupplied =
-    Number(params.assetReserveData.totalAToken) /
-    Math.pow(10, tokenDecimalsMap[params.token]);
-  const totalBorrowed =
-    Number(params.assetReserveData.totalVariableDebt) /
-    Math.pow(10, tokenDecimalsMap[params.token]);
-  const availableLiquidity = totalSupplied - totalBorrowed;
-
-  const tokenPrice = params.priceDataMap[params.token]; //10**8 decimals from oracle
-  const [, , availableBorrowsBase] = params.userAccountData; //in usd, 10**8 decimals
-  const availableBorrowBaseToken =
-    Number(availableBorrowsBase) / Number(tokenPrice);
-
-  if (borrowCap == 0) borrowCap = Infinity;
-
-  const availableAfterCap =
-    borrowCap != 0 && totalBorrowed + availableBorrowBaseToken > borrowCap
-      ? borrowCap - totalBorrowed
-      : availableBorrowBaseToken;
-
-  return availableAfterCap > availableLiquidity
-    ? availableLiquidity * 0.995 //0.5% lower to give some space if price changes/rounding errors
-    : availableAfterCap * 0.995;
+  const availableLiquidity = Number(params.userAccountData.userCollateral) / Number(params.userAccountData.decimals) * params.collateralUsdPrice * Number(params.ltv) / params.assetUsdPrice;
+  
+  return availableLiquidity * 0.995 //0.5% lower to give some space if price changes/rounding errors
 }
 
 function getAvailableRepay(params: any) {
   const borrowedBalance =
-    params.userPositionsData.borrowed.find(
-      (e: any) => e.underlyingAsset == params.token,
-    )?.balance || 0;
+    (Number(params.userAccountData.userBorrow) / Number(params.userAccountData.decimals)) || 0;
   if (borrowedBalance == 0) return 0;
 
   const userBalance = normalizeDecimalsAmount(
-    wrappedTokens.includes(params.token)
-      ? Number(params.userEthBalance?.value)
-      : Number(params.userWalletTokenBalance),
-    params.token,
+    Number(params.userWalletTokenBalance),
+    params.asset,
     tokenDecimalsMap,
   );
 
@@ -157,25 +103,25 @@ export function calculatePredictedHealthFactor(
   priceDataMap: any,
   userPositionsData: any,
 ): any {
-  const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8);
-  const amountUsd =
-    amount *
-    tokenPriceUsd *
-    (actionType == 'repay' || actionType == 'withdraw' ? -1 : 1);
+  // const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8);
+  // const amountUsd =
+  //   amount *
+  //   tokenPriceUsd *
+  //   (actionType == 'repay' || actionType == 'withdraw' ? -1 : 1);
 
-  const newTotalBorrow =
-    actionType == 'borrow' || actionType == 'repay'
-      ? (userPositionsData?.totalBorrowUsd || 0) + amountUsd
-      : userPositionsData?.totalBorrowUsd || 0;
+  // const newTotalBorrow =
+  //   actionType == 'borrow' || actionType == 'repay'
+  //     ? (userPositionsData?.totalBorrowUsd || 0) + amountUsd
+  //     : userPositionsData?.totalBorrowUsd || 0;
 
-  const newTotalThreshold =
-    actionType == 'supply' || actionType == 'withdraw'
-      ? (userPositionsData?.totalLiquidationThreshold || 0) +
-        amountUsd * liqMap[token]
-      : userPositionsData?.totalLiquidationThreshold || 0;
+  // const newTotalThreshold =
+  //   actionType == 'supply' || actionType == 'withdraw'
+  //     ? (userPositionsData?.totalLiquidationThreshold || 0) +
+  //       amountUsd * liqMap[token]
+  //     : userPositionsData?.totalLiquidationThreshold || 0;
 
-  const newHealth =
-    newTotalBorrow > 0 ? newTotalThreshold / newTotalBorrow : Infinity;
+  // const newHealth =
+  //   newTotalBorrow > 0 ? newTotalThreshold / newTotalBorrow : Infinity;
 
-  return newHealth;
+  return 0;
 }
