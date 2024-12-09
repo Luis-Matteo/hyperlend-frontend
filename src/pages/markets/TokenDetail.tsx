@@ -53,7 +53,7 @@ import Button from '../../components/common/Button';
 // Add these animation variants before the TokenDetail function
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
+  visible: { opacity: 1, y: 0 },
 };
 
 const containerVariants = {
@@ -61,9 +61,9 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1
-    }
-  }
+      staggerChildren: 0.1,
+    },
+  },
 };
 
 function TokenDetail() {
@@ -383,8 +383,8 @@ function TokenDetail() {
   return (
     <motion.div
       className='w-full'
-      initial="hidden"
-      animate="visible"
+      initial='hidden'
+      animate='visible'
       variants={containerVariants}
     >
       <Navbar
@@ -426,7 +426,9 @@ function TokenDetail() {
             {(supplies || []).map((supply, index) => (
               <div className='font-lufga' key={index}>
                 <p className={`text-xs pb-4 text-[#E1E1E1]`}>{supply.name}</p>
-                <p className='text-2xl text-white whitespace-nowrap'>{supply.value}</p>
+                <p className='text-2xl text-white whitespace-nowrap'>
+                  {supply.value}
+                </p>
               </div>
             ))}
           </div>
@@ -711,19 +713,16 @@ function TokenDetail() {
               <img className='' src={topRightArrowImage} />
             </button>
           </div>
-
         </motion.div>
       </motion.div>
-      {
-        shareImageModalStatus && (
-          <ShareImageModal
-            token={token}
-            apy={formatNumber(actionData?.totalApy, 3)}
-            dailyEarnings={formatNumber(actionData?.dailyEarning, 3)}
-            onClose={toggleModal}
-          />
-        )
-      }
+      {shareImageModalStatus && (
+        <ShareImageModal
+          token={token}
+          apy={formatNumber(actionData?.totalApy, 3)}
+          dailyEarnings={formatNumber(actionData?.dailyEarning, 3)}
+          onClose={toggleModal}
+        />
+      )}
     </motion.div>
   );
 }

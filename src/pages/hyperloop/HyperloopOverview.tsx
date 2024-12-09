@@ -20,7 +20,6 @@ function HyperloopOverview() {
     <>
       <div className='w-full grid grid-cols-2 text-center'>
         {typeButtons.map((button) => (
-
           <motion.button
             key={button.id}
             onClick={() => setActiveType(button.id)}
@@ -39,13 +38,9 @@ function HyperloopOverview() {
         ))}
       </div>
 
-      <AnimatePresence mode="wait">
-        {activeType === "loop" && (
-          <Loop />
-        )}
-        {activeType === "my-positions" && (
-          <MyPositions />
-        )}
+      <AnimatePresence mode='wait'>
+        {activeType === 'loop' && <Loop />}
+        {activeType === 'my-positions' && <MyPositions />}
       </AnimatePresence>
     </>
   );

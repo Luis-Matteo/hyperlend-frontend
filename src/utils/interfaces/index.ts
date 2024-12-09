@@ -1,1 +1,1 @@
-export * from './hypervault'
+export * from './hypervault';
