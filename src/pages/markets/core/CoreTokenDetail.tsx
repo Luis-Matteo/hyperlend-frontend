@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
-import Navbar from '../../layouts/Navbar';
-import CardItem from '../../components/common/CardItem';
+import Navbar from '../../../layouts/Navbar';
+import CardItem from '../../../components/common/CardItem';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useSwitchChain, useAccount, useBalance } from 'wagmi';
 import ReactGA from 'react-ga4';
-import { tokenDetailButton } from '../../utils/constants/constants';
+import { tokenDetailButton } from '../../../utils/constants/constants';
 import {
   formatNumber,
   decodeConfig,
   formatAddress,
-} from '../../utils/functions';
-import BorrowInfoChart from '../../components/charts/BorrowInfoChart';
-import InterestRateModelChart from '../../components/charts/InterestRateModelChart';
-import { TokenActionsProps } from '../../utils/types';
-import topRightArrowImage from '../../assets/icons/top-right-arrow.svg';
-import ShareImageModal from '../../components/common/ShareImageModal';
+} from '../../../utils/functions';
+import BorrowInfoChart from '../../../components/charts/BorrowInfoChart';
+import InterestRateModelChart from '../../../components/charts/InterestRateModelChart';
+import { TokenActionsProps } from '../../../utils/types';
+import topRightArrowImage from '../../../assets/icons/top-right-arrow.svg';
+import ShareImageModal from '../../../components/common/ShareImageModal';
 import { motion } from 'framer-motion';
 
 import {
@@ -26,29 +26,29 @@ import {
   liqPenaltyMap,
   networkChainId,
   oraclesMap,
-} from '../../utils/config';
+} from '../../../utils/config';
 
 import {
   useUserPositionsData,
   useUserAccountData,
-} from '../../utils/user/positions';
+} from '../../../utils/user/core/positions';
 
-import { useProtocolPriceData } from '../../utils/protocol/prices';
-import { useProtocolInterestRate } from '../../utils/protocol/interestRates';
-import { useProtocolAssetReserveData } from '../../utils/protocol/reserves';
+import { useProtocolPriceData } from '../../../utils/protocol/core/prices';
+import { useProtocolInterestRate } from '../../../utils/protocol/core/interestRates';
+import { useProtocolAssetReserveData } from '../../../utils/protocol/core/reserves';
 
-import { useProtocolReservesData } from '../../utils/protocol/reserves';
+import { useProtocolReservesData } from '../../../utils/protocol/core/reserves';
 
-import { useUserTokenBalance } from '../../utils/user/wallet';
+import { useUserTokenBalance } from '../../../utils/user/wallet';
 
 import {
   calculateAvailableBalance,
   getTokenPrecision,
-} from '../../utils/user/functions/utils';
+} from '../../../utils/user/core/functions/utils';
 
-import TokenActions from '../../components/markets/TokenActions';
-import { mockIsolatedMarkets } from '../../utils/mocks/markets';
-import Button from '../../components/common/Button';
+import TokenActions from '../../../components/markets/TokenActionsCore';
+import { mockIsolatedMarkets } from '../../../utils/mocks/markets';
+import Button from '../../../components/common/Button';
 
 // Add these animation variants before the TokenDetail function
 const cardVariants = {
