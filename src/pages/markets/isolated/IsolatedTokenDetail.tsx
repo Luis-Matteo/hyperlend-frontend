@@ -471,6 +471,11 @@ function TokenDetail() {
 
   const marketDetails = [
     {
+      name: 'Pair contract',
+      link: `https://testnet.purrsec.com/address/${pairAddress}`,
+      value: pairAddress,
+    },
+    {
       name: 'Asset contract',
       link: `https://testnet.purrsec.com/address/${market.asset}`,
       value: market.asset,
@@ -619,7 +624,7 @@ function TokenDetail() {
             </div>
             <BorrowInfoChart type='borrow' token={pairAddress} />
           </CardItem>
-          <CardItem className='p-4 lg:p-8 mb-6'>
+          {/* <CardItem className='p-4 lg:p-8 mb-6'>
             <div className='flex justify-between items-center flex-wrap'>
               <p className='text-[#797979] text-xl font-lufga'>
                 Interest Rate Model
@@ -645,7 +650,7 @@ function TokenDetail() {
                 (totalBorrowedTokens / totalSuppliedTokens) * 100
               }
             />
-          </CardItem>
+          </CardItem> */}
           <CardItem className='p-4 lg:p-8 mb-6'>
             <div className='flex justify-between items-center mb-8'>
               <p className='text-[#797979] text-xl font-lufga'>
