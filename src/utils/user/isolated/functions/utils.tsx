@@ -84,7 +84,7 @@ function getAvailableBorrow(params: any): any {
 
 function getAvailableRepay(params: any) {
   const borrowedBalance =
-    (Number(params.userAccountData.userBorrow) / Number(params.userAccountData.decimals)) || 0;
+    (Number(params.userAccountData.userBorrow) / Math.pow(10, Number(params.userAccountData.decimals))) || 0;
   if (borrowedBalance == 0) return 0;
 
   const userBalance = normalizeDecimalsAmount(
