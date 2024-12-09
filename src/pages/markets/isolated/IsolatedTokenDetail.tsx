@@ -29,7 +29,7 @@ import {
 import {
   useUserPositionsData,
   useUserAccountData,
-} from '../../../utils/user/core/positions';
+} from '../../../utils/user/isolated/positions';
 
 import { useUserTokenBalance } from '../../../utils/user/wallet';
 

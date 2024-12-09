@@ -53,27 +53,16 @@ export function calculateAvailableBalance(
 }
 
 function getAvailableSupply(params: any) {
-  let supplyCap = decodeConfig(
-    params.reserveDataMap[params.token].configuration.data,
-  ).supplyCap;
-
-  const totalSupplied =
-    Number(params.assetReserveData.totalAToken) /
-    Math.pow(10, tokenDecimalsMap[params.token]);
-
   const userAmount = normalizeDecimalsAmount(
-    wrappedTokens.includes(params.token)
-      ? Number(params.userEthBalance?.value)
-      : Number(params.userWalletTokenBalance),
+    // wrappedTokens.includes(params.token)
+    //   ? Number(params.userEthBalance?.value)
+    //   : Number(params.userWalletTokenBalance),
+    Number(params.userWalletTokenBalance),
     params.token,
     tokenDecimalsMap,
   );
 
-  if (supplyCap == 0) supplyCap = Infinity
-
-  return totalSupplied + userAmount > supplyCap
-    ? supplyCap - totalSupplied
-    : userAmount;
+  return userAmount;
 }
 
 function getAvailableWithdraw(params: any) {
