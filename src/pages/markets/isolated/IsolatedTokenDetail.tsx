@@ -86,7 +86,7 @@ function TokenDetail() {
 
   const [collateralAmount, setCollateralAmount] = useState(0);
   const [collateralAction, setCollateralAction] = useState('add');
-  const [isCollateralApproved, setIsCollateralApproved] = useState(false)
+  const [isCollateralApproved, setIsCollateralApproved] = useState(false);
   const [shareImageModalStatus, setShareImageModalStatus] =
     useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<any>(null);
@@ -149,7 +149,11 @@ function TokenDetail() {
     if (isTxPending) {
       openAnimateModal(
         'loading',
-        !isCollateralApproved ? "approve" : collateralAction == 'add' ? 'supply' : 'withdraw',
+        !isCollateralApproved
+          ? 'approve'
+          : collateralAction == 'add'
+            ? 'supply'
+            : 'withdraw',
         '',
         '',
       );
@@ -179,7 +183,11 @@ function TokenDetail() {
       setErrorMsg(error?.message);
       openAnimateModal(
         'failed',
-        !isCollateralApproved ? "approve" : collateralAction == 'add' ? 'supply' : 'withdraw',
+        !isCollateralApproved
+          ? 'approve'
+          : collateralAction == 'add'
+            ? 'supply'
+            : 'withdraw',
         '',
         parseErrorMsg(error?.message),
       );
@@ -245,12 +253,17 @@ function TokenDetail() {
   );
 
   useEffect(() => {
-    if (Number(collateralAllowance) / Math.pow(10, tokenDecimalsMap[market.collateral]) < collateralAmount && collateralAction != "approve"){
-      setIsCollateralApproved(false)
+    if (
+      Number(collateralAllowance) /
+        Math.pow(10, tokenDecimalsMap[market.collateral]) <
+        collateralAmount &&
+      collateralAction != 'approve'
+    ) {
+      setIsCollateralApproved(false);
     } else {
-      setIsCollateralApproved(true)
+      setIsCollateralApproved(true);
     }
-  }, [collateralAllowance, collateralAmount])
+  }, [collateralAllowance, collateralAmount]);
 
   const { data: userEthBalance } = useBalance({
     address: address,
@@ -342,7 +355,11 @@ function TokenDetail() {
       setLastConfirmedTxHash(txReceiptResult.data.transactionHash);
       openAnimateModal(
         'completed',
-        !isCollateralApproved ? "approve" : collateralAction == 'add' ? 'supply' : 'withdraw',
+        !isCollateralApproved
+          ? 'approve'
+          : collateralAction == 'add'
+            ? 'supply'
+            : 'withdraw',
         'https://testnet.purrsec.com/tx/' +
           txReceiptResult.data.transactionHash,
         '',
@@ -865,7 +882,7 @@ function TokenDetail() {
                 </div>
               </div>
               <Button
-                title={`${isCollateralApproved ? collateralAction : "approve"} collateral`}
+                title={`${isCollateralApproved ? collateralAction : 'approve'} collateral`}
                 variant='secondary'
                 onClick={handleCollateral}
               />
