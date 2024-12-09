@@ -8,6 +8,7 @@ import { apy, depositers, lineChartData, usersActivity } from '../../utils/const
 import { tvlcomposition } from '../../utils/constants/analytics';
 import { formatAddress, formatNumber } from '../../utils/functions';
 import Datepicker, { DateValueType } from 'react-tailwindcss-datepicker';
+import { motion } from 'framer-motion';
 
 function Analytics() {
     const [period, setPeriod] = useState<string>('daily')
@@ -16,11 +17,37 @@ function Analytics() {
         endDate: null
     });
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.5
+            }
+        }
+    };
+
     return (
         <>
-            <div className='w-full'>
+            <motion.div
+                className='w-full'
+                initial="hidden"
+                animate="visible"
+                variants={containerVariants}
+            >
                 <Navbar pageTitle={<span className="hidden lg:inline">Data Analytics</span>} />
-                <div className='flex items-center gap-2 flex-wrap mt-4 lg:mt-10'>
+                <motion.div className='flex items-center gap-2 flex-wrap mt-4 lg:mt-10' variants={itemVariants}>
                     <button
                         className={`${period === 'daily' ? 'text-secondary' : 'text-secondary/60'} border-secondary/60 border-2 hover:bg-secondary/20 py-3 px-5 font-lufga active:scale-95 duration-200 rounded-lg`}
                         onClick={() => setPeriod('daily')}>
@@ -41,8 +68,8 @@ function Analytics() {
                             displayFormat='DD/MM/YY'
                         />
                     </div>
-                </div>
-                <div className='grid grid-cols-1 xl:grid-cols-2 h-full gap-4 mt-6'>
+                </motion.div>
+                <motion.div className='grid grid-cols-1 xl:grid-cols-2 h-full gap-4 mt-6' variants={itemVariants}>
                     <BorderCard
                         title='TVL Composition'>
                         <PolarAreaChart
@@ -83,8 +110,8 @@ function Analytics() {
                         <ColumnChart
                             data={apy} />
                     </BorderCard>
-                </div>
-                <div className='mt-4'>
+                </motion.div>
+                <motion.div className='mt-4' variants={itemVariants}>
                     <BorderCard
                         title='Liquidations'>
                         <LineChart
@@ -92,8 +119,8 @@ function Analytics() {
                             xgrid={false}
                             ygrid={true} />
                     </BorderCard>
-                </div>
-                <div className='grid grid-cols-1 xl:grid-cols-2 h-full gap-4 mt-4'>
+                </motion.div>
+                <motion.div className='grid grid-cols-1 xl:grid-cols-2 h-full gap-4 mt-4' variants={itemVariants}>
                     <BorderCard
                         title='Largest Depositors'>
                         <div className='flex justify-between mt-8 mb-3'>
@@ -128,9 +155,8 @@ function Analytics() {
                             }
                         </div>
                     </BorderCard>
-                </div>
-            </div >
-
+                </motion.div>
+            </motion.div>
         </>
     );
 }

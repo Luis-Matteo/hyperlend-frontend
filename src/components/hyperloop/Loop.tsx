@@ -9,6 +9,7 @@ import rightArrowSuccessIcon from '../../assets/icons/right-arrow-success.svg';
 import rightArrowWarningIcon from '../../assets/icons/right-arrow-warning.svg';
 import downArrowIcon from '../../assets/icons/down-arrow.svg';
 import redStoneLogo from '../../assets/icons/red-stone-logo.svg';
+import { motion } from 'framer-motion';
 
 const tokenList = [
     {
@@ -42,7 +43,13 @@ function Loop() {
     };
     const details = selectedBorrowToken && selectedDepositToken;
     return (
-        <>
+        <motion.div
+            key="loop"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+        >
             <p className='text-secondary font-lufga mt-10'>Your deposit</p>
             <div className='flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4'>
                 <div className='flex gap-3 items-center p-3 w-[100px]'>
@@ -289,7 +296,7 @@ function Loop() {
                     </div>
                 </div>
             }
-        </>
+        </motion.div>
     );
 }
 
