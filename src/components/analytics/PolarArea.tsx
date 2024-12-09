@@ -1,5 +1,6 @@
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts'; // Import ApexOptions
+import React from 'react';
 
 type DataProps = {
   name: string;
@@ -11,20 +12,27 @@ type PolarAreaChartProps = {
   data: DataProps[];
 };
 
-const PolarAreaChart = ({ data }: PolarAreaChartProps) => {
+const PolarAreaChart = React.memo(({ data }: PolarAreaChartProps) => {
   const series = data.map((item) => item.value);
-
+  const labels = data.map((item) => item.name);
   const colors = data.map((item) => item.color);
   const options: ApexOptions = {
     chart: {
       type: 'polarArea', // Use one of the valid string literals
     },
+    labels,
     colors,
     legend: {
       show: false, // Show legend
     },
     stroke: {
       colors: ['#737373'],
+    },
+    tooltip: {
+      enabled: true, // Enable tooltips
+      y: {
+        formatter: (value) => `${value}%`, // Format the value shown in the tooltip
+      },
     },
   };
 
@@ -37,7 +45,7 @@ const PolarAreaChart = ({ data }: PolarAreaChartProps) => {
               className='w-3 h-3 rounded-full'
               style={{ backgroundColor: item.color }}
             />
-            <div className='flex justify-between items-center w-28'>
+            <div className='flex justify-between items-center w-32'>
               <p className='text-sm font-lufga text-[#D4D4D4]'>{item.name}</p>
               <p className='text-sm font-lufga text-white'>{item.value}%</p>
             </div>
@@ -47,6 +55,6 @@ const PolarAreaChart = ({ data }: PolarAreaChartProps) => {
       <ReactApexChart options={options} series={series} type='polarArea' />
     </div>
   );
-};
+});
 
 export default PolarAreaChart;

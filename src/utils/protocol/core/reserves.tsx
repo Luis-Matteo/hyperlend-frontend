@@ -71,7 +71,6 @@ export function useProtocolAssetReserveData(asset: string) {
     functionName: 'getReserveData',
     args: [asset],
   });
-
   const dataAny = (data as any) || [];
 
   return {
