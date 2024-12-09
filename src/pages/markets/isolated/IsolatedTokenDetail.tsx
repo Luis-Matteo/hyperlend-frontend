@@ -55,6 +55,7 @@ import { useUserAllowance } from '../../../utils/user/wallet';
 import AnimateModal, {
   AnimateModalProps,
 } from '../../../components/markets/AnimateModal';
+import { getErrorMessage } from '../../../utils/constants/errorCodes';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };
@@ -85,8 +86,10 @@ function TokenDetail() {
 
   const [collateralAmount, setCollateralAmount] = useState(0);
   const [collateralAction, setCollateralAction] = useState('add');
+  const [isCollateralApproved, setIsCollateralApproved] = useState(false)
   const [shareImageModalStatus, setShareImageModalStatus] =
     useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<any>(null);
 
   const toggleModal = () => {
     setShareImageModalStatus(!shareImageModalStatus);
@@ -106,7 +109,7 @@ function TokenDetail() {
   }, [isConnected, chainId]);
 
   const publicClient = usePublicClient();
-  const { data: hash, writeContractAsync } = useWriteContract();
+  const { data: hash, writeContractAsync, error } = useWriteContract();
 
   const txReceiptResult = useWaitForTransactionReceipt({
     hash: hash,
@@ -146,7 +149,7 @@ function TokenDetail() {
     if (isTxPending) {
       openAnimateModal(
         'loading',
-        collateralAction == 'add' ? 'supply' : 'withdraw',
+        !isCollateralApproved ? "approve" : collateralAction == 'add' ? 'supply' : 'withdraw',
         '',
         '',
       );
@@ -154,6 +157,42 @@ function TokenDetail() {
       handleDataFromActions('refetch');
     }
   }, [isTxPending]);
+
+  function parseErrorMsg(errorMessage: string) {
+    if (!errorMessage) return '';
+
+    return errorMessage.includes('Contract Call')
+      ? errorMessage.split('Contract Call')[0] +
+          (errorMessage
+            .split('Contract Call')[0]
+            .includes('reverted with the following reason:')
+            ? `(${getErrorMessage(errorMessage.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
+            : '')
+      : getErrorMessage(errorMessage.split('Request Arguments')[0]) !=
+          'ERROR_MESSAGE_NOT_FOUND'
+        ? getErrorMessage(errorMessage.split('Request Arguments')[0])
+        : (errorMessage.split('Request Arguments')[0] as unknown as string);
+  }
+
+  useEffect(() => {
+    if (error?.message) {
+      setErrorMsg(error?.message);
+      openAnimateModal(
+        'failed',
+        !isCollateralApproved ? "approve" : collateralAction == 'add' ? 'supply' : 'withdraw',
+        '',
+        parseErrorMsg(error?.message),
+      );
+    }
+  }, [error?.message]);
+
+  useEffect(() => {
+    if (errorMsg) {
+      setTimeout(() => {
+        setErrorMsg(null);
+      }, 4000);
+    }
+  }, [errorMsg]);
 
   //get info for this pair
   const pairs = useProtocolPairsData(pairAddress);
@@ -204,6 +243,14 @@ function TokenDetail() {
     address || '0x0000000000000000000000000000000000000000',
     pairAddress,
   );
+
+  useEffect(() => {
+    if (Number(collateralAllowance) / Math.pow(10, tokenDecimalsMap[market.collateral]) < collateralAmount && collateralAction != "approve"){
+      setIsCollateralApproved(false)
+    } else {
+      setIsCollateralApproved(true)
+    }
+  }, [collateralAllowance, collateralAmount])
 
   const { data: userEthBalance } = useBalance({
     address: address,
@@ -295,7 +342,7 @@ function TokenDetail() {
       setLastConfirmedTxHash(txReceiptResult.data.transactionHash);
       openAnimateModal(
         'completed',
-        collateralAction == 'add' ? 'supply' : 'withdraw',
+        !isCollateralApproved ? "approve" : collateralAction == 'add' ? 'supply' : 'withdraw',
         'https://testnet.purrsec.com/tx/' +
           txReceiptResult.data.transactionHash,
         '',
@@ -818,7 +865,7 @@ function TokenDetail() {
                 </div>
               </div>
               <Button
-                title={`${collateralAction} collateral`}
+                title={`${isCollateralApproved ? collateralAction : "approve"} collateral`}
                 variant='secondary'
                 onClick={handleCollateral}
               />
