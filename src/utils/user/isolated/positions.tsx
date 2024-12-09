@@ -24,9 +24,8 @@ import { useGetUserBalanceHistory } from '../history';
 export function useUserPositionData(
   isConnected: boolean,
   address: `0x${string}` | undefined,
-  pair: `0x${string}` | undefined
+  pair: `0x${string}` | undefined,
 ): any {
-
   const { data: userPairData } = useReadContract({
     abi: abis.uiPoolDataProvider,
     address: contracts.uiPoolDataProvider,
@@ -58,7 +57,7 @@ export function useUserPositionData(
     };
   }
 
-  return null
+  return null;
 }
 
 export function useUserAccountData(address?: string) {

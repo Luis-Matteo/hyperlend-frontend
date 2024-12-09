@@ -8,7 +8,7 @@ import { tokenDetailButton } from '../../../utils/constants/constants';
 import {
   formatNumber,
   formatAddress,
-  calculateApyIsolated
+  calculateApyIsolated,
 } from '../../../utils/functions';
 import BorrowInfoChart from '../../../components/charts/BorrowInfoChart';
 import InterestRateModelChart from '../../../components/charts/InterestRateModelChart';
@@ -23,7 +23,7 @@ import {
   iconsMap,
   tokenDecimalsMap,
   networkChainId,
-  tokenFullNameMap
+  tokenFullNameMap,
 } from '../../../utils/config';
 
 import {
@@ -33,15 +33,24 @@ import {
 
 import { useUserTokenBalance } from '../../../utils/user/wallet';
 
-import { useProtocolPairsData, preparePairData } from '../../../utils/protocol/isolated/pairs';
+import {
+  useProtocolPairsData,
+  preparePairData,
+} from '../../../utils/protocol/isolated/pairs';
 import { useAssetPrice } from '../../../utils/protocol/isolated/prices';
 
-import { calculateAvailableBalance, getTokenPrecision } from '../../../utils/user/core/functions/utils';
-
+import {
+  calculateAvailableBalance,
+  getTokenPrecision,
+} from '../../../utils/user/core/functions/utils';
 
 function TokenDetail() {
   const { pairAddress = '' } = useParams();
-  ReactGA.send({ hitType: 'pageview', page: '/token-details-isolated', title: pairAddress });
+  ReactGA.send({
+    hitType: 'pageview',
+    page: '/token-details-isolated',
+    title: pairAddress,
+  });
 
   const [collateralAmount, setCollateralAmount] = useState(0);
   const [collateralAction, setCollateralAction] = useState('add');
@@ -77,22 +86,26 @@ function TokenDetail() {
   }, [pairs]);
   const { priceDataMap } = useAssetPrice(oracleAddresses);
 
-  const assetOracleAddress = pairs.pairsDataMap[pairAddress].exchangeRate.chainlinkAssetAddress
-  const collateralOracleAddress = pairs.pairsDataMap[pairAddress].exchangeRate.chainlinkCollateralAddress
+  const assetOracleAddress =
+    pairs.pairsDataMap[pairAddress].exchangeRate.chainlinkAssetAddress;
+  const collateralOracleAddress =
+    pairs.pairsDataMap[pairAddress].exchangeRate.chainlinkCollateralAddress;
 
-  const assetUsdPrice = Number(priceDataMap[assetOracleAddress]) / Math.pow(10, 8)
-  const collateralUsdPrice = Number(priceDataMap[collateralOracleAddress]) / Math.pow(10, 8)
+  const assetUsdPrice =
+    Number(priceDataMap[assetOracleAddress]) / Math.pow(10, 8);
+  const collateralUsdPrice =
+    Number(priceDataMap[collateralOracleAddress]) / Math.pow(10, 8);
 
   const market = preparePairData(pairs.pairsDataMap[pairAddress], priceDataMap);
   const pair = pairs.pairsDataMap[pairAddress];
 
-  const totalSuppliedTokens = Number(market.totalAssets)
-  const totalBorrowedTokens =Number(market.totalBorrowed)
+  const totalSuppliedTokens = Number(market.totalAssets);
+  const totalBorrowedTokens = Number(market.totalBorrowed);
   const totalLiquidityToken = totalSuppliedTokens - totalBorrowedTokens;
   const configuration = {
     supplyCap: 0,
-    borrowCap: 0
-  }
+    borrowCap: 0,
+  };
 
   //refetch on update
   const { data: userWalletTokenBalance } = useUserTokenBalance(
@@ -113,7 +126,9 @@ function TokenDetail() {
 
   const userPositionsData = useUserPositionsData(isConnected, address);
 
-  const collateralAvailableAmount = Number(userWalletCollateralBalance) / Math.pow(10, tokenDecimalsMap[pair.collateral]);
+  const collateralAvailableAmount =
+    Number(userWalletCollateralBalance) /
+    Math.pow(10, tokenDecimalsMap[pair.collateral]);
 
   function handleDataFromActions(data: any) {
     console.log(data);
@@ -136,8 +151,8 @@ function TokenDetail() {
 
   const interestRateDataMap = {
     supply: 0,
-    borrow: 0
-  }
+    borrow: 0,
+  };
 
   const getDailyEarnings: any = (actionType: string) => {
     if (actionType == 'supply' || actionType == 'withdraw') {
@@ -158,11 +173,11 @@ function TokenDetail() {
   };
 
   const supplied = {
-    balance: 0
-  }
+    balance: 0,
+  };
   const borrowed = {
-    balance: 0
-  }
+    balance: 0,
+  };
 
   const [actionData, setActionData] = useState<TokenActionsProps>({
     availableAmountTitle: 'Suppliable',
@@ -190,7 +205,7 @@ function TokenDetail() {
     } else {
       console.log('no collateral');
     }
-  }
+  };
 
   const handleButtonClick = (button: number) => {
     setActiveButton(button);
@@ -222,7 +237,7 @@ function TokenDetail() {
           protocolBalance: supplied?.balance || 0,
           dailyEarning: getDailyEarnings('withdraw'),
           btnTitle: 'Withdraw',
-          token:  market.asset,
+          token: market.asset,
           isCollateralEnabled: false, //not used
           handleDataFromActions: handleDataFromActions,
         };
@@ -375,7 +390,12 @@ function TokenDetail() {
         pageIcon={
           <div className='flex -space-x-3'>
             <img src={market.assetIcon} height='30px' width='30px' alt='' />
-            <img src={market.collateralIcon} height='30px' width='30px' alt='' />
+            <img
+              src={market.collateralIcon}
+              height='30px'
+              width='30px'
+              alt=''
+            />
           </div>
         }
         back={true}
@@ -385,7 +405,9 @@ function TokenDetail() {
           {(supplies || []).map((supply, index) => (
             <div className='font-lufga' key={index}>
               <p className={`text-xs pb-4 text-[#E1E1E1]`}>{supply.name}</p>
-              <p className='text-2xl text-white whitespace-nowrap'>{supply.value}</p>
+              <p className='text-2xl text-white whitespace-nowrap'>
+                {supply.value}
+              </p>
             </div>
           ))}
         </div>
@@ -557,9 +579,7 @@ function TokenDetail() {
             </CardItem>
             <CardItem className='p-4 lg:p-8 mt-4'>
               <div className='w-full grid grid-cols-2 text-center'>
-                <button
-                  onClick={() => setCollateralAction('add')}
-                >
+                <button onClick={() => setCollateralAction('add')}>
                   <p
                     className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateralAction === 'add' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
                   >
@@ -569,9 +589,7 @@ function TokenDetail() {
                     className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateralAction === 'add' ? 'text-white' : 'text-[#546764]'}`}
                   />
                 </button>
-                <button
-                  onClick={() => setCollateralAction('remove')}
-                >
+                <button onClick={() => setCollateralAction('remove')}>
                   <p
                     className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateralAction === 'remove' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
                   >
@@ -626,14 +644,16 @@ function TokenDetail() {
               <div className='mt-4'>
                 <div className='flex justify-between items-center'>
                   <p className='text-base font-lufga text-[#4B5E5B]'>
-                    {collateralAction == "add" ? "Suppliable" : "Available"} amount
+                    {collateralAction == 'add' ? 'Suppliable' : 'Available'}{' '}
+                    amount
                   </p>
                   <p className='text-base font-lufga text-[#CAEAE5]'>
                     {formatNumber(
                       Number(collateralAvailableAmount),
                       getTokenPrecision(market.collateral, priceDataMap),
                       true,
-                    )} {market.collateralSymbol}
+                    )}{' '}
+                    {market.collateralSymbol}
                   </p>
                 </div>
               </div>
@@ -653,17 +673,15 @@ function TokenDetail() {
           </div>
         </div>
       </div>
-      {
-        shareImageModalStatus && (
-          <ShareImageModal
-            token={market.collateralName}
-            apy={formatNumber(actionData?.totalApy, 3)}
-            dailyEarnings={formatNumber(actionData?.dailyEarning, 3)}
-            onClose={toggleModal}
-          />
-        )
-      }
-    </div >
+      {shareImageModalStatus && (
+        <ShareImageModal
+          token={market.collateralName}
+          apy={formatNumber(actionData?.totalApy, 3)}
+          dailyEarnings={formatNumber(actionData?.dailyEarning, 3)}
+          onClose={toggleModal}
+        />
+      )}
+    </div>
   );
 }
 

@@ -294,9 +294,9 @@ function Modal({ token, modalType, onClose }: ModalProps) {
       .toFixed(0)
       .toString() as any as bigint;
 
-    if (amount == 0){
-        setErrorMsg("Amount should be greater than 0");
-        return;
+    if (amount == 0) {
+      setErrorMsg('Amount should be greater than 0');
+      return;
     }
 
     setIsTxPending(true);
@@ -454,9 +454,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             {errorMsg ? (
               <div className='flex justify-between mb-2'>
                 <p className='font-lufga font-light text-xs text-[#FF0000] mt-2'>
-                  {
-                    parseErrorMsg(errorMsg)
-                  }
+                  {parseErrorMsg(errorMsg)}
                 </p>
               </div>
             ) : (

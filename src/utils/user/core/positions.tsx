@@ -143,7 +143,10 @@ export function useUserPositionsData(
     0,
   );
 
-  const netApy = (supplyInterestEarned - borrowInterestEarned) / (totalSupply - totalBorrow) * 100;
+  const netApy =
+    ((supplyInterestEarned - borrowInterestEarned) /
+      (totalSupply - totalBorrow)) *
+    100;
 
   return {
     supplied: supplied,

@@ -1,6 +1,10 @@
 import { useEffect, useMemo } from 'react';
 import CardItem from '../../../components/common/CardItem';
-import { decodeConfig, formatNumber, formatUnit } from '../../../utils/functions';
+import {
+  decodeConfig,
+  formatNumber,
+  formatUnit,
+} from '../../../utils/functions';
 import InfoItem from '../../../components/common/InfoItem';
 import {
   tokenNameMap,

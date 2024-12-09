@@ -1,9 +1,4 @@
-import {
-  Navigate,
-  Route,
-  Routes,
-  useSearchParams,
-} from 'react-router-dom';
+import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 import Dashboard from '../pages/dashboard/Dashboard';
 import Markets from '../pages/markets/Markets';
 import CoreTokenDetails from '../pages/markets/core/CoreTokenDetail';
@@ -72,7 +67,8 @@ function MainContent() {
         <div
           className={`absolute top-0 right-0 w-full h-screen -z-10 ${guided > 0 ? 'lg:blur-[8px]' : ''}`}
         >
-          {location.pathname.match(/^\/markets\/[^/]+$/) && !(location.pathname.match(/^\/markets\/isolated\/?$/)) ? (
+          {location.pathname.match(/^\/markets\/[^/]+$/) &&
+          !location.pathname.match(/^\/markets\/isolated\/?$/) ? (
             <img
               className='w-full'
               src={

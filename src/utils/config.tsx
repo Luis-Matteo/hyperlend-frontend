@@ -93,4 +93,5 @@ export const tokenToGradient: any =
 export const oraclesMap: any =
   networkConfigs[currentChainId].oraclesMap || arb.oraclesMap;
 export const excludeIsolatedPairs: any =
-  networkConfigs[currentChainId].excludeIsolatedPairs || arb.excludeIsolatedPairs;
+  networkConfigs[currentChainId].excludeIsolatedPairs ||
+  arb.excludeIsolatedPairs;

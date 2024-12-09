@@ -1,11 +1,17 @@
 import { useMemo, useCallback } from 'react';
 import { useReadContracts, useReadContract } from 'wagmi';
 
-import { contracts, abis, excludeIsolatedPairs, tokenDecimalsMap, tokenFullNameMap, tokenNameMap, iconsMap } from '../../config';
-
 import {
-  calculateApyIsolated
-} from '../../../utils/functions';
+  contracts,
+  abis,
+  excludeIsolatedPairs,
+  tokenDecimalsMap,
+  tokenFullNameMap,
+  tokenNameMap,
+  iconsMap,
+} from '../../config';
+
+import { calculateApyIsolated } from '../../../utils/functions';
 
 export function useProtocolPairsData(pairAddress?: string): any {
   let {
@@ -20,8 +26,8 @@ export function useProtocolPairsData(pairAddress?: string): any {
     availablePoolsResults = [];
   }
 
-  if (pairAddress){
-    availablePoolsResults = [pairAddress]
+  if (pairAddress) {
+    availablePoolsResults = [pairAddress];
   }
 
   //for each pair, get borrowed asset, ltv, total supplied tokens, total borrow, total collateral
@@ -83,10 +89,16 @@ export function useProtocolPairsData(pairAddress?: string): any {
     return (availablePoolsResults as `0x${string}`[]).reduce(
       (acc, asset, index) => {
         const result = pairResults[index];
-        if (result && result.status === 'success' && !excludeIsolatedPairs.includes((result.result as any).pair)) {
+        if (
+          result &&
+          result.status === 'success' &&
+          !excludeIsolatedPairs.includes((result.result as any).pair)
+        ) {
           acc[asset] = result.result as any;
         } else {
-          console.error(`Failed to get pair data for asset or pair is excluded: ${asset}`);
+          console.error(
+            `Failed to get pair data for asset or pair is excluded: ${asset}`,
+          );
         }
         return acc;
       },
@@ -124,7 +136,10 @@ interface IsolatedPairInfo {
   liquidationPenalty: number;
 }
 
-export function preparePairData(pair: any, priceDataMap: any): IsolatedPairInfo {
+export function preparePairData(
+  pair: any,
+  priceDataMap: any,
+): IsolatedPairInfo {
   const assetPriceUsd =
     priceDataMap[pair.exchangeRate.chainlinkAssetAddress] || 0n;
   const collateralPriceUsd =
@@ -157,8 +172,7 @@ export function preparePairData(pair: any, priceDataMap: any): IsolatedPairInfo 
   const availableLiquidity =
     Number(pair.availableLiquidity) /
     Math.pow(10, tokenDecimalsMap[pair.asset]);
-  const availableLiquidityUsd =
-    availableLiquidity * assetPriceUsdNormalized;
+  const availableLiquidityUsd = availableLiquidity * assetPriceUsdNormalized;
 
   const market: IsolatedPairInfo = {
     pair: pair.pair,
@@ -182,7 +196,7 @@ export function preparePairData(pair: any, priceDataMap: any): IsolatedPairInfo 
     availableLiquidityUsd: availableLiquidityUsd,
     utilization: utilization * 100,
     ltv: Number(pair.ltv) / 1000,
-    liquidationPenalty: 10
+    liquidationPenalty: 10,
   };
 
   return market;

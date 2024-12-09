@@ -31,9 +31,7 @@ import {
 import { getTokenPrecision } from '../../utils/user/core/functions/utils';
 import { useProtocolPriceData } from '../../utils/protocol/core/prices';
 
-import AnimateModal, {
-  AnimateModalProps,
-} from './AnimateModal';
+import AnimateModal, { AnimateModalProps } from './AnimateModal';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };

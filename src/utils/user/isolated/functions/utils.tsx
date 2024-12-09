@@ -120,7 +120,7 @@ function getAvailableBorrow(params: any): any {
   const availableBorrowBaseToken =
     Number(availableBorrowsBase) / Number(tokenPrice);
 
-  if (borrowCap == 0) borrowCap = Infinity
+  if (borrowCap == 0) borrowCap = Infinity;
 
   const availableAfterCap =
     borrowCap != 0 && totalBorrowed + availableBorrowBaseToken > borrowCap
