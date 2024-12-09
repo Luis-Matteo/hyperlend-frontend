@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import ProgressBar from '../common/PercentBar';
 import Button from '../common/Button';
 import { TokenActionsIsolatedProps } from '../../utils/types';
-import ToggleButton from '../common/ToggleButton';
 import {
   useAccount,
   useWriteContract,
@@ -11,17 +10,8 @@ import {
 } from 'wagmi';
 
 import { formatNumber } from '../../utils/functions';
-import {
-  iconsMap,
-  tokenNameMap,
-  tokenDecimalsMap,
-  contracts,
-  wrappedTokens,
-} from '../../utils/config';
-import {
-  useUserAllowance,
-  useUserWrappedTokenAllowanceData,
-} from '../../utils/user/wallet';
+import { iconsMap, tokenNameMap, tokenDecimalsMap } from '../../utils/config';
+import { useUserAllowance } from '../../utils/user/wallet';
 import { getErrorMessage } from '../../utils/constants/errorCodes';
 import { protocolAction } from '../../utils/user/isolated/functions/actions';
 import { getTokenPrecision } from '../../utils/user/isolated/functions/utils';
@@ -43,7 +33,6 @@ const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
   dailyEarning,
   btnTitle,
   token,
-  isCollateralEnabled,
   handleDataFromActions,
 }) => {
   const actionType = btnTitle.toLowerCase();
@@ -51,7 +40,6 @@ const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
   const [progress, setProgress] = useState<number>(0);
   const [userAllowance, setUserAllowance] = useState(0);
   const [buttonText, setButtonText] = useState(btnTitle);
-  const [collateral, setCollateral] = useState(isCollateralEnabled);
   const [amount, setAmount] = useState(0);
   const [errorMsg, setErrorMsg] = useState<any>(null);
   const [isTxPending, setIsTxPending] = useState(false);

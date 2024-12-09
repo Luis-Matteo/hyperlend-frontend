@@ -15,10 +15,10 @@ import { tokenDetailButton } from '../../../utils/constants/constants';
 import {
   formatNumber,
   formatAddress,
-  calculateApyIsolated,
+  //   calculateApyIsolated,
 } from '../../../utils/functions';
 import BorrowInfoChart from '../../../components/charts/BorrowInfoChart';
-import InterestRateModelChart from '../../../components/charts/InterestRateModelChart';
+// import InterestRateModelChart from '../../../components/charts/InterestRateModelChart';
 import { TokenActionsIsolatedProps } from '../../../utils/types';
 import topRightArrowImage from '../../../assets/icons/top-right-arrow.svg';
 import ShareImageModal from '../../../components/common/ShareImageModal';
@@ -30,13 +30,9 @@ import {
   iconsMap,
   tokenDecimalsMap,
   networkChainId,
-  tokenFullNameMap,
 } from '../../../utils/config';
 
-import {
-  useUserPositionData,
-  useUserAccountData,
-} from '../../../utils/user/isolated/positions';
+import { useUserAccountData } from '../../../utils/user/isolated/positions';
 
 import { useUserTokenBalance } from '../../../utils/user/wallet';
 
@@ -81,7 +77,6 @@ function TokenDetail() {
 
   const [activeButton, setActiveButton] = useState(1);
   const [isTxPending, setIsTxPending] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<any>(null);
   const [lastConfirmedTxHash, setLastConfirmedTxHash] = useState<string>('');
 
   const { switchChain } = useSwitchChain();
@@ -94,7 +89,7 @@ function TokenDetail() {
   }, [isConnected, chainId]);
 
   const publicClient = usePublicClient();
-  const { data: hash, writeContractAsync, error } = useWriteContract();
+  const { data: hash, writeContractAsync } = useWriteContract();
 
   const txReceiptResult = useWaitForTransactionReceipt({
     hash: hash,
@@ -202,12 +197,6 @@ function TokenDetail() {
   });
   const { userAccountData } = useUserAccountData(pairAddress, address);
 
-  const userPositionsData = useUserPositionData(
-    isConnected,
-    address,
-    pairAddress,
-  );
-
   const collateralAvailableAmount =
     Number(userWalletCollateralBalance) /
     Math.pow(10, tokenDecimalsMap[pair.collateral]);
@@ -232,7 +221,6 @@ function TokenDetail() {
       assetUsdPrice,
       collateralUsdPrice,
       pair.ltv,
-      userPositionsData,
       userAccountData,
       priceDataMap,
       userEthBalance,
@@ -282,13 +270,12 @@ function TokenDetail() {
     dailyEarning: getDailyEarnings('supply'),
     btnTitle: 'Supply',
     token: market.asset,
-    isCollateralEnabled: false,
     handleDataFromActions: handleDataFromActions,
   });
 
   useEffect(() => {
     handleButtonClick(activeButton);
-  }, [userWalletTokenBalance, userEthBalance, userPositionsData]);
+  }, [userWalletTokenBalance, userEthBalance]);
 
   useEffect(() => {
     if (
@@ -353,7 +340,6 @@ function TokenDetail() {
           dailyEarning: getDailyEarnings('supply'),
           btnTitle: 'Supply',
           token: market.asset,
-          isCollateralEnabled: false,
           handleDataFromActions: handleDataFromActions,
         };
         break;
@@ -369,7 +355,6 @@ function TokenDetail() {
           dailyEarning: getDailyEarnings('withdraw'),
           btnTitle: 'Withdraw',
           token: market.asset,
-          isCollateralEnabled: false, //not used
           handleDataFromActions: handleDataFromActions,
         };
         break;
@@ -385,7 +370,6 @@ function TokenDetail() {
           dailyEarning: getDailyEarnings('borrow'),
           btnTitle: 'Borrow',
           token: market.asset,
-          isCollateralEnabled: false, //not used
           handleDataFromActions: handleDataFromActions,
         };
         break;
@@ -401,7 +385,6 @@ function TokenDetail() {
           dailyEarning: getDailyEarnings('repay'),
           btnTitle: 'Repay',
           token: market.asset,
-          isCollateralEnabled: false,
           handleDataFromActions: handleDataFromActions,
         };
         break;

@@ -1,5 +1,5 @@
-import { tokenDecimalsMap, wrappedTokens, liqMap } from '../../../config';
-import { normalizeDecimalsAmount, decodeConfig } from '../../../functions';
+import { tokenDecimalsMap } from '../../../config';
+import { normalizeDecimalsAmount } from '../../../functions';
 
 //return precision for token amount worth $0.01
 export function getTokenPrecision(token: string, priceDataMap: any): any {
@@ -21,7 +21,6 @@ export function calculateAvailableBalance(
   assetUsdPrice: number,
   collateralUsdPrice: number,
   ltv: number,
-  userPositionsData: any,
   userAccountData: any,
   priceDataMap: any,
   userEthBalance: any,
@@ -36,7 +35,6 @@ export function calculateAvailableBalance(
     assetUsdPrice: assetUsdPrice,
     collateralUsdPrice: collateralUsdPrice,
     ltv: ltv,
-    userPositionsData: userPositionsData,
     userAccountData: userAccountData,
     priceDataMap: priceDataMap,
     userEthBalance: userEthBalance,
@@ -103,13 +101,12 @@ function getAvailableRepay(params: any) {
   return borrowedBalance > userBalance ? userBalance : borrowedBalance;
 }
 
-export function calculatePredictedHealthFactor(
-  token: string,
-  amount: number,
-  actionType: string,
-  priceDataMap: any,
-  userPositionsData: any,
-): any {
+export function calculatePredictedHealthFactor(): any {
+  //   token: string,
+  //   amount: number,
+  //   actionType: string,
+  //   priceDataMap: any,
+  //   userPositionsData: any,
   // const tokenPriceUsd = Number(priceDataMap[token]) / Math.pow(10, 8);
   // const amountUsd =
   //   amount *

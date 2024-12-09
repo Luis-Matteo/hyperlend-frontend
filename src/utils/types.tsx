@@ -122,7 +122,6 @@ export interface TokenActionsIsolatedProps {
   dailyEarning: number;
   btnTitle: string;
   token: string;
-  isCollateralEnabled: boolean;
   handleDataFromActions: any;
 }
 

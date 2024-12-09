@@ -1,14 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import CardItem from '../../../components/common/CardItem';
-import { formatUnit, calculateApyIsolated } from '../../../utils/functions';
+import { formatUnit } from '../../../utils/functions';
 
-import {
-  tokenNameMap,
-  tokenFullNameMap,
-  iconsMap,
-  tokenDecimalsMap,
-  networkChainId,
-} from '../../../utils/config';
+import { networkChainId } from '../../../utils/config';
 
 import { useAccount, useSwitchChain } from 'wagmi';
 import { ModalType } from '../../../utils/types';
