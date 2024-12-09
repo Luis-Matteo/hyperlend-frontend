@@ -203,7 +203,7 @@ function TokenDetail() {
     setCollateralWithdrawableAmount(
       Number((userAccountData as any)?.userCollateral) /
         Math.pow(10, tokenDecimalsMap[market.collateral]) || 0,
-    );
+      );
   }, [userAccountData, (userAccountData as any)?.userAccountData]);
 
   function handleDataFromActions(data: any) {
@@ -226,14 +226,14 @@ function TokenDetail() {
   };
 
   const interestRateDataMap = {
-    supply: 0,
-    borrow: 0,
+    supply: market.supplyApy,
+    borrow: market.borrowApy,
   };
 
   const getDailyEarnings: any = (actionType: string) => {
     if (actionType == 'supply' || actionType == 'withdraw') {
       return (
-        ((market.totalAssetsUsd || 0) * (interestRateDataMap.supply / 100)) /
+        ((market.totalAssetsUsd || 0) * (market.supplyApy)) /
         365
       );
     }
@@ -242,17 +242,17 @@ function TokenDetail() {
       return (
         (-1 *
           (market.totalBorrowedUsd || 0) *
-          (interestRateDataMap.borrow / 100)) /
+          (market.borrowApy)) /
         365
       );
     }
   };
 
   const supplied = {
-    balance: 0,
+    balance: Number((userAccountData as any)?.userAssets) / Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
   };
   const borrowed = {
-    balance: 0,
+    balance: Number((userAccountData as any)?.userBorrows) / Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
   };
 
   const [actionData, setActionData] = useState<TokenActionsIsolatedProps>({
@@ -799,7 +799,7 @@ function TokenDetail() {
       </div>
       {shareImageModalStatus && (
         <ShareImageModal
-          token={market.assetSymbol}
+          token={market.asset}
           apy={formatNumber(actionData?.totalApy, 3)}
           dailyEarnings={formatNumber(actionData?.dailyEarning, 3)}
           onClose={toggleModal}
