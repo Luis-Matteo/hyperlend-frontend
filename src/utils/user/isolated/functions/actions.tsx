@@ -15,9 +15,17 @@ export async function protocolAction(
   pairAddress: string,
 ) {
   try {
-    if (!userAddress || userAddress == "0x0000000000000000000000000000000000000000") throw new Error("Missing user address");
+    if (
+      !userAddress ||
+      userAddress == '0x0000000000000000000000000000000000000000'
+    )
+      throw new Error('Missing user address');
 
-    if (actionType == 'supply' || actionType == 'repay' || actionType == "addCollateral") {
+    if (
+      actionType == 'supply' ||
+      actionType == 'repay' ||
+      actionType == 'addCollateral'
+    ) {
       if (allowance < amount) {
         const approveResult = await writeContractAsync({
           address: token as any,
@@ -37,10 +45,10 @@ export async function protocolAction(
     const functionParams: any = {
       deposit: [bgIntAmount, userAddress], //amount, receiver
       withdraw: [bgIntAmount, userAddress, userAddress], //amount, receiver, owner
-      borrowAsset: [bgIntAmount, 0, userAddress],  //_borrowAmount, _collateralAmount, receiver
+      borrowAsset: [bgIntAmount, 0, userAddress], //_borrowAmount, _collateralAmount, receiver
       repayAsset: [bgIntAmount, userAddress], //shares, borrower
       addCollateral: [bgIntAmount, userAddress], //uint256 _collateralAmount, address _borrower
-      removeCollateral: [bgIntAmount, userAddress] //uint256 _collateralAmount, address _receiver
+      removeCollateral: [bgIntAmount, userAddress], //uint256 _collateralAmount, address _receiver
     };
 
     if (useMaxAmount && (actionType == 'withdraw' || actionType == 'repay')) {
@@ -49,13 +57,13 @@ export async function protocolAction(
     }
 
     const functionNameConvert: any = {
-      supply: "deposit",
-      withdraw: "withdraw",
-      repay: "repayAsset",
-      borrow: "borrowAsset",
-      addCollateral: "addCollateral",
-      removeCollateral: "removeCollateral"
-    }
+      supply: 'deposit',
+      withdraw: 'withdraw',
+      repay: 'repayAsset',
+      borrow: 'borrowAsset',
+      addCollateral: 'addCollateral',
+      removeCollateral: 'removeCollateral',
+    };
 
     const txResult = await writeContractAsync({
       address: pairAddress,

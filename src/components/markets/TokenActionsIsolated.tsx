@@ -23,9 +23,7 @@ import {
   useUserWrappedTokenAllowanceData,
 } from '../../utils/user/wallet';
 import { getErrorMessage } from '../../utils/constants/errorCodes';
-import {
-  protocolAction,
-} from '../../utils/user/isolated/functions/actions';
+import { protocolAction } from '../../utils/user/isolated/functions/actions';
 import { getTokenPrecision } from '../../utils/user/isolated/functions/utils';
 import { useAssetPrice } from '../../utils/protocol/isolated/prices';
 
@@ -46,7 +44,7 @@ const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
   btnTitle,
   token,
   isCollateralEnabled,
-  handleDataFromActions
+  handleDataFromActions,
 }) => {
   const actionType = btnTitle.toLowerCase();
 

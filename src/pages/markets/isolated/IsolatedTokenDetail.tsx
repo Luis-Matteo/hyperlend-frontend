@@ -8,7 +8,7 @@ import {
   useWriteContract,
   useWaitForTransactionReceipt,
   usePublicClient,
-  useBalance
+  useBalance,
 } from 'wagmi';
 import ReactGA from 'react-ga4';
 import { tokenDetailButton } from '../../../utils/constants/constants';
@@ -51,15 +51,13 @@ import {
   getTokenPrecision,
 } from '../../../utils/user/isolated/functions/utils';
 
-import {
-  protocolAction,
-} from '../../../utils/user/isolated/functions/actions';
+import { protocolAction } from '../../../utils/user/isolated/functions/actions';
 
-import {
-  useUserAllowance,
-} from '../../../utils/user/wallet';
+import { useUserAllowance } from '../../../utils/user/wallet';
 
-import AnimateModal, { AnimateModalProps } from '../../../components/markets/AnimateModal';
+import AnimateModal, {
+  AnimateModalProps,
+} from '../../../components/markets/AnimateModal';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };
@@ -103,14 +101,14 @@ function TokenDetail() {
   });
 
   const [animateModalStatus, setAnimateModalStatus] =
-  useState<AnimateModalStatus>({
-    isOpen: false,
-    type: 'completed',
-    actionType: 'supply',
-    txLink: '',
-    extraDetails: '',
-    onClick: undefined,
-  });
+    useState<AnimateModalStatus>({
+      isOpen: false,
+      type: 'completed',
+      actionType: 'supply',
+      txLink: '',
+      extraDetails: '',
+      onClick: undefined,
+    });
 
   const openAnimateModal = (
     type: 'loading' | 'completed' | 'failed',
@@ -136,7 +134,7 @@ function TokenDetail() {
     if (isTxPending) {
       openAnimateModal(
         'loading',
-        collateralAction == "add" ? "supply" : "withdraw",
+        collateralAction == 'add' ? 'supply' : 'withdraw',
         '',
         '',
       );
@@ -204,15 +202,23 @@ function TokenDetail() {
   });
   const { userAccountData } = useUserAccountData(pairAddress, address);
 
-  const userPositionsData = useUserPositionData(isConnected, address, pairAddress);
+  const userPositionsData = useUserPositionData(
+    isConnected,
+    address,
+    pairAddress,
+  );
 
   const collateralAvailableAmount =
     Number(userWalletCollateralBalance) /
     Math.pow(10, tokenDecimalsMap[pair.collateral]);
-  const [collateralWithdrawableAmount, setCollateralWithdrawableAmount] = useState(0);
+  const [collateralWithdrawableAmount, setCollateralWithdrawableAmount] =
+    useState(0);
 
   useEffect(() => {
-    setCollateralWithdrawableAmount((Number((userAccountData as any)?.userCollateral) / Math.pow(10, tokenDecimalsMap[market.collateral])) || 0);
+    setCollateralWithdrawableAmount(
+      Number((userAccountData as any)?.userCollateral) /
+        Math.pow(10, tokenDecimalsMap[market.collateral]) || 0,
+    );
   }, [userAccountData, (userAccountData as any)?.userAccountData]);
 
   function handleDataFromActions(data: any) {
@@ -277,7 +283,7 @@ function TokenDetail() {
     btnTitle: 'Supply',
     token: market.asset,
     isCollateralEnabled: false,
-    handleDataFromActions: handleDataFromActions
+    handleDataFromActions: handleDataFromActions,
   });
 
   useEffect(() => {
@@ -293,7 +299,7 @@ function TokenDetail() {
       setLastConfirmedTxHash(txReceiptResult.data.transactionHash);
       openAnimateModal(
         'completed',
-        collateralAction == "add" ? "supply" : "withdraw",
+        collateralAction == 'add' ? 'supply' : 'withdraw',
         'https://testnet.purrsec.com/tx/' +
           txReceiptResult.data.transactionHash,
         '',
@@ -302,10 +308,13 @@ function TokenDetail() {
   }, [txReceiptResult]);
 
   const handleCollateral = async () => {
-    let actionType = collateralAction == "add" ? "addCollateral" : "removeCollateral"
+    let actionType =
+      collateralAction == 'add' ? 'addCollateral' : 'removeCollateral';
 
     const bgIntAmount = parseFloat(
-      (collateralAmount * Math.pow(10, tokenDecimalsMap[market.collateral])).toString(),
+      (
+        collateralAmount * Math.pow(10, tokenDecimalsMap[market.collateral])
+      ).toString(),
     )
       .toFixed(0)
       .toString() as any as bigint;
@@ -315,13 +324,14 @@ function TokenDetail() {
       actionType,
       market.collateral,
       address || '0x0000000000000000000000000000000000000000',
-      Number(collateralAllowance) / Math.pow(10, tokenDecimalsMap[market.collateral]),
+      Number(collateralAllowance) /
+        Math.pow(10, tokenDecimalsMap[market.collateral]),
       collateralAmount,
       bgIntAmount,
       writeContractAsync,
       publicClient,
       false,
-      pairAddress
+      pairAddress,
     );
     setIsTxPending(false);
   };
@@ -344,7 +354,7 @@ function TokenDetail() {
           btnTitle: 'Supply',
           token: market.asset,
           isCollateralEnabled: false,
-          handleDataFromActions: handleDataFromActions
+          handleDataFromActions: handleDataFromActions,
         };
         break;
       case 2:
@@ -360,7 +370,7 @@ function TokenDetail() {
           btnTitle: 'Withdraw',
           token: market.asset,
           isCollateralEnabled: false, //not used
-          handleDataFromActions: handleDataFromActions
+          handleDataFromActions: handleDataFromActions,
         };
         break;
       case 3:
@@ -376,7 +386,7 @@ function TokenDetail() {
           btnTitle: 'Borrow',
           token: market.asset,
           isCollateralEnabled: false, //not used
-          handleDataFromActions: handleDataFromActions
+          handleDataFromActions: handleDataFromActions,
         };
         break;
       case 4:
@@ -392,7 +402,7 @@ function TokenDetail() {
           btnTitle: 'Repay',
           token: market.asset,
           isCollateralEnabled: false,
-          handleDataFromActions: handleDataFromActions
+          handleDataFromActions: handleDataFromActions,
         };
         break;
       default:
@@ -767,7 +777,11 @@ function TokenDetail() {
                   <button
                     className='text-base text-[#CAEAE566]'
                     onClick={() => {
-                      {collateralAction == 'add' ? setCollateralAmount(collateralAvailableAmount) : setCollateralAmount(collateralWithdrawableAmount)}
+                      {
+                        collateralAction == 'add'
+                          ? setCollateralAmount(collateralAvailableAmount)
+                          : setCollateralAmount(collateralWithdrawableAmount);
+                      }
                     }}
                   >
                     MAX
@@ -781,15 +795,17 @@ function TokenDetail() {
                     amount
                   </p>
                   <p className='text-base font-lufga text-[#CAEAE5]'>
-                    {collateralAction == 'add' ? formatNumber(
-                      Number(collateralAvailableAmount),
-                      getTokenPrecision(market.collateral, priceDataMap),
-                      true,
-                    ) : formatNumber(
-                      Number(collateralWithdrawableAmount),
-                      getTokenPrecision(market.collateral, priceDataMap),
-                      true,
-                    )}{' '}
+                    {collateralAction == 'add'
+                      ? formatNumber(
+                          Number(collateralAvailableAmount),
+                          getTokenPrecision(market.collateral, priceDataMap),
+                          true,
+                        )
+                      : formatNumber(
+                          Number(collateralWithdrawableAmount),
+                          getTokenPrecision(market.collateral, priceDataMap),
+                          true,
+                        )}{' '}
                     {market.collateralSymbol}
                   </p>
                 </div>

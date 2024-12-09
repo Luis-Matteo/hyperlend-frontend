@@ -72,19 +72,26 @@ function getAvailableWithdraw(params: any) {
     params.asset,
     tokenDecimalsMap,
   );
-  
+
   return userAmount;
 }
 
 function getAvailableBorrow(params: any): any {
-  const availableLiquidity = (Number(params.userAccountData.userCollateral) / Math.pow(10, Number(params.userAccountData.decimals))) * params.collateralUsdPrice * Number(params.ltv) / 100000 / params.assetUsdPrice;
+  const availableLiquidity =
+    ((Number(params.userAccountData.userCollateral) /
+      Math.pow(10, Number(params.userAccountData.decimals))) *
+      params.collateralUsdPrice *
+      Number(params.ltv)) /
+    100000 /
+    params.assetUsdPrice;
 
-  return availableLiquidity * 0.995 //0.5% lower to give some space if price changes/rounding errors
+  return availableLiquidity * 0.995; //0.5% lower to give some space if price changes/rounding errors
 }
 
 function getAvailableRepay(params: any) {
   const borrowedBalance =
-    (Number(params.userAccountData.userBorrow) / Math.pow(10, Number(params.userAccountData.decimals))) || 0;
+    Number(params.userAccountData.userBorrow) /
+      Math.pow(10, Number(params.userAccountData.decimals)) || 0;
   if (borrowedBalance == 0) return 0;
 
   const userBalance = normalizeDecimalsAmount(
