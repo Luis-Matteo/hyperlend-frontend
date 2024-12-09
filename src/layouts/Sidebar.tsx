@@ -154,7 +154,11 @@ function Sidebar() {
           </div>
         </div>
         <div className='flex justify-between'>
-          <a className='flex gap-2 items-center' href='https://docs.hyperlend.finance' target='_blank'>
+          <a
+            className='flex gap-2 items-center'
+            href='https://docs.hyperlend.finance'
+            target='_blank'
+          >
             <img className='' src={logoutIcon} alt='' />
             <p className='font-lufga text-grey-light'>Docs</p>
           </a>

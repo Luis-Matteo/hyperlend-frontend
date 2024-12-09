@@ -110,3 +110,8 @@ export interface TokenActionsProps {
   isCollateralEnabled: boolean;
   handleDataFromActions: any;
 }
+
+export interface LargestUsers {
+  user: string;
+  totalUSD: number;
+}

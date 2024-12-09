@@ -32,7 +32,7 @@ function MarketControl({
     setMobileSearch((prev) => !prev);
   };
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className='pt-8 pb-4'
@@ -43,7 +43,7 @@ function MarketControl({
         transition={{ delay: 0.2 }}
       >
         <CardItem className='py-3 px-2 md:px-6 flex justify-between items-center'>
-          <motion.div 
+          <motion.div
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -51,22 +51,24 @@ function MarketControl({
           >
             <button
               type='button'
-              className={`py-2 px-4 font-lufga rounded-full text-xs font-bold transition-all duration-500 ${status === 'core' ? 'bg-secondary' : ' text-white'
-                }`}
+              className={`py-2 px-4 font-lufga rounded-full text-xs font-bold transition-all duration-500 ${
+                status === 'core' ? 'bg-secondary' : ' text-white'
+              }`}
               onClick={() => setStatus('core')}
             >
               Core
             </button>
             <button
               type='button'
-              className={`py-2 px-4 font-lufga rounded-full text-xs font-bold transition-all duration-500 ${status === 'isolated' ? 'bg-secondary' : ' text-white'
-                }`}
+              className={`py-2 px-4 font-lufga rounded-full text-xs font-bold transition-all duration-500 ${
+                status === 'isolated' ? 'bg-secondary' : ' text-white'
+              }`}
               onClick={() => setStatus('isolated')}
             >
               Isolated
             </button>
           </motion.div>
-          <motion.div 
+          <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -120,7 +122,7 @@ function MarketControl({
               </motion.div>
             )}
           </div>
-          <motion.div 
+          <motion.div
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}

@@ -9,7 +9,6 @@ import { ModalType } from '../../utils/types';
 import CoreTable from './CoreTable';
 import IsolatedTable from './IsolatedTable';
 
-
 function MarketOverview() {
   ReactGA.send({ hitType: 'pageview', page: '/markets' });
 
@@ -35,8 +34,7 @@ function MarketOverview() {
           setSearchText={setSearchText}
         />
       </div>
-      {
-        status === 'core' &&
+      {status === 'core' && (
         <CoreTable
           stable={stable}
           searchText={searchText}
@@ -44,9 +42,8 @@ function MarketOverview() {
           setModalType={setModalType}
           setSelectedToken={setSelectedToken}
         />
-      }
-      {
-        status === 'isolated' &&
+      )}
+      {status === 'isolated' && (
         <IsolatedTable
           stable={stable}
           searchText={searchText}
@@ -54,7 +51,7 @@ function MarketOverview() {
           setModalType={setModalType}
           setSelectedToken={setSelectedToken}
         />
-      }
+      )}
       {modalStatus && (
         <Modal
           token={selectedToken || ''}

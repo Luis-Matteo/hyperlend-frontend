@@ -3,19 +3,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Loop from '../../components/hyperloop/Loop';
 import MyPositions from '../../components/hyperloop/MyPositions';
 
-
 const typeButtons = [
   {
-    id: "loop",
-    title: "loop"
+    id: 'loop',
+    title: 'loop',
   },
   {
-    id: "my-positions",
-    title: "my positions"
-  }
-]
+    id: 'my-positions',
+    title: 'my positions',
+  },
+];
 function HyperloopOverview() {
-
   const [activeType, setActiveType] = useState<string>('loop');
 
   return (
@@ -39,13 +37,10 @@ function HyperloopOverview() {
           </motion.button>
         ))}
       </div>
-      <AnimatePresence mode="wait">
-        {activeType === "loop" && (
-          <Loop />
-        )}
-        {activeType === "my-positions" && (
-          <MyPositions />
-        )}
+
+      <AnimatePresence mode='wait'>
+        {activeType === 'loop' && <Loop />}
+        {activeType === 'my-positions' && <MyPositions />}
       </AnimatePresence>
     </>
   );

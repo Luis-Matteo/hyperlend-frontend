@@ -26,7 +26,7 @@ function Navbar({ pageTitle, pageIcon, back }: NavbarProps) {
       transition={{ duration: 0.3 }}
       className={`${guided > 0 ? 'lg:blur-[8px]' : ''}`}
     >
-      <div className="flex justify-between items-center lg:hidden mb-6">
+      <div className='flex justify-between items-center lg:hidden mb-6'>
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
