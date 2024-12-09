@@ -77,8 +77,8 @@ function getAvailableWithdraw(params: any) {
 }
 
 function getAvailableBorrow(params: any): any {
-  const availableLiquidity = Number(params.userAccountData.userCollateral) / Number(params.userAccountData.decimals) * params.collateralUsdPrice * Number(params.ltv) / params.assetUsdPrice;
-  
+  const availableLiquidity = (Number(params.userAccountData.userCollateral) / Math.pow(10, Number(params.userAccountData.decimals))) * params.collateralUsdPrice * Number(params.ltv) / 100000 / params.assetUsdPrice;
+
   return availableLiquidity * 0.995 //0.5% lower to give some space if price changes/rounding errors
 }
 
