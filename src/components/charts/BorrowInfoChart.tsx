@@ -8,13 +8,17 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-import { calculateApy, calculateApyIsolated, formatNumber } from '../../utils/functions';
+import {
+  calculateApy,
+  calculateApyIsolated,
+  formatNumber,
+} from '../../utils/functions';
 import { useInterestRateHistory } from '../../utils/protocol/history';
 
 interface BorrowInfoChartType {
   type: string;
   token: string;
-  isIsolated: boolean;
+  isIsolated?: boolean;
 }
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -40,21 +44,25 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({ token, type, isIsolated = false }) => {
+const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({
+  token,
+  type,
+  isIsolated = false,
+}) => {
   const rawData = useInterestRateHistory(token);
 
   let data;
-  if (isIsolated){
+  if (isIsolated) {
     data = rawData.map((e: any) => {
       const borrowApy = calculateApyIsolated(e.ratePerSec as BigInt);
       const supplyApy =
         borrowApy *
         Number(e.utilizationRate) *
         (1 - Number(e.feeToProtocolRate) / 100000);
-        
+
       return {
         time: new Date(e.timestamp).toDateString(),
-        rate: formatNumber(type == "supply" ? supplyApy : borrowApy, 2),
+        rate: formatNumber(type == 'supply' ? supplyApy : borrowApy, 2),
       };
     });
   } else {
