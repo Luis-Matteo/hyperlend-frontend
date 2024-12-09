@@ -564,7 +564,11 @@ function TokenDetail() {
                 </div>
               ))}
             </div>
-            <BorrowInfoChart type='supply' token={pairAddress} />
+            <BorrowInfoChart
+              type='supply'
+              token={pairAddress}
+              isIsolated={true}
+            />
           </CardItem>
           <CardItem className='p-4 lg:p-8 mb-6'>
             <div className='flex justify-between items-center'>
@@ -595,7 +599,11 @@ function TokenDetail() {
                 </div>
               ))}
             </div>
-            <BorrowInfoChart type='borrow' token={pairAddress} />
+            <BorrowInfoChart
+              type='borrow'
+              token={pairAddress}
+              isIsolated={true}
+            />
           </CardItem>
           {/* <CardItem className='p-4 lg:p-8 mb-6'>
             <div className='flex justify-between items-center flex-wrap'>

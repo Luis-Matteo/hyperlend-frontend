@@ -486,7 +486,7 @@ function TokenDetail() {
                   </div>
                 ))}
               </div>
-              <BorrowInfoChart type='supply' token={token} />
+              <BorrowInfoChart type='supply' token={token} isIsolated={false} />
             </CardItem>
           </motion.div>
 
@@ -520,7 +520,7 @@ function TokenDetail() {
                   </div>
                 ))}
               </div>
-              <BorrowInfoChart type='borrow' token={token} />
+              <BorrowInfoChart type='borrow' token={token} isIsolated={false} />
             </CardItem>
           </motion.div>
 
