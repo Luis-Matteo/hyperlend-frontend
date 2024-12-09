@@ -56,13 +56,13 @@ const navLinksTop: NavLinkProps[] = [
     icon: lendborrowIcon,
     disabled: false,
   },
-  {
-    id: 'hypervault',
-    title: 'HyperVault',
-    url: '/hypervault',
-    icon: hypervaultIcon,
-    disabled: false,
-  },
+  // {
+  //   id: 'hypervault',
+  //   title: 'HyperVault',
+  //   url: '/hypervault',
+  //   icon: hypervaultIcon,
+  //   disabled: false,
+  // },
   {
     id: 'analytics',
     title: 'Analytics',
@@ -70,13 +70,13 @@ const navLinksTop: NavLinkProps[] = [
     icon: analyticsIcon,
     disabled: false,
   },
-  {
-    id: 'hyperloop',
-    title: 'HyperLoop',
-    url: '/hyperloop',
-    icon: hyperloopIcon,
-    disabled: false,
-  },
+  // {
+  //   id: 'hyperloop',
+  //   title: 'HyperLoop',
+  //   url: '/hyperloop',
+  //   icon: hyperloopIcon,
+  //   disabled: false,
+  // },
 ];
 
 const navLinksDown: NavLinkProps[] = [
