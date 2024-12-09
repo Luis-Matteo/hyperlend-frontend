@@ -203,7 +203,7 @@ function TokenDetail() {
     setCollateralWithdrawableAmount(
       Number((userAccountData as any)?.userCollateral) /
         Math.pow(10, tokenDecimalsMap[market.collateral]) || 0,
-      );
+    );
   }, [userAccountData, (userAccountData as any)?.userAccountData]);
 
   function handleDataFromActions(data: any) {
@@ -232,27 +232,23 @@ function TokenDetail() {
 
   const getDailyEarnings: any = (actionType: string) => {
     if (actionType == 'supply' || actionType == 'withdraw') {
-      return (
-        ((market.totalAssetsUsd || 0) * (market.supplyApy)) /
-        365
-      );
+      return ((market.totalAssetsUsd || 0) * market.supplyApy) / 365;
     }
 
     if (actionType == 'borrow' || actionType == 'repay') {
-      return (
-        (-1 *
-          (market.totalBorrowedUsd || 0) *
-          (market.borrowApy)) /
-        365
-      );
+      return (-1 * (market.totalBorrowedUsd || 0) * market.borrowApy) / 365;
     }
   };
 
   const supplied = {
-    balance: Number((userAccountData as any)?.userAssets) / Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
+    balance:
+      Number((userAccountData as any)?.userAssets) /
+        Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
   };
   const borrowed = {
-    balance: Number((userAccountData as any)?.userBorrows) / Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
+    balance:
+      Number((userAccountData as any)?.userBorrows) /
+        Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
   };
 
   const [actionData, setActionData] = useState<TokenActionsIsolatedProps>({
