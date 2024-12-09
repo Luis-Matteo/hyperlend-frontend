@@ -1,6 +1,7 @@
 interface Hypervault {
     id: number;
     tag: 'new' | 'hot' | 'risk';
+    slug: string;
     assetSymbol: string;
     assetIcon: string;
     collateralSymbol: string;

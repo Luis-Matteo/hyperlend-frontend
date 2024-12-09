@@ -140,7 +140,7 @@ function Dashboard() {
           <motion.div
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.6 }}
             className='flex flex-col md:flex-row gap-4 justify-between'
           >
             <CardItem

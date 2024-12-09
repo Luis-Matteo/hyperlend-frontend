@@ -4,7 +4,7 @@ import hypervaultIcon from '../../assets/icons/hypervault-icon.svg';
 import hypervaultTopImage from '../../assets/img/hypervault-top-effect.svg';
 import hypervaultBottomImage from '../../assets/img/hypervault-bottom-effect.svg';
 import HypervaultControl from '../../components/hypervault/HypervaultControl';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { hypervaults } from '../../utils/mocks/hypervault';
 import HypervaultCard from '../../components/hypervault/HypervaultCard';
@@ -15,6 +15,18 @@ function Hypervault() {
     const [status, setStatus] = useState<string>('all');
     const [sort, setSort] = useState<'highest' | 'lowest'>('highest');
     const [searchText, setSearchText] = useState<string>('');
+
+    const sortedHypervaults = useMemo(() =>
+        [...hypervaults]
+            .filter(vault => status === 'all' ? true : vault.slug === status)
+            .sort((a, b) => {
+                if (sort === 'highest') {
+                    return b.tvl - a.tvl;
+                }
+                return a.tvl - b.tvl;
+            }),
+        [status, sort]
+    );
 
     return (
         <>
@@ -69,6 +81,7 @@ function Hypervault() {
                     setSearchText={setSearchText}
                 />
                 <motion.div
+                    key={sort}
                     className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'
                     initial="hidden"
                     animate="visible"
@@ -82,7 +95,7 @@ function Hypervault() {
                         }
                     }}
                 >
-                    {hypervaults.map((item) => (
+                    {sortedHypervaults.map((item) => (
                         <motion.button
                             onClick={() => navigate(`/hypervault/${item.id}`)}
                             key={item.id}
