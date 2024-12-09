@@ -31,9 +31,9 @@ function Hypervault() {
     return (
         <>
             <div className='w-full'>
-                <Navbar pageTitle="HyperVault" />
-                <div className='w-full relative py-8'>
-                    <div className='max-w-[580px] mx-auto flex flex-col gap-8 items-center justify-center'>
+                <Navbar pageTitle={<span className='hidden lg:inline'>HyperVault</span>} />
+                <div className='w-full relative py-16 md:py-8 overflow-hidden'>
+                    <div className='max-w-[280px] md:max-w-[580px] mx-auto flex flex-col gap-4lg:gap-8 items-center justify-center'>
                         <motion.div
                             className='flex gap-11 items-center'
                             initial={{ opacity: 0, y: 20 }}
@@ -41,14 +41,14 @@ function Hypervault() {
                             transition={{ duration: 0.6 }}
                         >
                             <motion.img
-                                className='w-28'
+                                className='w-12 sm:w-16 lg:w-28'
                                 src={hypervaultIcon}
                                 alt="HyperVault"
                                 whileHover={{ scale: 1.1 }}
                                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
                             />
                             <motion.p
-                                className='font-lufga text-[80px] font-bold text-secondary'
+                                className='font-lufga text-[32px] sm:text-[40px] lg:text-[80px] font-bold text-secondary'
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ duration: 0.6, delay: 0.2 }}
@@ -57,7 +57,7 @@ function Hypervault() {
                             </motion.p>
                         </motion.div>
                         <motion.p
-                            className='font-lufga text-center text-secondary'
+                            className='font-lufga text-center text-secondary/40 sm:text-secondary'
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.6, delay: 0.4 }}
@@ -65,10 +65,10 @@ function Hypervault() {
                             Crypto investment on autopilot. Secure your wealth, earn more with automated hedging.
                         </motion.p>
                     </div>
-                    <div className='absolute top-0 right-0'>
+                    <div className='absolute top-0 right-0 w-40 xl:w-auto'>
                         <img className='' src={hypervaultTopImage} alt="HyperVault" />
                     </div>
-                    <div className='absolute bottom-0 left-0'>
+                    <div className='absolute bottom-0 left-0 w-24 xl:w-auto'>
                         <img className='' src={hypervaultBottomImage} alt="HyperVault" />
                     </div>
                 </div>
