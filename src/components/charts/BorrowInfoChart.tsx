@@ -76,16 +76,18 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({
   }
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '20px 20px 20px 0px' }}>
       <ResponsiveContainer width='100%' height={300}>
         <LineChart
           data={data}
-          margin={{ left: 20, right: 20, top: 20, bottom: 0 }}
+          margin={{ left: 0, right: 20, top: 20, bottom: 0 }}
         >
           <XAxis
             dataKey='time'
             fontSize={15}
             padding={{ left: 30, right: 0 }} // Add padding to the left
+            fontFamily='lufga'
+            fontWeight='regular'
           />
           <YAxis
             tickFormatter={(value) => (value === 0 ? '' : value)} // Skip displaying the '0' value

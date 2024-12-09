@@ -189,6 +189,13 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   }, [userWalletTokenBalance, userEthBalance]);
 
   useEffect(() => {
+    setAllowance(
+      Number(userAllowance as any) / Math.pow(10, tokenDecimalsMap[token]),
+    );
+    updateAvailableAmount();
+  }, [userAllowance]);
+
+  useEffect(() => {
     if (amount != 0) {
       const newHealth = calculatePredictedHealthFactor(
         token,
@@ -334,7 +341,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
 
   useEffect(() => {
     setButtonText(getButtonText());
-  }, [modalType, allowance, amount]);
+  }, [modalType, allowance, amount, userAllowance]);
 
   const getButtonText = () => {
     return modalType == 'supply' || modalType == 'repay'
