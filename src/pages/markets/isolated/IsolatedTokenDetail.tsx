@@ -24,6 +24,7 @@ import topRightArrowImage from '../../../assets/icons/top-right-arrow.svg';
 import ShareImageModal from '../../../components/common/ShareImageModal';
 import TokenActions from '../../../components/markets/TokenActionsIsolated';
 import Button from '../../../components/common/Button';
+import { motion } from 'framer-motion';
 
 import {
   tokenNameMap,
@@ -56,6 +57,22 @@ import AnimateModal, {
 } from '../../../components/markets/AnimateModal';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
+};
+
+// Add these animation variants before the TokenDetail function
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
 };
 
 function TokenDetail() {
@@ -486,7 +503,12 @@ function TokenDetail() {
   ];
 
   return (
-    <div className='w-full'>
+    <motion.div
+      className='w-full'
+      initial='hidden'
+      animate='visible'
+      variants={containerVariants}
+    >
       <Navbar
         pageTitle={`${market.assetSymbol} / ${market.collateralSymbol}`}
         pageIcon={
@@ -502,19 +524,24 @@ function TokenDetail() {
         }
         back={true}
       />
-      <CardItem className='p-4 lg:p-12 my-6 hidden lg:block overflow-hidden'>
-        <div className='flex gap-16 items-center w-full overflow-auto'>
-          {(supplies || []).map((supply, index) => (
-            <div className='font-lufga' key={index}>
-              <p className={`text-xs pb-4 text-[#E1E1E1]`}>{supply.name}</p>
-              <p className='text-2xl text-white whitespace-nowrap'>
-                {supply.value}
-              </p>
-            </div>
-          ))}
-        </div>
-      </CardItem>
-      <div className='lg:hidden my-8 grid grid-cols-1 md:grid-cols-2 gap-3'>
+      <motion.div variants={cardVariants}>
+        <CardItem className='p-4 lg:p-12 my-6 hidden lg:block overflow-hidden'>
+          <div className='flex gap-16 items-center w-full overflow-auto'>
+            {(supplies || []).map((supply, index) => (
+              <div className='font-lufga' key={index}>
+                <p className={`text-xs pb-4 text-[#E1E1E1]`}>{supply.name}</p>
+                <p className='text-2xl text-white whitespace-nowrap'>
+                  {supply.value}
+                </p>
+              </div>
+            ))}
+          </div>
+        </CardItem>
+      </motion.div>
+      <motion.div
+        className='lg:hidden my-8 grid grid-cols-1 md:grid-cols-2 gap-3'
+        variants={containerVariants}
+      >
         {(supplies || []).map((supply, index) => (
           <CardItem
             className='px-[32px] py-[22px] flex flex-col gap-2'
@@ -528,79 +555,87 @@ function TokenDetail() {
             </p>
           </CardItem>
         ))}
-      </div>
-      <div className='flex flex-col-reverse lg:flex-row lg:gap-8 w-full'>
+      </motion.div>
+      <motion.div
+        className='flex flex-col-reverse lg:flex-row lg:gap-8 w-full'
+        variants={containerVariants}
+      >
         <div className='flex-grow w-auto overflow-x-auto'>
-          <CardItem className='p-4 lg:p-8 mb-6'>
-            <div className='flex justify-between items-center'>
-              <p className='text-[#797979] text-xl font-lufga'>Supply Info</p>
-              <ul className='flex gap-4 items-center'>
-                <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
-                  <p className='text-[#797979] text-sm font-lufga'>30D</p>
-                </button>
-                <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
-                  <p className='text-[#797979] text-sm font-lufga'>6M</p>
-                </button>
-                <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
-                  <p className='text-[#797979] text-sm font-lufga'>1Y</p>
-                </button>
-              </ul>
-            </div>
-            <div className='flex items-center mt-8 mb-8'>
-              <span className='w-2 h-2 bg-[#2DC24E] rounded-full mr-2'></span>
-              <p className='text-xs text-[#797979] font-lufga'>Supply APY</p>
-            </div>
-            <div className='flex justify-between gap-8 md:gap-12 w-full overflow-auto'>
-              {(supplyInfos || []).map((supplyInfo, index) => (
-                <div className='font-lufga' key={index}>
-                  <p className='text-[9px] pb-2 text-[#E1E1E1] whitespace-nowrap'>
-                    {supplyInfo.name}
-                  </p>
-                  <p className='text-2xl text-white'>{supplyInfo.value}</p>
-                </div>
-              ))}
-            </div>
-            <BorrowInfoChart
-              type='supply'
-              token={pairAddress}
-              isIsolated={true}
-            />
-          </CardItem>
-          <CardItem className='p-4 lg:p-8 mb-6'>
-            <div className='flex justify-between items-center'>
-              <p className='text-[#797979] text-xl font-lufga'>Borrow Info</p>
-              <ul className='flex gap-4 items-center'>
-                <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
-                  <p className='text-[#797979] text-sm font-lufga'>30D</p>
-                </button>
-                <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
-                  <p className='text-[#797979] text-sm font-lufga'>6M</p>
-                </button>
-                <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
-                  <p className='text-[#797979] text-sm font-lufga'>1Y</p>
-                </button>
-              </ul>
-            </div>
-            <div className='flex items-center mt-8 mb-8'>
-              <span className='w-2 h-2 bg-[#302DC2] rounded-full mr-2'></span>
-              <p className='text-xs text-[#797979] font-lufga'>Borrow APY</p>
-            </div>
-            <div className='flex justify-between gap-8 md:gap-12 w-full overflow-auto'>
-              {(borrowInfos || []).map((borrowInfo, index) => (
-                <div className='font-lufga' key={index}>
-                  <p className='text-[9px] pb-2 text-[#E1E1E1] whitespace-nowrap'>
-                    {borrowInfo.name}
-                  </p>
-                  <p className='text-2xl text-white'>{borrowInfo.value}</p>
-                </div>
-              ))}
-            </div>
-            <BorrowInfoChart
-              type='borrow'
-              token={pairAddress}
-              isIsolated={true}
-            />
-          </CardItem>
+          <motion.div variants={cardVariants}>
+            <CardItem className='p-4 lg:p-8 mb-6'>
+              <div className='flex justify-between items-center'>
+                <p className='text-[#797979] text-xl font-lufga'>Supply Info</p>
+                <ul className='flex gap-4 items-center'>
+                  <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
+                    <p className='text-[#797979] text-sm font-lufga'>30D</p>
+                  </button>
+                  <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
+                    <p className='text-[#797979] text-sm font-lufga'>6M</p>
+                  </button>
+                  <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
+                    <p className='text-[#797979] text-sm font-lufga'>1Y</p>
+                  </button>
+                </ul>
+              </div>
+              <div className='flex items-center mt-8 mb-8'>
+                <span className='w-2 h-2 bg-[#2DC24E] rounded-full mr-2'></span>
+                <p className='text-xs text-[#797979] font-lufga'>Supply APY</p>
+              </div>
+              <div className='flex justify-between gap-8 md:gap-12 w-full overflow-auto'>
+                {(supplyInfos || []).map((supplyInfo, index) => (
+                  <div className='font-lufga' key={index}>
+                    <p className='text-[9px] pb-2 text-[#E1E1E1] whitespace-nowrap'>
+                      {supplyInfo.name}
+                    </p>
+                    <p className='text-2xl text-white'>{supplyInfo.value}</p>
+                  </div>
+                ))}
+              </div>
+              <BorrowInfoChart
+                type='supply'
+                token={pairAddress}
+                isIsolated={true}
+              />
+            </CardItem>
+          </motion.div>
+
+          <motion.div variants={cardVariants}>
+            <CardItem className='p-4 lg:p-8 mb-6'>
+              <div className='flex justify-between items-center'>
+                <p className='text-[#797979] text-xl font-lufga'>Borrow Info</p>
+                <ul className='flex gap-4 items-center'>
+                  <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
+                    <p className='text-[#797979] text-sm font-lufga'>30D</p>
+                  </button>
+                  <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
+                    <p className='text-[#797979] text-sm font-lufga'>6M</p>
+                  </button>
+                  <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
+                    <p className='text-[#797979] text-sm font-lufga'>1Y</p>
+                  </button>
+                </ul>
+              </div>
+              <div className='flex items-center mt-8 mb-8'>
+                <span className='w-2 h-2 bg-[#302DC2] rounded-full mr-2'></span>
+                <p className='text-xs text-[#797979] font-lufga'>Borrow APY</p>
+              </div>
+              <div className='flex justify-between gap-8 md:gap-12 w-full overflow-auto'>
+                {(borrowInfos || []).map((borrowInfo, index) => (
+                  <div className='font-lufga' key={index}>
+                    <p className='text-[9px] pb-2 text-[#E1E1E1] whitespace-nowrap'>
+                      {borrowInfo.name}
+                    </p>
+                    <p className='text-2xl text-white'>{borrowInfo.value}</p>
+                  </div>
+                ))}
+              </div>
+              <BorrowInfoChart
+                type='borrow'
+                token={pairAddress}
+                isIsolated={true}
+              />
+            </CardItem>
+          </motion.div>
           {/* <CardItem className='p-4 lg:p-8 mb-6'>
             <div className='flex justify-between items-center flex-wrap'>
               <p className='text-[#797979] text-xl font-lufga'>
@@ -628,44 +663,49 @@ function TokenDetail() {
               }
             />
           </CardItem> */}
-          <CardItem className='p-4 lg:p-8 mb-6'>
-            <div className='flex justify-between items-center mb-8'>
-              <p className='text-[#797979] text-xl font-lufga'>
-                Market Details
-              </p>
-            </div>
-            {(marketDetails || []).map((item, index) => (
-              <div key={index}>
-                <div className='flex justify-between items-center'>
-                  <p className='text-base font-lufga text-[#CAEAE5B2]'>
-                    {item.name}
-                  </p>
-                  {item.link ? (
-                    <a
-                      href={item.link}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className=''
-                    >
-                      <p className='block sm:hidden lg:block xl:hidden text-base font-lufga text-[#CAEAE5] hover:text-gray-light'>
-                        {formatAddress(item.value)}
-                      </p>
-                      <p className='hidden sm:block lg:hidden xl:block text-base font-lufga text-[#CAEAE5] hover:text-gray-light'>
+          <motion.div variants={cardVariants}>
+            <CardItem className='p-4 lg:p-8 mb-6'>
+              <div className='flex justify-between items-center mb-8'>
+                <p className='text-[#797979] text-xl font-lufga'>
+                  Market Details
+                </p>
+              </div>
+              {(marketDetails || []).map((item, index) => (
+                <div key={index}>
+                  <div className='flex justify-between items-center'>
+                    <p className='text-base font-lufga text-[#CAEAE5B2]'>
+                      {item.name}
+                    </p>
+                    {item.link ? (
+                      <a
+                        href={item.link}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className=''
+                      >
+                        <p className='block sm:hidden lg:block xl:hidden text-base font-lufga text-[#CAEAE5] hover:text-gray-light'>
+                          {formatAddress(item.value)}
+                        </p>
+                        <p className='hidden sm:block lg:hidden xl:block text-base font-lufga text-[#CAEAE5] hover:text-gray-light'>
+                          {item.value}
+                        </p>
+                      </a>
+                    ) : (
+                      <p className='text-base font-lufga text-[#CAEAE5] '>
                         {item.value}
                       </p>
-                    </a>
-                  ) : (
-                    <p className='text-base font-lufga text-[#CAEAE5] '>
-                      {item.value}
-                    </p>
-                  )}
+                    )}
+                  </div>
+                  <hr className='mt-4 mb-4 text-[#212325] border-t-[0.25px]' />
                 </div>
-                <hr className='mt-4 mb-4 text-[#212325] border-t-[0.25px]' />
-              </div>
-            ))}
-          </CardItem>
+              ))}
+            </CardItem>
+          </motion.div>
         </div>
-        <div className='w-full lg:w-1/3 lg:min-w-[360px]'>
+        <motion.div
+          className='w-full lg:w-1/3 lg:min-w-[360px]'
+          variants={cardVariants}
+        >
           <div className='sticky top-0 '>
             <CardItem className='p-4 lg:p-8 font-lufga'>
               <div className='w-full grid grid-cols-4 text-center'>
@@ -791,8 +831,8 @@ function TokenDetail() {
               <img className='' src={topRightArrowImage} />
             </button>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
       {shareImageModalStatus && (
         <ShareImageModal
           token={market.asset}
@@ -810,7 +850,7 @@ function TokenDetail() {
           onClick={animateModalStatus.onClick}
         />
       )}
-    </div>
+    </motion.div>
   );
 }
 
