@@ -3,13 +3,13 @@ import { useReadContracts } from 'wagmi';
 import { normalizeBN, RAY, rayDiv, rayMul } from '@aave/math-utils';
 import { BigNumber } from 'bignumber.js';
 
-import { calculateApy } from '../functions';
+import { calculateApy } from '../../functions';
 import {
   contracts,
   assetAddresses,
   abis,
   tokenToRateStrategyMap,
-} from '../config';
+} from '../../config';
 
 import { useProtocolReservesData } from './reserves';
 

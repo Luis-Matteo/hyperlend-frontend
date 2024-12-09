@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ProgressBar from '../common/PercentBar';
 import Button from '../common/Button';
-import { TokenActionsProps } from '../../utils/types';
-import ToggleButton from '../common/ToggleButton';
+import { TokenActionsIsolatedProps } from '../../utils/types';
 import {
   useAccount,
   useWriteContract,
@@ -11,34 +10,20 @@ import {
 } from 'wagmi';
 
 import { formatNumber } from '../../utils/functions';
-import {
-  iconsMap,
-  tokenNameMap,
-  tokenDecimalsMap,
-  contracts,
-  wrappedTokens,
-} from '../../utils/config';
-import {
-  useUserAllowance,
-  useUserWrappedTokenAllowanceData,
-} from '../../utils/user/wallet';
+import { iconsMap, tokenNameMap, tokenDecimalsMap } from '../../utils/config';
+import { useUserAllowance } from '../../utils/user/wallet';
 import { getErrorMessage } from '../../utils/constants/errorCodes';
-import { wrappedTokenAction } from '../../utils/user/functions/wrappedEth';
-import {
-  protocolAction,
-  updateCollateralAction,
-} from '../../utils/user/functions/actions';
-import { getTokenPrecision } from '../../utils/user/functions/utils';
-import { useProtocolPriceData } from '../../utils/protocol/prices';
+import { protocolAction } from '../../utils/user/isolated/functions/actions';
+import { getTokenPrecision } from '../../utils/user/isolated/functions/utils';
+import { useAssetPrice } from '../../utils/protocol/isolated/prices';
 
-import AnimateModal, {
-  AnimateModalProps,
-} from '../../components/markets/AnimateModal';
+import AnimateModal, { AnimateModalProps } from './AnimateModal';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };
 
-const TokenActions: React.FC<TokenActionsProps> = ({
+const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
+  pairAddress,
   availableAmountTitle,
   availableAmount,
   totalApy,
@@ -48,7 +33,6 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   dailyEarning,
   btnTitle,
   token,
-  isCollateralEnabled,
   handleDataFromActions,
 }) => {
   const actionType = btnTitle.toLowerCase();
@@ -56,7 +40,6 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   const [progress, setProgress] = useState<number>(0);
   const [userAllowance, setUserAllowance] = useState(0);
   const [buttonText, setButtonText] = useState(btnTitle);
-  const [collateral, setCollateral] = useState(isCollateralEnabled);
   const [amount, setAmount] = useState(0);
   const [errorMsg, setErrorMsg] = useState<any>(null);
   const [isTxPending, setIsTxPending] = useState(false);
@@ -119,14 +102,10 @@ const TokenActions: React.FC<TokenActionsProps> = ({
     isConnected,
     token,
     address || '0x0000000000000000000000000000000000000000',
-    contracts.pool,
-  );
-  const { hTokenAllowance, dTokenAllowance } = useUserWrappedTokenAllowanceData(
-    address || '0x0000000000000000000000000000000000000000',
-    contracts.wrappedTokenGatewayV3,
+    pairAddress,
   );
 
-  const { priceDataMap } = useProtocolPriceData();
+  const { priceDataMap } = useAssetPrice([token as any]);
 
   useEffect(() => {
     setButtonText(btnTitle);
@@ -198,23 +177,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       const allowance =
         Number(userAllowance) / Math.pow(10, tokenDecimalsMap[token]);
 
-      if (amount > allowance && !wrappedTokens.includes(token)) {
-        setButtonText('Approve');
-      } else {
-        setButtonText(btnTitle);
-      }
-    }
-
-    if (wrappedTokens.includes(token)) {
-      if (
-        actionType == 'withdraw' &&
-        amount > Number(hTokenAllowance) / Math.pow(10, 18)
-      ) {
-        setButtonText('Approve');
-      } else if (
-        actionType == 'borrow' &&
-        amount > Number(dTokenAllowance) / Math.pow(10, 18)
-      ) {
+      if (amount > allowance) {
         setButtonText('Approve');
       } else {
         setButtonText(btnTitle);
@@ -272,22 +235,6 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       .toString() as any as bigint;
 
     setIsTxPending(true);
-    if (wrappedTokens.includes(token)) {
-      await wrappedTokenAction(
-        actionType,
-        token,
-        bgIntAmount,
-        address || '0x0000000000000000000000000000000000000000',
-        hTokenAllowance,
-        dTokenAllowance,
-        writeContractAsync,
-        publicClient,
-        useMaxAmount,
-      );
-      setIsTxPending(false);
-      return;
-    }
-
     await protocolAction(
       actionType,
       token,
@@ -298,21 +245,9 @@ const TokenActions: React.FC<TokenActionsProps> = ({
       writeContractAsync,
       publicClient,
       useMaxAmount,
+      pairAddress,
     );
     setIsTxPending(false);
-  };
-
-  const updateCollateral = async () => {
-    setIsTxPending(true);
-    await updateCollateralAction(
-      token,
-      collateral,
-      writeContractAsync,
-      publicClient,
-    );
-    setIsTxPending(false);
-    setCollateral(!collateral);
-    console.log(hash);
   };
 
   const setMaxAmount = () => {
@@ -322,16 +257,6 @@ const TokenActions: React.FC<TokenActionsProps> = ({
 
   return (
     <div className=''>
-      {btnTitle === 'Supply' && (
-        <div className='flex justify-between items-center mt-4'>
-          <p className='text-base text-[#CAEAE566]'>Collateral</p>
-          <ToggleButton
-            status={collateral}
-            setStatus={setCollateral}
-            onClick={updateCollateral}
-          />
-        </div>
-      )}
       <div className='flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4'>
         <div className='flex gap-3 items-center p-3'>
           <img

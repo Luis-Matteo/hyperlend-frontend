@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom';
 import Dashboard from '../pages/dashboard/Dashboard';
 import Markets from '../pages/markets/Markets';
-import TokenDetails from '../pages/markets/TokenDetail';
+import CoreTokenDetails from '../pages/markets/core/CoreTokenDetail';
 import Sidebar from '../layouts/Sidebar';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
@@ -19,6 +19,7 @@ import { useConfirm } from '../provider/ConfirmProvider';
 import NotFound from '../pages/not-found/NotFound';
 import Analytics from '../pages/analytics/Analytics';
 import MarketOverview from '../pages/markets/MarketOverview';
+import IsolatedTokenDetails from '../pages/markets/isolated/IsolatedTokenDetail';
 import Hypervault from '../pages/hypervault/Hypervault';
 
 function MainContent() {
@@ -47,7 +48,11 @@ function MainContent() {
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='markets' element={<Markets />}>
               <Route path='' element={<MarketOverview />} />
-              <Route path=':token' element={<TokenDetails />} />
+              <Route path=':token' element={<CoreTokenDetails />} />
+              <Route path='isolated' element={<Markets />}>
+                <Route path='' element={<MarketOverview />} />
+                <Route path=':pairAddress' element={<IsolatedTokenDetails />} />
+              </Route>
             </Route>
             <Route path='hypervault' element={<Hypervault />} />
             <Route path='analytics' element={<Analytics />} />
@@ -64,7 +69,8 @@ function MainContent() {
         <div
           className={`absolute top-0 right-0 w-full h-screen -z-10 ${guided > 0 ? 'lg:blur-[8px]' : ''}`}
         >
-          {location.pathname.match(/^\/markets\/[^/]+$/) ? (
+          {location.pathname.match(/^\/markets\/[^/]+$/) &&
+          !location.pathname.match(/^\/markets\/isolated\/?$/) ? (
             <img
               className='w-full'
               src={

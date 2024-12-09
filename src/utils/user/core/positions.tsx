@@ -1,7 +1,11 @@
 import { useReadContract } from 'wagmi';
 
-import { calculateApy } from '../functions';
-import { UserReserveData, UserPositionData, UserPositionsData } from '../types';
+import { calculateApy } from '../../functions';
+import {
+  UserReserveData,
+  UserPositionData,
+  UserPositionsData,
+} from '../../types';
 import {
   contracts,
   tokenNameMap,
@@ -10,12 +14,12 @@ import {
   ltvMap,
   abis,
   liqMap,
-} from '../config';
+} from '../../config';
 
-import { useProtocolReservesData } from '../protocol/reserves';
-import { useProtocolPriceData } from '../protocol/prices';
+import { useProtocolReservesData } from '../../protocol/core/reserves';
+import { useProtocolPriceData } from '../../protocol/core/prices';
 
-import { useGetUserBalanceHistory } from './history';
+import { useGetUserBalanceHistory } from '../history';
 
 export function useUserPositionsData(
   isConnected: boolean,
@@ -138,7 +142,11 @@ export function useUserPositionsData(
     (partialSum: number, a: any) => partialSum + (a.apr / 100) * a.value,
     0,
   );
-  const netApy = (supplyInterestEarned - borrowInterestEarned) / 100;
+
+  const netApy =
+    ((supplyInterestEarned - borrowInterestEarned) /
+      (totalSupply - totalBorrow)) *
+    100;
 
   return {
     supplied: supplied,

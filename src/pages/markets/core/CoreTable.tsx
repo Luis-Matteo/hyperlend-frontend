@@ -1,7 +1,11 @@
 import { useEffect, useMemo } from 'react';
-import CardItem from '../../components/common/CardItem';
-import { decodeConfig, formatNumber, formatUnit } from '../../utils/functions';
-import InfoItem from '../../components/common/InfoItem';
+import CardItem from '../../../components/common/CardItem';
+import {
+  decodeConfig,
+  formatNumber,
+  formatUnit,
+} from '../../../utils/functions';
+import InfoItem from '../../../components/common/InfoItem';
 import {
   tokenNameMap,
   tokenFullNameMap,
@@ -10,18 +14,16 @@ import {
   stablecoinsList,
   networkChainId,
   tokenColorMap,
-} from '../../utils/config';
+} from '../../../utils/config';
 
-import { useProtocolPriceData } from '../../utils/protocol/prices';
-import { useProtocolInterestRate } from '../../utils/protocol/interestRates';
-import { useProtocolAssetReserveData } from '../../utils/protocol/reserves';
-import { useProtocolReservesData } from '../../utils/protocol/reserves';
+import { useProtocolPriceData } from '../../../utils/protocol/core/prices';
+import { useProtocolInterestRate } from '../../../utils/protocol/core/interestRates';
+import { useProtocolAssetReserveData } from '../../../utils/protocol/core/reserves';
+import { useProtocolReservesData } from '../../../utils/protocol/core/reserves';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { AssetDetail, ModalType } from '../../utils/types';
-import { filterString } from '../../utils/functions';
+import { AssetDetail, ModalType } from '../../../utils/types';
+import { filterString } from '../../../utils/functions';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { tableVariants, itemVariants } from '../../utils/constants/effects';
 
 interface CoreTableProps {
   stable: boolean;
@@ -120,6 +122,7 @@ function CoreTable({
     }
   }, [account]);
 
+  console.log(assets);
   return (
     <>
       <CardItem className='md:py-6 md:px-7 hidden xl:block'>
@@ -218,15 +221,9 @@ function CoreTable({
             </div>
             <div className='w-[120px] 2xl:w-[240px]'></div>
           </div>
-          <motion.div
-            variants={tableVariants}
-            initial='hidden'
-            animate='visible'
-            className='lg:max-h-[calc(100vh-346px)] xl:max-h-[calc(100vh-394px)] h-full overflow-auto hidden xl:block'
-          >
+          <div className='lg:max-h-[calc(100vh-346px)] xl:max-h-[calc(100vh-394px)] h-full overflow-auto hidden xl:block'>
             {(assets || []).map((item, key) => (
-              <motion.div
-                variants={itemVariants}
+              <div
                 className='flex justify-between items-center xl:gap-2 2xl:gap-8 py-[14px] px-2.5 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer'
                 key={key}
               >
@@ -296,111 +293,104 @@ function CoreTable({
                     Borrow
                   </button>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </CardItem>
 
-      <motion.div
-        className='xl:hidden w-full flex flex-col gap-4'
-        initial='hidden'
-        animate='visible'
-        variants={tableVariants}
-      >
+      <div className='xl:hidden w-full flex flex-col gap-4'>
         {(assets || []).map((item, key) => (
-          <motion.div variants={itemVariants} key={key}>
-            <CardItem className=''>
-              <Link
-                className='flex flex-col hover:bg-[#1F2A29] cursor-pointer rounded-t-2xl'
-                to={`${item.underlyingAsset}`}
+          <CardItem className='' key={key}>
+            <Link
+              className='flex flex-col hover:bg-[#1F2A29] cursor-pointer rounded-t-2xl'
+              to={`${item.underlyingAsset}`}
+            >
+              <div
+                className={`flex items-center gap-2 col-span-2 h-full p-[20px] rounded-t-2xl bg-gradient-to-t from-transparent ${item.color}`}
               >
-                <div
-                  className={`flex items-center gap-2 col-span-2 h-full p-[20px] rounded-t-2xl bg-gradient-to-t from-transparent ${item.color}`}
-                >
-                  <img src={item.icon} alt='symbol' className='w-6 h-6' />
-                  <p className=' text-white font-lufga'>{item.symbol}</p>
-                </div>
-                <div className='flex flex-col gap-[30px] p-[24px] border-y-[1px] border-[#212325]'>
-                  <p className='text-[#B1B5C3] font-medium font-lufga text-sm md:text-base '>
-                    Total Supplied:{' '}
-                    <span className='text-white'>
-                      {formatUnit(item.totalSupplied)}{' '}
-                    </span>
-                    <span className='text-xs'>
-                      (${formatUnit(item.totalSuppliedUsd)})
-                    </span>
-                  </p>
-                  <div className='grid grid-cols-2 gap-[30px]'>
-                    <div className='flex flex-col gap-[14px]'>
-                      <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>
-                        Supply APY
-                      </p>
-                      <p className='text-white font-medium font-lufga text-lg'>
-                        {formatUnit(item.supplyApy)}%
-                      </p>
-                    </div>
-                    <div className='flex flex-col gap-[14px]'>
-                      <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>
-                        Total Borrowed
-                      </p>
-                      <p className='text-white font-medium font-lufga text-lg'>
-                        {formatUnit(item.totalBorrowed)}{' '}
-                        <span className='text-[#B1B5C3] text-xs'>
-                          ${formatUnit(item.totalBorrowedUsd)}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className='grid grid-cols-2 gap-[30px]'>
-                    <div className='flex flex-col gap-[14px]'>
-                      <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>
-                        Borrow APY
-                      </p>
-                      <p className='text-success font-medium font-lufga text-lg'>
-                        {formatUnit(item.borrowApy)}%
-                      </p>
-                    </div>
-                    <div className='flex flex-col gap-[14px]'>
-                      <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>
-                        Available Liquidity
-                      </p>
-                      <p className='text-white font-medium font-lufga text-lg'>
-                        {formatUnit(item.totalLiquidityToken)}{' '}
-                        <span className='text-[#B1B5C3] text-xs'>
-                          ${formatUnit(item.totalLiquidtyUsd)}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-              <div className='grid grid-cols-2 gap-4 p-[24px]'>
-                <button
-                  className='w-full py-2 text-secondary font-lufga rounded-xl font-bold hover:text-gray'
-                  onClick={() => {
-                    setModalStatus(true);
-                    setModalType('supply');
-                    setSelectedToken(item.underlyingAsset);
-                  }}
-                >
-                  Supply
-                </button>
-                <button
-                  className='w-full py-2 text-secondary font-lufga rounded-xl font-bold hover:text-gray'
-                  onClick={() => {
-                    setModalStatus(true);
-                    setModalType('borrow');
-                    setSelectedToken(item.underlyingAsset);
-                  }}
-                >
-                  Borrow
-                </button>
+                <img src={item.icon} alt='symbol' className='w-6 h-6' />
+                <p className=' text-white font-lufga'>{item.symbol}</p>
               </div>
-            </CardItem>
-          </motion.div>
+              <div className='flex flex-col gap-[30px] p-[24px] border-y-[1px] border-[#212325]'>
+                <p className='text-[#B1B5C3] font-medium font-lufga text-sm md:text-base '>
+                  Total Supplied:{' '}
+                  <span className='text-white'>
+                    {formatUnit(item.totalSupplied)}{' '}
+                  </span>
+                  <span className='text-xs'>
+                    (${formatUnit(item.totalSuppliedUsd)})
+                  </span>
+                </p>
+                <div className='grid grid-cols-2 gap-[30px]'>
+                  <div className='flex flex-col gap-[14px]'>
+                    <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>
+                      Supply APY
+                    </p>
+                    <p className='text-white font-medium font-lufga text-lg'>
+                      {formatUnit(item.supplyApy)}%
+                    </p>
+                  </div>
+                  <div className='flex flex-col gap-[14px]'>
+                    <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>
+                      Total Borrowed
+                    </p>
+                    <p className='text-white font-medium font-lufga text-lg'>
+                      {formatUnit(item.totalBorrowed)}{' '}
+                      <span className='text-[#B1B5C3] text-xs'>
+                        ${formatUnit(item.totalBorrowedUsd)}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <div className='grid grid-cols-2 gap-[30px]'>
+                  <div className='flex flex-col gap-[14px]'>
+                    <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>
+                      Borrow APY
+                    </p>
+                    <p className='text-success font-medium font-lufga text-lg'>
+                      {formatUnit(item.borrowApy)}%
+                    </p>
+                  </div>
+                  <div className='flex flex-col gap-[14px]'>
+                    <p className='text-[#B1B5C3] font-lufga text-sm md:text-base '>
+                      Available Liquidity
+                    </p>
+                    <p className='text-white font-medium font-lufga text-lg'>
+                      {formatUnit(item.totalLiquidityToken)}{' '}
+                      <span className='text-[#B1B5C3] text-xs'>
+                        ${formatUnit(item.totalLiquidtyUsd)}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+            <div className='grid grid-cols-2 gap-4 p-[24px]'>
+              <button
+                className='w-full py-2 text-secondary font-lufga rounded-xl font-bold hover:text-gray'
+                onClick={() => {
+                  setModalStatus(true);
+                  setModalType('supply');
+                  setSelectedToken(item.underlyingAsset);
+                }}
+              >
+                Supply
+              </button>
+              <button
+                className='w-full py-2 text-secondary font-lufga rounded-xl font-bold hover:text-gray'
+                onClick={() => {
+                  setModalStatus(true);
+                  setModalType('borrow');
+                  setSelectedToken(item.underlyingAsset);
+                }}
+              >
+                Borrow
+              </button>
+            </div>
+          </CardItem>
         ))}
-      </motion.div>
+      </div>
     </>
   );
 }

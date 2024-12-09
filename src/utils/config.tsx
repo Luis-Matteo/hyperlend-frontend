@@ -2,6 +2,7 @@ import ethIcon from '../assets/icons/coins/eth-icon.svg';
 import usdcIcon from '../assets/icons/coins/usdc-icon.svg';
 import usdtIcon from '../assets/icons/coins/usdt-icon.svg';
 import wbtcIcon from '../assets/icons/coins/wbtc-icon.svg';
+import stHypeIcon from '../assets/icons/coins/sthype-icon.svg';
 
 import arb from './chains/arb';
 import hlTestnet from './chains/hlTestnet';
@@ -14,6 +15,10 @@ import rateStrategyAbi from '../abis/RateStrategyAbi.json';
 import faucetAbi from '../abis/FaucetAbi.json';
 import wrappedTokenGatewayV3Abi from '../abis/WrappedTokenGatewayV3Abi.json';
 import variableDebtTokenAbi from '../abis/VariableDebtTokenAbi.json';
+import isolatedPoolAbi from '../abis/IsolatedPoolAbi.json';
+import isolatedPairRegistryAbi from '../abis/IsolatedPairRegistryAbi.json';
+import uiDataProviderIsolatedAbi from '../abis/UiDataProviderIsolatedAbi.json';
+import chainlinkAbi from '../abis/ChainlinkAbi.json';
 
 export const abis: Record<string, any> = {
   dataProvider: DataProviderAbi,
@@ -25,6 +30,10 @@ export const abis: Record<string, any> = {
   faucet: faucetAbi,
   wrappedTokenGatewayV3: wrappedTokenGatewayV3Abi,
   variableDebtToken: variableDebtTokenAbi,
+  isolatedPool: isolatedPoolAbi,
+  isolatedPairRegistry: isolatedPairRegistryAbi,
+  uiDataProviderIsolated: uiDataProviderIsolatedAbi,
+  chainlink: chainlinkAbi,
 };
 
 export const iconsMap: any = {
@@ -33,6 +42,7 @@ export const iconsMap: any = {
   USDC: usdcIcon,
   WBTC: wbtcIcon,
   MBTC: wbtcIcon,
+  stHYPE: stHypeIcon,
 };
 
 //make sure to also add them to tailwind.config.js,
@@ -40,6 +50,7 @@ export const iconsMap: any = {
 export const tokenColorMap: any = {
   MBTC: 'f7931a',
   ETH: '497493',
+  stHYPE: '97fce0',
 };
 
 export const stablecoinsList = ['USDC', 'USDT'];
@@ -81,3 +92,6 @@ export const tokenToGradient: any =
   networkConfigs[currentChainId].tokenToGradient || arb.tokenToGradient;
 export const oraclesMap: any =
   networkConfigs[currentChainId].oraclesMap || arb.oraclesMap;
+export const excludeIsolatedPairs: any =
+  networkConfigs[currentChainId].excludeIsolatedPairs ||
+  arb.excludeIsolatedPairs;

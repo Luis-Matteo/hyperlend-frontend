@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MarketControl from '../../components/markets/MarketControl';
 
 import Navbar from '../../layouts/Navbar';
@@ -6,8 +6,8 @@ import Modal from '../../components/common/Modal';
 import ReactGA from 'react-ga4';
 
 import { ModalType } from '../../utils/types';
-import CoreTable from './CoreTable';
-import IsolatedTable from './IsolatedTable';
+import CoreTable from './core/CoreTable';
+import IsolatedTable from './isolated/IsolatedTable';
 
 function MarketOverview() {
   ReactGA.send({ hitType: 'pageview', page: '/markets' });
@@ -20,6 +20,12 @@ function MarketOverview() {
 
   const [modalType, setModalType] = useState<ModalType>('supply');
   const [selectedToken, setSelectedToken] = useState<string>('');
+
+  useEffect(() => {
+    if (location.pathname.match(/^\/markets\/isolated\/?$/)) {
+      setStatus('isolated');
+    }
+  }, [location.pathname]);
 
   return (
     <>

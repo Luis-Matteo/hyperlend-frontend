@@ -27,25 +27,25 @@ import {
   getTokenPrecision,
   calculateAvailableBalance,
   calculatePredictedHealthFactor,
-} from '../../utils/user/functions/utils';
+} from '../../utils/user/core/functions/utils';
 
-import { useProtocolPriceData } from '../../utils/protocol/prices';
-import { useProtocolInterestRate } from '../../utils/protocol/interestRates';
-import { useProtocolAssetReserveData } from '../../utils/protocol/reserves';
+import { useProtocolPriceData } from '../../utils/protocol/core/prices';
+import { useProtocolInterestRate } from '../../utils/protocol/core/interestRates';
+import { useProtocolAssetReserveData } from '../../utils/protocol/core/reserves';
 
 import {
   useUserPositionsData,
   useUserAccountData,
-} from '../../utils/user/positions';
+} from '../../utils/user/core/positions';
 import {
   useUserWrappedTokenAllowanceData,
   useUserAllowance,
   useUserTokenBalance,
 } from '../../utils/user/wallet';
-import { wrappedTokenAction } from '../../utils/user/functions/wrappedEth';
-import { protocolAction } from '../../utils/user/functions/actions';
+import { wrappedTokenAction } from '../../utils/user/core/functions/wrappedEth';
+import { protocolAction } from '../../utils/user/core/functions/actions';
 
-import { useProtocolReservesData } from '../../utils/protocol/reserves';
+import { useProtocolReservesData } from '../../utils/protocol/core/reserves';
 
 import AnimateModal, {
   AnimateModalProps,
@@ -294,6 +294,11 @@ function Modal({ token, modalType, onClose }: ModalProps) {
       .toFixed(0)
       .toString() as any as bigint;
 
+    if (amount == 0) {
+      setErrorMsg('Amount should be greater than 0');
+      return;
+    }
+
     setIsTxPending(true);
     if (wrappedTokens.includes(token)) {
       await wrappedTokenAction(
@@ -446,17 +451,15 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             </div>
           </div>
           <div className='mb-6'>
-            {/* {errorMsg ? (
+            {errorMsg ? (
               <div className='flex justify-between mb-2'>
                 <p className='font-lufga font-light text-xs text-[#FF0000] mt-2'>
-                  {
-                    parseErrorMsg(errorMsg)
-                  }
+                  {parseErrorMsg(errorMsg)}
                 </p>
               </div>
             ) : (
               ''
-            )} */}
+            )}
             <div className='flex justify-between mb-2'>
               <p className='font-lufga font-light text-[#797979]'>Available</p>
               <p className='font-lufga font-light text-[#797979]'>
