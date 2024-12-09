@@ -20,19 +20,19 @@ const contracts: any = {
 const tokenFullNameMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 'MockBitcoin',
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 'Ethereum',
-  '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 'ThunderHead Staked HYPE',
+  // '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 'ThunderHead Staked HYPE',
 };
 
 const tokenNameMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 'MBTC',
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 'ETH',
-  '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 'stHYPE',
+  // '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 'stHYPE',
 };
 
 const tokenToRateStrategyMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 'volatileOne', //btc
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 'volatileOne',
-  '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 'volatileOne',
+  // '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 'volatileOne',
 };
 
 const assetAddresses = Object.keys(tokenNameMap);
@@ -40,25 +40,25 @@ const assetAddresses = Object.keys(tokenNameMap);
 const tokenDecimalsMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 8,
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 18,
-  '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 18,
+  // '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 18,
 };
 
 const ltvMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 0.75,
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 0.75,
-  '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 0.5,
+  // '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 0.5,
 };
 
 const liqMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 0.8,
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 0.8,
-  '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 0.65,
+  // '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 0.65,
 };
 
 const liqPenaltyMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 0.1,
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 0.1,
-  '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 0.1,
+  // '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 0.1,
 };
 
 const wrappedTokens = ['0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7'];
@@ -90,6 +90,7 @@ const oraclesMap: any = {
 const excludeIsolatedPairs = [
   '0xB1ed098b6b7Ae18b0Aa822c90a1E0371c7fDb96D', //old ETH-stHYPE
   '0xf1039C557e8B599dc26e0CCdA24De015Fb59Ec6f', //old stHYPE-ETH
+  '0xbb727Bce50C12c9472Bf5d6F0e76388455ec62d5', //new stHYPE, but they aren't ready to publish it yet
 ];
 
 const hlTestnet: any = {
