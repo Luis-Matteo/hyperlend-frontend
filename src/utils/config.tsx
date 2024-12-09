@@ -38,6 +38,7 @@ export const abis: Record<string, any> = {
 
 export const iconsMap: any = {
   ETH: ethIcon,
+  WETH: ethIcon,
   USDT: usdtIcon,
   USDC: usdcIcon,
   WBTC: wbtcIcon,

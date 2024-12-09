@@ -264,19 +264,19 @@ function Analytics() {
               tip='TVL'
             />
           </BorderCard>
-          <BorderCard title='Total Users'>
+          <BorderCard title='Users'>
             <LineChart
               data={period === 'daily' ? dailyUsers : weeklyUsers}
               tip='Users'
             />
           </BorderCard>
-          <BorderCard title='Total Deposits'>
+          <BorderCard title='Deposits'>
             <LineChart
               data={period === 'daily' ? dailyDeposits : weeklyDeposits}
               tip='Deposits'
             />
           </BorderCard>
-          <BorderCard title='Total Borrowed'>
+          <BorderCard title='Borrowed'>
             <LineChart
               data={period === 'daily' ? dailyBorrows : weeklyBorrows}
               tip='Borrows'
