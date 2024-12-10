@@ -234,6 +234,11 @@ const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
       .toFixed(0)
       .toString() as any as bigint;
 
+    if (amount == 0){
+      setErrorMsg('Amount should be greater than 0');
+      return;
+    }
+
     setIsTxPending(true);
     await protocolAction(
       actionType,
@@ -294,13 +299,13 @@ const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
           </button>
         </div>
       </div>
-      {/* {errorMsg ? (
+      {errorMsg ? (
         <p className='text-xs text-[#FF0000] mt-2'>
           {parseErrorMsg(errorMsg)}
         </p>
       ) : (
         ''
-      )} */}
+      )}
       <div className='relative my-2 '>
         <ProgressBar progress={progress} control={true} className='h-1.5' />
         <input
