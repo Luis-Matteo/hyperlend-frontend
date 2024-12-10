@@ -234,7 +234,7 @@ const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
       .toFixed(0)
       .toString() as any as bigint;
 
-    if (amount == 0){
+    if (amount == 0) {
       setErrorMsg('Amount should be greater than 0');
       return;
     }
@@ -300,9 +300,7 @@ const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
         </div>
       </div>
       {errorMsg ? (
-        <p className='text-xs text-[#FF0000] mt-2'>
-          {parseErrorMsg(errorMsg)}
-        </p>
+        <p className='text-xs text-[#FF0000] mt-2'>{parseErrorMsg(errorMsg)}</p>
       ) : (
         ''
       )}
