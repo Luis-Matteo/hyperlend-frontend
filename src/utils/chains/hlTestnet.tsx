@@ -84,7 +84,7 @@ const oraclesMap: any = {
   '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7':
     '0xc88F13B22443E6dDe99bc702F0130A8edee45174',
   '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616':
-    '0x713c630Cbb3A37b45bA3921125abb3D0D4F4d8ef',
+    '0x2bd27d573d12D5843E983F716224C2b8e5aa0C5F',
 };
 
 const excludeIsolatedPairs = [
