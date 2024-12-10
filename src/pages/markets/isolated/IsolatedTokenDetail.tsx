@@ -607,17 +607,19 @@ function TokenDetail() {
         variants={containerVariants}
       >
         {(supplies || []).map((supply, index) => (
-          <CardItem
-            className='px-[32px] py-[22px] flex flex-col gap-2'
-            key={index}
-          >
-            <p className='text-xs font-light font-lufga text-[#E1E1E1] italic'>
-              {supply.name}
-            </p>
-            <p className='text-3xl font-medium font-lufga text-white'>
-              {supply.value}
-            </p>
-          </CardItem>
+          <motion.div key={index} variants={cardVariants}>
+            <CardItem
+              className='px-[32px] py-[22px] flex flex-col gap-2'
+              key={index}
+            >
+              <p className='text-xs font-light font-lufga text-[#E1E1E1] italic'>
+                {supply.name}
+              </p>
+              <p className='text-3xl font-medium font-lufga text-white'>
+                {supply.value}
+              </p>
+            </CardItem>
+          </motion.div>
         ))}
       </motion.div>
       <motion.div
@@ -626,8 +628,8 @@ function TokenDetail() {
       >
         <div className='flex-grow w-auto overflow-x-auto'>
           <motion.div variants={cardVariants}>
-            <CardItem className='p-4 lg:p-8 mb-6'>
-              <div className='flex justify-between items-center'>
+            <CardItem className='pr-4 lg:pr-8 pt-4 lg:pt-8 pb-4 lg:pb-8 mb-6'>
+              <div className='pl-4 lg:pl-8 flex justify-between items-center'>
                 <p className='text-[#797979] text-xl font-lufga'>Supply Info</p>
                 <ul className='flex gap-4 items-center'>
                   <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
@@ -641,11 +643,11 @@ function TokenDetail() {
                   </button>
                 </ul>
               </div>
-              <div className='flex items-center mt-8 mb-8'>
+              <div className='pl-4 lg:pl-8 flex items-center mt-8 mb-8'>
                 <span className='w-2 h-2 bg-[#2DC24E] rounded-full mr-2'></span>
                 <p className='text-xs text-[#797979] font-lufga'>Supply APY</p>
               </div>
-              <div className='flex justify-between gap-8 md:gap-12 w-full overflow-auto'>
+              <div className='pl-4 lg:pl-8  flex justify-between gap-4 md:justify-start flex-wrap md:gap-12'>
                 {(supplyInfos || []).map((supplyInfo, index) => (
                   <div className='font-lufga' key={index}>
                     <p className='text-[9px] pb-2 text-[#E1E1E1] whitespace-nowrap'>
@@ -664,8 +666,8 @@ function TokenDetail() {
           </motion.div>
 
           <motion.div variants={cardVariants}>
-            <CardItem className='p-4 lg:p-8 mb-6'>
-              <div className='flex justify-between items-center'>
+            <CardItem className='pr-4 lg:pr-8 pt-4 lg:pt-8 pb-4 lg:pb-8 mb-6'>
+              <div className='pl-4 lg:pl-8 flex justify-between items-center'>
                 <p className='text-[#797979] text-xl font-lufga'>Borrow Info</p>
                 <ul className='flex gap-4 items-center'>
                   <button className='px-4 py-1.5 bg-[#081916] rounded-full'>
@@ -679,11 +681,11 @@ function TokenDetail() {
                   </button>
                 </ul>
               </div>
-              <div className='flex items-center mt-8 mb-8'>
+              <div className='pl-4 lg:pl-8 flex items-center mt-8 mb-8'>
                 <span className='w-2 h-2 bg-[#302DC2] rounded-full mr-2'></span>
                 <p className='text-xs text-[#797979] font-lufga'>Borrow APY</p>
               </div>
-              <div className='flex justify-between gap-8 md:gap-12 w-full overflow-auto'>
+              <div className='pl-4 lg:pl-8 flex justify-between gap-8 md:gap-12 w-full overflow-auto'>
                 {(borrowInfos || []).map((borrowInfo, index) => (
                   <div className='font-lufga' key={index}>
                     <p className='text-[9px] pb-2 text-[#E1E1E1] whitespace-nowrap'>

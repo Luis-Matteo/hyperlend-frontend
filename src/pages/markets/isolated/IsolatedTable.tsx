@@ -152,8 +152,15 @@ function IsolatedTable({}: CoreTableProps) {
                   <div className='flex flex-1 items-center gap-2'>
                     <div className='text-white font-lufga w-[14%] flex justify-center'>
                       <div className='text-sm'>
-                        <p className=''>{formatUnit(item.totalAssets)}</p>
-                        <p className=''>${formatUnit(item.totalAssetsUsd)}</p>
+                        <p className='text-lg'>
+                          {formatUnit(item.totalAssets)}
+                        </p>
+                        <p
+                          className='text-sm text-gray-500'
+                          style={{ color: 'grey' }}
+                        >
+                          ${formatUnit(item.totalAssetsUsd)}
+                        </p>
                       </div>
                     </div>
                     <div className='font-lufga w-[12%] flex justify-center'>
@@ -163,8 +170,15 @@ function IsolatedTable({}: CoreTableProps) {
                     </div>
                     <div className='text-white font-lufga w-[14%] flex justify-center'>
                       <div className='text-right text-sm'>
-                        <p className=''>{formatUnit(item.totalBorrowed)}</p>
-                        <p className=''>${formatUnit(item.totalBorrowedUsd)}</p>
+                        <p className='text-lg'>
+                          {formatUnit(item.totalBorrowed)}
+                        </p>
+                        <p
+                          className='text-sm text-gray-500'
+                          style={{ color: 'grey' }}
+                        >
+                          ${formatUnit(item.totalBorrowedUsd)}
+                        </p>
                       </div>
                     </div>
                     <div className='font-lufga w-[12%] flex justify-center'>
@@ -174,18 +188,26 @@ function IsolatedTable({}: CoreTableProps) {
                     </div>
                     <div className='text-white font-lufga w-[16%] flex justify-center'>
                       <div className='text-right text-sm'>
-                        <p className=''>{formatUnit(item.totalCollateral)}</p>
-                        <p className=''>
+                        <p className='text-lg'>
+                          {formatUnit(item.totalCollateral)}
+                        </p>
+                        <p
+                          className='text-sm text-gray-500'
+                          style={{ color: 'grey' }}
+                        >
                           ${formatUnit(item.totalCollateralUsd)}
                         </p>
                       </div>
                     </div>
                     <div className='text-white font-lufga w-[18%] flex justify-center'>
                       <div className='text-right text-sm'>
-                        <p className=''>
+                        <p className='text-lg'>
                           {formatUnit(item.availableLiquidity)}
                         </p>
-                        <p className=''>
+                        <p
+                          className='text-sm text-gray-500'
+                          style={{ color: 'grey' }}
+                        >
                           ${formatUnit(item.availableLiquidityUsd)}
                         </p>
                       </div>

@@ -61,7 +61,11 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({
         (1 - Number(e.feeToProtocolRate) / 100000);
 
       return {
-        time: new Date(e.timestamp).toDateString(),
+        time: new Date(e.timestamp).toLocaleDateString('en-US', {
+          year: '2-digit',
+          month: 'numeric',
+          day: 'numeric',
+        }),
         rate: formatNumber(type == 'supply' ? supplyApy : borrowApy, 2),
       };
     });
@@ -69,7 +73,11 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({
     data = rawData.map((e: any) => {
       const rate = type == 'supply' ? e.liquidityRate : e.borrowRate;
       return {
-        time: new Date(e.timestamp).toDateString(),
+        time: new Date(e.timestamp).toLocaleDateString('en-US', {
+          year: '2-digit',
+          month: 'numeric',
+          day: 'numeric',
+        }), // change date to numbers
         rate: formatNumber(calculateApy(rate), 2),
       };
     });

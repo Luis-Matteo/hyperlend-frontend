@@ -242,22 +242,39 @@ function CoreTable({
                     </p>
                   </div>
                   <div className='text-white font-lufga w-[13%] text-sm'>
-                    <p className=''>{formatUnit(item.totalSupplied)}</p>
-                    <p className=''>${formatUnit(item.totalSuppliedUsd)}</p>
+                    <p className='text-lg'>{formatUnit(item.totalSupplied)}</p>
+                    <p
+                      className='text-sm text-gray-500'
+                      style={{ color: 'grey' }}
+                    >
+                      ${formatUnit(item.totalSuppliedUsd)}
+                    </p>
                   </div>
                   <div className='text-white font-lufga w-[11%] text-sm'>
                     {formatNumber(item.supplyApy, 2)}%
                   </div>
                   <div className='text-white font-lufga w-[13%] text-sm'>
-                    <p className=''>{formatUnit(item.totalBorrowed)}</p>
-                    <p className=''>${formatUnit(item.totalBorrowedUsd)}</p>
+                    <p className='text-lg'>{formatUnit(item.totalBorrowed)}</p>
+                    <p
+                      className='text-sm text-gray-500'
+                      style={{ color: 'grey' }}
+                    >
+                      ${formatUnit(item.totalBorrowedUsd)}
+                    </p>
                   </div>
                   <div className='text-white font-lufga w-[11%] text-sm'>
                     {formatNumber(item.borrowApy, 2)}%
                   </div>
                   <div className='text-white font-lufga w-[16%] text-sm'>
-                    <p className=''>{formatUnit(item.totalLiquidityToken)}</p>
-                    <p className=''>${formatUnit(item.totalLiquidtyUsd)}</p>
+                    <p className='text-lg'>
+                      {formatUnit(item.totalLiquidityToken)}
+                    </p>
+                    <p
+                      className='text-sm text-gray-500'
+                      style={{ color: 'grey' }}
+                    >
+                      ${formatUnit(item.totalLiquidtyUsd)}
+                    </p>
                   </div>
                   <div className='text-white font-lufga w-[9%] text-sm'>
                     {item.isCollateral ? (

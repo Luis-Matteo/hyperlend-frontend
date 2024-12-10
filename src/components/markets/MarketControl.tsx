@@ -72,13 +72,13 @@ function MarketControl({
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className='bg-[#081916] rounded-full hidden md:flex gap-2'
+            className='bg-[#081916] rounded-full hidden md:flex gap-5 w-full md:w-[500px] lg:w-[600px] p-2'
           >
             <div className='p-2 rounded-full'>
-              <img src={magnifyIcon} alt='' />
+              <img src={magnifyIcon} alt='Search Icon' />
             </div>
             <input
-              className='bg-[#081916] rounded-full text-white font-lufga italic focus:outline-0'
+              className='bg-[#081916] rounded-full text-white font-lufga font-normal px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#28A745] w-full'
               placeholder='Search your coins...'
               onChange={(e) => {
                 setSearchText(e.target.value);
