@@ -90,11 +90,15 @@ function Modal({ token, modalType, onClose }: ModalProps) {
       actionType: actionType,
       txLink: txLink,
       extraDetails: extraDetails,
-      onClick: () =>
+      onClick: () => {
         setAnimateModalStatus((prevState) => ({
           ...prevState,
           isOpen: false,
-        })),
+        }));
+        if (type != 'failed') {
+          onClose(); // Close the Modal when AnimateModal is done
+        }
+      },
     });
   };
 
@@ -166,8 +170,6 @@ function Modal({ token, modalType, onClose }: ModalProps) {
 
   useEffect(() => {
     if (isTxPending) {
-      //TODO: add loading icon
-      setButtonText('Sending transaction...');
       openAnimateModal(
         'loading',
         modalType.toLowerCase() as
@@ -179,8 +181,6 @@ function Modal({ token, modalType, onClose }: ModalProps) {
         '',
         '',
       );
-    } else {
-      setButtonText(getButtonText());
     }
   }, [isTxPending]);
 
@@ -550,7 +550,15 @@ function Modal({ token, modalType, onClose }: ModalProps) {
             actionType={animateModalStatus.actionType}
             txLink={animateModalStatus.txLink}
             extraDetails={animateModalStatus.extraDetails}
-            onClick={animateModalStatus.onClick}
+            onClick={() => {
+              setAnimateModalStatus((prevState) => ({
+                ...prevState,
+                isOpen: false,
+              }));
+              if (animateModalStatus.type != 'failed') {
+                onClose(); // Close the Modal when AnimateModal is done
+              }
+            }}
           />
         )}
       </motion.div>
