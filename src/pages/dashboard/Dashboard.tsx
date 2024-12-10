@@ -145,7 +145,7 @@ function Dashboard() {
           >
             <CardItem
               ref={divRefs[0]}
-              className={`px-4 lg:px-8 pt-4 md:max-w-[480px] w-full overflow-hidden md:mb-0 mx-auto ${guided > 0 && guided !== 1 ? 'lg:blur-[8px]' : ''}`}
+              className={`px-4 lg:px-8 py-4 h-60 md:h-72 max-w-[480px] w-full overflow-hidden md:mb-0 mx-auto ${guided > 0 && guided !== 1 ? 'lg:blur-[8px]' : ''}`}
             >
               <div className=''>
                 <div className='flex gap-2 items-center'>
@@ -164,7 +164,7 @@ function Dashboard() {
                     className='w-[340px]'
                   />
                 </div>
-                <div className='flex mt-12 text-center justify-center items-end'>
+                <div className='flex mt-0 md:mt-12 text-center justify-center items-end'>
                   <Factor healthFactor={healthFactor} />
                 </div>
               </div>
@@ -178,7 +178,7 @@ function Dashboard() {
                 title='Your Positions'
                 className='mb-8 font-lufga'
               />
-              <div className='flex flex-col justify-between gap-5 px-5 w-full'>
+              <div className='flex flex-col justify-between gap-5 w-full'>
                 <div className='h-20 font-lufga'>
                   <span className='text-white mb-2'>Collateral deposited</span>
                   <PositionBar
@@ -268,7 +268,7 @@ function Dashboard() {
             transition={{ delay: 0.6 }}
             className={`lg:flex gap-5 justify-between ${guided > 0 && guided !== 4 ? 'lg:blur-[8px]' : ''}`}
           >
-            <CardItem className='py-4 lg:py-6 px-2 md:px-4 xl:px-7 flex-1 mb-4 lg:mb-0'>
+            <CardItem className='py-4 lg:py-6 px-4 md:px-4 xl:px-7 flex-1 mb-4 lg:mb-0'>
               <div className='max-h-[250px]'>
                 <p className='text-white font-lufga text-2xl pb-4'>Supplied</p>
                 <div className='text-center'>
@@ -348,7 +348,7 @@ function Dashboard() {
                 </div>
               </div>
             </CardItem>
-            <CardItem className='py-4 lg:py-6 px-2 md:px-4 xl:px-7 flex-1'>
+            <CardItem className='py-4 lg:py-6 px-4 md:px-4 xl:px-7 flex-1'>
               <div className='max-h-[250px]'>
                 <p className='text-white font-lufga text-2xl pb-4'>Borrowed</p>
                 <div className='text-center'>

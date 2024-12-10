@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAccount, useSignMessage } from 'wagmi';
+import '../../assets/css/custom-styles.css';
 
 import mountainImage from '../../assets/img/mountain.svg';
 import { copyToClipboard } from '../../utils/functions';
@@ -148,7 +149,7 @@ const Main = () => {
 
   return (
     <>
-      <div className='relative h-56 w-full rounded-md px-7 py-5 bg-secondary mb-10'>
+      <div className='relative h-56 w-full rounded-md px-7 py-5 pb-[15.25rem] md bg-secondary mb-10 '>
         <div className=''>
           <p className='font-black text-xl leading-8'>Refer Your Frens</p>
           <p className='font-light mt-3'>
@@ -156,7 +157,7 @@ const Main = () => {
             <br /> crypto holdings as collateral.
           </p>
         </div>
-        <div className='absolute right-0 bottom-0'>
+        <div className='absolute right-0 bottom-0' style={{ top: '110px' }}>
           <img src={mountainImage} alt='mountain' />
         </div>
       </div>

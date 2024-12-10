@@ -27,16 +27,27 @@ const CustomTooltip = ({ active, payload, label }: any) => {
       <div
         className='custom-tooltip'
         style={{
-          backgroundColor: '#fff',
+          backgroundColor: 'black',
           padding: '10px',
-          border: '1px solid #ccc',
+          fontFamily: 'lufga',
+          fontWeight: 'regular',
         }}
       >
-        <p className='label' style={{ color: '#302DC2' }}>{`Date: ${label}`}</p>
-        <p
-          className='intro'
-          style={{ color: '#38b2ac' }}
-        >{`APY: ${payload[0].value}%`}</p>
+        <p className='label' style={{ color: 'white' }}>{`${label}`}</p>
+        <p className='intro' style={{ color: 'white' }}>
+          <span
+            style={{
+              display: 'inline-block',
+              width: '10px',
+              height: '10px',
+              backgroundColor:
+                payload[0].name == 'Borrow APY' ? '#4c51bf' : '#2DC24E',
+              borderRadius: '50%',
+              marginRight: '5px',
+            }}
+          ></span>
+          APY: <span style={{ fontWeight: '600' }}>{payload[0].value}%</span>
+        </p>
       </div>
     );
   }
@@ -102,7 +113,7 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({
             // domain={[10, 100]} // Set the Y-axis domain from 10 to 100
             // ticks={[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]} // Define ticks manually
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip cursor={false} content={<CustomTooltip />} />
           <Line
             type='monotone'
             dataKey='rate'

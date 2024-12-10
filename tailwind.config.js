@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      spacing: {
+        2.5: '0.7rem', // 10px
+      },
       boxShadow: {
         custom: '0 0 15px #252525',
         '3xl': '0 0 20px 10px #252525',
