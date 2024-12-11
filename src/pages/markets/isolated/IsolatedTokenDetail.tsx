@@ -796,26 +796,31 @@ function TokenDetail() {
             </CardItem>
             <CardItem className='p-4 lg:p-8 mt-4'>
               <div className='w-full grid grid-cols-2 text-center'>
-                <button onClick={() => setCollateralAction('add')}>
-                  <p
-                    className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateralAction === 'add' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
-                  >
-                    Add collateral
-                  </p>
+                <div className='flex flex-col items-center'>
+
+                  <button onClick={() => setCollateralAction('add')}>
+                    <p
+                      className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateralAction === 'add' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                    >
+                      Add collateral
+                    </p>
+                  </button>
                   <hr
-                    className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateralAction === 'add' ? 'text-white' : 'text-[#546764]'}`}
+                    className={`w-full mt-4 border transition-colors duration-300 ease-in-out ${collateralAction === 'add' ? 'text-white' : 'text-[#546764]'}`}
                   />
-                </button>
-                <button onClick={() => setCollateralAction('remove')}>
-                  <p
-                    className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateralAction === 'remove' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
-                  >
-                    Remove collateral
-                  </p>
+                </div>
+                <div className='flex flex-col items-center'>
+                  <button onClick={() => setCollateralAction('remove')}>
+                    <p
+                      className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateralAction === 'remove' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                    >
+                      Remove collateral
+                    </p>
+                  </button>
                   <hr
-                    className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateralAction === 'remove' ? 'text-white' : 'text-[#546764]'}`}
+                    className={`w-full mt-4 border transition-colors duration-300 ease-in-out ${collateralAction === 'remove' ? 'text-white' : 'text-[#546764]'}`}
                   />
-                </button>
+                </div>
               </div>
               <div className='flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4'>
                 <div className='flex gap-3 items-center p-3'>
