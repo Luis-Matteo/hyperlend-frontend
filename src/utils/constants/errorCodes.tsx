@@ -89,8 +89,6 @@ const errorCodes: Record<string, string> = {
   STABLE_BORROWING_ENABLED: '88', // 'Stable borrowing is enabled'
   SILOED_BORROWING_VIOLATION: '89', // 'User is trying to borrow multiple assets includinga siloed one'
   RESERVE_DEBT_NOT_ZERO: '90', // the total debt of the reserve needs to be 0
-  'the wallet is not properly connected, try unlocking it':
-    'n.connector.getChainId is not a function',
 };
 
 const errorMessages: Record<string, string> = Object.fromEntries(
@@ -98,6 +96,12 @@ const errorMessages: Record<string, string> = Object.fromEntries(
 );
 
 export function getErrorMessage(code: string): string {
-  console.log(code);
-  return errorMessages[code] || 'ERROR_MESSAGE_NOT_FOUND';
+  if (errorMessages[code]) return errorMessages[code];
+
+  if (code.includes('Connector not connected.'))
+    return 'Please connect your wallet first!';
+  if (code.includes('connector.getChainId is not a function'))
+    return 'The wallet is not properly connected, try unlocking it!';
+
+  return 'ERROR_MESSAGE_NOT_FOUND';
 }

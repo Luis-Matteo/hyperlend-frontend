@@ -10,7 +10,7 @@ import {
 } from 'recharts';
 
 import { formatNumber } from '../../utils/functions';
-import { useProtocolInterestRateModel } from '../../utils/protocol/interestRates';
+import { useProtocolInterestRateModel } from '../../utils/protocol/core/interestRates';
 
 interface InterestRateModelChartType {
   token: string;

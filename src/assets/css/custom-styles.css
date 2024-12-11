@@ -5,3 +5,7 @@
 w3m-button {
   --wui-color-inverse-100: #000000; /* Black */
 }
+
+#mountain {
+  top: 110px;
+}

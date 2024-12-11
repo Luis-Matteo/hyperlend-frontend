@@ -41,7 +41,7 @@ function formatUnit(num: number, decimal: number = 2) {
 function formatAddress(inputAddress: string) {
   if (!inputAddress) return '';
   const start = inputAddress.slice(0, 6);
-  const end = inputAddress.slice(-3);
+  const end = inputAddress.slice(-5);
   return `${start}...${end}`;
 }
 
@@ -53,6 +53,14 @@ function calculateApy(currentRate: BigInt) {
   let rateBN = new BigNumber(currentRate.toString());
   let rateDecimal = Number(rateBN.div(1e27));
   let apy = Math.pow(Math.E, rateDecimal) - 1;
+  return apy * 100;
+}
+
+export function calculateApyIsolated(ratePerSec: BigInt) {
+  const secondsPerYear = 31536000;
+  const rateBN = new BigNumber(ratePerSec.toString());
+  const rateDecimal = Number(rateBN.div(1e18));
+  const apy = (Math.pow(Math.E, rateDecimal) - 1) * secondsPerYear;
   return apy * 100;
 }
 
@@ -174,6 +182,54 @@ const normalizeDecimalsAmount = (
   return Number(x) / Math.pow(10, tokenDecimalsMap[token]);
 };
 
+type DailyData = {
+  date: string;
+  value: number;
+};
+
+export type WeeklyData = {
+  date: string;
+  value: number;
+};
+
+function getWeeklyData(dailyData: DailyData[]): WeeklyData[] {
+  const weeklyData: WeeklyData[] = [];
+
+  let weekStartDate: string | null = null;
+  let weeklyValue = 0;
+  let currentWeekDay = 0;
+
+  for (let i = 0; i < dailyData.length; i++) {
+    const dayData = dailyData[i];
+    const currentDate = new Date(dayData.date);
+
+    if (currentWeekDay === 0) {
+      if (weekStartDate !== null) {
+        weeklyData.push({
+          date: weekStartDate,
+          value: weeklyValue,
+        });
+      }
+
+      weekStartDate = currentDate.toISOString().split('T')[0];
+      weeklyValue = 0; // Reset the weekly sum
+    }
+
+    weeklyValue += dayData.value;
+
+    currentWeekDay = (currentWeekDay + 1) % 7;
+  }
+
+  if (weekStartDate !== null) {
+    weeklyData.push({
+      date: weekStartDate,
+      value: weeklyValue,
+    });
+  }
+
+  return weeklyData;
+}
+
 export {
   formatNumber,
   formatAddress,
@@ -181,4 +237,5 @@ export {
   calculateApy,
   copyToClipboard,
   normalizeDecimalsAmount,
+  getWeeklyData,
 };

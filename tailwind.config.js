@@ -1,14 +1,22 @@
-const colors = ['f7931a', '497493'];
+const colors = ['f7931a', '497493', '97fce0'];
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+    './node_modules/react-tailwindcss-datepicker/dist/index.esm.{js,ts}',
+  ],
   theme: {
     extend: {
+      spacing: {
+        2.5: '0.7rem', // 10px
+      },
       boxShadow: {
         custom: '0 0 15px #252525',
         '3xl': '0 0 20px 10px #252525',
         '4xl': '0px 0px 40px 20px #252525',
+        'inner-3xl': '0px -13px 36.5px 0px #CAEAE54D inset',
       },
       fontFamily: {
         lufga: ['Lufga', 'sans-serif'],
@@ -25,6 +33,7 @@ export default {
         'grey-light': '#E1E1E1',
         success: '#2DC24E',
         warning: '#FFD542',
+        error: '#FF4245',
       },
       blur: {
         xs: '2px',
