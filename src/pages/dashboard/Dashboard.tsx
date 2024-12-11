@@ -180,14 +180,34 @@ function Dashboard() {
               />
               <div className='flex flex-col justify-between gap-5 w-full'>
                 <div className='h-20 font-lufga'>
-                  <span className='text-white mb-2'>Collateral deposited</span>
+                  <div className='flex gap-2 items-center mb-2'>
+                    <span className='text-white'>Collateral deposited</span>
+                    <InfoItem
+                      title={
+                        <span>
+                          Displays ratio of assets deposited to HyperLend relative to total assets in your wallet
+                        </span>
+                      }
+                      className='w-[200px]'
+                    />
+                  </div>
                   <PositionBar
                     available={totalSupplyUsd}
                     total={totalSupplyUsd + walletBalanceValue}
                   />
                 </div>
                 <div className='h-20 font-lufga'>
-                  <span className='text-white mb-2'>Borrow</span>
+                  <div className='flex gap-2 items-center mb-2'>
+                    <span className='text-white'>Borrow</span>
+                    <InfoItem
+                      title={
+                        <span>
+                          Displays ratio of assets deposited to HyperLend relative to total assets in your wallet
+                        </span>
+                      }
+                      className='w-[200px]'
+                    />
+                  </div>
                   <PositionBar
                     available={totalBorrowUsd}
                     total={totalBorrowLimit}

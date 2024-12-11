@@ -167,13 +167,13 @@ function TokenDetail() {
 
     return errorMessage.includes('Contract Call')
       ? errorMessage.split('Contract Call')[0] +
-          (errorMessage
-            .split('Contract Call')[0]
-            .includes('reverted with the following reason:')
-            ? `(${getErrorMessage(errorMessage.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
-            : '')
+      (errorMessage
+        .split('Contract Call')[0]
+        .includes('reverted with the following reason:')
+        ? `(${getErrorMessage(errorMessage.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
+        : '')
       : getErrorMessage(errorMessage.split('Request Arguments')[0]) !=
-          'ERROR_MESSAGE_NOT_FOUND'
+        'ERROR_MESSAGE_NOT_FOUND'
         ? getErrorMessage(errorMessage.split('Request Arguments')[0])
         : (errorMessage.split('Request Arguments')[0] as unknown as string);
   }
@@ -255,8 +255,8 @@ function TokenDetail() {
   useEffect(() => {
     if (
       Number(collateralAllowance) /
-        Math.pow(10, tokenDecimalsMap[market.collateral]) <
-        collateralAmount &&
+      Math.pow(10, tokenDecimalsMap[market.collateral]) <
+      collateralAmount &&
       collateralAction != 'approve'
     ) {
       setIsCollateralApproved(false);
@@ -279,7 +279,7 @@ function TokenDetail() {
   useEffect(() => {
     setCollateralWithdrawableAmount(
       Number((userAccountData as any)?.userCollateral) /
-        Math.pow(10, tokenDecimalsMap[market.collateral]) || 0,
+      Math.pow(10, tokenDecimalsMap[market.collateral]) || 0,
     );
   }, [userAccountData, (userAccountData as any)?.userAccountData]);
 
@@ -320,12 +320,12 @@ function TokenDetail() {
   const supplied = {
     balance:
       Number((userAccountData as any)?.userAssets) /
-        Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
+      Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
   };
   const borrowed = {
     balance:
       Number((userAccountData as any)?.userBorrows) /
-        Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
+      Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
   };
 
   const [actionData, setActionData] = useState<TokenActionsIsolatedProps>({
@@ -361,7 +361,7 @@ function TokenDetail() {
             ? 'supply'
             : 'withdraw',
         'https://testnet.purrsec.com/tx/' +
-          txReceiptResult.data.transactionHash,
+        txReceiptResult.data.transactionHash,
         '',
       );
     }
@@ -385,7 +385,7 @@ function TokenDetail() {
       market.collateral,
       address || '0x0000000000000000000000000000000000000000',
       Number(collateralAllowance) /
-        Math.pow(10, tokenDecimalsMap[market.collateral]),
+      Math.pow(10, tokenDecimalsMap[market.collateral]),
       collateralAmount,
       bgIntAmount,
       writeContractAsync,
@@ -776,45 +776,51 @@ function TokenDetail() {
             <CardItem className='p-4 lg:p-8 font-lufga'>
               <div className='w-full grid grid-cols-4 text-center'>
                 {tokenDetailButton.map((button) => (
-                  <button
-                    key={button.id}
-                    onClick={() => handleButtonClick(button.id)}
-                  >
-                    <p
-                      className={`text-base capitalize transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                  <div className='flex flex-col items-center' key={button.id}>
+                    <button
+                      onClick={() => handleButtonClick(button.id)}
                     >
-                      {button.label}
-                    </p>
+                      <p
+                        className={`text-base capitalize transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                      >
+                        {button.label}
+                      </p>
+                    </button>
                     <hr
-                      className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#546764]'}`}
+                      className={`w-full mt-4 border transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#546764]'}`}
                     />
-                  </button>
+                  </div>
                 ))}
               </div>
               <TokenActions {...actionData} />
             </CardItem>
             <CardItem className='p-4 lg:p-8 mt-4'>
               <div className='w-full grid grid-cols-2 text-center'>
-                <button onClick={() => setCollateralAction('add')}>
-                  <p
-                    className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateralAction === 'add' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
-                  >
-                    Add collateral
-                  </p>
+                <div className='flex flex-col items-center'>
+
+                  <button onClick={() => setCollateralAction('add')}>
+                    <p
+                      className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateralAction === 'add' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                    >
+                      Add collateral
+                    </p>
+                  </button>
                   <hr
-                    className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateralAction === 'add' ? 'text-white' : 'text-[#546764]'}`}
+                    className={`w-full mt-4 border transition-colors duration-300 ease-in-out ${collateralAction === 'add' ? 'text-white' : 'text-[#546764]'}`}
                   />
-                </button>
-                <button onClick={() => setCollateralAction('remove')}>
-                  <p
-                    className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateralAction === 'remove' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
-                  >
-                    Remove collateral
-                  </p>
+                </div>
+                <div className='flex flex-col items-center'>
+                  <button onClick={() => setCollateralAction('remove')}>
+                    <p
+                      className={`text-base font-lufga capitalize transition-colors duration-300 ease-in-out ${collateralAction === 'remove' ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                    >
+                      Remove collateral
+                    </p>
+                  </button>
                   <hr
-                    className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${collateralAction === 'remove' ? 'text-white' : 'text-[#546764]'}`}
+                    className={`w-full mt-4 border transition-colors duration-300 ease-in-out ${collateralAction === 'remove' ? 'text-white' : 'text-[#546764]'}`}
                   />
-                </button>
+                </div>
               </div>
               <div className='flex items-center justify-between bg-[#071311] rounded-md px-4 py-2 mt-4 mb-4'>
                 <div className='flex gap-3 items-center p-3'>
@@ -870,15 +876,15 @@ function TokenDetail() {
                   <p className='text-base font-lufga text-[#CAEAE5]'>
                     {collateralAction == 'add'
                       ? formatNumber(
-                          Number(collateralAvailableAmount),
-                          getTokenPrecision(market.collateral, priceDataMap),
-                          true,
-                        )
+                        Number(collateralAvailableAmount),
+                        getTokenPrecision(market.collateral, priceDataMap),
+                        true,
+                      )
                       : formatNumber(
-                          Number(collateralWithdrawableAmount),
-                          getTokenPrecision(market.collateral, priceDataMap),
-                          true,
-                        )}{' '}
+                        Number(collateralWithdrawableAmount),
+                        getTokenPrecision(market.collateral, priceDataMap),
+                        true,
+                      )}{' '}
                     {market.collateralSymbol}
                   </p>
                 </div>

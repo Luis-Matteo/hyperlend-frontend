@@ -276,21 +276,21 @@ function TokenDetail() {
     },
     ...(isolated
       ? [
-          {
-            name: 'Asset Price',
-            value: `Asset Price`,
-          },
-          {
-            name: 'Collateral Price',
-            value: `Collateral Price`,
-          },
-        ]
+        {
+          name: 'Asset Price',
+          value: `Asset Price`,
+        },
+        {
+          name: 'Collateral Price',
+          value: `Collateral Price`,
+        },
+      ]
       : [
-          {
-            name: 'Price',
-            value: `$${formatNumber(tokenPrice, 2)}`,
-          },
-        ]),
+        {
+          name: 'Price',
+          value: `$${formatNumber(tokenPrice, 2)}`,
+        },
+      ]),
     {
       name: 'Liquidity',
       value: `$${formatNumber(totalLiquidityToken * tokenPrice, 2)}`,
@@ -605,19 +605,20 @@ function TokenDetail() {
             <CardItem className='p-4 lg:p-8 font-lufga'>
               <div className='w-full grid grid-cols-4 text-center'>
                 {tokenDetailButton.map((button: any) => (
-                  <button
-                    key={button.id}
-                    onClick={() => handleButtonClick(button.id)}
-                  >
-                    <p
-                      className={`text-base capitalize transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                  <div className='flex flex-col items-center' key={button.id}>
+                    <button
+                      onClick={() => handleButtonClick(button.id)}
                     >
-                      {button.label}
-                    </p>
+                      <p
+                        className={`text-base capitalize transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#CAEAE566] hover:text-white'}`}
+                      >
+                        {button.label}
+                      </p>
+                    </button>
                     <hr
-                      className={`mt-4 mb-4 border transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#546764]'}`}
+                      className={`w-full mt-4 border transition-colors duration-300 ease-in-out ${activeButton === button.id ? 'text-white' : 'text-[#546764]'}`}
                     />
-                  </button>
+                  </div>
                 ))}
               </div>
               <TokenActions {...actionData} />
