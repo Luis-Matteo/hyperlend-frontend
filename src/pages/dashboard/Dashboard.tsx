@@ -185,7 +185,8 @@ function Dashboard() {
                     <InfoItem
                       title={
                         <span>
-                          Displays ratio of assets deposited to HyperLend relative to total assets in your wallet
+                          Displays ratio of assets deposited to HyperLend
+                          relative to total assets in your wallet
                         </span>
                       }
                       className='w-[200px]'
@@ -202,7 +203,8 @@ function Dashboard() {
                     <InfoItem
                       title={
                         <span>
-                          Displays ratio of assets deposited to HyperLend relative to total assets in your wallet
+                          Displays ratio of assets deposited to HyperLend
+                          relative to total assets in your wallet
                         </span>
                       }
                       className='w-[200px]'
