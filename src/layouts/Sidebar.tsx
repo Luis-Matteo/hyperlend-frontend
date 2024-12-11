@@ -66,7 +66,7 @@ function Sidebar() {
           <div className='pt-8'>
             <Status />
           </div>
-          <div className='flex flex-col gap-6 pt-10'>
+          <div className='flex flex-col gap-4 pt-10'>
             {navLinksTop.map((item: NavLink) => (
               <NavButton
                 key={item.id}
