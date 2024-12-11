@@ -31,8 +31,15 @@ const Factor = ({ healthFactor }: FactorProps) => {
               const angle =
                 (index / dots.length) * (180 * (length / (length - 1))) - 90;
               const rotation = `rotate(${angle}deg)`;
+              const maxOpacity = (hf / maxHf) * 100 + 40;
+              const opacityRaw =
+                hf > maxHf
+                  ? (index * (100 / dots.length)) / 100
+                  : (index * maxOpacity) / dots.length / 100;
+              const opacity = Math.max(0.1, Math.min(opacityRaw, 1));
+
               const hue = Math.floor(((index + 1) / dots.length) * 100); // 0 to 120 (red to green)
-              let color = `hsla(1, ${hue}%, ${100 - (hue * (100 - 50)) / 100}%, 1)`;
+              let color = `hsla(${hue}, 100%, 50%, ${opacity})`;
               if (index > hf * (dots.length / maxHf)) color = `bg-[#282829]`;
               return (
                 <div
