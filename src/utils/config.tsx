@@ -57,6 +57,7 @@ export const tokenColorMap: any = {
 export const stablecoinsList = ['USDC', 'USDT'];
 
 const currentChainId: number = 998;
+export const currentChaiApiName: string = 'hyperEvmTestnet';
 
 const networkConfigs: any = {
   42161: arb,
