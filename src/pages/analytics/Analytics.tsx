@@ -14,6 +14,7 @@ import { useAccount } from 'wagmi';
 import { colorList } from '../../utils/constants/colorList';
 import { LargestUsers } from '../../utils/types';
 import Datepicker, { DateValueType } from 'react-tailwindcss-datepicker';
+import { currentChaiApiName } from '../../utils/config';
 // import { motion } from 'framer-motion';
 
 interface APYData {
@@ -55,7 +56,7 @@ function Analytics() {
   });
 
   useEffect(() => {
-    const chain = chainId === 998 ? 'hyperEvmTestnet' : 'arbitrum';
+    const chain = currentChaiApiName;
     const startDate = dateRange?.startDate?.toISOString().split('T')[0];
     const endDate = dateRange?.endDate?.toISOString().split('T')[0];
     const today = new Date();
