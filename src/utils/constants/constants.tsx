@@ -63,13 +63,13 @@ const navLinksTop: NavLinkProps[] = [
   //   icon: hypervaultIcon,
   //   disabled: false,
   // },
-//   {
-//     id: 'analytics',
-//     title: 'Analytics',
-//     url: '/analytics',
-//     icon: analyticsIcon,
-//     disabled: false,
-//   },
+  {
+    id: 'analytics',
+    title: 'Analytics',
+    url: '/analytics',
+    icon: analyticsIcon,
+    disabled: false,
+  },
   // {
   //   id: 'hyperloop',
   //   title: 'HyperLoop',
