@@ -1,6 +1,6 @@
 import dashboardIcon from '../../assets/icons/dashboard-icon.svg';
 import lendborrowIcon from '../../assets/icons/lend-borrow-icon.svg';
-// import analyticsIcon from '../../assets/icons/analytics-icon.svg';
+import analyticsIcon from '../../assets/icons/analytics-icon.svg';
 // import hyperloopIcon from '../../assets/icons/hyperloop-icon.svg';
 // import hypervaultIcon from '../../assets/icons/hypervault-icon.svg';
 
@@ -63,13 +63,13 @@ const navLinksTop: NavLinkProps[] = [
   //   icon: hypervaultIcon,
   //   disabled: false,
   // },
-//   {
-//     id: 'analytics',
-//     title: 'Analytics',
-//     url: '/analytics',
-//     icon: analyticsIcon,
-//     disabled: false,
-//   },
+  {
+    id: 'analytics',
+    title: 'Analytics',
+    url: '/analytics',
+    icon: analyticsIcon,
+    disabled: false,
+  },
   // {
   //   id: 'hyperloop',
   //   title: 'HyperLoop',
