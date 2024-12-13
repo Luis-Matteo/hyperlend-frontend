@@ -25,7 +25,7 @@ function Sidebar() {
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state: RootState) => state.sidebar.isOpen);
   const sidebarRef = useRef<HTMLDivElement>(null);
-  const [faucetButtonText, setFaucetButtonText] = useState("Faucet")
+  const [faucetButtonText, setFaucetButtonText] = useState('Faucet');
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -122,9 +122,9 @@ function Sidebar() {
               <button
                 className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
                 onClick={async () => {
-                  setFaucetButtonText("Sending ETH...")
+                  setFaucetButtonText('Sending ETH...');
                   await claimFaucet(address);
-                  setFaucetButtonText("Faucet")
+                  setFaucetButtonText('Faucet');
                   sendClaimTx();
                 }}
                 key={'openFaucet'}

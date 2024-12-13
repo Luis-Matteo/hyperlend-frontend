@@ -6,7 +6,7 @@ import { networkChainId } from '../../../utils/config';
 
 import { useAccount, useSwitchChain } from 'wagmi';
 import { ModalType } from '../../../utils/types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import {
   useProtocolPairsData,
@@ -48,6 +48,7 @@ interface IsolatedPairInfo {
 }
 
 function IsolatedTable({}: CoreTableProps) {
+  const location = useLocation();
   const account = useAccount();
   const { switchChain } = useSwitchChain();
 
@@ -127,7 +128,11 @@ function IsolatedTable({}: CoreTableProps) {
               >
                 <Link
                   className='flex flex-1 gap-2 items-center'
-                  to={`isolated/${item.pair}`}
+                  to={
+                    location.pathname.includes('isolated')
+                      ? `${item.pair}`
+                      : `isolated/${item.pair}`
+                  }
                 >
                   <div className='flex items-center gap-2 h-full w-[80px] 2xl:w-[120px]'>
                     <img
