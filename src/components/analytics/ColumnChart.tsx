@@ -36,6 +36,7 @@ const ColumnChart = ({ data }: ChartProps) => {
     yaxis: {
       labels: {
         show: true,
+        offsetX: -15,
       },
       axisBorder: {
         show: false, // Hide y-axis border

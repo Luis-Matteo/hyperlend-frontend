@@ -313,7 +313,7 @@ function Dashboard() {
                   <div className='overflow-auto max-h-[200px]'>
                     {(supplied || []).map((item: any, index: any) => (
                       <button
-                        className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-[#1F2A29]'
+                        className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-primary-hover'
                         key={index}
                         onClick={() =>
                           navigate(`/markets/${item.underlyingAsset}`)
@@ -353,7 +353,7 @@ function Dashboard() {
                           </button>
                         </div>
                         <button
-                          className='w-full py-2 bg-secondary font-lufga rounded-xl font-bold'
+                          className='w-full py-2 bg-secondary font-lufga rounded-xl font-bold hover:bg-[#CAEAE5]/80'
                           onClick={(e) => {
                             e.stopPropagation();
                             setModalStatus(true);
@@ -393,7 +393,7 @@ function Dashboard() {
                   <div className='overflow-auto max-h-[200px]'>
                     {(borrowed || []).map((item: any, index: any) => (
                       <button
-                        className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-[#1F2A29]'
+                        className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-primary-hover'
                         key={index}
                         onClick={() =>
                           navigate(`/markets/${item.underlyingAsset}`)
@@ -423,7 +423,7 @@ function Dashboard() {
                         </div>
                         <div>
                           <button
-                            className='w-full py-2 bg-secondary font-lufga rounded-xl font-bold'
+                            className='w-full py-2 bg-secondary font-lufga rounded-xl font-bold hover:bg-[#CAEAE5]/80'
                             onClick={(e) => {
                               e.stopPropagation();
                               setModalStatus(true);
