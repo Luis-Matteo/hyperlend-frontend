@@ -5,7 +5,7 @@ export async function claimFaucet(userAddress?: string) {
     body: JSON.stringify({ type: 'ethFaucet', user: userAddress }),
   };
 
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<void>((resolve) => {
     fetch('https://api.hyperliquid-testnet.xyz/info', requestOptions)
     .then((response) => response.json())
     .then((data) => {
