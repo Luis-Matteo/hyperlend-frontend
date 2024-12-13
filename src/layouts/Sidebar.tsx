@@ -10,7 +10,7 @@ import logoutIcon from '../assets/icons/logout-icon.svg';
 import xmarkIcon from '../assets/icons/xmark-icon.svg';
 import referralsIcon from '../assets/icons/referralsIcon.svg';
 import { toggleModalOpen, toggleSidebar } from '../store/sidebarSlice';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { networkChainId, contracts, abis } from '../utils/config';
 import { useAccount, useWriteContract } from 'wagmi';
@@ -25,6 +25,8 @@ function Sidebar() {
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state: RootState) => state.sidebar.isOpen);
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const [faucetButtonText, setFaucetButtonText] = useState("Faucet")
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -119,8 +121,10 @@ function Sidebar() {
             {networkChainId == 998 && isConnected ? (
               <button
                 className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
-                onClick={() => {
-                  claimFaucet(address);
+                onClick={async () => {
+                  setFaucetButtonText("Sending ETH...")
+                  await claimFaucet(address);
+                  setFaucetButtonText("Faucet")
                   sendClaimTx();
                 }}
                 key={'openFaucet'}
@@ -134,7 +138,7 @@ function Sidebar() {
                 <p
                   className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
                 >
-                  Faucet
+                  {faucetButtonText}
                 </p>
               </button>
             ) : (
