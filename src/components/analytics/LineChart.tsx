@@ -54,6 +54,7 @@ const LineChart = React.memo(
             colors: '#D4D4D4',
             fontSize: '12px',
           },
+          offsetX: -15,
           formatter: (value) => `${value.toLocaleString()}`,
         },
         axisBorder: {

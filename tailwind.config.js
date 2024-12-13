@@ -25,6 +25,7 @@ export default {
       colors: {
         primary: '#050F0D',
         'primary-light': '#071311',
+        'primary-hover': '#172422',
         secondary: '#CAEAE5',
         gray: '#4F4F4F',
         'gray-dark': '#081A16',
