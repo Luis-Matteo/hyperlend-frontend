@@ -101,7 +101,7 @@ export function getErrorMessage(code: string): string {
   if (code.includes('Connector not connected.'))
     return 'Please connect your wallet first!';
   if (code.includes('connector.getChainId is not a function'))
-    return 'The wallet is not properly connected, try unlocking it!';
+    return 'The wallet is not properly connected, try unlocking it and then refresh the page!';
 
   return 'ERROR_MESSAGE_NOT_FOUND';
 }
