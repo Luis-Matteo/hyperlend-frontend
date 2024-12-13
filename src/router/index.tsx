@@ -21,6 +21,8 @@ import Analytics from '../pages/analytics/Analytics';
 import MarketOverview from '../pages/markets/MarketOverview';
 import IsolatedTokenDetails from '../pages/markets/isolated/IsolatedTokenDetail';
 import Hypervault from '../pages/hypervault/Hypervault';
+import HypervaultOverview from '../pages/hypervault/HypervaultOverview';
+import HypervaultDetails from '../pages/hypervault/HypervaultDetails';
 
 function MainContent() {
   const { guided } = useConfirm();
@@ -54,7 +56,10 @@ function MainContent() {
                 <Route path=':pairAddress' element={<IsolatedTokenDetails />} />
               </Route>
             </Route>
-            <Route path='hypervault' element={<Hypervault />} />
+            <Route path='hypervault' element={<Hypervault />} >
+              <Route path='' element={<HypervaultOverview />} />
+              <Route path=':vaultId' element={<HypervaultDetails />} />
+            </Route>
             <Route path='analytics' element={<Analytics />} />
             <Route path='hyperloop' element={<Hyperloop />}>
               <Route path='' element={<HyperloopOverview />} />
@@ -70,7 +75,7 @@ function MainContent() {
           className={`absolute top-0 right-0 w-full h-screen -z-10 ${guided > 0 ? 'lg:blur-[8px]' : ''}`}
         >
           {location.pathname.match(/^\/markets\/[^/]+$/) &&
-          !location.pathname.match(/^\/markets\/isolated\/?$/) ? (
+            !location.pathname.match(/^\/markets\/isolated\/?$/) ? (
             <img
               className='w-full'
               src={
