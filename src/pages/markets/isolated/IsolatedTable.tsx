@@ -123,7 +123,7 @@ function IsolatedTable({}: CoreTableProps) {
           <div className='lg:max-h-[calc(100vh-346px)] xl:max-h-[calc(100vh-394px)] h-full overflow-auto hidden xl:block'>
             {(markets || []).map((item, key) => (
               <div
-                className='flex justify-between items-center xl:gap-2 2xl:gap-8 py-[14px] px-2 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer'
+                className='flex justify-between items-center xl:gap-2 2xl:gap-8 py-[14px] px-2 border-b-[1px] border-[#212325] hover:bg-primary-hover cursor-pointer'
                 key={key}
               >
                 <Link
@@ -234,7 +234,7 @@ function IsolatedTable({}: CoreTableProps) {
       <div className='xl:hidden w-full flex flex-col gap-4'>
         {(markets || []).map((item, key) => (
           <CardItem className='' key={key}>
-            <div className='flex flex-col hover:bg-[#1F2A29] cursor-pointer rounded-t-2xl'>
+            <div className='flex flex-col hover:bg-primary-hover cursor-pointer rounded-t-2xl'>
               <div
                 className={`flex items-center gap-8 h-full p-[20px] rounded-t-2xl bg-gradient-to-t from-transparent to-[#f7931a40]`}
               >

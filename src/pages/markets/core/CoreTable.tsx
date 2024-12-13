@@ -224,7 +224,7 @@ function CoreTable({
           <div className='lg:max-h-[calc(100vh-346px)] xl:max-h-[calc(100vh-394px)] h-full overflow-auto hidden xl:block'>
             {(assets || []).map((item, key) => (
               <div
-                className='flex justify-between items-center xl:gap-2 2xl:gap-8 py-[14px] px-2.5 border-b-[1px] border-[#212325] hover:bg-[#1F2A29] cursor-pointer'
+                className='flex justify-between items-center xl:gap-2 2xl:gap-8 py-[14px] px-2.5 border-b-[1px] border-[#212325] hover:bg-primary-hover cursor-pointer'
                 key={key}
               >
                 <Link
@@ -290,7 +290,7 @@ function CoreTable({
 
                 <div className='grid xl:grid-cols-1 2xl:grid-cols-2 gap-2 xl:w-[120px] 2xl:w-[240px] '>
                   <button
-                    className='w-full py-2 bg-secondary font-lufga rounded-xl font-bold hover:'
+                    className='w-full py-2 bg-secondary font-lufga rounded-xl font-bold hover:bg-[#CAEAE5]/80'
                     onClick={() => {
                       setModalStatus(true);
                       setModalType('supply');
@@ -300,7 +300,7 @@ function CoreTable({
                     Supply
                   </button>
                   <button
-                    className='w-full py-2 bg-secondary font-lufga rounded-xl font-bold'
+                    className='w-full py-2 bg-secondary font-lufga rounded-xl font-bold hover:bg-[#CAEAE5]/80'
                     onClick={() => {
                       setModalStatus(true);
                       setModalType('borrow');
@@ -320,7 +320,7 @@ function CoreTable({
         {(assets || []).map((item, key) => (
           <CardItem className='' key={key}>
             <Link
-              className='flex flex-col hover:bg-[#1F2A29] cursor-pointer rounded-t-2xl'
+              className='flex flex-col hover:bg-primary-hover cursor-pointer rounded-t-2xl'
               to={`${item.underlyingAsset}`}
             >
               <div
