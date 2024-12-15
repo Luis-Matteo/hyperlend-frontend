@@ -119,8 +119,9 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     contracts.pool,
   );
   const { hTokenAllowance, dTokenAllowance } = useUserWrappedTokenAllowanceData(
+    token,
     address || '0x0000000000000000000000000000000000000000',
-    contracts.wrappedTokenGatewayV3,
+    contracts.wrappedTokenGatewayV3[token],
   );
 
   const { priceDataMap } = useProtocolPriceData();

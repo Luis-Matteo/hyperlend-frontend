@@ -130,6 +130,7 @@ interface IUserWrappedTokenAllowanceData {
 }
 
 export function useUserWrappedTokenAllowanceData(
+  token: string,
   owner: string,
   spender: string,
 ): IUserWrappedTokenAllowanceData {
@@ -139,7 +140,7 @@ export function useUserWrappedTokenAllowanceData(
     isConnected && address
       ? ({
           abi: erc20Abi,
-          address: wrappedTokenProtocolTokens.hToken,
+          address: wrappedTokenProtocolTokens[token].hToken,
           functionName: 'allowance',
           args: [owner, spender],
           query: {
@@ -153,7 +154,7 @@ export function useUserWrappedTokenAllowanceData(
     isConnected && address
       ? ({
           abi: abis.variableDebtToken,
-          address: wrappedTokenProtocolTokens.dToken,
+          address: wrappedTokenProtocolTokens[token].dToken,
           functionName: 'borrowAllowance',
           args: [owner, spender],
           query: {
