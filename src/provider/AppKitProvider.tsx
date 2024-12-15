@@ -49,7 +49,7 @@ const hyperEvmTestnet = defineChain({
 
 const chains = [hyperEvmTestnet] as const;
 const enableInjected = true as const;
-const config = defaultWagmiConfig({
+export const config = defaultWagmiConfig({
   chains,
   projectId,
   metadata,
