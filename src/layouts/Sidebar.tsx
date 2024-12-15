@@ -19,10 +19,9 @@ import { claimFaucet } from '../utils/protocol/faucet';
 import explorerIcon from '../assets/icons/explorer-icon.svg';
 import { useConfirm } from '../provider/ConfirmProvider';
 
-import Turnstile, { useTurnstile } from 'react-turnstile';
+import Turnstile from 'react-turnstile';
 
 function Sidebar() {
-  const turnstile = useTurnstile();
   const { isConnected, address } = useAccount();
   const { guided } = useConfirm();
   const dispatch = useDispatch();
