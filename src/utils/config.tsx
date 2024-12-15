@@ -3,6 +3,7 @@ import usdcIcon from '../assets/icons/coins/usdc-icon.svg';
 import usdtIcon from '../assets/icons/coins/usdt-icon.svg';
 import wbtcIcon from '../assets/icons/coins/wbtc-icon.svg';
 import stHypeIcon from '../assets/icons/coins/sthype-icon.svg';
+import hypeIcon from '../assets/icons/coins/hype-icon.svg';
 
 import arb from './chains/arb';
 import hlTestnet from './chains/hlTestnet';
@@ -44,6 +45,7 @@ export const iconsMap: any = {
   WBTC: wbtcIcon,
   MBTC: wbtcIcon,
   stHYPE: stHypeIcon,
+  HYPE: hypeIcon,
 };
 
 //make sure to also add them to tailwind.config.js,
@@ -52,6 +54,7 @@ export const tokenColorMap: any = {
   MBTC: 'f7931a',
   ETH: '497493',
   stHYPE: '97fce0',
+  HYPE: '97fce0',
 };
 
 export const stablecoinsList = ['USDC', 'USDT'];
@@ -97,3 +100,5 @@ export const oraclesMap: any =
 export const excludeIsolatedPairs: any =
   networkConfigs[currentChainId].excludeIsolatedPairs ||
   arb.excludeIsolatedPairs;
+export const excludeCoreReserves: any =
+  networkConfigs[currentChainId].excludeCoreReserves || arb.excludeCoreReserves;

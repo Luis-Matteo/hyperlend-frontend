@@ -19,6 +19,8 @@ import { claimFaucet } from '../utils/protocol/faucet';
 import explorerIcon from '../assets/icons/explorer-icon.svg';
 import { useConfirm } from '../provider/ConfirmProvider';
 
+import Turnstile from 'react-turnstile';
+
 function Sidebar() {
   const { isConnected, address } = useAccount();
   const { guided } = useConfirm();
@@ -26,6 +28,7 @@ function Sidebar() {
   const isSidebarOpen = useSelector((state: RootState) => state.sidebar.isOpen);
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [faucetButtonText, setFaucetButtonText] = useState('Faucet');
+  const [isCapcthaRequested, setIsCaptchaRequested] = useState(false);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -119,28 +122,38 @@ function Sidebar() {
             </button>
 
             {networkChainId == 998 && isConnected ? (
-              <button
-                className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
-                onClick={async () => {
-                  setFaucetButtonText('Sending ETH...');
-                  await claimFaucet(address);
-                  setFaucetButtonText('Faucet');
-                  sendClaimTx();
-                }}
-                key={'openFaucet'}
-                type='button'
-              >
-                <div
-                  className={`transition-all duration-300 ease-in-out transform px-3`}
+              isCapcthaRequested ? (
+                <Turnstile
+                  sitekey='0x4AAAAAAA2Qg1SB87LOUhrG'
+                  onVerify={async (token) => {
+                    setIsCaptchaRequested(false);
+                    setFaucetButtonText('Sending ETH...');
+                    await claimFaucet(token, address);
+                    setFaucetButtonText('Faucet');
+                    sendClaimTx();
+                  }}
+                />
+              ) : (
+                <button
+                  className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
+                  onClick={async () => {
+                    setIsCaptchaRequested(true);
+                  }}
+                  key={'openFaucet'}
+                  type='button'
                 >
-                  <img src={faucetIcon} className='w-5' alt={'faucet'} />
-                </div>
-                <p
-                  className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
-                >
-                  {faucetButtonText}
-                </p>
-              </button>
+                  <div
+                    className={`transition-all duration-300 ease-in-out transform px-3`}
+                  >
+                    <img src={faucetIcon} className='w-5' alt={'faucet'} />
+                  </div>
+                  <p
+                    className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
+                  >
+                    {faucetButtonText}
+                  </p>
+                </button>
+              )
             ) : (
               ''
             )}

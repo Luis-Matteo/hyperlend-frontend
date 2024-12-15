@@ -14,6 +14,7 @@ import {
   stablecoinsList,
   networkChainId,
   tokenColorMap,
+  excludeCoreReserves,
 } from '../../../utils/config';
 
 import { useProtocolPriceData } from '../../../utils/protocol/core/prices';
@@ -58,6 +59,8 @@ function CoreTable({
     let assets: AssetDetail[] = [];
     for (let token of Object.keys(reserveDataMap)) {
       const protocolAssetReserveData = protocolAssetReserveDataMap[token];
+
+      if (excludeCoreReserves.includes(token)) continue;
 
       if (stable && !stablecoinsList.includes(tokenNameMap[token])) continue;
       if (

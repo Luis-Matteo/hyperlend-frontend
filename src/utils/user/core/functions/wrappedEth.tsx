@@ -24,11 +24,11 @@ export async function wrappedTokenAction(
     if (action === 'withdraw') {
       if (hTokenAllowance < Number(bgIntAmount)) {
         const approveResult = await writeContractAsync({
-          address: wrappedTokenProtocolTokens.hToken,
+          address: wrappedTokenProtocolTokens[token].hToken,
           abi: erc20Abi,
           functionName: 'approve',
           args: [
-            contracts.wrappedTokenGatewayV3,
+            contracts.wrappedTokenGatewayV3[token],
             '115792089237316195423570985008687907853269984665640564039457584007913129639935',
           ],
         });
@@ -39,11 +39,11 @@ export async function wrappedTokenAction(
     } else if (action === 'borrow') {
       if (dTokenAllowance < Number(bgIntAmount)) {
         const approveResult = await writeContractAsync({
-          address: wrappedTokenProtocolTokens.dToken,
+          address: wrappedTokenProtocolTokens[token].dToken,
           abi: abis.variableDebtToken,
           functionName: 'approveDelegation',
           args: [
-            contracts.wrappedTokenGatewayV3,
+            contracts.wrappedTokenGatewayV3[token],
             '115792089237316195423570985008687907853269984665640564039457584007913129639935',
           ],
         });
@@ -67,7 +67,7 @@ export async function wrappedTokenAction(
     }
 
     const txResult = await writeContractAsync({
-      address: contracts.wrappedTokenGatewayV3,
+      address: contracts.wrappedTokenGatewayV3[token],
       abi: abis.wrappedTokenGatewayV3,
       functionName: functionNames[action],
       args: functionParams[action],
