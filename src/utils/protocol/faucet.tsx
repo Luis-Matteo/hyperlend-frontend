@@ -6,7 +6,7 @@ export async function claimFaucet(userAddress?: string) {
   let { hash, number } = blockData;
 
   const powChallenge = `${hash}-${number}-${userAddress}`;
-  const difficulty = 4;
+  const difficulty = 1;
 
   let powResult: string = '';
   let nonce: number = 0;
