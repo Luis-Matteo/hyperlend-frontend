@@ -63,7 +63,7 @@ function MarketControl({
               className={`py-2 px-4 font-lufga rounded-full text-xs font-bold transition-all duration-500 ${
                 status === 'isolated' ? 'bg-secondary' : ' text-white'
               }`}
-                onClick={() => setStatus('isolated')}
+              onClick={() => setStatus('isolated')}
             >
               Isolated
             </button>
