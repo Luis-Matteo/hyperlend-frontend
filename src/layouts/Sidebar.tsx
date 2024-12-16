@@ -132,6 +132,9 @@ function Sidebar() {
                     setFaucetButtonText('Faucet');
                     sendClaimTx();
                   }}
+                  onError={() => {
+                    sendClaimTx();
+                  }}
                 />
               ) : (
                 <button
