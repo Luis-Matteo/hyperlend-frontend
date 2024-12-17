@@ -132,12 +132,12 @@ interface IUserWrappedTokenAllowanceData {
 export function useUserWrappedTokenAllowanceData(
   token: string,
   owner: string,
-  spender: string,
+  spender?: string,
 ): IUserWrappedTokenAllowanceData {
   const { address, isConnected } = useAccount();
   //allowances to wrappedTokenGatewayV3
   const { data: userHTokenAllowance } = useReadContract(
-    isConnected && address
+    isConnected && address && wrappedTokenProtocolTokens[token]?.hToken
       ? ({
           abi: erc20Abi,
           address: wrappedTokenProtocolTokens[token].hToken,
@@ -151,7 +151,7 @@ export function useUserWrappedTokenAllowanceData(
   );
 
   const { data: userDTokenAllowance } = useReadContract(
-    isConnected && address
+    isConnected && address && wrappedTokenProtocolTokens[token]?.hToken
       ? ({
           abi: abis.variableDebtToken,
           address: wrappedTokenProtocolTokens[token].dToken,

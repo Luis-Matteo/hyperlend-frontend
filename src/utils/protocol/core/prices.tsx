@@ -34,6 +34,7 @@ export function useProtocolPriceData() {
         if (result && result.status === 'success') {
           acc[asset] = result.result as bigint;
         } else {
+          console.log(result)
           console.error(`Failed to get price data for asset: ${asset}`);
         }
         return acc;
