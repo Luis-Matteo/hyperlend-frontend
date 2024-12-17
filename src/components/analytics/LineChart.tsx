@@ -1,7 +1,7 @@
 import Chart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import React from 'react';
-// import { formatNumber } from '../../utils/functions';
+import { formatUnit } from '../../utils/functions';
 interface DataPoint {
   value: number;
   date: string;
@@ -37,6 +37,14 @@ const LineChart = React.memo(
             colors: '#D4D4D4',
             fontSize: '12px',
           },
+          formatter: function (value: string) {
+            const date = new Date(value);
+            return date.toLocaleDateString('en-GB', {
+              day: '2-digit',
+              month: '2-digit',
+              year: '2-digit'
+            });
+          }
         },
         axisBorder: {
           show: true, // Hide x-axis border
@@ -55,7 +63,7 @@ const LineChart = React.memo(
             fontSize: '12px',
           },
           offsetX: -15,
-          formatter: (value) => `${value.toLocaleString()}`,
+          formatter: (value) => `${tip === 'TVL' ? '$' : ''} ${formatUnit(value, 1)}`,
         },
         axisBorder: {
           show: false, // Hide y-axis border
