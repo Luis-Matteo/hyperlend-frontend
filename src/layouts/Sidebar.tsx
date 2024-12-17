@@ -127,7 +127,7 @@ function Sidebar() {
                   sitekey='0x4AAAAAAA2Qg1SB87LOUhrG'
                   onVerify={async (token) => {
                     setIsCaptchaRequested(false);
-                    setFaucetButtonText('Sending ETH...');
+                    setFaucetButtonText('Sending tokens...');
                     await claimFaucet(token, address);
                     setFaucetButtonText('Faucet');
                     sendClaimTx();

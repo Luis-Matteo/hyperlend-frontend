@@ -33,17 +33,17 @@ export async function claimFaucet(token: any, userAddress?: string) {
       .then((response) => response.json())
       .then((data) => {
         if (data.status == 'ok') {
-          alert('ETH claimed');
+          alert('Native tokens claimed');
           resolve();
         } else if (data.status == 'err') {
           fetch('https://api.hyperlend.finance/ethFaucet', requestOptions)
             .then((res) => res.json())
             .then((d) => {
               if (d.status == 'ok') {
-                alert('ETH claimed');
+                alert('Native token claimed');
                 resolve();
               } else if (d.status == 'err') {
-                if (d.response == 'user_already_claimed_eth') {
+                if (d.response == 'user_already_claimed') {
                   alert('User can only claim faucet once per wallet!');
                   resolve();
                 } else {
