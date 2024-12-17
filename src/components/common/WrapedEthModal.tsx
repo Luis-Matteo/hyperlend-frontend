@@ -16,8 +16,6 @@ import {
   tokenNameMap,
   tokenDecimalsMap,
   iconsMap,
-  wrappedTokens,
-  contracts,
   abis,
 } from '../../utils/config';
 
@@ -44,7 +42,6 @@ function WrappedEthModal({ token, modalType, onClose }: WrappedEthModalProps) {
   const percentList = [25, 50, 75, 100];
 
   const [availableBalance, setAvailableBalance] = useState<number>(0);
-  const [useMaxAmount, setUseMaxAmount] = useState(false);
   const [isTxPending, setIsTxPending] = useState(false);
   const [buttonText, setButtonText] = useState(capitalizeString(modalType));
   const [errorMsg, setErrorMsg] = useState<any>(null);
@@ -101,7 +98,7 @@ function WrappedEthModal({ token, modalType, onClose }: WrappedEthModalProps) {
 
   const updateAvailableAmount = () => {
     if (modalType == 'supply') {
-      setAvailableBalance(Number(userEthBalance?.formatted));
+      setAvailableBalance(Number(userEthBalance?.formatted) - 0.0002);
     } else {
       setAvailableBalance(Number(userWalletTokenBalance) / Math.pow(10, 18));
     }
@@ -142,10 +139,6 @@ function WrappedEthModal({ token, modalType, onClose }: WrappedEthModalProps) {
   useEffect(() => {
     updateAvailableAmount();
   }, [userWalletTokenBalance, userEthBalance]);
-
-  useEffect(() => {
-    setUseMaxAmount(progress == 100);
-  }, [progress]);
 
   useEffect(() => {
     if (error?.message) {
