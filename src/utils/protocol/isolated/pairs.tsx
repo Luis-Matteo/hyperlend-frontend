@@ -178,7 +178,8 @@ export function preparePairData(
     pair: pair.pair,
     asset: pair.asset,
     assetName: tokenFullNameMap[pair.asset],
-    assetSymbol: tokenNameMap[pair.asset],
+    assetSymbol:
+      tokenNameMap[pair.asset] == 'ETH' ? 'WETH' : tokenNameMap[pair.asset],
     assetIcon: iconsMap[tokenNameMap[pair.asset]],
     collateral: pair.collateral,
     collateralName: tokenFullNameMap[pair.collateral],
@@ -194,7 +195,7 @@ export function preparePairData(
     totalCollateralUsd: totalCollateral * collateralPriceUsdNormalized,
     availableLiquidity: availableLiquidity,
     availableLiquidityUsd: availableLiquidityUsd,
-    utilization: utilization * 100,
+    utilization: Number(parseFloat((utilization * 100).toString()).toFixed(4)),
     ltv: Number(pair.ltv) / 1000,
     liquidationPenalty: 10,
   };

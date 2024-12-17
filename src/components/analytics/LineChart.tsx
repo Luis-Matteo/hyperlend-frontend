@@ -42,9 +42,9 @@ const LineChart = React.memo(
             return date.toLocaleDateString('en-GB', {
               day: '2-digit',
               month: '2-digit',
-              year: '2-digit'
+              year: '2-digit',
             });
-          }
+          },
         },
         axisBorder: {
           show: true, // Hide x-axis border
@@ -63,7 +63,8 @@ const LineChart = React.memo(
             fontSize: '12px',
           },
           offsetX: -15,
-          formatter: (value) => `${tip === 'TVL' ? '$' : ''} ${formatUnit(value, 1)}`,
+          formatter: (value) =>
+            `${tip === 'TVL' ? '$' : ''} ${formatUnit(value, 1)}`,
         },
         axisBorder: {
           show: false, // Hide y-axis border

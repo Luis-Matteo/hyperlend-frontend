@@ -18,6 +18,7 @@ import { getTokenPrecision } from '../../utils/user/isolated/functions/utils';
 import { useAssetPrice } from '../../utils/protocol/isolated/prices';
 
 import AnimateModal, { AnimateModalProps } from './AnimateModal';
+import WrappedEthModal from '../common/WrapedEthModal';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };
@@ -45,6 +46,11 @@ const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
   const [isTxPending, setIsTxPending] = useState(false);
   const [useMaxAmount, setUseMaxAmount] = useState(false);
   const [lastConfirmedTxHash, setLastConfirmedTxHash] = useState<string>('');
+
+  const [isWrapModalOpen, setIsWrapModalOpen] = useState({
+    isOpen: false,
+    isWrap: true,
+  });
 
   const [animateModalStatus, setAnimateModalStatus] =
     useState<AnimateModalStatus>({
@@ -372,6 +378,40 @@ const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
         </div>
       </div>
       <Button title={buttonText} onClick={() => sendTransaction()} />
+      <div className='flex space-x-4'>
+        <Button
+          title={`Wrap ETH`}
+          variant='secondary'
+          onClick={() => {
+            setIsWrapModalOpen({
+              isOpen: true,
+              isWrap: true,
+            });
+          }}
+        />
+        <Button
+          title={`Unwrap WETH`}
+          variant='secondary'
+          onClick={() => {
+            setIsWrapModalOpen({
+              isOpen: true,
+              isWrap: false,
+            });
+          }}
+        />
+      </div>
+      {isWrapModalOpen.isOpen && (
+        <WrappedEthModal
+          token={token}
+          modalType={isWrapModalOpen.isWrap ? 'supply' : 'withdraw'}
+          onClose={() => {
+            setIsWrapModalOpen({
+              isOpen: false,
+              isWrap: true,
+            });
+          }}
+        />
+      )}
       {animateModalStatus.isOpen && (
         <AnimateModal
           type={animateModalStatus.type}
