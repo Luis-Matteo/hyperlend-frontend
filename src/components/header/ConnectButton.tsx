@@ -1,11 +1,11 @@
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useAppKit } from '@reown/appkit/react';
 import { useAccount, useEnsAvatar, useEnsName } from 'wagmi';
 import { formatAddress } from '../../utils/functions';
 export default function ConnectButton() {
   const { isConnected, address } = useAccount();
   const { data: ensName } = useEnsName({ address });
   const { data: ensAvatar } = useEnsAvatar({ name: ensName! });
-  const { open } = useWeb3Modal();
+  const { open } = useAppKit();
 
   return (
     <button className='' onClick={() => open()}>
