@@ -131,8 +131,10 @@ function Dashboard() {
         className='flex flex-col'
       >
         <Navbar pageTitle='Dashboard' />
-        <div className="text-white">
-         ⚠️ Hyperliquid EVM Testnet oracle isn't working currently, so borrowing/repaying/withdrawing will fail and price data isn't available.
+        <div className='text-white'>
+          ⚠️ Hyperliquid EVM Testnet oracle currently isn't working, so
+          borrowing/repaying/withdrawing will fail and price data isn't
+          available. This issue impacts all users.
         </div>
         <motion.div
           initial={{ y: 20, opacity: 0 }}
