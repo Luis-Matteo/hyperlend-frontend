@@ -7,8 +7,7 @@ import { calculateApy } from '../../functions';
 import {
   contracts,
   assetAddresses,
-  abis,
-  tokenToRateStrategyMap,
+  abis
 } from '../../config';
 
 import { useProtocolReservesData } from './reserves';
@@ -78,8 +77,6 @@ interface Rates {
 
 export function useProtocolInterestRateModel(token: string, interestRateStrategyData: any, methods: any) {
   const rates: Rates[] = [];
-
-  console.log(`recalculating`, token)
 
   if (!interestRateStrategyData) return [];
 
