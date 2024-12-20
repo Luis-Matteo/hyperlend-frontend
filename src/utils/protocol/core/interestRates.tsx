@@ -76,28 +76,15 @@ interface Rates {
   utilization: number;
 }
 
-export function useProtocolInterestRateModel(token: string) {
+export function useProtocolInterestRateModel(token: string, interestRateStrategyData: any, methods: any) {
   const rates: Rates[] = [];
 
-  const rateStrategyType = tokenToRateStrategyMap[token] || 'volatileOne';
-  const methods = [
-    'getVariableRateSlope1',
-    'getVariableRateSlope2',
-    'OPTIMAL_USAGE_RATIO',
-    'getBaseVariableBorrowRate',
-  ];
+  console.log(`recalculating`, token)
 
-  const { data: interestRateStrategyData } = useReadContracts({
-    contracts: methods.map((method) => ({
-      abi: abis.rateStrategy,
-      address: contracts.rateStrategies[rateStrategyType],
-      functionName: method,
-    })),
-  });
   if (!interestRateStrategyData) return [];
 
   const params = methods.reduce(
-    (acc, method, index) => {
+    (acc: any, method: any, index: any) => {
       const result = interestRateStrategyData[index];
       if (result && result.status === 'success') {
         acc[method] = interestRateStrategyData[index].result;
