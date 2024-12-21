@@ -1,17 +1,23 @@
 import { NavLink } from '../utils/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-// import { navLinks } from '../utils/constants';
-import { navLinksTop, navLinksDown } from '../utils/constants/constants';
+
+import {
+  navLinksDown,
+  navLinksTop,
+  //navLinksDown 
+} from '../utils/constants/constants';
 import NavButton from '../components/header/NavButton';
-import logo from '../assets/icons/logo-text.svg';
-import Status from '../components/header/Status';
+import { logo, newLogo, referralsIcon } from '../assets';
 import logoutIcon from '../assets/icons/logout-icon.svg';
 import xmarkIcon from '../assets/icons/xmark-icon.svg';
-import referralsIcon from '../assets/icons/referralsIcon.svg';
-import { toggleModalOpen, toggleSidebar } from '../store/sidebarSlice';
+// import referralsIcon from '../assets/icons/referralsIcon.svg';
+import {
+  toggleModalOpen,
+  //toggleModalOpen,
+  toggleSidebar
+} from '../store/sidebarSlice';
 import { useEffect, useRef, useState } from 'react';
-
 import { networkChainId, contracts, abis } from '../utils/config';
 import { useAccount, useWriteContract } from 'wagmi';
 import faucetIcon from '../assets/icons/faucet-color.svg';
@@ -57,7 +63,7 @@ function Sidebar() {
       });
       if (error && error.message) alert(error.message);
       console.log('MockBTC claimed: ', hash);
-    } catch (e){
+    } catch (e) {
       console.log(e)
       alert(`Error claiming MBTC: ${JSON.stringify(e)}`)
     }
@@ -68,13 +74,32 @@ function Sidebar() {
       ref={sidebarRef}
       className={`bg-primary transition-transform duration-300 fixed z-30 lg:relative ${isSidebarOpen ? 'translate-x-0 shadow-custom' : '-translate-x-full lg:translate-x-0'} ${guided > 0 ? 'lg:blur-[8px]' : ''}`}
     >
-      <div className='w-64 p-10 flex-col justify-between flex h-screen'>
+      <div className='w-64 p-10 flex flex-col justify-between  h-screen'>
         <div className=''>
-          <div className='pt-4'>
+          <div className='pt-4 flex gap-3 justify-center align-middle items-center'>
             <img className='' src={logo} alt='' />
+            <span
+              className="text-[#CAEAE5] font-nexa font-bold text-lg"
+            >
+              HyperLend
+            </span>
           </div>
-          <div className='pt-8'>
-            <Status />
+          <div className='pt-8 flex justify-center align-middle items-center gap-3 flex-row'>
+            <div className=''>
+              <img className='' src={newLogo} alt='' width="100%" height="100%" />
+            </div>
+            <div className='flex flex-col justify-end align-bottom items-center'>
+              <span
+                className="text-[#AEEAB9] font-lufga font-regular text-[16px]"
+              >
+                Global Elite
+              </span>
+              <span
+                className="text-[#4F4F4F] font-lufga font-medium text-[14px]"
+              >
+                Rank: 12,988  
+              </span>
+            </div>
           </div>
           <div className='flex flex-col gap-4 pt-10'>
             {navLinksTop.map((item: NavLink) => (
@@ -87,7 +112,6 @@ function Sidebar() {
                 disabled={item.disabled}
               />
             ))}
-
             <button
               className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
               onClick={() => {
@@ -165,7 +189,6 @@ function Sidebar() {
             ) : (
               ''
             )}
-
             {navLinksDown.map((item: NavLink) => (
               <NavButton
                 key={item.id}
@@ -196,7 +219,7 @@ function Sidebar() {
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

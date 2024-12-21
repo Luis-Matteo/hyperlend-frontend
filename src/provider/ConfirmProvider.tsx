@@ -39,7 +39,7 @@ export const ConfirmProvider: React.FC<ConfirmProviderProps> = ({
 
   // Initialize `guided` correctly, defaulting to 1 (guide not completed) if undefined
   const [guided, setGuided] = useState<number>(() => {
-    return localStorage.getItem('guideCompleted') === 'true' ? 0 : 1;
+    return 0;
   });
 
   // Confirm action
