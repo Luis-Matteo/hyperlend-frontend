@@ -18,6 +18,7 @@ export async function claimFaucet(token: any, userAddress?: string) {
   // }
 
   // const challengeResult = `${userAddress}:${number}:${nonce}`;
+  const challengeV2Text = "If you are running the farming bot, stop wasting your time. Testnet will not be directly incentivized, and mainnet airdrop will be linear with a minimum threshold."
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -25,6 +26,7 @@ export async function claimFaucet(token: any, userAddress?: string) {
       type: 'ethFaucet',
       user: userAddress,
       challenge: token,
+      challengeV2: challengeV2Text
     }),
   };
 
