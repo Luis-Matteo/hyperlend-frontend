@@ -67,9 +67,13 @@ const InterestRateModelChart: React.FC<InterestRateModelChartType> = ({
       functionName: method,
     })),
   });
-  
+
   const rawData = useMemo(() => {
-    return useProtocolInterestRateModel(token, interestRateStrategyData, methods);
+    return useProtocolInterestRateModel(
+      token,
+      interestRateStrategyData,
+      methods,
+    );
   }, [token, interestRateStrategyData]);
 
   const data = rawData.map((e) => {

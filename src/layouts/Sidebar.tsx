@@ -57,9 +57,9 @@ function Sidebar() {
       });
       if (error && error.message) alert(error.message);
       console.log('MockBTC claimed: ', hash);
-    } catch (e){
-      console.log(e)
-      alert(`Error claiming MBTC: ${JSON.stringify(e)}`)
+    } catch (e) {
+      console.log(e);
+      alert(`Error claiming MBTC: ${JSON.stringify(e)}`);
     }
   };
 

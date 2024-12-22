@@ -44,7 +44,7 @@ function Dashboard() {
   const [modalType, setModalType] = useState<ModalType>('supply');
   const closeModal = () => setModalStatus(false);
 
-  const [isNetworkDown, setIsNetworkDown] = useState(false)
+  const [isNetworkDown, setIsNetworkDown] = useState(false);
 
   if (blockNumberError) {
     console.log(blockNumberError.name);
@@ -131,13 +131,12 @@ function Dashboard() {
         className='flex flex-col'
       >
         <Navbar pageTitle='Dashboard' />
-        {
-            isNetworkDown && (
-                <div className='text-white'>
-                ⚠️ Hyperliquid EVM Testnet network is currently down, please try again later.
-                </div>
-            )
-        }
+        {isNetworkDown && (
+          <div className='text-white'>
+            ⚠️ Hyperliquid EVM Testnet network is currently down, please try
+            again later.
+          </div>
+        )}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
