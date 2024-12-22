@@ -118,6 +118,7 @@ const excludeIsolatedPairs = [
 
 const excludeCoreReserves = [
   '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616', //stHYPE
+  '0x68CD2D3503cB4A334522E557c5BA1a0d5Fe56bfC'
 ];
 
 const hlTestnet: any = {
