@@ -95,7 +95,7 @@ function getAvailableWithdraw(params: any) {
   );
   const tokenPriceUsd =
     Number(params.priceDataMap[params.token]) / Math.pow(10, 8);
-  const userBalanceToken = supplied?.balance;
+  const userBalanceToken = supplied?.balance || 0;
   const userBalanceValueUsd = userBalanceToken * tokenPriceUsd;
 
   if (userBalanceToken == 0) return 0;
