@@ -1,8 +1,12 @@
 import dashboardIcon from '../../assets/icons/dashboard-icon.svg';
 import lendborrowIcon from '../../assets/icons/lend-borrow-icon.svg';
-import analyticsIcon from '../../assets/icons/analytics-icon.svg';
-// import hyperloopIcon from '../../assets/icons/hyperloop-icon.svg';
-// import hypervaultIcon from '../../assets/icons/hypervault-icon.svg';
+import {
+  // hyperVaultIcon,
+  // hyperLoopIcon,
+  // referralsIcon,
+  // pointsIcon,
+  analyticsIcon,
+} from '../../assets';
 
 type NavLinkProps = {
   id: string;
@@ -11,7 +15,37 @@ type NavLinkProps = {
   icon?: string;
   disabled: boolean;
 };
+type TransactionTableTitleProps = {
+  id: string;
+  title: string;
+};
 
+export const supplyTransactionTableTitles: TransactionTableTitleProps[] = [
+  { title: 'Assets', id: 'assets' },
+  { title: 'Balance', id: 'balance' },
+  { title: 'Value', id: 'value' },
+  { title: 'APR', id: 'apr' },
+  { title: 'Collateral', id: 'collateral' },
+];
+export const supplyTransactionTableTitlesMobile: TransactionTableTitleProps[] =
+  [
+    { title: 'Assets', id: 'assets' },
+    { title: 'Value', id: 'value' },
+    { title: 'APR', id: 'apr' },
+  ];
+export const borrowTransactionTableTitles: TransactionTableTitleProps[] = [
+  { title: 'Assets', id: 'assets' },
+  { title: 'Balance', id: 'balance' },
+  { title: ' Value', id: 'value' },
+  { title: 'APR', id: 'apr' },
+  { title: 'Pool', id: 'pool' },
+];
+export const borrowTransactionTableTitlesMobile: TransactionTableTitleProps[] =
+  [
+    { title: 'Assets', id: 'assets' },
+    { title: ' Value', id: 'value' },
+    { title: 'APR', id: 'apr' },
+  ];
 // const navLinks: NavLinkProps[] = [
 //   {
 //     id: 'dashboard',
@@ -60,7 +94,14 @@ const navLinksTop: NavLinkProps[] = [
   //   id: 'hypervault',
   //   title: 'HyperVault',
   //   url: '/hypervault',
-  //   icon: hypervaultIcon,
+  //   icon: hyperVaultIcon,
+  //   disabled: false,
+  // },
+  // {
+  //   id: 'hyperloop',
+  //   title: 'HyperLoop',
+  //   url: '/hyperloop',
+  //   icon: hyperLoopIcon,
   //   disabled: false,
   // },
   {
@@ -71,21 +112,21 @@ const navLinksTop: NavLinkProps[] = [
     disabled: false,
   },
   // {
-  //   id: 'hyperloop',
-  //   title: 'HyperLoop',
-  //   url: '/hyperloop',
-  //   icon: hyperloopIcon,
+  //   id: 'points',
+  //   title: 'Points',
+  //   url: '/referrals',
+  //   icon: pointsIcon,
   //   disabled: false,
+  // },
+  // {
+  //   id: 'staking',
+  //   title: 'Staking',
+  //   url: '/staking',
+  //   disabled: true,
   // },
 ];
 
 const navLinksDown: NavLinkProps[] = [
-  {
-    id: 'points',
-    title: 'Points',
-    url: '/points',
-    disabled: true,
-  },
   {
     id: 'staking',
     title: 'Staking',

@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'hero-pattern': 'url(../src/assets/img/share-img/hero-background.svg)',
+      },
       spacing: {
         2.5: '0.7rem', // 10px
       },
