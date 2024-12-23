@@ -8,7 +8,7 @@ import {
   //navLinksDown 
 } from '../utils/constants/constants';
 import NavButton from '../components/header/NavButton';
-import { logo, newLogo, referralsIcon } from '../assets';
+import { logo, myLogo,referralsIcon } from '../assets';
 import logoutIcon from '../assets/icons/logout-icon.svg';
 import xmarkIcon from '../assets/icons/xmark-icon.svg';
 // import referralsIcon from '../assets/icons/referralsIcon.svg';
@@ -86,7 +86,7 @@ function Sidebar() {
           </div>
           <div className='pt-8 flex justify-center align-middle items-center gap-3 flex-row'>
             <div className=''>
-              <img className='' src={newLogo} alt='' width="100%" height="100%" />
+              <img className='' src={myLogo} alt='' width="100%" height="100%" />
             </div>
             <div className='flex flex-col justify-end align-bottom items-center'>
               <span

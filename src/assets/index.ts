@@ -16,5 +16,6 @@ export { default as ethIcon } from './icons/eth-icon.svg'
 export { default as borrowArrowIcon } from './icons/borrow-arrow.svg'
 export { default as supplyIcon } from './icons/supply-arrow.svg'
 export { default as collateralIcon } from './icons/collateral-icon.svg'
+export { default as myLogo } from './icons/my-logo.png'
 export { default as lendArrowIcon } from './icons/lend-borrow-icon.svg'
 export { default as healthFactorImage}  from "./img/share-img/health-factor.svg"
