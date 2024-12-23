@@ -48,14 +48,19 @@ function Sidebar() {
 
   const { data: hash, writeContractAsync, error } = useWriteContract();
   const sendClaimTx = () => {
-    writeContractAsync({
-      address: contracts.faucet,
-      abi: abis.faucet,
-      functionName: 'claim',
-      args: [],
-    });
-    if (error && error.message) alert(error.message);
-    console.log('MockBTC claimed: ', hash);
+    try {
+      writeContractAsync({
+        address: contracts.faucet,
+        abi: abis.faucet,
+        functionName: 'claim',
+        args: [],
+      });
+      if (error && error.message) alert(error.message);
+      console.log('MockBTC claimed: ', hash);
+    } catch (e) {
+      console.log(e);
+      alert(`Error claiming MBTC: ${JSON.stringify(e)}`);
+    }
   };
 
   return (

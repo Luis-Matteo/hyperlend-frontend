@@ -46,10 +46,12 @@ function Dashboard() {
 
   const [isNetworkDown, setIsNetworkDown] = useState(false);
 
-  if (blockNumberError) {
-    console.log(blockNumberError.name);
-    setIsNetworkDown(true);
-  }
+  useEffect(() => {
+    if (blockNumberError) {
+      console.log(blockNumberError?.name);
+      setIsNetworkDown(true);
+    }
+  }, [blockNumberError]);
 
   useEffect(() => {
     if (isConnected && chainId != networkChainId) {

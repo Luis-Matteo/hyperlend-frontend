@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -11,6 +11,8 @@ import {
 
 import { formatNumber } from '../../utils/functions';
 import { useProtocolInterestRateModel } from '../../utils/protocol/core/interestRates';
+import { useReadContracts } from 'wagmi';
+import { abis, contracts, tokenToRateStrategyMap } from '../../utils/config';
 
 interface InterestRateModelChartType {
   token: string;
@@ -51,7 +53,28 @@ const InterestRateModelChart: React.FC<InterestRateModelChartType> = ({
   token,
   currentUtilization,
 }) => {
-  const rawData = useProtocolInterestRateModel(token);
+  const rateStrategyType = tokenToRateStrategyMap[token] || 'volatileOne';
+  const methods = [
+    'getVariableRateSlope1',
+    'getVariableRateSlope2',
+    'OPTIMAL_USAGE_RATIO',
+    'getBaseVariableBorrowRate',
+  ];
+  const { data: interestRateStrategyData } = useReadContracts({
+    contracts: methods.map((method) => ({
+      abi: abis.rateStrategy,
+      address: contracts.rateStrategies[rateStrategyType],
+      functionName: method,
+    })),
+  });
+
+  const rawData = useMemo(() => {
+    return useProtocolInterestRateModel(
+      token,
+      interestRateStrategyData,
+      methods,
+    );
+  }, [token, interestRateStrategyData]);
 
   const data = rawData.map((e) => {
     let borrowRatePercent = e.variableRate * 100;

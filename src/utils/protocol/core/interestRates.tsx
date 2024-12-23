@@ -4,12 +4,7 @@ import { normalizeBN, RAY, rayDiv, rayMul } from '@aave/math-utils';
 import { BigNumber } from 'bignumber.js';
 
 import { calculateApy } from '../../functions';
-import {
-  contracts,
-  assetAddresses,
-  abis,
-  tokenToRateStrategyMap,
-} from '../../config';
+import { contracts, assetAddresses, abis } from '../../config';
 
 import { useProtocolReservesData } from './reserves';
 
@@ -76,28 +71,17 @@ interface Rates {
   utilization: number;
 }
 
-export function useProtocolInterestRateModel(token: string) {
+export function useProtocolInterestRateModel(
+  token: string,
+  interestRateStrategyData: any,
+  methods: any,
+) {
   const rates: Rates[] = [];
 
-  const rateStrategyType = tokenToRateStrategyMap[token] || 'volatileOne';
-  const methods = [
-    'getVariableRateSlope1',
-    'getVariableRateSlope2',
-    'OPTIMAL_USAGE_RATIO',
-    'getBaseVariableBorrowRate',
-  ];
-
-  const { data: interestRateStrategyData } = useReadContracts({
-    contracts: methods.map((method) => ({
-      abi: abis.rateStrategy,
-      address: contracts.rateStrategies[rateStrategyType],
-      functionName: method,
-    })),
-  });
   if (!interestRateStrategyData) return [];
 
   const params = methods.reduce(
-    (acc, method, index) => {
+    (acc: any, method: any, index: any) => {
       const result = interestRateStrategyData[index];
       if (result && result.status === 'success') {
         acc[method] = interestRateStrategyData[index].result;

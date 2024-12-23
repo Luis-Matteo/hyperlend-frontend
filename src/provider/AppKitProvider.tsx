@@ -1,5 +1,5 @@
-import { createWeb3Modal } from '@web3modal/wagmi/react';
-import { defaultWagmiConfig } from '@web3modal/wagmi/react/config';
+import { createAppKit } from '@reown/appkit/react';
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -47,29 +47,44 @@ const hyperEvmTestnet = defineChain({
   },
 });
 
-const chains = [hyperEvmTestnet] as const;
-const enableInjected = true as const;
-export const config = defaultWagmiConfig({
-  chains,
+// const chains = [hyperEvmTestnet];
+// const enableInjected = true as const;
+// export const config = defaultWagmiConfig({
+//   chains,
+//   projectId,
+//   metadata,
+//   enableInjected,
+// });
+
+export const wagmiAdapter = new WagmiAdapter({
+  networks: [hyperEvmTestnet],
   projectId,
-  metadata,
-  enableInjected,
 });
 
 // 3. Create modal
-createWeb3Modal({
-  metadata,
-  wagmiConfig: config,
+// createWeb3Modal({
+//   metadata,
+//   wagmiConfig: config,
+//   projectId,
+//   enableAnalytics: true,
+//   themeVariables: {
+//     '--w3m-accent': '#CAEAE5',
+//   },
+// });
+
+createAppKit({
+  adapters: [wagmiAdapter],
+  networks: [hyperEvmTestnet],
+  metadata: metadata,
   projectId,
-  enableAnalytics: true,
-  themeVariables: {
-    '--w3m-accent': '#CAEAE5',
+  features: {
+    analytics: true,
   },
 });
 
 export function AppKitProvider({ children }: { children: ReactNode }) {
   return (
-    <WagmiProvider config={config}>
+    <WagmiProvider config={wagmiAdapter.wagmiConfig}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
   );
