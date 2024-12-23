@@ -31,7 +31,7 @@ export async function wrappedTokenAction(
             contracts.wrappedTokenGatewayV3[token],
             '115792089237316195423570985008687907853269984665640564039457584007913129639935',
           ],
-          maxFeePerGas: parseGwei('1'),
+          maxFeePerGas: parseGwei('0.1'),
         });
         await publicClient.waitForTransactionReceipt({
           hash: approveResult,
@@ -47,7 +47,7 @@ export async function wrappedTokenAction(
             contracts.wrappedTokenGatewayV3[token],
             '115792089237316195423570985008687907853269984665640564039457584007913129639935',
           ],
-          maxFeePerGas: parseGwei('1'),
+          maxFeePerGas: parseGwei('0.1'),
         });
         await publicClient.waitForTransactionReceipt({
           hash: approveResult,
@@ -77,7 +77,7 @@ export async function wrappedTokenAction(
         action === 'supply' || action === 'repay'
           ? bgIntAmount
           : (0 as any as bigint),
-      maxFeePerGas: parseGwei('1'),
+      maxFeePerGas: parseGwei('0.1'),
     });
 
     await publicClient.waitForTransactionReceipt({ hash: txResult });

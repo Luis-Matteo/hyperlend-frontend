@@ -55,7 +55,7 @@ function Sidebar() {
         abi: abis.faucet,
         functionName: 'claim',
         args: [],
-        maxFeePerGas: parseGwei('1'),
+        maxFeePerGas: parseGwei('0.1'),
       });
       if (error && error.message) alert(error.message);
       console.log('MockBTC claimed: ', hash);
