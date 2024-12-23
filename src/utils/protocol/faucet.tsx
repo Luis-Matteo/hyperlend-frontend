@@ -53,7 +53,7 @@ export async function claimFaucet(token: any, userAddress?: string) {
         console.error(err);
         resolve();
       });
-  })    
+  });
 }
 
 // async function sha256(message: any) {

@@ -5,17 +5,17 @@ const tagConfig = {
   new: {
     textColor: 'text-[#2DC24E]',
     borderColor: 'border-[#2DC24E]',
-    icon: './assets/img/tags/new.svg',
+    icon: '/assets/img/tags/new.svg',
   },
   hot: {
     textColor: 'text-[#C2BD2D]',
     borderColor: 'border-[#C2BD2D]',
-    icon: './assets/img/tags/hot.svg',
+    icon: '/assets/img/tags/hot.svg',
   },
   risk: {
     textColor: 'text-[#FF4245]',
     borderColor: 'border-[#FF4245]',
-    icon: './assets/img/tags/risk.svg',
+    icon: '/assets/img/tags/risk.svg',
   },
 };
 

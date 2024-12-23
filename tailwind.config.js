@@ -19,6 +19,7 @@ export default {
         custom: '0 0 15px #252525',
         '3xl': '0 0 20px 10px #252525',
         '4xl': '0px 0px 40px 20px #252525',
+        'inner-2xl': '0px 0px 24px 0px #FFFFFF1F inset',
         'inner-3xl': '0px -13px 36.5px 0px #CAEAE54D inset',
       },
       fontFamily: {
