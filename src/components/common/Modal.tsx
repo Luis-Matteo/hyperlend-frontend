@@ -556,7 +556,10 @@ function Modal({ token, modalType, onClose }: ModalProps) {
                 ...prevState,
                 isOpen: false,
               }));
-              if (animateModalStatus.type != 'failed') {
+              if (
+                animateModalStatus.type != 'failed' &&
+                getButtonText() != 'Approve'
+              ) {
                 onClose(); // Close the Modal when AnimateModal is done
               }
             }}

@@ -4,11 +4,7 @@ import { normalizeBN, RAY, rayDiv, rayMul } from '@aave/math-utils';
 import { BigNumber } from 'bignumber.js';
 
 import { calculateApy } from '../../functions';
-import {
-  contracts,
-  assetAddresses,
-  abis
-} from '../../config';
+import { contracts, assetAddresses, abis } from '../../config';
 
 import { useProtocolReservesData } from './reserves';
 
@@ -75,7 +71,11 @@ interface Rates {
   utilization: number;
 }
 
-export function useProtocolInterestRateModel(token: string, interestRateStrategyData: any, methods: any) {
+export function useProtocolInterestRateModel(
+  token: string,
+  interestRateStrategyData: any,
+  methods: any,
+) {
   const rates: Rates[] = [];
 
   if (!interestRateStrategyData) return [];

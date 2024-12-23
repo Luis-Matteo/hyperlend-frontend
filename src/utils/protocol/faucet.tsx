@@ -18,6 +18,8 @@ export async function claimFaucet(token: any, userAddress?: string) {
   // }
 
   // const challengeResult = `${userAddress}:${number}:${nonce}`;
+  const challengeV2Text =
+    'If you are running the farming bot, stop wasting your time. Testnet will not be directly incentivized, and mainnet airdrop will be linear with a minimum threshold.';
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -25,46 +27,33 @@ export async function claimFaucet(token: any, userAddress?: string) {
       type: 'ethFaucet',
       user: userAddress,
       challenge: token,
+      challengeV2: challengeV2Text,
     }),
   };
 
   return new Promise<void>((resolve) => {
-    fetch('https://api.hyperliquid-testnet.xyz/info', requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status == 'ok') {
-          alert('Native tokens claimed');
+    fetch('https://api.hyperlend.finance/ethFaucet', requestOptions)
+      .then((res) => res.json())
+      .then((d) => {
+        if (d.status == 'ok') {
+          alert('Native token claimed');
           resolve();
-        } else if (data.status == 'err') {
-          fetch('https://api.hyperlend.finance/ethFaucet', requestOptions)
-            .then((res) => res.json())
-            .then((d) => {
-              if (d.status == 'ok') {
-                alert('Native token claimed');
-                resolve();
-              } else if (d.status == 'err') {
-                if (d.response == 'user_already_claimed') {
-                  alert('User can only claim faucet once per wallet!');
-                  resolve();
-                } else {
-                  alert(d.response);
-                  resolve();
-                }
-              }
-            })
-            .catch((err) => {
-              alert(err);
-              console.error(err);
-              resolve();
-            });
+        } else if (d.status == 'err') {
+          if (d.response == 'user_already_claimed') {
+            alert('User can only claim faucet once per wallet!');
+            resolve();
+          } else {
+            alert(d.response);
+            resolve();
+          }
         }
       })
-      .catch((error) => {
-        alert(error);
-        console.error(error);
+      .catch((err) => {
+        alert(err);
+        console.error(err);
         resolve();
       });
-  });
+  })    
 }
 
 // async function sha256(message: any) {

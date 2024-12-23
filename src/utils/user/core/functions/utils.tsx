@@ -71,9 +71,11 @@ function getAvailableSupply(params: any) {
 
   if (supplyCap == 0) supplyCap = Infinity;
 
-  return totalSupplied + userAmount > supplyCap
-    ? supplyCap - totalSupplied
-    : userAmount;
+  if (totalSupplied + userAmount > supplyCap) {
+    return supplyCap - totalSupplied > 0 ? supplyCap - totalSupplied : 0;
+  }
+
+  return userAmount;
 }
 
 function getAvailableWithdraw(params: any) {
@@ -138,9 +140,11 @@ function getAvailableBorrow(params: any): any {
       ? borrowCap - totalBorrowed
       : availableBorrowBaseToken;
 
-  return availableAfterCap > availableLiquidity
-    ? availableLiquidity * 0.995 //0.5% lower to give some space if price changes/rounding errors
-    : availableAfterCap * 0.995;
+  if (availableAfterCap > availableLiquidity) {
+    return availableLiquidity * 0.995 > 0 ? availableLiquidity * 0.995 : 0; //0.5% lower to give some space if price changes/rounding errors
+  }
+
+  return availableAfterCap * 0.995 > 0 ? availableAfterCap * 0.995 : 0;
 }
 
 function getAvailableRepay(params: any) {

@@ -12,7 +12,9 @@ import IsolatedTable from './isolated/IsolatedTable';
 function MarketOverview() {
   ReactGA.send({ hitType: 'pageview', page: '/markets' });
 
-  const [status, setStatus] = useState<string>('core');
+  const [status, setStatus] = useState<string>(
+    localStorage.getItem('currentMarketsType') || 'core',
+  );
   const [stable, setStable] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>('');
   const [modalStatus, setModalStatus] = useState<boolean>(false);

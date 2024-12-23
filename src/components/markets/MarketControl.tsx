@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CardItem from '../common/CardItem';
 import magnifyIcon from '../../assets/icons/magnify-icon.svg';
 import ToggleButton from '../common/ToggleButton';
@@ -31,6 +31,11 @@ function MarketControl({
   const onClose = () => {
     setMobileSearch((prev) => !prev);
   };
+
+  useEffect(() => {
+    localStorage.setItem('currentMarketsType', status);
+  }, [status]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

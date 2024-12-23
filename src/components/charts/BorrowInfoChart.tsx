@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   LineChart,
   Line,
@@ -128,4 +128,4 @@ const BorrowInfoChart: React.FC<BorrowInfoChartType> = ({
   );
 };
 
-export default BorrowInfoChart;
+export default memo(BorrowInfoChart);
