@@ -51,6 +51,7 @@ const Hero = () => (
         </div>
       </div>
     </div>
+    {/* ==================HERO MOBILE============================================================================================== */}
     <div className='sm:block  lg:hidden w-[100%]  py-8 '>
       <div className='flex flex-col justify-center align-middle items-start gap-5'>
         <div className='flex flex-col gap-2 justify-center align-middle items-start'>
@@ -78,13 +79,7 @@ const Hero = () => (
         />
       </div>
     </div>
-    <div className='flex lg:hidden gap-2 justify-start align-middle items-start w-[100%] py-3 '>
-      <HeroCard
-        title='Total APY'
-        infoItem='Shows the total APY,total increase in APY, and the percentage increase'
-        percentage='18.7%'
-        percentageIncreased='+1.3%'
-      />
+    <div className='flex lg:hidden gap-2 md:gap-4 justify-start align-middle items-start w-[100%] py-3 '>
       <HeroCard
         title='Total Points'
         infoItem='Shows the total points,total increase in points, and the percentage increase'
@@ -96,6 +91,13 @@ const Hero = () => (
         title='Health Factor'
         infoItem='Shows the health factor'
         healthFactor='9.8'
+      />
+
+      <HeroCard
+        title='Total APY'
+        infoItem='Shows the total APY,total increase in APY, and the percentage increase'
+        percentage='18.7%'
+        percentageIncreased='+1.3%'
       />
     </div>
   </div>
