@@ -233,6 +233,14 @@ function IsolatedTable({}: CoreTableProps) {
 
       <div className='xl:hidden w-full flex flex-col gap-4'>
         {(markets || []).map((item, key) => (
+          <Link
+          className='flex flex-1 gap-2 items-center'
+          to={
+            location.pathname.includes('isolated')
+              ? `${item.pair}`
+              : `isolated/${item.pair}`
+          }
+        >
           <CardItem className='' key={key}>
             <div className='flex flex-col hover:bg-primary-hover cursor-pointer rounded-t-2xl'>
               <div
@@ -343,6 +351,7 @@ function IsolatedTable({}: CoreTableProps) {
               </button>
             </div>
           </CardItem>
+          </Link>
         ))}
       </div>
     </>
