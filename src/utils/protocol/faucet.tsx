@@ -49,7 +49,7 @@ export async function claimFaucet(token: any, userAddress?: string) {
         }
       })
       .catch((err) => {
-        alert(err);
+        alert(`Error claiming faucet: ${err.message}`);
         console.error(err);
         resolve();
       });
