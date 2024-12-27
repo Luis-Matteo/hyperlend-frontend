@@ -296,31 +296,31 @@ function TokenDetail() {
       : [
           {
             name: 'Price',
-            value: `$${formatNumber(tokenPrice, 2)}`,
+            value: `$${formatNumber(tokenPrice, 2, true)}`,
           },
         ]),
     {
       name: 'Liquidity',
-      value: `$${formatNumber(totalLiquidityToken * tokenPrice, 2)}`,
+      value: `$${formatNumber(totalLiquidityToken * tokenPrice, 2, true)}`,
     },
     {
       name: 'Utilization rate',
-      value: `${formatNumber((totalBorrowedTokens / totalSuppliedTokens) * 100, 2)}%`,
+      value: `${formatNumber((totalBorrowedTokens / totalSuppliedTokens) * 100, 2, true)}%`,
     },
   ];
 
   const supplyInfos = [
     {
       name: `Total supply (${tokenNameMap[token]})`,
-      value: `${formatNumber(totalSuppliedTokens, 2)}`,
+      value: `${formatNumber(totalSuppliedTokens, 2, true)}`,
     },
     {
       name: 'Total supply (USD)',
-      value: `$${formatNumber(totalSuppliedTokens * tokenPrice, 2)}`,
+      value: `$${formatNumber(totalSuppliedTokens * tokenPrice, 2, true)}`,
     },
     {
       name: 'APY',
-      value: `${formatNumber(interestRateDataMap[token].supply, 2)}%`,
+      value: `${formatNumber(interestRateDataMap[token].supply, 2, true)}%`,
     },
     {
       name: 'LTV',
@@ -331,15 +331,15 @@ function TokenDetail() {
   const borrowInfos = [
     {
       name: `Total borrrow (${tokenNameMap[token]})`,
-      value: `${formatNumber(totalBorrowedTokens, 2)}`,
+      value: `${formatNumber(totalBorrowedTokens, 2, true)}`,
     },
     {
       name: 'Total borrrow (USD)',
-      value: `$${formatNumber(totalBorrowedTokens * tokenPrice, 2)}`,
+      value: `$${formatNumber(totalBorrowedTokens * tokenPrice, 2, true)}`,
     },
     {
       name: 'APY',
-      value: `${formatNumber(interestRateDataMap[token].borrow, 2)}%`,
+      value: `${formatNumber(interestRateDataMap[token].borrow, 2, true)}%`,
     },
     {
       name: 'Liquidation Threshold',
@@ -368,23 +368,23 @@ function TokenDetail() {
     },
     {
       name: 'Supply cap reached',
-      value: `${formatNumber((totalSuppliedTokens / configuration.supplyCap) * 100, 2)}%`,
+      value: `${formatNumber((totalSuppliedTokens / configuration.supplyCap) * 100, 2, true)}%`,
     },
     {
       name: 'Borrow cap',
-      value: `${configuration.borrowCap > 0 ? formatNumber(configuration.borrowCap, 2) : '∞'} ${tokenNameMap[token]}`,
+      value: `${configuration.borrowCap > 0 ? formatNumber(configuration.borrowCap, 2, true) : '∞'} ${tokenNameMap[token]}`,
     },
     {
       name: 'Borrow cap reached',
-      value: `${configuration.borrowCap > 0 ? formatNumber((totalBorrowedTokens / configuration.borrowCap) * 100, 2) : 0}%`,
+      value: `${configuration.borrowCap > 0 ? formatNumber((totalBorrowedTokens / configuration.borrowCap) * 100, 2, true) : 0}%`,
     },
     {
       name: 'Collateral factor',
-      value: `${formatNumber(configuration.ltv / 100, 4)}%`,
+      value: `${formatNumber(configuration.ltv / 100, 4, true)}%`,
     },
     {
       name: 'Reserve factor',
-      value: `${formatNumber(configuration.reserveFactor / 100, 4)}%`,
+      value: `${formatNumber(configuration.reserveFactor / 100, 4, true)}%`,
     },
   ];
 

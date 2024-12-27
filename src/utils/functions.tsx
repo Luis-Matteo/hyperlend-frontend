@@ -20,7 +20,7 @@ function formatNumber(
   });
 }
 
-function formatUnit(num: number, decimal: number = 2) {
+function formatUnit(num: number, decimal: number = 2, handleNaN: boolean = true) {
   const sign = Math.sign(num);
   const numAbs = Math.abs(num);
 
@@ -34,6 +34,8 @@ function formatUnit(num: number, decimal: number = 2) {
   } else {
     formattedNum = numAbs.toFixed(decimal);
   }
+
+  if (handleNaN && isNaN(Number(formattedNum))) return 0;
 
   return sign < 0 ? `-${formattedNum}` : formattedNum;
 }
