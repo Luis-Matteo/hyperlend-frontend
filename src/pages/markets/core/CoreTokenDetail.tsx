@@ -114,6 +114,14 @@ function TokenDetail() {
   const { priceDataMap } = useProtocolPriceData();
   const { interestRateDataMap } = useProtocolInterestRate();
 
+  if (!reserveDataMap || !reserveDataMap[token]) {
+    return (
+      <div>
+        Error loading page, try again later!
+      </div>
+    )
+  }
+
   const supplied = userPositionsData.supplied.find(
     (e) => e.underlyingAsset == token,
   );

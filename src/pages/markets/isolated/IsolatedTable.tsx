@@ -84,7 +84,9 @@ function IsolatedTable({ stable, searchText }: CoreTableProps) {
         searchText.length > 0 &&
         !(
           filterString(pair.assetName, searchText) ||
-          filterString(pair.collateralName, searchText)
+          filterString(pair.collateralName, searchText) ||
+          filterString(pair.assetSymbol, searchText) ||
+          filterString(pair.collateralSymbol, searchText)
         )
       )
         continue;

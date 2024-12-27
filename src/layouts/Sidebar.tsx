@@ -229,7 +229,7 @@ function Sidebar() {
             <p className='font-lufga text-grey-light'>Docs</p>
           </a>
           <div className='flex items-center text-white'>
-            <small>v0.1.98</small>
+            <small>v0.1.100</small>
           </div>
           <button
             className='lg:hidden'
