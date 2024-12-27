@@ -115,11 +115,7 @@ function TokenDetail() {
   const { interestRateDataMap } = useProtocolInterestRate();
 
   if (!reserveDataMap || !reserveDataMap[token]) {
-    return (
-      <div>
-        Error loading page, try again later!
-      </div>
-    )
+    return <div>Error loading page, try again later!</div>;
   }
 
   const supplied = userPositionsData.supplied.find(

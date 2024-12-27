@@ -74,10 +74,8 @@ function IsolatedTable({ stable, searchText }: CoreTableProps) {
 
       if (
         stable &&
-        (
-          !stablecoinsList.includes(pair.assetName) ||
-          !stablecoinsList.includes(pair.collateralName)
-        )
+        (!stablecoinsList.includes(pair.assetName) ||
+          !stablecoinsList.includes(pair.collateralName))
       )
         continue;
       if (

@@ -20,7 +20,11 @@ function formatNumber(
   });
 }
 
-function formatUnit(num: number, decimal: number = 2, handleNaN: boolean = true) {
+function formatUnit(
+  num: number,
+  decimal: number = 2,
+  handleNaN: boolean = true,
+) {
   const sign = Math.sign(num);
   const numAbs = Math.abs(num);
 
