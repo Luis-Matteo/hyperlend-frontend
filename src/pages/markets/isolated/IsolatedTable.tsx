@@ -1,8 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import CardItem from '../../../components/common/CardItem';
-import { formatUnit } from '../../../utils/functions';
+import { filterString, formatUnit } from '../../../utils/functions';
 
-import { networkChainId } from '../../../utils/config';
+import { networkChainId, stablecoinsList } from '../../../utils/config';
 
 import { useAccount, useSwitchChain } from 'wagmi';
 import { ModalType } from '../../../utils/types';
@@ -47,7 +47,7 @@ interface IsolatedPairInfo {
   liquidationPenalty: number;
 }
 
-function IsolatedTable({}: CoreTableProps) {
+function IsolatedTable({ stable, searchText }: CoreTableProps) {
   const location = useLocation();
   const account = useAccount();
   const { switchChain } = useSwitchChain();
@@ -70,7 +70,26 @@ function IsolatedTable({}: CoreTableProps) {
     const pairInfo = pairs.pairsDataMap;
 
     for (let pairAddress of Object.keys(pairs.pairsDataMap)) {
-      markets.push(preparePairData(pairInfo[pairAddress], priceDataMap));
+      let pair = preparePairData(pairInfo[pairAddress], priceDataMap);
+
+      if (
+        stable &&
+        (
+          !stablecoinsList.includes(pair.assetName) ||
+          !stablecoinsList.includes(pair.collateralName)
+        )
+      )
+        continue;
+      if (
+        searchText.length > 0 &&
+        !(
+          filterString(pair.assetName, searchText) ||
+          filterString(pair.collateralName, searchText)
+        )
+      )
+        continue;
+
+      markets.push(pair);
     }
   }
 
