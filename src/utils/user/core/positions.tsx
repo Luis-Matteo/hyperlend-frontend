@@ -174,7 +174,7 @@ export function useUserPositionsData(
     ((supplyInterestEarned - borrowInterestEarned) /
       (totalSupply - totalBorrow || 1)) *
     100;
-    
+
   return {
     supplied,
     borrowed,

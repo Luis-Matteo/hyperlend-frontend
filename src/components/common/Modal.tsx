@@ -50,6 +50,7 @@ import { useProtocolReservesData } from '../../utils/protocol/core/reserves';
 import AnimateModal, {
   AnimateModalProps,
 } from '../../components/markets/AnimateModal';
+import { parseUnits } from 'viem';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };
@@ -296,10 +297,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   };
 
   const sendTransaction = async () => {
-    let bgIntAmount = BigInt(
-      Number(parseFloat(amount.toString()).toFixed(0)) *
-        Math.pow(10, tokenDecimalsMap[token]),
-    );
+    let bgIntAmount = parseUnits(amount.toString(), tokenDecimalsMap[token])
 
     if (amount == 0) {
       setErrorMsg('Amount should be greater than 0');
