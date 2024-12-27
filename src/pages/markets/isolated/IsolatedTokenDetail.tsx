@@ -834,8 +834,13 @@ function TokenDetail() {
                       value={collateralAmount}
                       onChange={(e) => {
                         setCollateralAmount(
-                          Number(e.target.value) >= collateralAvailableAmount
-                            ? collateralAvailableAmount
+                          Number(e.target.value) >=
+                            (collateralAction == 'add'
+                              ? collateralAvailableAmount
+                              : collateralWithdrawableAmount)
+                            ? collateralAction == 'add'
+                              ? collateralAvailableAmount
+                              : collateralWithdrawableAmount
                             : Number(e.target.value),
                         );
                       }}

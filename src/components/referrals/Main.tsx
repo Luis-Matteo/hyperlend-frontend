@@ -81,7 +81,6 @@ const Main = () => {
       })
       .finally(() => {
         setIsLoading(false); // done loading
-        console.log("here")
       });
   }, [address, isConnected, signature]);
 
