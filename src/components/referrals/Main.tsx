@@ -81,8 +81,9 @@ const Main = () => {
       })
       .finally(() => {
         setIsLoading(false); // done loading
+        console.log("here")
       });
-  }, [address, isConnected]);
+  }, [address, isConnected, signature]);
 
   // Once message is signed, store it to localStorage
   useEffect(() => {
