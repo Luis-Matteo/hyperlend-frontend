@@ -16,7 +16,7 @@ import { getErrorMessage } from '../../utils/constants/errorCodes';
 import { protocolAction } from '../../utils/user/isolated/functions/actions';
 import { getTokenPrecision } from '../../utils/user/isolated/functions/utils';
 import { useAssetPrice } from '../../utils/protocol/isolated/prices';
-import { parseUnits } from "viem";
+import { parseUnits } from 'viem';
 
 import AnimateModal, { AnimateModalProps } from './AnimateModal';
 import WrappedEthModal from '../common/WrapedEthModal';
@@ -235,7 +235,7 @@ const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
   }, [txReceiptResult]);
 
   const sendTransaction = async () => {
-    let bgIntAmount = parseUnits(amount.toString(), tokenDecimalsMap[token])
+    let bgIntAmount = parseUnits(amount.toString(), tokenDecimalsMap[token]);
 
     if (amount == 0) {
       setErrorMsg('Amount should be greater than 0');

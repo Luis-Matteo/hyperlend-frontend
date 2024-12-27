@@ -271,7 +271,7 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   }, [txReceiptResult]);
 
   const sendTransaction = async () => {
-    let bgIntAmount = parseUnits(amount.toString(), tokenDecimalsMap[token])
+    let bgIntAmount = parseUnits(amount.toString(), tokenDecimalsMap[token]);
 
     if (amount == 0) {
       setErrorMsg('Amount should be greater than 0');

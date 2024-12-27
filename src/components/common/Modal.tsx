@@ -297,7 +297,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   };
 
   const sendTransaction = async () => {
-    let bgIntAmount = parseUnits(amount.toString(), tokenDecimalsMap[token])
+    let bgIntAmount = parseUnits(amount.toString(), tokenDecimalsMap[token]);
 
     if (amount == 0) {
       setErrorMsg('Amount should be greater than 0');
