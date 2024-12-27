@@ -16,7 +16,7 @@ const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
 const metadata = {
   name: 'Hyperlend',
   description: 'Hyperlend',
-  url: 'https://hyperlend.com',
+  url: 'https://hyperlend.finance',
   icons: ['https://www.hyperlend.finance/assets/logo-text-BcZCnvTH.svg'],
 };
 
