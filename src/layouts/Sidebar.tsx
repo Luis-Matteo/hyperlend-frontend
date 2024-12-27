@@ -228,7 +228,7 @@ function Sidebar() {
             <img className='' src={logoutIcon} alt='' />
             <p className='font-lufga text-grey-light'>Docs</p>
           </a>
-          <div className='flex items-center text-white'>
+          <div className='font-lufga flex items-center text-white'>
             <small>v0.1.100</small>
           </div>
           <button
