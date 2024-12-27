@@ -103,11 +103,16 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     });
   };
 
+  //wagmi hooks
   const publicClient = usePublicClient();
   const { address, isConnected } = useAccount();
   const { data: hash, writeContractAsync, error } = useWriteContract();
   const { data: userEthBalance } = useBalance({ address: address });
-
+  const txReceiptResult = useWaitForTransactionReceipt({
+    hash: hash,
+  });
+  
+  //custom hooks
   const { data: userWalletTokenBalance } = useUserTokenBalance(
     isConnected,
     token,
@@ -134,10 +139,6 @@ function Modal({ token, modalType, onClose }: ModalProps) {
 
   const userPositionsData = useUserPositionsData(isConnected, address);
   const assetReserveData = useProtocolAssetReserveData(token);
-
-  const txReceiptResult = useWaitForTransactionReceipt({
-    hash: hash,
-  });
 
   const updateAvailableAmount = () => {
     const avBalance = calculateAvailableBalance(
@@ -299,7 +300,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const sendTransaction = async () => {
     let bgIntAmount = parseUnits(amount.toString(), tokenDecimalsMap[token]);
 
-    if (amount == 0) {
+    if (bgIntAmount == 0n) {
       setErrorMsg('Amount should be greater than 0');
       return;
     }
