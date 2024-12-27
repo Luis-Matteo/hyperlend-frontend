@@ -57,6 +57,10 @@ export async function protocolAction(
       //   '115792089237316195423570985008687907853269984665640564039457584007913129639935';
     }
 
+    if (bgIntAmount == 0n){
+      throw new Error("ZERO_AMOUNT")
+    }
+
     const functionNameConvert: any = {
       supply: 'deposit',
       withdraw: 'withdraw',

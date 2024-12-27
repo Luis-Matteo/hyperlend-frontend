@@ -55,6 +55,10 @@ export async function wrappedTokenAction(
       }
     }
 
+    if (bgIntAmount == 0n){
+      throw new Error("ZERO_AMOUNT");
+    }
+
     const functionParams: any = {
       supply: [token, address, 0],
       withdraw: [token, bgIntAmount, address],
