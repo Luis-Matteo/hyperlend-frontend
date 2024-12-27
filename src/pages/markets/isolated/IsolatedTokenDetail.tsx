@@ -473,38 +473,38 @@ function TokenDetail() {
   const supplies = [
     {
       name: 'Reserves',
-      value: formatNumber(totalLiquidityToken, 4),
+      value: formatNumber(totalLiquidityToken, 4, true),
     },
     {
       name: 'Asset Price',
-      value: `$${formatNumber(assetUsdPrice, 2)}`,
+      value: `$${formatNumber(assetUsdPrice, 2, true)}`,
     },
     {
       name: 'Collateral Price',
-      value: `$${formatNumber(collateralUsdPrice, 2)}`,
+      value: `$${formatNumber(collateralUsdPrice, 2, true)}`,
     },
     {
       name: 'Liquidity',
-      value: `$${formatNumber(totalLiquidityToken * assetUsdPrice, 2)}`,
+      value: `$${formatNumber(totalLiquidityToken * assetUsdPrice, 2, true)}`,
     },
     {
       name: 'Utilization rate',
-      value: `${totalSuppliedTokens > 0 ? formatNumber((totalBorrowedTokens / totalSuppliedTokens) * 100, 2) : 0}%`,
+      value: `${totalSuppliedTokens > 0 ? formatNumber((totalBorrowedTokens / totalSuppliedTokens) * 100, 2, true) : 0}%`,
     },
   ];
 
   const supplyInfos = [
     {
       name: `Total supply (${market.assetSymbol})`,
-      value: `${formatNumber(totalSuppliedTokens, 2)}`,
+      value: `${formatNumber(totalSuppliedTokens, 2, true)}`,
     },
     {
       name: 'Total supply (USD)',
-      value: `$${formatNumber(totalSuppliedTokens * assetUsdPrice, 2)}`,
+      value: `$${formatNumber(totalSuppliedTokens * assetUsdPrice, 2, true)}`,
     },
     {
       name: 'APY',
-      value: `${formatNumber(interestRateDataMap.supply, 2)}%`,
+      value: `${formatNumber(interestRateDataMap.supply, 2, true)}%`,
     },
     {
       name: 'LTV',
@@ -515,15 +515,15 @@ function TokenDetail() {
   const borrowInfos = [
     {
       name: `Total borrrow (${market.assetSymbol})`,
-      value: `${formatNumber(totalBorrowedTokens, 2)}`,
+      value: `${formatNumber(totalBorrowedTokens, 2, true)}`,
     },
     {
       name: 'Total borrrow (USD)',
-      value: `$${formatNumber(totalBorrowedTokens * assetUsdPrice, 2)}`,
+      value: `$${formatNumber(totalBorrowedTokens * assetUsdPrice, 2, true)}`,
     },
     {
       name: 'APY',
-      value: `${formatNumber(interestRateDataMap.borrow, 2)}%`,
+      value: `${formatNumber(interestRateDataMap.borrow, 2, true)}%`,
     },
     {
       name: 'Liquidation Threshold',
@@ -834,8 +834,13 @@ function TokenDetail() {
                       value={collateralAmount}
                       onChange={(e) => {
                         setCollateralAmount(
-                          Number(e.target.value) >= collateralAvailableAmount
-                            ? collateralAvailableAmount
+                          Number(e.target.value) >=
+                            (collateralAction == 'add'
+                              ? collateralAvailableAmount
+                              : collateralWithdrawableAmount)
+                            ? collateralAction == 'add'
+                              ? collateralAvailableAmount
+                              : collateralWithdrawableAmount
                             : Number(e.target.value),
                         );
                       }}

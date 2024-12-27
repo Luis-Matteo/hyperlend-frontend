@@ -27,6 +27,7 @@ export function calculateAvailableBalance(
   actionType: string,
 ): any {
   if (!userAccountData) userAccountData = [0, 0, 0, 0, 0];
+  if (!reserveDataMap[token]) return 0;
 
   const params = {
     token: token,
