@@ -1,4 +1,4 @@
-import { erc20Abi } from 'viem';
+import { erc20Abi, parseGwei } from 'viem';
 
 import { contracts, abis } from '../../../config';
 
@@ -24,6 +24,7 @@ export async function protocolAction(
             contracts.pool,
             '115792089237316195423570985008687907853269984665640564039457584007913129639935',
           ],
+          maxFeePerGas: parseGwei('0.1'),
         });
         await publicClient.waitForTransactionReceipt({
           hash: approveResult.hash,
@@ -48,6 +49,7 @@ export async function protocolAction(
       abi: abis.pool,
       functionName: actionType,
       args: functionParams[actionType],
+      maxFeePerGas: parseGwei('0.1'),
     });
     await publicClient.waitForTransactionReceipt({ hash: txResult.hash });
   } catch (error) {
@@ -67,6 +69,7 @@ export async function updateCollateralAction(
       abi: abis.pool,
       functionName: 'setUserUseReserveAsCollateral',
       args: [token, !currentCollateralStatus],
+      maxFeePerGas: parseGwei('0.1'),
     });
     await publicClient.waitForTransactionReceipt({ hash: txResult.hash });
   } catch (error) {

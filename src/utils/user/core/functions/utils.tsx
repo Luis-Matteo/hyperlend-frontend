@@ -95,10 +95,10 @@ function getAvailableWithdraw(params: any) {
   );
   const tokenPriceUsd =
     Number(params.priceDataMap[params.token]) / Math.pow(10, 8);
-  const userBalanceToken = supplied?.balance;
+  const userBalanceToken = supplied?.balance || 0;
   const userBalanceValueUsd = userBalanceToken * tokenPriceUsd;
 
-  if (userBalanceToken == 0) return 0;
+  if (!userBalanceToken || userBalanceToken == 0) return 0;
 
   const maxWithdrawableUsd =
     (Number(totalCollateralBase) -
@@ -152,7 +152,7 @@ function getAvailableRepay(params: any) {
     params.userPositionsData.borrowed.find(
       (e: any) => e.underlyingAsset == params.token,
     )?.balance || 0;
-  if (borrowedBalance == 0) return 0;
+  if (!borrowedBalance || borrowedBalance == 0) return 0;
 
   const userBalance = normalizeDecimalsAmount(
     wrappedTokens.includes(params.token)

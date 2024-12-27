@@ -20,6 +20,7 @@ import explorerIcon from '../assets/icons/explorer-icon.svg';
 import { useConfirm } from '../provider/ConfirmProvider';
 
 import Turnstile from 'react-turnstile';
+import { parseGwei } from 'viem';
 
 function Sidebar() {
   const { isConnected, address } = useAccount();
@@ -54,6 +55,7 @@ function Sidebar() {
         abi: abis.faucet,
         functionName: 'claim',
         args: [],
+        maxFeePerGas: parseGwei('0.1'),
       });
       if (error && error.message) alert(error.message);
       console.log('MockBTC claimed: ', hash);
@@ -135,35 +137,74 @@ function Sidebar() {
                     setFaucetButtonText('Sending tokens...');
                     await claimFaucet(token, address);
                     setFaucetButtonText('Faucet');
-                    sendClaimTx();
+                    // sendClaimTx();
                   }}
                   onError={() => {
                     sendClaimTx();
                   }}
                 />
               ) : (
-                <button
-                  className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
-                  onClick={async () => {
-                    setIsCaptchaRequested(true);
-                  }}
-                  key={'openFaucet'}
-                  type='button'
-                >
-                  <div
-                    className={`transition-all duration-300 ease-in-out transform px-3`}
+                <>
+                  <button
+                    className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
+                    onClick={async () => {
+                      setIsCaptchaRequested(true);
+                    }}
+                    key={'openFaucet'}
+                    type='button'
                   >
-                    <img src={faucetIcon} className='w-5' alt={'faucet'} />
-                  </div>
-                  <p
-                    className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
+                    <div
+                      className={`transition-all duration-300 ease-in-out transform px-3`}
+                    >
+                      <img src={faucetIcon} className='w-5' alt={'faucet'} />
+                    </div>
+                    <p
+                      className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
+                    >
+                      {faucetButtonText}
+                    </p>
+                  </button>
+                  <button
+                    className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
+                    onClick={async () => {
+                      sendClaimTx();
+                    }}
+                    key={'openMbtcFaucet'}
+                    type='button'
                   >
-                    {faucetButtonText}
-                  </p>
-                </button>
+                    <div
+                      className={`transition-all duration-300 ease-in-out transform px-3`}
+                    >
+                      <img src={faucetIcon} className='w-5' alt={'faucet'} />
+                    </div>
+                    <p
+                      className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
+                    >
+                      MBTC faucet
+                    </p>
+                  </button>
+                </>
               )
             ) : (
-              ''
+              <button
+                className={`flex items-center gap-2 transition-all duration-300 ease-in-out transform`}
+                onClick={async () => {
+                  sendClaimTx();
+                }}
+                key={'openMbtcFaucet'}
+                type='button'
+              >
+                <div
+                  className={`transition-all duration-300 ease-in-out transform px-3`}
+                >
+                  <img src={faucetIcon} className='w-5' alt={'faucet'} />
+                </div>
+                <p
+                  className={`font-lufga font-medium transition-colors duration-300 ease-in-out text-secondary`}
+                >
+                  MBTC faucet
+                </p>
+              </button>
             )}
 
             {navLinksDown.map((item: NavLink) => (
