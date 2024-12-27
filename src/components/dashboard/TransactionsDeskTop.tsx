@@ -29,7 +29,6 @@ import TransactionTableTitles from './TransactionTableTitles';
 function TransactionsDeskTop() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
 
-  const { guided } = useConfirm();
   const navigate = useNavigate();
   const { data: hash, writeContractAsync } = useWriteContract();
   const { switchChain } = useSwitchChain();
@@ -147,11 +146,7 @@ function TransactionsDeskTop() {
                       }
                     >
                       <div className='text-white font-lufga flex gap-1 justify-start items-center'>
-                        <img
-                          className=''
-                          src={item.assetIcon}
-                          alt=''
-                        />
+                        <img className='' src={item.assetIcon} alt='' />
                         <p className='text-xs sm:text-base lg:text-xs xl:text-xs'>
                           {item.asset}
                         </p>
@@ -232,11 +227,7 @@ function TransactionsDeskTop() {
                       }
                     >
                       <div className='text-white font-lufga flex gap-1 justify-start items-center'>
-                        <img
-                          className=''
-                          src={item.assetIcon}
-                          alt=''
-                        />
+                        <img className='' src={item.assetIcon} alt='' />
                         <p className='text-xs sm:text-base lg:text-xs xl:text-xs'>
                           {item.asset}
                         </p>
