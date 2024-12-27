@@ -80,13 +80,12 @@ export async function wrappedTokenAction(
       value:
         action === 'supply' || action === 'repay'
           ? bgIntAmount
-          : (0 as any as bigint),
+          : 0n,
       maxFeePerGas: parseGwei('0.1'),
     });
 
     await publicClient.waitForTransactionReceipt({ hash: txResult });
   } catch (error) {
-    console.log(bgIntAmount)
     console.error('An error occurred in wrappedTokenAction:', error);
   }
 }
