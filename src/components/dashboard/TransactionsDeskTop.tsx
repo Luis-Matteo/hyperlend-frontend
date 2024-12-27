@@ -114,9 +114,9 @@ function TransactionsDeskTop() {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className={`lg:flex lg:flex-col xl:flex-row gap-5 justify-between ${guided > 0 && guided !== 4 ? 'lg:blur-[8px]' : ''}`}
+          className={`lg:flex lg:flex-col xl:flex-row gap-5 justify-between `}
         >
-          <CardItem className='py-4 lg:py-6 px-4 md:px-4 xl:px-7 flex-1 mb-4 lg:mb-0'>
+          <CardItem className='py-4 h-auto lg:py-6 px-4 md:px-4 xl:px-7 flex-1 mb-4 lg:mb-0'>
             <div className=''>
               <div className='flex justify-start align-middle items-center gap-2 py-2'>
                 <CustomIcon
@@ -127,7 +127,7 @@ function TransactionsDeskTop() {
                 />
                 <p className='text-white font-lufga text-2xl'>You Supplied</p>
               </div>
-              <div className='text-center'>
+              <div className='text-center h-[100%]'>
                 <div className='py-3 px-2 grid grid-cols-6 border-y-[1px] bg-grey border-[#212325]'>
                   {supplyTransactionTableTitles?.map((item) => (
                     <TransactionTableTitles
@@ -137,36 +137,36 @@ function TransactionsDeskTop() {
                     />
                   ))}
                 </div>
-                <div className='overflow-auto max-h-[200px]'>
+                <div className='h-[100%]'>
                   {(supplyTransactions || []).map((item: any) => (
                     <button
-                      className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-primary-hover'
+                      className='w-full grid grid-cols-6 py-[14px] px-2 justify-start border-b-[1px] border-[#212325] items-center hover:bg-primary-hover'
                       key={item.id}
                       onClick={() =>
                         navigate(`/markets/${item.underlyingAsset}`)
                       }
                     >
-                      <div className='text-white font-lufga flex gap-1 justify-center items-center'>
+                      <div className='text-white font-lufga flex gap-1 justify-start items-center'>
                         <img
-                          className='w-4 sm:w-6 lg:w-4 xl:w-6'
+                          className=''
                           src={item.assetIcon}
                           alt=''
                         />
-                        <p className='text-xs sm:text-base lg:text-xs xl:text-base'>
+                        <p className='text-xs sm:text-base lg:text-xs xl:text-xs'>
                           {item.asset}
                         </p>
                       </div>
-                      <span className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
+                      <span className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
                         {formatNumber(item.balance, 2)}K
                       </span>
-                      <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
+                      <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
                         ${formatNumber(item.value, 2)}K
                       </div>
-                      <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
+                      <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
                         {formatNumber(item.apr, 2)}%
                       </div>
                       <div
-                        className={`text-xs sm:text-base lg:text-xs xl:text-base ${item.isCollateralEnabled ? 'text-success font-lufga' : 'text-secondary font-lufga'}`}
+                        className={`text-xs sm:text-base lg:text-xs xl:text-xs ${item.isCollateralEnabled ? 'text-success font-lufga' : 'text-secondary font-lufga'}`}
                       >
                         <button
                           onClick={() => {
@@ -222,38 +222,38 @@ function TransactionsDeskTop() {
                     />
                   ))}
                 </div>
-                <div className='overflow-auto max-h-[200px]'>
+                <div className='h-[100%]'>
                   {(borrowTransactions || []).map((item: any, index: any) => (
                     <button
-                      className='w-full grid grid-cols-6 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-primary-hover'
+                      className='w-full grid grid-cols-6 py-[14px] px-1 mr-3 ml-2 border-b-[1px] border-[#212325] items-center hover:bg-primary-hover'
                       key={index}
                       onClick={() =>
                         navigate(`/markets/${item.underlyingAsset}`)
                       }
                     >
-                      <div className='text-white font-lufga flex gap-2 justify-center'>
+                      <div className='text-white font-lufga flex gap-1 justify-start items-center'>
                         <img
-                          className='w-4 sm:w-6 lg:w-4 xl:w-6'
+                          className=''
                           src={item.assetIcon}
                           alt=''
                         />
-                        <p className='text-xs sm:text-base lg:text-xs xl:text-base'>
+                        <p className='text-xs sm:text-base lg:text-xs xl:text-xs'>
                           {item.asset}
                         </p>
                       </div>
                       <div
-                        className={`text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base ${item.title === 'Balance' && 'hidden md:block lg:block xl:block'}`}
+                        className={`text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-xs ${item.title === 'Balance' && 'hidden md:block lg:block xl:block'}`}
                       >
                         {formatNumber(item.balance, 2)}K
                       </div>
-                      <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
+                      <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
                         ${formatNumber(item.value, 2)}K
                       </div>
-                      <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
+                      <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
                         {formatNumber(item.apr, 2)}%
                       </div>
                       <div
-                        className={`text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-base ${item.pool === 'Pool' && 'hidden md:block lg:block xl:block'}`}
+                        className={`text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-xs ${item.pool === 'Pool' && 'hidden md:block lg:block xl:block'}`}
                       >
                         {item.pool}
                       </div>
