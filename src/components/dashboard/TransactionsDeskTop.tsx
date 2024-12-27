@@ -11,7 +11,6 @@ import { formatNumber } from '../../utils/functions';
 import { ModalType } from '../../utils/types';
 import { contracts, abis, networkChainId } from '../../utils/config';
 import { useNavigate } from 'react-router-dom';
-import { useConfirm } from '../../provider/ConfirmProvider';
 import { motion } from 'framer-motion';
 import CustomIcon from '../common/CustomIcon';
 import { borrowArrowIcon, collateralIcon, supplyIcon } from '../../assets';
