@@ -16,6 +16,7 @@ import { getErrorMessage } from '../../utils/constants/errorCodes';
 import { protocolAction } from '../../utils/user/isolated/functions/actions';
 import { getTokenPrecision } from '../../utils/user/isolated/functions/utils';
 import { useAssetPrice } from '../../utils/protocol/isolated/prices';
+import { parseUnits } from 'viem';
 
 import AnimateModal, { AnimateModalProps } from './AnimateModal';
 import WrappedEthModal from '../common/WrapedEthModal';

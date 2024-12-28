@@ -1,6 +1,5 @@
 import { Hypervault } from '../interfaces';
 
-
 const hypervaults: Hypervault[] = [
   {
     id: 1,
@@ -164,6 +163,3 @@ const vaultTokenList = [
 ];
 
 export { hypervaults, vaultTokenList };
-
-
-

@@ -22,7 +22,7 @@ export async function wrappedTokenAction(
 ) {
   try {
     if (action === 'withdraw') {
-      if (hTokenAllowance < Number(bgIntAmount)) {
+      if (hTokenAllowance <= Number(bgIntAmount)) {
         const approveResult = await writeContractAsync({
           address: wrappedTokenProtocolTokens[token].hToken,
           abi: erc20Abi,
@@ -38,7 +38,7 @@ export async function wrappedTokenAction(
         });
       }
     } else if (action === 'borrow') {
-      if (dTokenAllowance < Number(bgIntAmount)) {
+      if (dTokenAllowance <= Number(bgIntAmount)) {
         const approveResult = await writeContractAsync({
           address: wrappedTokenProtocolTokens[token].dToken,
           abi: abis.variableDebtToken,
@@ -53,6 +53,10 @@ export async function wrappedTokenAction(
           hash: approveResult,
         });
       }
+    }
+
+    if (bgIntAmount == 0n) {
+      throw new Error('ZERO_AMOUNT');
     }
 
     const functionParams: any = {

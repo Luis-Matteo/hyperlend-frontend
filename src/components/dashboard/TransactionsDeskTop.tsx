@@ -11,7 +11,6 @@ import { formatNumber } from '../../utils/functions';
 import { ModalType } from '../../utils/types';
 import { contracts, abis, networkChainId } from '../../utils/config';
 import { useNavigate } from 'react-router-dom';
-import { useConfirm } from '../../provider/ConfirmProvider';
 import { motion } from 'framer-motion';
 import CustomIcon from '../common/CustomIcon';
 import { borrowArrowIcon, collateralIcon, supplyIcon } from '../../assets';
@@ -29,7 +28,6 @@ import TransactionTableTitles from './TransactionTableTitles';
 function TransactionsDeskTop() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
 
-  const { guided } = useConfirm();
   const navigate = useNavigate();
   const { data: hash, writeContractAsync } = useWriteContract();
   const { switchChain } = useSwitchChain();
@@ -152,6 +150,7 @@ function TransactionsDeskTop() {
                           src={item.assetIcon}
                           alt=''
                         />
+
                         <p className='text-xs sm:text-base lg:text-xs xl:text-xs'>
                           {item.asset}
                         </p>

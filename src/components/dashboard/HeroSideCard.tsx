@@ -1,4 +1,3 @@
-
 import { borrowIcon, depositIcon } from '../../assets';
 import CustomIcon from '../common/CustomIcon';
 import CustomTitle from '../common/CustomTitle';

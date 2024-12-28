@@ -1,4 +1,3 @@
-
 import { healthFactorImage } from '../../assets';
 import CustomTitle from '../common/CustomTitle';
 

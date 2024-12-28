@@ -30,6 +30,7 @@ export function useAssetPrice(chainlinkOracles: `0x${string}`[]) {
         } else {
           console.error(`Failed to get price data from oracle: ${asset}`);
           console.log(result);
+          acc[asset] = 0n;
         }
         return acc;
       },
