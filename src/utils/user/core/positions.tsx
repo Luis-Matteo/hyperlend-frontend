@@ -129,12 +129,27 @@ export function useUserPositionsData(
   const borrowed: UserPositionData[] = userReservesData
     ? (userReservesData as any)['0']
         .map((e: UserReserveData) => {
+          const reserveData = reserveDataMap[e.underlyingAsset];
+
+          if (!reserveData){
+            return {
+              underlyingAsset: e.underlyingAsset,
+              assetName: tokenNameMap[e.underlyingAsset],
+              balance: 0,
+              value: 0,
+              apr: 0,
+              icon: iconsMap[tokenNameMap[e.underlyingAsset]],
+              isCollateralEnabled: null,
+            };
+          }
+
           // Convert scaledVariableDebt to BigInt
-          const scaledDebtBn = toBigIntSafe(e.scaledVariableDebt);
+          const balanceBn = (e.scaledVariableDebt * reserveData.variableBorrowIndex) / 1000000000000000000000000000n
+          const debtBn = toBigIntSafe(balanceBn);
           const decimals = tokenDecimalsMap[e.underlyingAsset] ?? 0;
 
           // Normalize the user’s borrow position into a floating number
-          const balanceNormalized = bigIntToFloat(scaledDebtBn, decimals);
+          const balanceNormalized = bigIntToFloat(debtBn, decimals);
 
           // Price data
           const rawPriceBn = toBigIntSafe(
