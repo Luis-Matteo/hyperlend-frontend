@@ -71,7 +71,10 @@ export async function wrappedTokenAction(
         115792089237316195423570985008687907853269984665640564039457584007913129639935n;
     }
 
-    bgIntAmount = bgIntAmount * 102n / 100n; //it's recommended to send an _amount slightly higher than the current borrowed amount, will be refunded
+    if (action == "repay"){
+      bgIntAmount = bgIntAmount * 102n / 100n; //it's recommended to send an _amount slightly higher than the current borrowed amount, will be refunded
+    }
+
 
     const txResult = await writeContractAsync({
       address: contracts.wrappedTokenGatewayV3[token],
