@@ -72,7 +72,7 @@ export async function wrappedTokenAction(
     }
     
     if (useMaxAmount && action == "repay"){
-      bgIntAmount = (bgIntAmount * 102n) / 100n; //it's recommended to send an _amount slightly higher than the current borrowed amount, will be refunded
+      bgIntAmount = (bgIntAmount * 1005n) / 1000n; //it's recommended to send an _amount slightly higher than the current borrowed amount, will be refunded
     }
 
     const txResult = await writeContractAsync({
