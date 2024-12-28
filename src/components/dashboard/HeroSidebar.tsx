@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import HeroSideCardMobile from './HeroSideCardMobile';
 
 const HeroSidebar = () => (
-  <div className='h-[100%] sm:w-[100%]  lg:w-auto flex flex-col justify-end px-4 py-9 gap-3  rounded-md border border-1 border-[#CAEAE54D]'>
+  <div className='h-[100%] sm:w-[100%]  lg:w-auto flex flex-col justify-end px-4 py-9 gap-3  rounded-md border border-1 border-[#CAEAE54D] bg-[#071311]'>
     <div className='flex justify-between items-center'>
       <span className='text-[#E1E1E1] text-xs font-lufga font-light italic'>
         Your Position
