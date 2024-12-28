@@ -16,7 +16,7 @@ const TransactionTableTitles = ({
     <div className='flex gap-1 justify-center items-center mb-2 align-middle'>
       <span className={titleStyles}>{title}</span>
       <InfoItem
-        title={<span className={infoItemStyles}>{infoItem}</span>}
+        title={<span className={infoItemStyles} style={{border:"2px solid red"}}>{infoItem}</span>}
         className='w-[200px]'
       />
     </div>

@@ -120,19 +120,19 @@ function TransactionsMobile() {
           transition={{ delay: 0.6 }}
           className={`lg:flex lg:flex-col xl:flex-row gap-5 justify-between ${guided > 0 && guided !== 4 ? 'lg:blur-[8px]' : ''}`}
         >
-          <CardItem className='py-4 lg:py-6 px-4 md:px-4 xl:px-7 flex-1 mb-4 lg:mb-0'>
+          <CardItem className='pt-4 h-auto lg:pt-6 flex-1 mb-4 lg:mb-0'>
             <div className=''>
-              <div className='flex justify-start align-middle items-center gap-2 py-2'>
+              <div className='flex justify-start align-middle items-center gap-4 py-4 px-7'>
                 <CustomIcon
                   mainDivStyles='rounded-full border border-1 border-[#CAEAE51A] bg-[#CAEAE50D] px-3 py-2'
                   iconImage={supplyIcon}
                   width='7px'
                   height='10px'
                 />
-                <p className='text-white font-lufga text-2xl'>You Supplied</p>
+                <p className='text-[#CAEAE5] font-lufga text-2xl'>You Supplied</p>
               </div>
               <div className='text-center'>
-                <div className='py-3 px-2 grid grid-cols-3 border-y-[1px] bg-grey border-[#212325]'>
+                <div className='py-3 px-2 grid grid-cols-3 border-y-[1px] bg-[#050F0D] border-[#212325]'>
                   {supplyTransactionTableTitlesMobile?.map((item) => (
                     <TransactionTableTitles
                       title={item.title}
@@ -141,10 +141,10 @@ function TransactionsMobile() {
                     />
                   ))}
                 </div>
-                <div className='overflow-auto max-h-[200px]'>
+                <div className='h-[100%] pb-10 bg-primary-hover rounded-b-2xl'>
                   {(supplyTransactionsMobile || []).map((item: any) => (
                     <button
-                      className='w-full grid grid-cols-3 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-primary-hover'
+                      className='w-full grid grid-cols-3 py-[14px] px-2.5 justify-start border-b-[1px] border-[#071311] items-center bg-[#111E1C] hover:bg-primary-hover'
                       key={item.id}
                       onClick={() =>
                         navigate(`/markets/${item.underlyingAsset}`)
@@ -174,20 +174,20 @@ function TransactionsMobile() {
               </div>
             </div>
           </CardItem>
-          <CardItem className='py-4 lg:py-6 px-4 md:px-4 xl:px-7 flex-1 mb-4 lg:mb-0'>
+          <CardItem className='pt-4 h-auto lg:pt-6 flex-1 mb-4 lg:mb-0'>
             <div className=''>
-              <div className='flex justify-start align-middle items-center gap-2 py-2'>
-                <CustomIcon
+              <div className='flex justify-start align-middle items-center gap-4 py-4 px-7'>
+              <CustomIcon
                   mainDivStyles='rounded-full border border-1 border-[#CAEAE51A] bg-[#FF00040D] px-3 py-2'
                   iconImage={borrowArrowIcon}
                   width='5px'
                   height='10px'
                 />
-                <p className='text-white font-lufga text-2xl'>You Borrowed</p>
+                <p className='text-[#CAEAE5] font-lufga text-2xl'>You Borrowed</p>
               </div>
               <div className='text-center'>
-                <div className='py-3 px-2 grid grid-cols-3 border-y-[1px] bg-grey border-[#212325]'>
-                  {borrowTransactionTableTitlesMobile?.map((item) => (
+                <div className='py-3 px-2 grid grid-cols-3 border-y-[1px] bg-[#050F0D] border-[#212325]'>
+                  { borrowTransactionTableTitlesMobile?.map((item) => (
                     <TransactionTableTitles
                       title={item.title}
                       key={item.id}
@@ -195,41 +195,40 @@ function TransactionsMobile() {
                     />
                   ))}
                 </div>
-                <div className='overflow-auto max-h-[200px]'>
-                  {(borrowTransactionsMobile || []).map(
-                    (item: any, index: any) => (
-                      <button
-                        className='w-full grid grid-cols-3 py-[14px] px-2.5 border-b-[1px] border-[#212325] items-center hover:bg-primary-hover'
-                        key={index}
-                        onClick={() =>
-                          navigate(`/markets/${item.underlyingAsset}`)
-                        }
-                      >
-                        <div className='text-white font-lufga flex gap-2 justify-center'>
-                          <img
-                            className='w-4 sm:w-6 lg:w-4 xl:w-6'
-                            src={item.assetIcon}
-                            alt=''
-                          />
-                          <p className='text-xs sm:text-base lg:text-xs xl:text-base'>
-                            {item.asset}
-                          </p>
-                        </div>
+                <div className='h-[100%] pb-10 bg-primary-hover rounded-b-2xl'>
+                  {(borrowTransactionsMobile || []).map((item: any) => (
+                    <button
+                      className='w-full grid grid-cols-3 py-[14px] px-2.5 justify-start border-b-[1px] border-[#071311] items-center bg-[#111E1C] hover:bg-primary-hover'
+                      key={item.id}
+                      onClick={() =>
+                        navigate(`/markets/${item.underlyingAsset}`)
+                      }
+                    >
+                      <div className='text-white font-lufga flex gap-1 justify-center items-center'>
+                        <img
+                          className='w-4 sm:w-6 lg:w-4 xl:w-6'
+                          src={item.assetIcon}
+                          alt=''
+                        />
+                        <p className='text-xs sm:text-base lg:text-xs xl:text-base'>
+                          {item.asset}
+                        </p>
+                      </div>
 
-                        <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
-                          ${formatNumber(item.value, 2)}K
-                        </div>
-                        <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
-                          {formatNumber(item.apr, 2)}%
-                        </div>
-                      </button>
-                      // </Link>
-                    ),
-                  )}
+                      <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
+                        ${formatNumber(item.value, 2)}K
+                      </div>
+                      <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
+                        {formatNumber(item.apr, 2)}%
+                      </div>
+                    </button>
+                    // </Link>
+                  ))}
                 </div>
               </div>
             </div>
           </CardItem>
+          
         </motion.div>
       </motion.div>
     </>
