@@ -91,7 +91,9 @@ export function useUserPositionsData(
           }
 
           // Convert scaledATokenBalance to BigInt
-          const balanceBn = (e.scaledATokenBalance * reserveData.liquidityIndex) / 1000000000000000000000000000n
+          const balanceBn =
+            (e.scaledATokenBalance * reserveData.liquidityIndex) /
+            1000000000000000000000000000n;
           const decimals = tokenDecimalsMap[e.underlyingAsset] ?? 0;
 
           // Normalize the user’s supply position into a floating number
@@ -131,7 +133,7 @@ export function useUserPositionsData(
         .map((e: UserReserveData) => {
           const reserveData = reserveDataMap[e.underlyingAsset];
 
-          if (!reserveData){
+          if (!reserveData) {
             return {
               underlyingAsset: e.underlyingAsset,
               assetName: tokenNameMap[e.underlyingAsset],
@@ -144,7 +146,9 @@ export function useUserPositionsData(
           }
 
           // Convert scaledVariableDebt to BigInt
-          const balanceBn = (e.scaledVariableDebt * reserveData.variableBorrowIndex) / 1000000000000000000000000000n
+          const balanceBn =
+            (e.scaledVariableDebt * reserveData.variableBorrowIndex) /
+            1000000000000000000000000000n;
           const debtBn = toBigIntSafe(balanceBn);
           const decimals = tokenDecimalsMap[e.underlyingAsset] ?? 0;
 

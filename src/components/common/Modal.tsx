@@ -111,7 +111,7 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   const txReceiptResult = useWaitForTransactionReceipt({
     hash: hash,
   });
-  
+
   //custom hooks
   const { data: userWalletTokenBalance } = useUserTokenBalance(
     isConnected,
