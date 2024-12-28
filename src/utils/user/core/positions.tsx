@@ -43,7 +43,7 @@ export function useUserPositionsData(
   });
 
   // Early return if we aren’t connected or we don’t have a valid address
-  if (!isConnected || !address) {
+  if (!isConnected || !address || !reserveDataMap) {
     return {
       supplied: [],
       borrowed: [],
@@ -75,12 +75,27 @@ export function useUserPositionsData(
   const supplied: UserPositionData[] = userReservesData
     ? (userReservesData as any)['0']
         .map((e: UserReserveData) => {
+          const reserveData = reserveDataMap[e.underlyingAsset];
+
+          if (!reserveData) {
+            return {
+              underlyingAsset: e.underlyingAsset,
+              assetName: tokenNameMap[e.underlyingAsset],
+              balance: 0,
+              value: 0,
+              price: 0,
+              apr: 0,
+              icon: iconsMap[tokenNameMap[e.underlyingAsset]],
+              isCollateralEnabled: e.usageAsCollateralEnabledOnUser,
+            };
+          }
+
           // Convert scaledATokenBalance to BigInt
-          const scaledBalanceBn = toBigIntSafe(e.scaledATokenBalance);
+          const balanceBn = (e.scaledATokenBalance * reserveData.liquidityIndex) / 1000000000000000000000000000n
           const decimals = tokenDecimalsMap[e.underlyingAsset] ?? 0;
 
           // Normalize the user’s supply position into a floating number
-          const balanceNormalized = bigIntToFloat(scaledBalanceBn, decimals);
+          const balanceNormalized = bigIntToFloat(balanceBn, decimals);
 
           // Price data (stored on-chain or from an oracle) also read as BigInt
           const rawPriceBn = toBigIntSafe(
