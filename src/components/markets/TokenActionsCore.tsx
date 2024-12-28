@@ -32,7 +32,6 @@ import { getTokenPrecision } from '../../utils/user/core/functions/utils';
 import { useProtocolPriceData } from '../../utils/protocol/core/prices';
 
 import AnimateModal, { AnimateModalProps } from './AnimateModal';
-import { parseUnits } from 'viem';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };
