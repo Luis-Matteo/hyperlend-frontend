@@ -1,5 +1,6 @@
 export async function claimFaucet(token: any, userAddress?: string) {
-  const challengeV2Text =
+  try {
+    const challengeV2Text =
     'If you are running the farming bot, stop wasting your time. Testnet will not be directly incentivized, and mainnet airdrop will be linear with a minimum threshold.';
   const requestOptions = {
     method: 'POST',
@@ -35,4 +36,8 @@ export async function claimFaucet(token: any, userAddress?: string) {
         resolve();
       });
   });
+  } catch (e: any){
+    alert(`Error claiming faucet in claimFaucet(): ${e.message}`);
+    console.log(`Error in claimFaucet: ${e.message}`)
+  }
 }
