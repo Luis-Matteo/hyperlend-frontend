@@ -33,6 +33,7 @@ import { useProtocolPriceData } from '../../utils/protocol/core/prices';
 
 import AnimateModal, { AnimateModalProps } from './AnimateModal';
 import { parseUnits } from 'viem';
+import Big from 'big.js';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };
@@ -286,7 +287,8 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   }, [txReceiptResult]);
 
   const sendTransaction = async () => {
-    let bgIntAmount = parseUnits(amount.toString(), tokenDecimalsMap[token]);
+    let fixedAmount = Big(amount.toString()).toFixed(tokenDecimalsMap[token]);
+    let bgIntAmount = parseUnits(fixedAmount, tokenDecimalsMap[token]);
 
     if (bgIntAmount == 0n) {
       setErrorMsg('Amount should be greater than 0');

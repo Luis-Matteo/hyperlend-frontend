@@ -11,6 +11,7 @@ import {
   usePublicClient,
   useWaitForTransactionReceipt,
 } from 'wagmi';
+import Big from 'big.js';
 
 import { ModalProps } from '../../utils/types';
 import {
@@ -298,7 +299,8 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   };
 
   const sendTransaction = async () => {
-    let bgIntAmount = parseUnits(amount.toString(), tokenDecimalsMap[token]);
+    let fixedAmount = Big(amount.toString()).toFixed(tokenDecimalsMap[token]);
+    let bgIntAmount = parseUnits(fixedAmount, tokenDecimalsMap[token]);
 
     if (bgIntAmount == 0n) {
       setErrorMsg('Amount should be greater than 0');
