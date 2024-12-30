@@ -39,7 +39,7 @@ function formatUnit(
     formattedNum = numAbs.toFixed(decimal);
   }
 
-  if (handleNaN && isNaN(Number(formattedNum))) return 0;
+  if (handleNaN && isNaN(Number(formattedNum.slice(0, -1)))) return 0;
 
   return sign < 0 ? `-${formattedNum}` : formattedNum;
 }
