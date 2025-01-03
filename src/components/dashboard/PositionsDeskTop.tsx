@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, FC } from 'react';
 import CardItem from '../common/CardItem';
-import { formatNumber } from '../../utils/functions';
+import { formatNumber, formatUnit } from '../../utils/functions';
 import { ModalType } from '../../utils/types';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -121,10 +121,10 @@ const PositionsDeskTop: FC<PositionsProps> = ({
                         </p>
                       </div>
                       <span className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
-                        {formatNumber(item.balance, 2)}K
+                        {formatUnit(item.balance, 3)}
                       </span>
                       <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
-                        ${formatNumber(item.value, 2)}K
+                        ${formatUnit(item.value, 2)}
                       </div>
                       <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
                         {formatNumber(item.apr, 2)}%
@@ -208,10 +208,10 @@ const PositionsDeskTop: FC<PositionsProps> = ({
                         <div
                           className={`text-white font-lufga  text-center  text-xs sm:text-base lg:text-xs xl:text-xs ${item.title === 'Balance' && 'hidden md:block lg:block xl:block'}`}
                         >
-                          {formatNumber(item.balance, 2)}K
+                          {formatUnit(item.balance, 3)}
                         </div>
                         <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
-                          ${formatNumber(item.value, 2)}K
+                          ${formatUnit(item.value, 2)}
                         </div>
                         <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
                           {formatNumber(item.apr, 2)}%

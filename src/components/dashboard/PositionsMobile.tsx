@@ -6,7 +6,7 @@ import {
 import { useAccount } from 'wagmi';
 import ReactGA from 'react-ga4';
 import CardItem from '../common/CardItem';
-import { formatNumber } from '../../utils/functions';
+import { formatNumber, formatUnit } from '../../utils/functions';
 import { useNavigate } from 'react-router-dom';
 import { useConfirm } from '../../provider/ConfirmProvider';
 import { motion } from 'framer-motion';
@@ -125,7 +125,7 @@ function PositionsMobile() {
                       </div>
 
                       <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
-                        ${formatNumber(item.value, 2)}K
+                        ${formatUnit(item.value, 2)}
                       </div>
                       <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
                         {formatNumber(item.apr, 2)}%
@@ -181,7 +181,7 @@ function PositionsMobile() {
                       </div>
 
                       <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
-                        ${formatNumber(item.value, 2)}K
+                        ${formatUnit(item.value, 2)}
                       </div>
                       <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-base'>
                         {formatNumber(item.apr, 2)}%

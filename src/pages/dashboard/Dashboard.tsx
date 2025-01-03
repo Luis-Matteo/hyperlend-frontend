@@ -22,6 +22,7 @@ import { contracts, abis } from '../../utils/config';
 import DashboardPositions from './DashboardPositions';
 import { useUserPositionsData } from '../../utils/user/core/positions';
 import { getUserPoints } from '../../utils/user/points';
+import { useFetchPrimaryHlName } from '../../utils/protocol/hlNames';
 
 function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
@@ -34,7 +35,7 @@ function Dashboard() {
   const { error: blockNumberError } = useBlockNumber();
   const { data: hash, writeContractAsync } = useWriteContract();
   const { chainId, isConnected, address } = useAccount();
-  const { data: name, isLoading: isNameLoading } = useName({
+  const { data: paperclipName, isLoading: isPaperclipNameLoading } = useName({
     address: address || '0x0000000000000000000000000000000000000000',
   });
 
@@ -43,10 +44,12 @@ function Dashboard() {
   const [modalType, setModalType] = useState<ModalType>('supply');
   const closeModal = () => setModalStatus(false);
 
+  const [name, setName] = useState<string>('HyperLend user');
   const [isNetworkDown, setIsNetworkDown] = useState(false);
 
   const userPositions = useUserPositionsData(isConnected, address);
   const userPoints = getUserPoints();
+  const hlName = useFetchPrimaryHlName(address);
 
   const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {
     writeContractAsync({
@@ -70,6 +73,14 @@ function Dashboard() {
       switchChain({ chainId: networkChainId });
     }
   }, [isConnected, chainId]);
+
+  useEffect(() => {
+    if (hlName.data != name && hlName.data && hlName.error == null) {
+      setName(hlName.data);
+    } else if (paperclipName) {
+      setName(paperclipName);
+    }
+  }, [hlName, paperclipName]);
 
   const divRefs = [
     useRef<HTMLDivElement>(null),
@@ -137,9 +148,7 @@ function Dashboard() {
           >
             <div className='flex gap-4 flex-col lg:flex-col xl:flex-row w-[100%] py-3 justify-start'>
               <Hero
-                name={
-                  isNameLoading ? 'HyperLend user' : name || 'HyperLend user'
-                }
+                name={name}
                 userPositionsData={userPositions}
                 userPointsData={userPoints}
               />
