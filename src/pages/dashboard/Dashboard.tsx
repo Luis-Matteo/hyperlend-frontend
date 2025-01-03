@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSwitchChain, useAccount, useBlockNumber } from 'wagmi';
+import {
+  useSwitchChain,
+  useAccount,
+  useBlockNumber,
+  useWriteContract,
+} from 'wagmi';
 import ReactGA from 'react-ga4';
 
 import Modal from '../../components/common/Modal';
@@ -11,8 +16,10 @@ import { networkChainId } from '../../utils/config';
 import { useConfirm } from '../../provider/ConfirmProvider';
 import { motion } from 'framer-motion';
 import { HeroSidebar } from '../../components';
+import { contracts, abis } from '../../utils/config';
 
 import DashboardPositions from './DashboardPositions';
+import { useUserPositionsData } from '../../utils/user/core/positions';
 
 function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
@@ -22,7 +29,6 @@ function Dashboard() {
     //, closeGuide, nextStep
   } = useConfirm();
   const { switchChain } = useSwitchChain();
-  const { chainId, isConnected } = useAccount();
   const { error: blockNumberError } = useBlockNumber();
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
@@ -31,6 +37,21 @@ function Dashboard() {
   const closeModal = () => setModalStatus(false);
 
   const [isNetworkDown, setIsNetworkDown] = useState(false);
+
+  const { data: hash, writeContractAsync } = useWriteContract();
+  const { chainId, isConnected, address } = useAccount();
+
+  const userPositions = useUserPositionsData(isConnected, address);
+
+  const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {
+    writeContractAsync({
+      address: contracts.pool,
+      abi: abis.pool,
+      functionName: 'setUserUseReserveAsCollateral',
+      args: [asset, !isEnabled],
+    });
+    console.log(hash);
+  };
 
   useEffect(() => {
     if (blockNumberError) {
@@ -118,6 +139,8 @@ function Dashboard() {
             setModalToken={setModalToken}
             setModalStatus={setModalStatus}
             setModalType={setModalType}
+            userPositions={userPositions}
+            sendToggleCollateralTx={sendToggleCollateralTx}
           />
           <motion.div
             ref={divRefs[3]}

@@ -9,12 +9,16 @@ interface CorePositionsProps {
   setModalToken: React.Dispatch<React.SetStateAction<string>>;
   setModalStatus: React.Dispatch<React.SetStateAction<boolean>>;
   setModalType: React.Dispatch<React.SetStateAction<ModalType>>;
+  userPositions: any;
+  sendToggleCollateralTx: (asset: string, isEnabled: boolean) => any;
 }
 
 const Core: FC<CorePositionsProps> = ({
   setModalToken,
   setModalStatus,
   setModalType,
+  userPositions,
+  sendToggleCollateralTx,
 }) => {
   const { guided } = useConfirm();
 
@@ -44,6 +48,8 @@ const Core: FC<CorePositionsProps> = ({
               setModalToken={setModalToken}
               setModalStatus={setModalStatus}
               setModalType={setModalType}
+              userPositions={userPositions}
+              sendToggleCollateralTx={sendToggleCollateralTx}
             />
           </div>
           <div className='w-full block md:hidden lg:hidden xl:hidden'>

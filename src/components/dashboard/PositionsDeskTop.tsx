@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef, FC } from 'react';
-import { useAccount, useWriteContract } from 'wagmi';
-import ReactGA from 'react-ga4';
 import CardItem from '../common/CardItem';
 import { formatNumber } from '../../utils/functions';
 import { ModalType } from '../../utils/types';
-import { contracts, abis } from '../../utils/config';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import CustomIcon from '../common/CustomIcon';
@@ -15,36 +12,22 @@ import {
 } from '../../utils/constants/constants';
 import PositionsTableTitles from './PositionsTableTitles';
 
-import { useUserPositionsData } from '../../utils/user/core/positions';
-
 interface PositionsProps {
   setModalToken: React.Dispatch<React.SetStateAction<string>>;
   setModalStatus: React.Dispatch<React.SetStateAction<boolean>>;
   setModalType: React.Dispatch<React.SetStateAction<ModalType>>;
+  userPositions: any;
+  sendToggleCollateralTx: (asset: string, isEnabled: boolean) => any;
 }
 
 const PositionsDeskTop: FC<PositionsProps> = ({
   setModalToken,
   setModalStatus,
   setModalType,
+  userPositions,
+  sendToggleCollateralTx,
 }) => {
-  ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
-
   const navigate = useNavigate();
-  const { data: hash, writeContractAsync } = useWriteContract();
-  const { isConnected, address } = useAccount();
-
-  const userPositions = useUserPositionsData(isConnected, address);
-
-  const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {
-    writeContractAsync({
-      address: contracts.pool,
-      abi: abis.pool,
-      functionName: 'setUserUseReserveAsCollateral',
-      args: [asset, !isEnabled],
-    });
-    console.log(hash);
-  };
 
   const divRefs = [
     useRef<HTMLDivElement>(null),
