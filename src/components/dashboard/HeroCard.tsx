@@ -9,7 +9,7 @@ type HeroCardProps = {
   percentageIncreased?: string;
   infoItem?: string;
   healthFactor?: string;
-  currentTitle?:string
+  currentTitle?: string;
 };
 const HeroCard = ({
   title,
@@ -19,17 +19,17 @@ const HeroCard = ({
   infoItem,
   percentage,
   healthFactor,
-  currentTitle
+  currentTitle,
 }: HeroCardProps) => (
   <div
     className={`h-[130px] rounded-lg w-[100%] md:w-auto lg:w-auto bg-[#071311] border border-1 border-[#CAEAE54D] py-2 px-1 md:py-3 md:px-3  lg:py-6 lg:px-6 flex flex-col justify-center ${title === 'Current balance' ? 'pr-12 ' : 'pr-1 lg:pr-6'} items-center lg:items-start xl:items-start gap-1`}
   >
     <CustomTitle
-        title={title}
-        titleStyles='text-[#E1E1E1] text-xs font-lufga font-light italic  text-nowrap'
-        infoItem={infoItem}
-        currentTitle={currentTitle}
-      />
+      title={title}
+      titleStyles='text-[#E1E1E1] text-xs font-lufga font-light italic  text-nowrap'
+      infoItem={infoItem}
+      currentTitle={currentTitle}
+    />
     <div
       className={`flex flex-col justify-center ${title === 'Health Factor' ? 'items-center' : 'items-start'} px-0`}
     >

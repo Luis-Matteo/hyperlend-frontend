@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef, FC } from 'react';
-import {
-  useAccount,
-  useWriteContract,
-} from 'wagmi';
+import { useAccount, useWriteContract } from 'wagmi';
 import ReactGA from 'react-ga4';
 import CardItem from '../common/CardItem';
 import { formatNumber } from '../../utils/functions';
@@ -29,7 +26,7 @@ interface PositionsProps {
 const PositionsDeskTop: FC<PositionsProps> = ({
   setModalToken,
   setModalStatus,
-  setModalType
+  setModalType,
 }) => {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
 
@@ -110,7 +107,9 @@ const PositionsDeskTop: FC<PositionsProps> = ({
                   width='7px'
                   height='10px'
                 />
-                <p className='text-[#CAEAE5] font-lufga text-2xl'>You Supplied</p>
+                <p className='text-[#CAEAE5] font-lufga text-2xl'>
+                  You Supplied
+                </p>
               </div>
               <div className='text-center h-[100%]'>
                 <div className='py-3 px-2 grid grid-cols-6 border-y-[1px] bg-[#050F0D] border-[#212325]'>
@@ -132,11 +131,7 @@ const PositionsDeskTop: FC<PositionsProps> = ({
                       }
                     >
                       <div className='text-white font-lufga flex gap-1 justify-center items-center '>
-                        <img
-                          className=''
-                          src={item.icon}
-                          alt=''
-                        />
+                        <img className='' src={item.icon} alt='' />
 
                         <p className='text-xs sm:text-base lg:text-xs xl:text-xs'>
                           {item.assetName}
@@ -196,7 +191,9 @@ const PositionsDeskTop: FC<PositionsProps> = ({
                   width='5px'
                   height='10px'
                 />
-                <p className='text-[#CAEAE5] font-lufga text-2xl'>You Borrowed</p>
+                <p className='text-[#CAEAE5] font-lufga text-2xl'>
+                  You Borrowed
+                </p>
               </div>
               <div className='text-center'>
                 <div className='py-3 px-2 grid grid-cols-6 border-y-[1px] bg-[#050F0D] border-[#212325]'>
@@ -210,54 +207,52 @@ const PositionsDeskTop: FC<PositionsProps> = ({
                   ))}
                 </div>
                 <div className='h-[100%] pb-10 bg-primary-hover rounded-b-2xl'>
-                  {(userPositions.borrowed || []).map((item: any, index: any) => (
-                    <button
-                      className='w-full grid grid-cols-6 py-[14px] px-2 justify-start border-b-[1px] border-[#071311] items-center bg-[#111E1C] hover:bg-primary-hover'
-                      key={index}
-                      onClick={() =>
-                        navigate(`/markets/${item.underlyingAsset}`)
-                      }
-                    >
-                      <div className='text-white font-lufga flex gap-1 justify-center items-center'>
-                        <img
-                          className=''
-                          src={item.icon}
-                          alt=''
-                        />
-                        <p className='text-xs sm:text-base lg:text-xs xl:text-xs'>
-                          {item.assetName}
-                        </p>
-                      </div>
-                      <div
-                        className={`text-white font-lufga  text-center  text-xs sm:text-base lg:text-xs xl:text-xs ${item.title === 'Balance' && 'hidden md:block lg:block xl:block'}`}
-                      >
-                        {formatNumber(item.balance, 2)}K
-                      </div>
-                      <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
-                        ${formatNumber(item.value, 2)}K
-                      </div>
-                      <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
-                        {formatNumber(item.apr, 2)}%
-                      </div>
-                      <div
-                        className={`text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-xs ${item.pool === 'Pool' && 'hidden md:block lg:block xl:block'}`}
-                      >
-                        {item.pool}
-                      </div>
+                  {(userPositions.borrowed || []).map(
+                    (item: any, index: any) => (
                       <button
-                        className='w-full py-2 bg-[#CAEAE5] font-lufga rounded-md font-bold text-xs hover:bg-[#CAEAE5]/80 hidden md:block lg:block xl:block'
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setModalStatus(true);
-                          setModalToken(item.underlyingAsset);
-                          setModalType('repay');
-                        }}
+                        className='w-full grid grid-cols-6 py-[14px] px-2 justify-start border-b-[1px] border-[#071311] items-center bg-[#111E1C] hover:bg-primary-hover'
+                        key={index}
+                        onClick={() =>
+                          navigate(`/markets/${item.underlyingAsset}`)
+                        }
                       >
-                        Repay
+                        <div className='text-white font-lufga flex gap-1 justify-center items-center'>
+                          <img className='' src={item.icon} alt='' />
+                          <p className='text-xs sm:text-base lg:text-xs xl:text-xs'>
+                            {item.assetName}
+                          </p>
+                        </div>
+                        <div
+                          className={`text-white font-lufga  text-center  text-xs sm:text-base lg:text-xs xl:text-xs ${item.title === 'Balance' && 'hidden md:block lg:block xl:block'}`}
+                        >
+                          {formatNumber(item.balance, 2)}K
+                        </div>
+                        <div className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
+                          ${formatNumber(item.value, 2)}K
+                        </div>
+                        <div className='text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
+                          {formatNumber(item.apr, 2)}%
+                        </div>
+                        <div
+                          className={`text-success font-lufga text-xs sm:text-base lg:text-xs xl:text-xs ${item.pool === 'Pool' && 'hidden md:block lg:block xl:block'}`}
+                        >
+                          {item.pool}
+                        </div>
+                        <button
+                          className='w-full py-2 bg-[#CAEAE5] font-lufga rounded-md font-bold text-xs hover:bg-[#CAEAE5]/80 hidden md:block lg:block xl:block'
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setModalStatus(true);
+                            setModalToken(item.underlyingAsset);
+                            setModalType('repay');
+                          }}
+                        >
+                          Repay
+                        </button>
                       </button>
-                    </button>
-                    // </Link>
-                  ))}
+                      // </Link>
+                    ),
+                  )}
                 </div>
               </div>
             </div>
@@ -266,6 +261,6 @@ const PositionsDeskTop: FC<PositionsProps> = ({
       </motion.div>
     </>
   );
-}
+};
 
 export default PositionsDeskTop;

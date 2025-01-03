@@ -27,12 +27,11 @@ export const supplyPositionTableTitles: PositionTableTitleProps[] = [
   { title: 'APR', id: 'apr' },
   { title: 'Collateral', id: 'collateral' },
 ];
-export const supplyPositionTableTitlesMobile: PositionTableTitleProps[] =
-  [
-    { title: 'Assets', id: 'assets' },
-    { title: 'Value', id: 'value' },
-    { title: 'APR', id: 'apr' },
-  ];
+export const supplyPositionTableTitlesMobile: PositionTableTitleProps[] = [
+  { title: 'Assets', id: 'assets' },
+  { title: 'Value', id: 'value' },
+  { title: 'APR', id: 'apr' },
+];
 export const borrowPositionTableTitles: PositionTableTitleProps[] = [
   { title: 'Assets', id: 'assets' },
   { title: 'Balance', id: 'balance' },
@@ -40,12 +39,11 @@ export const borrowPositionTableTitles: PositionTableTitleProps[] = [
   { title: 'APR', id: 'apr' },
   { title: 'Pool', id: 'pool' },
 ];
-export const borrowPositionTableTitlesMobile: PositionTableTitleProps[] =
-  [
-    { title: 'Assets', id: 'assets' },
-    { title: ' Value', id: 'value' },
-    { title: 'APR', id: 'apr' },
-  ];
+export const borrowPositionTableTitlesMobile: PositionTableTitleProps[] = [
+  { title: 'Assets', id: 'assets' },
+  { title: ' Value', id: 'value' },
+  { title: 'APR', id: 'apr' },
+];
 // const navLinks: NavLinkProps[] = [
 //   {
 //     id: 'dashboard',

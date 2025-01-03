@@ -14,7 +14,7 @@ interface CorePositionsProps {
 const Core: FC<CorePositionsProps> = ({
   setModalToken,
   setModalStatus,
-  setModalType
+  setModalType,
 }) => {
   const { guided } = useConfirm();
 
@@ -41,9 +41,9 @@ const Core: FC<CorePositionsProps> = ({
         >
           <div className='w-full hidden md:block lg:block xl:block'>
             <PositionsDeskTop
-              setModalToken = {setModalToken}
-              setModalStatus = {setModalStatus}
-              setModalType = {setModalType}
+              setModalToken={setModalToken}
+              setModalStatus={setModalStatus}
+              setModalType={setModalType}
             />
           </div>
           <div className='w-full block md:hidden lg:hidden xl:hidden'>
@@ -53,6 +53,6 @@ const Core: FC<CorePositionsProps> = ({
       </motion.div>
     </>
   );
-}
+};
 
 export default Core;

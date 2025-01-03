@@ -3,9 +3,7 @@ import {
   useEffect,
   useRef,
 } from 'react';
-import {
-  useAccount
-} from 'wagmi';
+import { useAccount } from 'wagmi';
 import ReactGA from 'react-ga4';
 import CardItem from '../common/CardItem';
 import { formatNumber } from '../../utils/functions';
@@ -92,7 +90,9 @@ function PositionsMobile() {
                   width='7px'
                   height='10px'
                 />
-                <p className='text-[#CAEAE5] font-lufga text-2xl'>You Supplied</p>
+                <p className='text-[#CAEAE5] font-lufga text-2xl'>
+                  You Supplied
+                </p>
               </div>
               <div className='text-center'>
                 <div className='py-3 px-2 grid grid-cols-3 border-y-[1px] bg-[#050F0D] border-[#212325]'>
@@ -140,17 +140,19 @@ function PositionsMobile() {
           <CardItem className='pt-4 h-auto lg:pt-6 flex-1 mb-4 lg:mb-0'>
             <div className=''>
               <div className='flex justify-start align-middle items-center gap-4 py-4 px-7'>
-              <CustomIcon
+                <CustomIcon
                   mainDivStyles='rounded-full border border-1 border-[#CAEAE51A] bg-[#FF00040D] px-3 py-2'
                   iconImage={borrowArrowIcon}
                   width='5px'
                   height='10px'
                 />
-                <p className='text-[#CAEAE5] font-lufga text-2xl'>You Borrowed</p>
+                <p className='text-[#CAEAE5] font-lufga text-2xl'>
+                  You Borrowed
+                </p>
               </div>
               <div className='text-center'>
                 <div className='py-3 px-2 grid grid-cols-3 border-y-[1px] bg-[#050F0D] border-[#212325]'>
-                  { borrowPositionTableTitlesMobile?.map((item) => (
+                  {borrowPositionTableTitlesMobile?.map((item) => (
                     <PositionsTableTitles
                       title={item.title}
                       key={item.id}
@@ -191,7 +193,6 @@ function PositionsMobile() {
               </div>
             </div>
           </CardItem>
-          
         </motion.div>
       </motion.div>
     </>

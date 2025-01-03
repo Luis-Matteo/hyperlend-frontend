@@ -14,7 +14,7 @@ interface DashboardPositionsProps {
 const DashboardPositions: FC<DashboardPositionsProps> = ({
   setModalToken,
   setModalStatus,
-  setModalType
+  setModalType,
 }) => {
   const [activeTab, setActiveTab] = useState<string>('core');
 
@@ -65,16 +65,20 @@ const DashboardPositions: FC<DashboardPositionsProps> = ({
         </div>
       </div>
       <AnimatePresence mode='wait'>
-        {activeTab === 'core' && <Core 
-          setModalToken = {setModalToken}
-          setModalStatus = {setModalStatus}
-          setModalType = {setModalType}
-        />}
-        {activeTab === 'isolated' && <Isolated 
-          setModalToken = {setModalToken}
-          setModalStatus = {setModalStatus}
-          setModalType = {setModalType}
-        />}
+        {activeTab === 'core' && (
+          <Core
+            setModalToken={setModalToken}
+            setModalStatus={setModalStatus}
+            setModalType={setModalType}
+          />
+        )}
+        {activeTab === 'isolated' && (
+          <Isolated
+            setModalToken={setModalToken}
+            setModalStatus={setModalStatus}
+            setModalType={setModalType}
+          />
+        )}
       </AnimatePresence>
     </>
   );

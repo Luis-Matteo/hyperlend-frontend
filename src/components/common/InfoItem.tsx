@@ -6,15 +6,21 @@ import { balanceEyeIcon } from '../../assets';
 interface InfoItemProps {
   title: ReactNode;
   className?: string;
-  currentTitle?:string;
+  currentTitle?: string;
 }
 
-const InfoItem: React.FC<InfoItemProps> = ({ title, className,currentTitle }) => {
+const InfoItem: React.FC<InfoItemProps> = ({
+  title,
+  className,
+  currentTitle,
+}) => {
   return (
     <div className='relative group'>
-     {
-      currentTitle === "Current balance" ? <img src={balanceEyeIcon} alt="" /> :  <Info size={11} className='text-[#FFFFFF66] dark:text-[#3E3E3E]' />
-     }
+      {currentTitle === 'Current balance' ? (
+        <img src={balanceEyeIcon} alt='' />
+      ) : (
+        <Info size={11} className='text-[#FFFFFF66] dark:text-[#3E3E3E]' />
+      )}
       <motion.p
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

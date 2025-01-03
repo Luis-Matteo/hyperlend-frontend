@@ -1,9 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import {
-  useSwitchChain,
-  useAccount,
-  useBlockNumber,
-} from 'wagmi';
+import { useSwitchChain, useAccount, useBlockNumber } from 'wagmi';
 import ReactGA from 'react-ga4';
 
 import Modal from '../../components/common/Modal';
@@ -26,15 +22,12 @@ function Dashboard() {
     //, closeGuide, nextStep
   } = useConfirm();
   const { switchChain } = useSwitchChain();
-  const {
-    chainId,
-    isConnected,
-  } = useAccount();
+  const { chainId, isConnected } = useAccount();
   const { error: blockNumberError } = useBlockNumber();
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
-  const [modalToken,setModalToken] = useState<string>('');
-  const [modalType,setModalType] = useState<ModalType>('supply');
+  const [modalToken, setModalToken] = useState<string>('');
+  const [modalType, setModalType] = useState<ModalType>('supply');
   const closeModal = () => setModalStatus(false);
 
   const [isNetworkDown, setIsNetworkDown] = useState(false);
@@ -122,10 +115,10 @@ function Dashboard() {
             </div>
           </motion.div>
           <DashboardPositions
-            setModalToken = {setModalToken}
-            setModalStatus = {setModalStatus}
-            setModalType = {setModalType}
-           />
+            setModalToken={setModalToken}
+            setModalStatus={setModalStatus}
+            setModalType={setModalType}
+          />
           <motion.div
             ref={divRefs[3]}
             initial={{ y: 20, opacity: 0 }}

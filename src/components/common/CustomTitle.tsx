@@ -5,14 +5,14 @@ type TitleProps = {
   infoItem?: string;
   titleStyles?: string;
   infoItemStyles?: string;
-  currentTitle?:string;
+  currentTitle?: string;
 };
 const CustomTitle = ({
   title,
   infoItem,
   titleStyles,
   infoItemStyles,
-  currentTitle
+  currentTitle,
 }: TitleProps) => {
   return (
     <div className='flex gap-1 justify-center items-center mb-2 align-middle'>

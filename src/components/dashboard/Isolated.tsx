@@ -8,9 +8,9 @@ interface IsolatedPositionsProps {
 }
 
 const Isolated: FC<IsolatedPositionsProps> = ({
-  setModalToken,
-  setModalStatus,
-  setModalType
+  // setModalToken,
+  // setModalStatus,
+  // setModalType,
 }) => {
   return (
     <div className='flex justify-center items-center'>
