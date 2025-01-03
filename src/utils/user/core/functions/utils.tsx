@@ -101,6 +101,11 @@ function getAvailableWithdraw(params: any) {
 
   if (!userBalanceToken || userBalanceToken == 0) return 0;
 
+  //is user is not borrowing, return token amount
+  if (totalDebtBase == 0) {
+    return userBalanceToken;
+  }
+
   const maxWithdrawableUsd =
     (Number(totalCollateralBase) -
       Number(totalDebtBase) / (Number(currentLiquidationThreshold) / 10000)) /

@@ -116,7 +116,14 @@ function CoreTable({
 
   const assets = useMemo(
     () => getAssets(),
-    [reserveDataMap, priceDataMap, interestRateDataMap, stable, searchText],
+    [
+      reserveDataMap,
+      priceDataMap,
+      interestRateDataMap,
+      stable,
+      searchText,
+      protocolAssetReserveDataMap,
+    ],
   );
 
   useEffect(() => {
