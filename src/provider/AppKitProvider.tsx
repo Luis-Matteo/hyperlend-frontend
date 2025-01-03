@@ -24,6 +24,8 @@ const metadata = {
 
 const hyperEvmTestnet = defineChain({
   id: 998,
+  caipNetworkId: 'eip155:998',
+  chainNamespace: 'eip155',
   name: 'HyperEVM Testnet',
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
