@@ -35,7 +35,7 @@ function Dashboard() {
   const { error: blockNumberError } = useBlockNumber();
   const { data: hash, writeContractAsync } = useWriteContract();
   const { chainId, isConnected, address } = useAccount();
-  const { data: paperclipName, isLoading: isPaperclipNameLoading } = useName({
+  const { data: paperclipName } = useName({
     address: address || '0x0000000000000000000000000000000000000000',
   });
 
