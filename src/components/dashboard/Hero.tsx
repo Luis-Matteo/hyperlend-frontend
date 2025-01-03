@@ -6,11 +6,12 @@ import HeroMobile from './HeroMobile';
 import { IPoints } from '../../utils/user/points';
 
 interface IHero {
+  name: string;
   userPositionsData: UserPositionsData;
   userPointsData: IPoints;
 }
 
-const Hero = ({ userPositionsData, userPointsData }: IHero) => (
+const Hero = ({ name, userPositionsData, userPointsData }: IHero) => (
   <div className='w-full'>
     <div className='hidden lg:block w-[100%] h-[366px] py-8 px-6 rounded-2xl border border-1 border-[#CAEAE54D] bg-hero-pattern bg-cover bg-bottom'>
       <div className='flex flex-col justify-center align-middle items-start gap-5'>
@@ -26,7 +27,7 @@ const Hero = ({ userPositionsData, userPointsData }: IHero) => (
               Welcome to HyperLend!
             </span>
             <h1 className='text-[#CAEAE5] font-lufga font-semibold text-[48px]  m-0 p-0'>
-              Hello hyperlend.hl
+              Hello {name}
             </h1>
           </div>
         </div>

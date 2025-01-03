@@ -6,6 +6,7 @@ import {
   useWriteContract,
 } from 'wagmi';
 import ReactGA from 'react-ga4';
+import { useName } from '@paperclip-labs/whisk-sdk/identity';
 
 import Modal from '../../components/common/Modal';
 import Navbar from '../../layouts/Navbar';
@@ -31,6 +32,11 @@ function Dashboard() {
   } = useConfirm();
   const { switchChain } = useSwitchChain();
   const { error: blockNumberError } = useBlockNumber();
+  const { data: hash, writeContractAsync } = useWriteContract();
+  const { chainId, isConnected, address } = useAccount();
+  const { data: name, isLoading: isNameLoading } = useName({
+    address: address || '0x0000000000000000000000000000000000000000',
+  });
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
   const [modalToken, setModalToken] = useState<string>('');
@@ -38,9 +44,6 @@ function Dashboard() {
   const closeModal = () => setModalStatus(false);
 
   const [isNetworkDown, setIsNetworkDown] = useState(false);
-
-  const { data: hash, writeContractAsync } = useWriteContract();
-  const { chainId, isConnected, address } = useAccount();
 
   const userPositions = useUserPositionsData(isConnected, address);
   const userPoints = getUserPoints();
@@ -134,6 +137,9 @@ function Dashboard() {
           >
             <div className='flex gap-4 flex-col lg:flex-col xl:flex-row w-[100%] py-3 justify-start'>
               <Hero
+                name={
+                  isNameLoading ? 'HyperLend user' : name || 'HyperLend user'
+                }
                 userPositionsData={userPositions}
                 userPointsData={userPoints}
               />
