@@ -15,32 +15,32 @@ type NavLinkProps = {
   icon?: string;
   disabled: boolean;
 };
-type TransactionTableTitleProps = {
+type PositionTableTitleProps = {
   id: string;
   title: string;
 };
 
-export const supplyTransactionTableTitles: TransactionTableTitleProps[] = [
+export const supplyPositionTableTitles: PositionTableTitleProps[] = [
   { title: 'Assets', id: 'assets' },
   { title: 'Balance', id: 'balance' },
   { title: 'Value', id: 'value' },
   { title: 'APR', id: 'apr' },
   { title: 'Collateral', id: 'collateral' },
 ];
-export const supplyTransactionTableTitlesMobile: TransactionTableTitleProps[] =
+export const supplyPositionTableTitlesMobile: PositionTableTitleProps[] =
   [
     { title: 'Assets', id: 'assets' },
     { title: 'Value', id: 'value' },
     { title: 'APR', id: 'apr' },
   ];
-export const borrowTransactionTableTitles: TransactionTableTitleProps[] = [
+export const borrowPositionTableTitles: PositionTableTitleProps[] = [
   { title: 'Assets', id: 'assets' },
   { title: 'Balance', id: 'balance' },
   { title: ' Value', id: 'value' },
   { title: 'APR', id: 'apr' },
   { title: 'Pool', id: 'pool' },
 ];
-export const borrowTransactionTableTitlesMobile: TransactionTableTitleProps[] =
+export const borrowPositionTableTitlesMobile: PositionTableTitleProps[] =
   [
     { title: 'Assets', id: 'assets' },
     { title: ' Value', id: 'value' },

@@ -2,24 +2,21 @@ import { useState, useEffect, useRef } from 'react';
 import {
   useSwitchChain,
   useAccount,
-  useWriteContract,
   useBlockNumber,
 } from 'wagmi';
 import ReactGA from 'react-ga4';
 
 import Modal from '../../components/common/Modal';
 import Navbar from '../../layouts/Navbar';
+import Hero from '../../components/dashboard/Hero';
 
 import { ModalType } from '../../utils/types';
-import { contracts, abis, networkChainId } from '../../utils/config';
-// import { useUserPositionsData } from '../../utils/user/core/positions';
-// import { useNavigate } from 'react-router-dom';
+import { networkChainId } from '../../utils/config';
 import { useConfirm } from '../../provider/ConfirmProvider';
 import { motion } from 'framer-motion';
-import Hero from '../../components/dashboard/Hero';
 import { HeroSidebar } from '../../components';
 
-import DashboardTransactions from './DashboardTransactions';
+import DashboardPositions from './DashboardPositions';
 
 function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
@@ -28,25 +25,16 @@ function Dashboard() {
     guided,
     //, closeGuide, nextStep
   } = useConfirm();
-  // const navigate = useNavigate();
-  const { data: hash, writeContractAsync } = useWriteContract();
   const { switchChain } = useSwitchChain();
   const {
-    //address,
     chainId,
     isConnected,
   } = useAccount();
   const { error: blockNumberError } = useBlockNumber();
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
-  const [
-    modalToken,
-    //,setModalToken
-  ] = useState<string>('');
-  const [
-    modalType,
-    //,setModalType
-  ] = useState<ModalType>('supply');
+  const [modalToken,setModalToken] = useState<string>('');
+  const [modalType,setModalType] = useState<ModalType>('supply');
   const closeModal = () => setModalStatus(false);
 
   const [isNetworkDown, setIsNetworkDown] = useState(false);
@@ -64,21 +52,6 @@ function Dashboard() {
     }
   }, [isConnected, chainId]);
 
-  // const {
-  //   supplied,
-  //   borrowed,
-  // } = useUserPositionsData(isConnected, address);
-
-  const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {
-    writeContractAsync({
-      address: contracts.pool,
-      abi: abis.pool,
-      functionName: 'setUserUseReserveAsCollateral',
-      args: [asset, !isEnabled],
-    });
-    console.log(hash);
-  };
-
   const divRefs = [
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
@@ -95,7 +68,6 @@ function Dashboard() {
     { width: 0, height: 0 },
   ]);
   console.log(divDimensions);
-  console.log(sendToggleCollateralTx);
   // Update widths and heights
   const updateDimensions = () => {
     const newDimensions = divRefs.map((ref) => ({
@@ -149,7 +121,11 @@ function Dashboard() {
               <HeroSidebar />
             </div>
           </motion.div>
-          <DashboardTransactions />
+          <DashboardPositions
+            setModalToken = {setModalToken}
+            setModalStatus = {setModalStatus}
+            setModalType = {setModalType}
+           />
           <motion.div
             ref={divRefs[3]}
             initial={{ y: 20, opacity: 0 }}

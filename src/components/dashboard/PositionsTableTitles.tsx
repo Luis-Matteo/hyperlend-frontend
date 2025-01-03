@@ -6,7 +6,7 @@ type TitleProps = {
   titleStyles?: string;
   infoItemStyles?: string;
 };
-const TransactionTableTitles = ({
+const PositionsTableTitles = ({
   title,
   infoItem,
   titleStyles,
@@ -23,4 +23,4 @@ const TransactionTableTitles = ({
   );
 };
 
-export default TransactionTableTitles;
+export default PositionsTableTitles;

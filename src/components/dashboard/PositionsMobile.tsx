@@ -4,69 +4,32 @@ import {
   useRef,
 } from 'react';
 import {
-  // useSwitchChain,
-  // useAccount,
-  // useWriteContract,
-  useBlockNumber,
+  useAccount
 } from 'wagmi';
 import ReactGA from 'react-ga4';
 import CardItem from '../common/CardItem';
 import { formatNumber } from '../../utils/functions';
-//import { ModalType } from '../../utils/types';
-//import { contracts, abis, networkChainId } from '../../utils/config';
 import { useNavigate } from 'react-router-dom';
 import { useConfirm } from '../../provider/ConfirmProvider';
 import { motion } from 'framer-motion';
 import CustomIcon from '../common/CustomIcon';
 import { borrowArrowIcon, supplyIcon } from '../../assets';
 import {
-  borrowTransactionTableTitlesMobile,
-  supplyTransactionTableTitlesMobile,
+  borrowPositionTableTitlesMobile,
+  supplyPositionTableTitlesMobile,
 } from '../../utils/constants/constants';
+import PositionsTableTitles from './PositionsTableTitles';
 
-import {
-  borrowTransactionsMobile,
-  supplyTransactionsMobile,
-} from '../../utils/mocks/transactions';
-import TransactionTableTitles from './TransactionTableTitles';
+import { useUserPositionsData } from '../../utils/user/core/positions';
 
-function TransactionsMobile() {
+function PositionsMobile() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
 
-  const { guided } = useConfirm();
   const navigate = useNavigate();
-  // const { data: hash, writeContractAsync } = useWriteContract();
-  //const { switchChain } = useSwitchChain();
-  //const {  chainId, isConnected } = useAccount();
-  const { error: blockNumberError } = useBlockNumber();
+  const { guided } = useConfirm();
 
-  //const [modalStatus, setModalStatus] = useState<boolean>(false);
-  // const [modalToken, setModalToken] = useState<string>('');
-  // const [modalType, setModalType] = useState<ModalType>('supply');
-  // const closeModal = () => setModalStatus(false);
-
-  if (blockNumberError) {
-    console.log(blockNumberError.name);
-    alert(
-      `RPC node error: ${blockNumberError.message} \n\nPlease try again later!`,
-    );
-  }
-
-  // useEffect(() => {
-  //   if (isConnected && chainId != networkChainId) {
-  //     switchChain({ chainId: networkChainId });
-  //   }
-  // }, [isConnected, chainId]);
-
-  // const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {
-  //   writeContractAsync({
-  //     address: contracts.pool,
-  //     abi: abis.pool,
-  //     functionName: 'setUserUseReserveAsCollateral',
-  //     args: [asset, !isEnabled],
-  //   });
-  //   console.log(hash);
-  // };
+  const { isConnected, address } = useAccount();
+  const userPositions = useUserPositionsData(isConnected, address);
 
   const divRefs = [
     useRef<HTMLDivElement>(null),
@@ -133,8 +96,8 @@ function TransactionsMobile() {
               </div>
               <div className='text-center'>
                 <div className='py-3 px-2 grid grid-cols-3 border-y-[1px] bg-[#050F0D] border-[#212325]'>
-                  {supplyTransactionTableTitlesMobile?.map((item) => (
-                    <TransactionTableTitles
+                  {supplyPositionTableTitlesMobile?.map((item) => (
+                    <PositionsTableTitles
                       title={item.title}
                       key={item.id}
                       titleStyles='text-xs font-medium text-[#FFFFFF] font-lufga'
@@ -142,7 +105,7 @@ function TransactionsMobile() {
                   ))}
                 </div>
                 <div className='h-[100%] pb-10 bg-primary-hover rounded-b-2xl'>
-                  {(supplyTransactionsMobile || []).map((item: any) => (
+                  {(userPositions.supplied || []).map((item: any) => (
                     <button
                       className='w-full grid grid-cols-3 py-[14px] px-2.5 justify-start border-b-[1px] border-[#071311] items-center bg-[#111E1C] hover:bg-primary-hover'
                       key={item.id}
@@ -153,11 +116,11 @@ function TransactionsMobile() {
                       <div className='text-white font-lufga flex gap-1 justify-center items-center'>
                         <img
                           className='w-4 sm:w-6 lg:w-4 xl:w-6'
-                          src={item.assetIcon}
+                          src={item.icon}
                           alt=''
                         />
                         <p className='text-xs sm:text-base lg:text-xs xl:text-base'>
-                          {item.asset}
+                          {item.assetName}
                         </p>
                       </div>
 
@@ -187,8 +150,8 @@ function TransactionsMobile() {
               </div>
               <div className='text-center'>
                 <div className='py-3 px-2 grid grid-cols-3 border-y-[1px] bg-[#050F0D] border-[#212325]'>
-                  { borrowTransactionTableTitlesMobile?.map((item) => (
-                    <TransactionTableTitles
+                  { borrowPositionTableTitlesMobile?.map((item) => (
+                    <PositionsTableTitles
                       title={item.title}
                       key={item.id}
                       titleStyles='text-xs font-medium text-[#FFFFFF] font-lufga'
@@ -196,7 +159,7 @@ function TransactionsMobile() {
                   ))}
                 </div>
                 <div className='h-[100%] pb-10 bg-primary-hover rounded-b-2xl'>
-                  {(borrowTransactionsMobile || []).map((item: any) => (
+                  {(userPositions.borrowed || []).map((item: any) => (
                     <button
                       className='w-full grid grid-cols-3 py-[14px] px-2.5 justify-start border-b-[1px] border-[#071311] items-center bg-[#111E1C] hover:bg-primary-hover'
                       key={item.id}
@@ -207,11 +170,11 @@ function TransactionsMobile() {
                       <div className='text-white font-lufga flex gap-1 justify-center items-center'>
                         <img
                           className='w-4 sm:w-6 lg:w-4 xl:w-6'
-                          src={item.assetIcon}
+                          src={item.icon}
                           alt=''
                         />
                         <p className='text-xs sm:text-base lg:text-xs xl:text-base'>
-                          {item.asset}
+                          {item.assetName}
                         </p>
                       </div>
 
@@ -235,4 +198,4 @@ function TransactionsMobile() {
   );
 }
 
-export default TransactionsMobile;
+export default PositionsMobile;

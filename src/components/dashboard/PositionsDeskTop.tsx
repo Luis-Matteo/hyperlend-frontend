@@ -1,56 +1,43 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, FC } from 'react';
 import {
-  useSwitchChain,
   useAccount,
   useWriteContract,
-  useBlockNumber,
 } from 'wagmi';
 import ReactGA from 'react-ga4';
 import CardItem from '../common/CardItem';
 import { formatNumber } from '../../utils/functions';
 import { ModalType } from '../../utils/types';
-import { contracts, abis, networkChainId } from '../../utils/config';
+import { contracts, abis } from '../../utils/config';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import CustomIcon from '../common/CustomIcon';
 import { borrowArrowIcon, collateralIcon, supplyIcon } from '../../assets';
 import {
-  borrowTransactionTableTitles,
-  supplyTransactionTableTitles,
+  borrowPositionTableTitles,
+  supplyPositionTableTitles,
 } from '../../utils/constants/constants';
+import PositionsTableTitles from './PositionsTableTitles';
 
-import {
-  borrowTransactions,
-  supplyTransactions,
-} from '../../utils/mocks/transactions';
-import TransactionTableTitles from './TransactionTableTitles';
+import { useUserPositionsData } from '../../utils/user/core/positions';
 
-function TransactionsDeskTop() {
+interface PositionsProps {
+  setModalToken: React.Dispatch<React.SetStateAction<string>>;
+  setModalStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalType: React.Dispatch<React.SetStateAction<ModalType>>;
+}
+
+const PositionsDeskTop: FC<PositionsProps> = ({
+  setModalToken,
+  setModalStatus,
+  setModalType
+}) => {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
 
   const navigate = useNavigate();
   const { data: hash, writeContractAsync } = useWriteContract();
-  const { switchChain } = useSwitchChain();
-  const { chainId, isConnected } = useAccount();
-  const { error: blockNumberError } = useBlockNumber();
+  const { isConnected, address } = useAccount();
 
-  const [modalStatus, setModalStatus] = useState<boolean>(false);
-  const [modalToken, setModalToken] = useState<string>('');
-  const [modalType, setModalType] = useState<ModalType>('supply');
-  const closeModal = () => setModalStatus(false);
-  console.log(modalStatus, modalToken, modalType, closeModal);
-  if (blockNumberError) {
-    console.log(blockNumberError.name);
-    alert(
-      `RPC node error: ${blockNumberError.message} \n\nPlease try again later!`,
-    );
-  }
-
-  useEffect(() => {
-    if (isConnected && chainId != networkChainId) {
-      switchChain({ chainId: networkChainId });
-    }
-  }, [isConnected, chainId]);
+  const userPositions = useUserPositionsData(isConnected, address);
 
   const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {
     writeContractAsync({
@@ -127,8 +114,8 @@ function TransactionsDeskTop() {
               </div>
               <div className='text-center h-[100%]'>
                 <div className='py-3 px-2 grid grid-cols-6 border-y-[1px] bg-[#050F0D] border-[#212325]'>
-                  {supplyTransactionTableTitles?.map((item) => (
-                    <TransactionTableTitles
+                  {supplyPositionTableTitles?.map((item) => (
+                    <PositionsTableTitles
                       title={item.title}
                       key={item.id}
                       titleStyles='text-xs font-medium text-[#FFFFFF] font-lufga'
@@ -136,7 +123,7 @@ function TransactionsDeskTop() {
                   ))}
                 </div>
                 <div className='h-[100%] pb-10 bg-primary-hover rounded-b-2xl'>
-                  {(supplyTransactions || []).map((item: any) => (
+                  {(userPositions.supplied || []).map((item: any) => (
                     <button
                       className='w-full grid grid-cols-6 py-[14px] px-2 justify-start border-b-[1px] border-[#071311] items-center bg-[#111E1C] hover:bg-primary-hover'
                       key={item.id}
@@ -147,12 +134,12 @@ function TransactionsDeskTop() {
                       <div className='text-white font-lufga flex gap-1 justify-center items-center '>
                         <img
                           className=''
-                          src={item.assetIcon}
+                          src={item.icon}
                           alt=''
                         />
 
                         <p className='text-xs sm:text-base lg:text-xs xl:text-xs'>
-                          {item.asset}
+                          {item.assetName}
                         </p>
                       </div>
                       <span className='text-white font-lufga text-xs sm:text-base lg:text-xs xl:text-xs'>
@@ -213,8 +200,8 @@ function TransactionsDeskTop() {
               </div>
               <div className='text-center'>
                 <div className='py-3 px-2 grid grid-cols-6 border-y-[1px] bg-[#050F0D] border-[#212325]'>
-                  {borrowTransactionTableTitles?.map((item) => (
-                    <TransactionTableTitles
+                  {borrowPositionTableTitles?.map((item) => (
+                    <PositionsTableTitles
                       title={item.title}
                       key={item.id}
                       titleStyles='text-xs font-medium text-[#FFFFFF] font-lufga'
@@ -223,7 +210,7 @@ function TransactionsDeskTop() {
                   ))}
                 </div>
                 <div className='h-[100%] pb-10 bg-primary-hover rounded-b-2xl'>
-                  {(borrowTransactions || []).map((item: any, index: any) => (
+                  {(userPositions.borrowed || []).map((item: any, index: any) => (
                     <button
                       className='w-full grid grid-cols-6 py-[14px] px-2 justify-start border-b-[1px] border-[#071311] items-center bg-[#111E1C] hover:bg-primary-hover'
                       key={index}
@@ -234,11 +221,11 @@ function TransactionsDeskTop() {
                       <div className='text-white font-lufga flex gap-1 justify-center items-center'>
                         <img
                           className=''
-                          src={item.assetIcon}
+                          src={item.icon}
                           alt=''
                         />
                         <p className='text-xs sm:text-base lg:text-xs xl:text-xs'>
-                          {item.asset}
+                          {item.assetName}
                         </p>
                       </div>
                       <div
@@ -281,4 +268,4 @@ function TransactionsDeskTop() {
   );
 }
 
-export default TransactionsDeskTop;
+export default PositionsDeskTop;

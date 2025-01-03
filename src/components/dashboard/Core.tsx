@@ -1,10 +1,21 @@
-import { useRef } from 'react';
+import { FC, useRef } from 'react';
 import { useConfirm } from '../../provider/ConfirmProvider';
 import { motion } from 'framer-motion';
-import TransactionsDeskTop from './TransactionsDeskTop';
-import TransactionsMobile from './TransactionsMobile';
+import PositionsDeskTop from './PositionsDeskTop';
+import PositionsMobile from './PositionsMobile';
+import { ModalType } from '../../utils/types';
 
-function Core() {
+interface CorePositionsProps {
+  setModalToken: React.Dispatch<React.SetStateAction<string>>;
+  setModalStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalType: React.Dispatch<React.SetStateAction<ModalType>>;
+}
+
+const Core: FC<CorePositionsProps> = ({
+  setModalToken,
+  setModalStatus,
+  setModalType
+}) => {
   const { guided } = useConfirm();
 
   const divRefs = [
@@ -29,10 +40,14 @@ function Core() {
           className={`lg:flex lg:flex-col xl:flex-row gap-5 justify-between ${guided > 0 && guided !== 4 ? 'lg:blur-[8px]' : ''}`}
         >
           <div className='w-full hidden md:block lg:block xl:block'>
-            <TransactionsDeskTop />
+            <PositionsDeskTop
+              setModalToken = {setModalToken}
+              setModalStatus = {setModalStatus}
+              setModalType = {setModalType}
+            />
           </div>
           <div className='w-full block md:hidden lg:hidden xl:hidden'>
-            <TransactionsMobile />
+            <PositionsMobile />
           </div>
         </motion.div>
       </motion.div>

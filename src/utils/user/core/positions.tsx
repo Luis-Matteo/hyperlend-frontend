@@ -177,6 +177,7 @@ export function useUserPositionsData(
             apr,
             icon: iconsMap[tokenNameMap[e.underlyingAsset]],
             isCollateralEnabled: null,
+            pool: "Core"
           };
         })
         .filter((item: UserPositionData) => item.balance > 0)

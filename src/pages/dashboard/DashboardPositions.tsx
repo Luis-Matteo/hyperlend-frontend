@@ -1,9 +1,21 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Core, Isolated } from '../../components';
 import { Link } from 'react-router-dom';
 import { earningsIcon } from '../../assets';
-const DashboardTransactions = () => {
+import { ModalType } from '../../utils/types';
+
+interface DashboardPositionsProps {
+  setModalToken: React.Dispatch<React.SetStateAction<string>>;
+  setModalStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  setModalType: React.Dispatch<React.SetStateAction<ModalType>>;
+}
+
+const DashboardPositions: FC<DashboardPositionsProps> = ({
+  setModalToken,
+  setModalStatus,
+  setModalType
+}) => {
   const [activeTab, setActiveTab] = useState<string>('core');
 
   const typeButtons = [
@@ -53,11 +65,19 @@ const DashboardTransactions = () => {
         </div>
       </div>
       <AnimatePresence mode='wait'>
-        {activeTab === 'core' && <Core />}
-        {activeTab === 'isolated' && <Isolated />}
+        {activeTab === 'core' && <Core 
+          setModalToken = {setModalToken}
+          setModalStatus = {setModalStatus}
+          setModalType = {setModalType}
+        />}
+        {activeTab === 'isolated' && <Isolated 
+          setModalToken = {setModalToken}
+          setModalStatus = {setModalStatus}
+          setModalType = {setModalType}
+        />}
       </AnimatePresence>
     </>
   );
 };
 
-export default DashboardTransactions;
+export default DashboardPositions;
