@@ -1,8 +1,16 @@
 import { pointsIcon } from '../../assets';
+import { formatNumber } from '../../utils/functions';
+import { UserPositionsData } from '../../utils/types';
 import HeroCard from './HeroCard';
 import HeroMobile from './HeroMobile';
+import { IPoints } from '../../utils/user/points';
 
-const Hero = () => (
+interface IHero {
+  userPositionsData: UserPositionsData;
+  userPointsData: IPoints;
+}
+
+const Hero = ({ userPositionsData, userPointsData }: IHero) => (
   <div className='w-full'>
     <div className='hidden lg:block w-[100%] h-[366px] py-8 px-6 rounded-2xl border border-1 border-[#CAEAE54D] bg-hero-pattern bg-cover bg-bottom'>
       <div className='flex flex-col justify-center align-middle items-start gap-5'>
@@ -26,28 +34,28 @@ const Hero = () => (
           <HeroCard
             title='Current balance'
             infoItem='Shows the total current balance,total increase in income, and the percentage increase'
-            amount='$1,753,050'
-            amountIncreased='+$22,568 '
-            percentageIncreased='+1.28%'
+            amount={`$${formatNumber(userPositionsData.totalBalanceUsd, 2)}`}
+            amountIncreased={`$${formatNumber(userPositionsData.totalBalanceChange, 2)}`}
+            percentageIncreased={`${formatNumber(userPositionsData.totalBalanceChangePercentage, 2)}%`}
             currentTitle='Current balance'
           />
           <HeroCard
             title='Total APY'
             infoItem='Shows the total APY,total increase in APY, and the percentage increase'
-            percentage='18.7%'
-            percentageIncreased='+1.3%'
+            percentage={`${formatNumber(userPositionsData.netApy, 2)}%`}
+            percentageIncreased={`${0}%`}
           />
           <HeroCard
             title='Total Points'
             infoItem='Shows the total points,total increase in points, and the percentage increase'
-            amount='421'
-            amountIncreased='+12 '
-            percentageIncreased='+3.89%'
+            amount={`${userPointsData.totalPoints}`}
+            amountIncreased={`+${userPointsData.pointsIncrease}`}
+            percentageIncreased={`+${userPointsData.pointsPercentIncrease}%`}
           />
           <HeroCard
             title='Health Factor'
             infoItem='Shows the health factor'
-            healthFactor='9,8'
+            healthFactor={formatNumber(userPositionsData.healthFactor, 2)}
           />
         </div>
       </div>
@@ -74,9 +82,9 @@ const Hero = () => (
         <HeroMobile
           title='Current balance'
           infoItem='Shows the total current balance,total increase in income, and the percentage increase'
-          amount='$1,753,050'
-          amountIncreased='+$22,568 '
-          percentageIncreased='+1.28%'
+          amount={`$${formatNumber(userPositionsData.totalBalanceUsd, 2)}`}
+          amountIncreased={`$${formatNumber(userPositionsData.totalBalanceChange, 2)}`}
+          percentageIncreased={`${formatNumber(userPositionsData.totalBalanceChangePercentage, 2)}%`}
         />
       </div>
     </div>
@@ -84,21 +92,21 @@ const Hero = () => (
       <HeroCard
         title='Total Points'
         infoItem='Shows the total points,total increase in points, and the percentage increase'
-        amount='421'
-        amountIncreased='+12 '
-        percentageIncreased='+3.89%'
+        amount={`${userPointsData.totalPoints}`}
+        amountIncreased={`+${userPointsData.pointsIncrease}`}
+        percentageIncreased={`+${userPointsData.pointsPercentIncrease}%`}
       />
       <HeroCard
         title='Health Factor'
         infoItem='Shows the health factor'
-        healthFactor='9.8'
+        healthFactor={formatNumber(userPositionsData.healthFactor, 2)}
       />
 
       <HeroCard
         title='Total APY'
         infoItem='Shows the total APY,total increase in APY, and the percentage increase'
-        percentage='18.7%'
-        percentageIncreased='+1.3%'
+        percentage={`${formatNumber(userPositionsData.netApy, 2)}%`}
+        percentageIncreased={`${0}%`}
       />
     </div>
   </div>

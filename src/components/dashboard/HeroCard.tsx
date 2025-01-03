@@ -54,7 +54,7 @@ const HeroCard = ({
       )}
       {title !== 'Health Factor' && (
         <span className='text-[#2DC24E] font-lufga font-normal text-[14px] text-nowrap'>
-          {amountIncreased}({percentageIncreased})
+          {amountIncreased} ({percentageIncreased})
         </span>
       )}
     </div>

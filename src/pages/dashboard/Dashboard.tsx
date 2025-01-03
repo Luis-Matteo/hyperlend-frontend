@@ -20,6 +20,7 @@ import { contracts, abis } from '../../utils/config';
 
 import DashboardPositions from './DashboardPositions';
 import { useUserPositionsData } from '../../utils/user/core/positions';
+import { getUserPoints } from '../../utils/user/points';
 
 function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
@@ -42,6 +43,7 @@ function Dashboard() {
   const { chainId, isConnected, address } = useAccount();
 
   const userPositions = useUserPositionsData(isConnected, address);
+  const userPoints = getUserPoints();
 
   const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {
     writeContractAsync({
@@ -131,8 +133,11 @@ function Dashboard() {
             className='flex flex-col md:flex-row gap-4 justify-between'
           >
             <div className='flex gap-4 flex-col lg:flex-col xl:flex-row w-[100%] py-3 justify-start'>
-              <Hero />
-              <HeroSidebar />
+              <Hero
+                userPositionsData={userPositions}
+                userPointsData={userPoints}
+              />
+              <HeroSidebar userPositionsData={userPositions} />
             </div>
           </motion.div>
           <DashboardPositions

@@ -1,4 +1,4 @@
-interface IPoints {
+export interface IPoints {
   totalPoints: number;
   pointsIncrease: number;
   pointsPercentIncrease: number;

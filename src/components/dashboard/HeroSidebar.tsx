@@ -2,8 +2,14 @@ import { earningsIcon } from '../../assets';
 import HeroSideCard from './HeroSideCard';
 import { Link } from 'react-router-dom';
 import HeroSideCardMobile from './HeroSideCardMobile';
+import { UserPositionsData } from '../../utils/types';
+import { formatNumber } from '../../utils/functions';
 
-const HeroSidebar = () => (
+interface IHeroSidebar {
+  userPositionsData: UserPositionsData;
+}
+
+const HeroSidebar = ({ userPositionsData }: IHeroSidebar) => (
   <div className='h-[100%] sm:w-[100%]  lg:w-auto flex flex-col justify-end px-4 py-9 gap-3  rounded-md border border-1 border-[#CAEAE54D] bg-[#071311]'>
     <div className='flex justify-between items-center'>
       <span className='text-[#E1E1E1] text-xs font-lufga font-light italic'>
@@ -22,30 +28,30 @@ const HeroSidebar = () => (
       <HeroSideCard
         title='Total Deposited'
         infoItem='shows the total amount deposited,the total increase in deposits and the percentage increase'
-        amount='$1,753,050'
-        amountIncreased='+$33,132'
-        percentageIncreased='+1.89%'
+        amount={`$${formatNumber(userPositionsData.totalSupplyUsd, 2)}`}
+        amountIncreased={`$${0}`}
+        percentageIncreased={`${0}%`}
       />
       <HeroSideCard
         title='Total Borrowed'
         infoItem='shows the total amount borrowed,the total increase in deposits and the percentage increase'
-        amount='$153,370'
-        amountIncreased='+$1,855'
-        percentageIncreased='+1.21%'
+        amount={`$${formatNumber(userPositionsData.totalBorrowUsd, 2)}`}
+        amountIncreased={`$${0}`}
+        percentageIncreased={`${0}%`}
       />
     </div>
     <div className='lg:flex xl:hidden'>
       <HeroSideCardMobile
         title='Total Deposited'
-        infoItem='shows the total amount deposited,the total increase in deposits and the percentage increase'
-        amount='$1,753,050'
-        amountIncreased='+$33,132'
-        percentageIncreased='+1.89%'
+        infoItem='shows the total amount deposited, the total increase in deposits and the percentage increase'
+        amount={`$${formatNumber(userPositionsData.totalSupplyUsd, 2)}`}
+        amountIncreased={`$${0}`}
+        percentageIncreased={`${0}%`}
         titleOne='Total Borrowed'
         infoItemOne='shows the total amount borrowed,the total increase in deposits and the percentage increase'
-        amountOne='$153,370'
-        amountIncreasedOne='+$1,855'
-        percentageIncreasedOne='+1.21%'
+        amountOne={`$${formatNumber(userPositionsData.totalBorrowUsd, 2)}`}
+        amountIncreasedOne={`$${0}`}
+        percentageIncreasedOne={`${0}%`}
       />
     </div>
   </div>
