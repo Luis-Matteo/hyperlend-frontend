@@ -19,6 +19,8 @@ import { useAssetPrice } from '../../utils/protocol/isolated/prices';
 
 import AnimateModal, { AnimateModalProps } from './AnimateModal';
 import WrappedEthModal from '../common/WrapedEthModal';
+import Big from 'big.js';
+import { parseUnits } from 'viem';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };
@@ -234,12 +236,10 @@ const TokenActions: React.FC<TokenActionsIsolatedProps> = ({
   }, [txReceiptResult]);
 
   const sendTransaction = async () => {
-    let bgIntAmount = BigInt(
-      Number(parseFloat(amount.toString()).toFixed(0)) *
-        Math.pow(10, tokenDecimalsMap[token]),
-    );
+    let fixedAmount = Big(amount.toString()).toFixed(tokenDecimalsMap[token]);
+    let bgIntAmount = parseUnits(fixedAmount, tokenDecimalsMap[token]);
 
-    if (amount == 0) {
+    if (bgIntAmount == 0n) {
       setErrorMsg('Amount should be greater than 0');
       return;
     }

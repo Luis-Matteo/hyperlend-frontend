@@ -68,8 +68,11 @@ export async function wrappedTokenAction(
 
     if (useMaxAmount && (action == 'withdraw' || action == 'repay')) {
       functionParams[action][1] =
-        '115792089237316195423570985008687907853269984665640564039457584007913129639935';
-      bgIntAmount = BigInt(((Number(bgIntAmount) * 102) / 100).toFixed(0)); //it's recommended to send an _amount slightly higher than the current borrowed amount, will be refunded
+        115792089237316195423570985008687907853269984665640564039457584007913129639935n;
+    }
+
+    if (useMaxAmount && action == 'repay') {
+      bgIntAmount = (bgIntAmount * 1005n) / 1000n; //it's recommended to send an _amount slightly higher than the current borrowed amount, will be refunded
     }
 
     const txResult = await writeContractAsync({
@@ -77,10 +80,7 @@ export async function wrappedTokenAction(
       abi: abis.wrappedTokenGatewayV3,
       functionName: functionNames[action],
       args: functionParams[action],
-      value:
-        action === 'supply' || action === 'repay'
-          ? bgIntAmount
-          : (0 as any as bigint),
+      value: action == 'supply' || action == 'repay' ? bgIntAmount : 0n,
       maxFeePerGas: parseGwei('0.1'),
     });
 
