@@ -62,6 +62,8 @@ export interface UserPositionsData {
   healthFactor: number;
   netApy: number;
   totalLiquidationThreshold: number;
+  apyChange: number;
+  apyChangePercentage: number;
 }
 
 export type ModalType = 'supply' | 'withdraw' | 'borrow' | 'repay';

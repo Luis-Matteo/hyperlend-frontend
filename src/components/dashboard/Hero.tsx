@@ -44,7 +44,7 @@ const Hero = ({ name, userPositionsData, userPointsData }: IHero) => (
             title='Total APY'
             infoItem='Shows the total APY,total increase in APY, and the percentage increase'
             percentage={`${formatNumber(userPositionsData.netApy, 2)}%`}
-            percentageIncreased={`${0}%`}
+            percentageIncreased={`${formatNumber(userPositionsData.apyChangePercentage, 2)}%`}
           />
           <HeroCard
             title='Total Points'

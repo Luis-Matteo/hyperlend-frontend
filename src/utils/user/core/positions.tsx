@@ -27,8 +27,12 @@ export function useUserPositionsData(
 ): UserPositionsData {
   const { reserveDataMap } = useProtocolReservesData();
   const { priceDataMap } = useProtocolPriceData();
-  const { totalBalanceChange, totalBalanceChangePercentage } =
-    useGetUserBalanceHistory(address);
+  const {
+    totalBalanceChange,
+    totalBalanceChangePercentage,
+    apyChange,
+    apyChangePercentage,
+  } = useGetUserBalanceHistory(address);
   const { data: userReservesData } = useReadContract({
     abi: abis.uiPoolDataProvider,
     address: contracts.uiPoolDataProvider,
@@ -56,6 +60,8 @@ export function useUserPositionsData(
       totalLiquidationThreshold: 0,
       totalBalanceChange: 0,
       totalBalanceChangePercentage: 0,
+      apyChange: 0,
+      apyChangePercentage: 0,
     };
   }
 
@@ -224,6 +230,9 @@ export function useUserPositionsData(
 
     totalBalanceChange,
     totalBalanceChangePercentage,
+
+    apyChange,
+    apyChangePercentage,
   };
 }
 

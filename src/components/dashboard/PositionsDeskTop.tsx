@@ -36,7 +36,7 @@ const PositionsDeskTop: FC<PositionsProps> = ({
     useRef<HTMLDivElement>(null),
   ];
 
-  const [divDimensions, setDivDimensions] = useState<
+  const [, /*divDimensions*/ setDivDimensions] = useState<
     { width: number; height: number }[]
   >([
     { width: 0, height: 0 },
@@ -44,7 +44,6 @@ const PositionsDeskTop: FC<PositionsProps> = ({
     { width: 0, height: 0 },
     { width: 0, height: 0 },
   ]);
-  console.log(divDimensions);
   // Update widths and heights
   const updateDimensions = () => {
     const newDimensions = divRefs.map((ref) => ({
