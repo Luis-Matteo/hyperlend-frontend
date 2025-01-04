@@ -64,6 +64,8 @@ export interface UserPositionsData {
   totalLiquidationThreshold: number;
   apyChange: number;
   apyChangePercentage: number;
+  supplyInterestDaily: number;
+  borrowInterestDaily: number;
 }
 
 export type ModalType = 'supply' | 'withdraw' | 'borrow' | 'repay';

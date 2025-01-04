@@ -14,7 +14,6 @@ const HeroSideCard = ({
   title,
   amount,
   amountIncreased,
-  percentageIncreased,
   infoItem,
   percentage,
 }: HeroSideCardProps) => (
@@ -35,8 +34,14 @@ const HeroSideCard = ({
           {percentage}
         </span>
       )}
-      <span className='text-[#2DC24E] font-lufga font-normal text-[14px]'>
-        {amountIncreased}({percentageIncreased})
+      <span
+        className={
+          amountIncreased?.includes('-')
+            ? 'text-[#C22E2E] font-lufga font-normal text-[14px]'
+            : 'text-[#2DC24E] font-lufga font-normal text-[14px]'
+        }
+      >
+        {amountIncreased}
       </span>
     </div>
 

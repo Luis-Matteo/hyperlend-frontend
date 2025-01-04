@@ -62,6 +62,8 @@ export function useUserPositionsData(
       totalBalanceChangePercentage: 0,
       apyChange: 0,
       apyChangePercentage: 0,
+      supplyInterestDaily: 0,
+      borrowInterestDaily: 0,
     };
   }
 
@@ -233,6 +235,9 @@ export function useUserPositionsData(
 
     apyChange,
     apyChangePercentage,
+
+    supplyInterestDaily: supplyInterestEarned / 365,
+    borrowInterestDaily: borrowInterestEarned / 365,
   };
 }
 

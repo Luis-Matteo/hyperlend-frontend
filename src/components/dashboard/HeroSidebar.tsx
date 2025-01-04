@@ -3,7 +3,7 @@ import HeroSideCard from './HeroSideCard';
 import { Link } from 'react-router-dom';
 import HeroSideCardMobile from './HeroSideCardMobile';
 import { UserPositionsData } from '../../utils/types';
-import { formatNumber } from '../../utils/functions';
+import { formatNumber, formatUnit } from '../../utils/functions';
 
 interface IHeroSidebar {
   userPositionsData: UserPositionsData;
@@ -29,15 +29,13 @@ const HeroSidebar = ({ userPositionsData }: IHeroSidebar) => (
         title='Total Deposited'
         infoItem='shows the total amount deposited,the total increase in deposits and the percentage increase'
         amount={`$${formatNumber(userPositionsData.totalSupplyUsd, 2)}`}
-        amountIncreased={`$${0}`}
-        percentageIncreased={`${0}%`}
+        amountIncreased={`$${formatUnit(userPositionsData.supplyInterestDaily, 3)}/day`}
       />
       <HeroSideCard
         title='Total Borrowed'
         infoItem='shows the total amount borrowed,the total increase in deposits and the percentage increase'
         amount={`$${formatNumber(userPositionsData.totalBorrowUsd, 2)}`}
-        amountIncreased={`$${0}`}
-        percentageIncreased={`${0}%`}
+        amountIncreased={`-$${formatUnit(userPositionsData.borrowInterestDaily, 3)}/day`}
       />
     </div>
     <div className='lg:flex xl:hidden'>
@@ -45,13 +43,11 @@ const HeroSidebar = ({ userPositionsData }: IHeroSidebar) => (
         title='Total Deposited'
         infoItem='shows the total amount deposited, the total increase in deposits and the percentage increase'
         amount={`$${formatNumber(userPositionsData.totalSupplyUsd, 2)}`}
-        amountIncreased={`$${0}`}
-        percentageIncreased={`${0}%`}
+        amountIncreased={`$${formatUnit(userPositionsData.supplyInterestDaily, 3)}/day`}
         titleOne='Total Borrowed'
         infoItemOne='shows the total amount borrowed,the total increase in deposits and the percentage increase'
         amountOne={`$${formatNumber(userPositionsData.totalBorrowUsd, 2)}`}
-        amountIncreasedOne={`$${0}`}
-        percentageIncreasedOne={`${0}%`}
+        amountIncreasedOne={`-$${formatUnit(userPositionsData.borrowInterestDaily, 3)}/day`}
       />
     </div>
   </div>
