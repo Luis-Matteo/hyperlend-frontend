@@ -5,6 +5,7 @@ import {
   // hyperLoopIcon,
   // referralsIcon,
   // pointsIcon,
+  pointsIcon,
   analyticsIcon,
 } from '../../assets';
 
@@ -127,6 +128,13 @@ const navLinksTop: NavLinkProps[] = [
 ];
 
 const navLinksDown: NavLinkProps[] = [
+  {
+    disabled: false,
+    id: 'points',
+    title: 'Points',
+    url: '/points',
+    icon: pointsIcon,
+  },
   {
     id: 'staking',
     title: 'Staking',

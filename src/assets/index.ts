@@ -19,3 +19,25 @@ export { default as collateralIcon } from './icons/collateral-icon.svg'
 export { default as myLogo } from './icons/my-logo.png'
 export { default as lendArrowIcon } from './icons/lend-borrow-icon.svg'
 export { default as healthFactorImage}  from "./img/share-img/health-factor.svg"
+export {default as logoTrans} from "./icons/logo-trans.svg"
+export {default as claimCardBg} from "./icons/claim-card-bg.svg"
+
+// tier icons
+export {default as bronzeIcon} from "./icons/bronze.svg"
+export {default as novaIcon} from "./icons/nova.svg"
+export {default as guardianIcon} from "./icons/guardian.svg"
+export {default as eagleIcon} from "./icons/eagle.svg"
+export {default as eliteIcon} from "./icons/elite.svg"
+
+// tier icons backgrounds
+export {default as bronzeBg} from "./icons/bronze-bg.svg"
+export {default as novaBg} from "./icons/nova-bg.svg"
+export {default as guardianBg} from "./icons/guardian-bg.svg"
+export {default as eagleBg} from "./icons/eagle-bg.svg"
+export {default as eliteBg} from "./icons/elite-bg.svg"
+
+// rank icons
+export {default as rankOne} from "./icons/rank-1.svg"
+export {default as rankTwo} from "./icons/rank-2.svg"
+export {default as rankThree} from "./icons/rank-3.svg"
+

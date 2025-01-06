@@ -58,3 +58,8 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
