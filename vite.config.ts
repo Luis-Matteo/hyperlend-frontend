@@ -1,5 +1,5 @@
 // import { sentryVitePlugin } from "@sentry/vite-plugin";
-import path from 'node:path';
+import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
