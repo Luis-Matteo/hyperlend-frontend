@@ -2,6 +2,7 @@ const colors = ['f7931a', '497493', '97fce0'];
 
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: ['class'],
   content: [
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
@@ -13,10 +14,11 @@ export default {
         'hero-pattern': 'url(../src/assets/img/share-img/hero-background.svg)',
       },
       spacing: {
-        2.5: '0.7rem', // 10px
+        2.5: '0.7rem',
       },
       boxShadow: {
         custom: '0 0 15px #252525',
+        bottom: '0 2px 0 0 #1D52A088',
         '3xl': '0 0 20px 10px #252525',
         '4xl': '0px 0px 40px 20px #252525',
         'inner-2xl': '0px 0px 24px 0px #FFFFFF1F inset',
@@ -39,12 +41,24 @@ export default {
         success: '#2DC24E',
         warning: '#FFD542',
         error: '#FF4245',
+        // tier colors
+        bronze: '#D7B68E',
+        nova: '#DFE7EA',
+        guardian: '#AEEAB9',
+        eagle: '#A7CFF8',
+        elite: '#FF4430'
+
       },
       blur: {
         xs: '2px',
       },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
     },
   },
   safelist: colors.map((e) => `to-[#${e}40]`),
-  plugins: [],
+  plugins: [require('tailwindcss-animate')],
 };

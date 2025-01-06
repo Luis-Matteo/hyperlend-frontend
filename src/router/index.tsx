@@ -23,6 +23,7 @@ import IsolatedTokenDetails from '../pages/markets/isolated/IsolatedTokenDetail'
 import Hypervault from '../pages/hypervault/Hypervault';
 import HypervaultOverview from '../pages/hypervault/HypervaultOverview';
 import HypervaultDetails from '../pages/hypervault/HypervaultDetails';
+import Points from '@/pages/points/Points';
 
 function MainContent() {
   const { guided } = useConfirm();
@@ -61,6 +62,7 @@ function MainContent() {
               <Route path=':vaultId' element={<HypervaultDetails />} />
             </Route>
             <Route path='analytics' element={<Analytics />} />
+            <Route path='points' element={<Points />} />
             <Route path='hyperloop' element={<Hyperloop />}>
               <Route path='' element={<HyperloopOverview />} />
               <Route path='setting' element={<HyperloopSetting />} />
