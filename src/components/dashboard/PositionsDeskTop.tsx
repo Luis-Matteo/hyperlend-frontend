@@ -82,7 +82,7 @@ const PositionsDeskTop: FC<PositionsProps> = ({
         >
           <CardItem className='pt-4 h-auto lg:pt-6 flex-1 mb-4 lg:mb-0'>
             <div className=''>
-              <div className='flex justify-start align-middle items-center gap-4 py-4 px-7'>
+              <div className='flex justify-start align-middle items-center gap-4 py-2 mb-5 px-7'>
                 <CustomIcon
                   mainDivStyles='rounded-full border border-1 border-[#CAEAE51A] bg-[#CAEAE50D] px-3 py-2'
                   iconImage={supplyIcon}
@@ -166,11 +166,11 @@ const PositionsDeskTop: FC<PositionsProps> = ({
           </CardItem>
           <CardItem className='pt-4 h-auto lg:pt-6   flex-1 mb-4 lg:mb-0'>
             <div className=''>
-              <div className='flex justify-start align-middle items-center gap-4 py-4 px-7'>
+              <div className='flex justify-start align-middle items-center gap-4 py-2 mb-5 px-7'>
                 <CustomIcon
                   mainDivStyles='rounded-full border border-1 border-[#CAEAE51A] bg-[#FF00040D] px-3 py-2'
                   iconImage={borrowArrowIcon}
-                  width='5px'
+                  width='7px'
                   height='10px'
                 />
                 <p className='text-[#CAEAE5] font-lufga text-2xl'>

@@ -26,7 +26,7 @@ const HeroSideCardMobile = ({
   infoItemOne,
   percentageOne,
 }: HeroSideCardProps) => (
-  <div className='w-auto lg:w-[100%] xl:w-[270px] flex justify-between rounded-lg items-center border border-1 border-[#CAEAE54D] py-4 px-2'>
+  <div className='w-auto lg:w-[100%] xl:w-[270px] flex justify-between rounded-2xl items-center border border-1 border-[#CAEAE54D] py-4 px-2'>
     <div className='rounded-lg bg-[#071311] flex flex-col justify-center items-start'>
       <CustomTitle
         title={title}

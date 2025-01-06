@@ -28,6 +28,7 @@ import { useConfirm } from '../provider/ConfirmProvider';
 import Turnstile from 'react-turnstile';
 import { parseGwei } from 'viem';
 
+const rank = null
 function Sidebar() {
   const { isConnected, address } = useAccount();
   const { guided } = useConfirm();
@@ -99,7 +100,7 @@ function Sidebar() {
                 Global Elite
               </span>
               <span className='text-[#4F4F4F] font-lufga font-medium text-[14px]'>
-                Rank: 12,988
+                Rank:{ !rank ?  "12,988" : rank }
               </span>
             </div>
           </div>

@@ -13,11 +13,11 @@ const PositionsTableTitles = ({
   infoItemStyles,
 }: TitleProps) => {
   return (
-    <div className='flex gap-1 justify-center items-center mb-2 align-middle'>
+    <div className='flex gap-1 justify-center items-center align-middle'>
       <span className={titleStyles}>{title}</span>
       <InfoItem
         title={
-          <span className={infoItemStyles} style={{ border: '2px solid red' }}>
+          <span className={infoItemStyles}>
             {infoItem}
           </span>
         }

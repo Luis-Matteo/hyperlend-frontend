@@ -16,7 +16,7 @@ const HeroMobile = ({
   infoItem,
 }: HeroCardProps) => (
   <div
-    className={`rounded-lg w-[100%] md:w-[65%] bg-[#071311] border border-1 border-[#CAEAE54D] py-6 pl-6 flex flex-col justify-center  items-start  bg-hero-pattern bg-cover bg-inherit bg-no-repeat bg-right`}
+    className={`rounded-2xl w-[100%] md:w-[65%] bg-[#071311] border border-1 border-[#CAEAE54D] py-6 pl-6 flex flex-col justify-center  items-start  bg-hero-pattern bg-cover bg-inherit bg-no-repeat bg-right`}
   >
     <div className='flex flex-col justify-center  items-start'>
       <CustomTitle

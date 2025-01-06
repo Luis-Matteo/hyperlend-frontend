@@ -10,20 +10,21 @@ interface IHero {
   userPositionsData: UserPositionsData;
   userPointsData: IPoints;
 }
-
+const rank = null
 const Hero = ({ name, userPositionsData, userPointsData }: IHero) => (
   <div className='w-full'>
-    <div className='hidden lg:block w-[100%] h-[366px] py-8 px-6 rounded-2xl border border-1 border-[#CAEAE54D] bg-hero-pattern bg-cover bg-bottom'>
+    <div className="hidden lg:block  w-full rounded-2xl  border border-1 border-[#CAEAE54D]">
+    <div className='w-[100%] h-[366px] py-8 px-6 rounded-2xl bg-hero-pattern bg-cover bg-bottom'>
       <div className='flex flex-col justify-center align-middle items-start gap-5'>
         <div className='flex flex-col gap-2 justify-center align-middle items-start'>
           <div className='flex gap-3 justify-center'>
             <img src={pointsIcon} alt='' />
             <h5 className='text-[#AEEAB9] font-lufga font-normal text-[18px]'>
-              Master Guardian
+             { !rank ? "Master Guardian" : rank}
             </h5>
           </div>
           <div className='flex flex-col justify-center gap-0 items-start m-0 p-0'>
-            <span className='text-[#CAEAE5] font-medium font-lufga text-[25px]  m-0 p-0 mb-[-15px]'>
+            <span className='text-[#CAEAE5] font-thin font-lufga text-[22px]  m-0 p-0 mb-[-13px]'>
               Welcome to HyperLend!
             </span>
             <h1 className='text-[#CAEAE5] font-lufga font-semibold text-[48px]  m-0 p-0'>
@@ -60,6 +61,7 @@ const Hero = ({ name, userPositionsData, userPointsData }: IHero) => (
           />
         </div>
       </div>
+    </div>
     </div>
     {/* ==================HERO MOBILE============================================================================================== */}
     <div className='sm:block  lg:hidden w-[100%]  py-8 '>

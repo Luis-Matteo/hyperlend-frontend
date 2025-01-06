@@ -22,7 +22,7 @@ const HeroCard = ({
   currentTitle,
 }: HeroCardProps) => (
   <div
-    className={`h-[130px] rounded-lg w-[100%] md:w-auto lg:w-auto bg-[#071311] border border-1 border-[#CAEAE54D] py-2 px-1 md:py-3 md:px-3  lg:py-6 lg:px-6 flex flex-col justify-center ${title === 'Current balance' ? 'pr-12 ' : 'pr-1 lg:pr-6'} items-center lg:items-start xl:items-start gap-1`}
+    className={`h-[130px] rounded-2xl w-[100%] md:w-auto lg:w-auto bg-[#071311] border border-1 border-[#CAEAE54D] py-2 px-1 md:py-3 md:px-3  lg:py-6 lg:px-6 flex flex-col justify-center ${title === 'Current balance' ? 'pr-12 ' : 'pr-1 lg:pr-6'} items-center lg:items-start xl:items-start gap-1`}
   >
     <CustomTitle
       title={title}
