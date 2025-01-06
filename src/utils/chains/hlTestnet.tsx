@@ -38,7 +38,7 @@ const tokenNameMap: any = {
 
 const tokenToRateStrategyMap: any = {
   '0x453b63484b11bbF0b61fC7E854f8DAC7bdE7d458': 'volatileOne', //btc
-  '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 'volatileOne',
+  '0xe0bdd7e8b7bf5b15dcDA6103FCbBA82a460ae2C7': 'volatileOne', //eth
   '0xe2FbC9cB335A65201FcDE55323aE0F4E8A96A616': 'volatileOne',
   '0x68CD2D3503cB4A334522E557c5BA1a0d5Fe56bfC': 'volatileOne',
 };
