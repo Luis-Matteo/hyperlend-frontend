@@ -1,5 +1,18 @@
 [
   {
+    "inputs": [],
+    "name": "UTIL_PREC",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -205,6 +218,72 @@
         "internalType": "struct UiDataProviderIsolated.UserData",
         "name": "",
         "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_registry",
+        "type": "address"
+      }
+    ],
+    "name": "getUserPairs",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "pair",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "asset",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "collateral",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "suppliedAssets",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "borrowedAssets",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "suppliedCollateral",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "ratePerSec",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "utilization",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct UiDataProviderIsolated.UserPosition[]",
+        "name": "",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",

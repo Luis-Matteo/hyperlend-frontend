@@ -167,13 +167,13 @@ function TokenDetail() {
 
     return errorMessage.includes('Contract Call')
       ? errorMessage.split('Contract Call')[0] +
-      (errorMessage
-        .split('Contract Call')[0]
-        .includes('reverted with the following reason:')
-        ? `(${getErrorMessage(errorMessage.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
-        : '')
+          (errorMessage
+            .split('Contract Call')[0]
+            .includes('reverted with the following reason:')
+            ? `(${getErrorMessage(errorMessage.split('Contract Call')[0].split('reverted with the following reason:')[1].trim())})`
+            : '')
       : getErrorMessage(errorMessage.split('Request Arguments')[0]) !=
-        'ERROR_MESSAGE_NOT_FOUND'
+          'ERROR_MESSAGE_NOT_FOUND'
         ? getErrorMessage(errorMessage.split('Request Arguments')[0])
         : (errorMessage.split('Request Arguments')[0] as unknown as string);
   }
@@ -255,8 +255,8 @@ function TokenDetail() {
   useEffect(() => {
     if (
       Number(collateralAllowance) /
-      Math.pow(10, tokenDecimalsMap[market.collateral]) <
-      collateralAmount &&
+        Math.pow(10, tokenDecimalsMap[market.collateral]) <
+        collateralAmount &&
       collateralAction != 'approve'
     ) {
       setIsCollateralApproved(false);
@@ -279,7 +279,7 @@ function TokenDetail() {
   useEffect(() => {
     setCollateralWithdrawableAmount(
       Number((userAccountData as any)?.userCollateral) /
-      Math.pow(10, tokenDecimalsMap[market.collateral]) || 0,
+        Math.pow(10, tokenDecimalsMap[market.collateral]) || 0,
     );
   }, [userAccountData, (userAccountData as any)?.userAccountData]);
 
@@ -320,12 +320,12 @@ function TokenDetail() {
   const supplied = {
     balance:
       Number((userAccountData as any)?.userAssets) /
-      Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
+        Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
   };
   const borrowed = {
     balance:
       Number((userAccountData as any)?.userBorrows) /
-      Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
+        Math.pow(10, tokenDecimalsMap[market.asset]) || 0,
   };
 
   const [actionData, setActionData] = useState<TokenActionsIsolatedProps>({
@@ -361,7 +361,7 @@ function TokenDetail() {
             ? 'supply'
             : 'withdraw',
         'https://testnet.purrsec.com/tx/' +
-        txReceiptResult.data.transactionHash,
+          txReceiptResult.data.transactionHash,
         '',
       );
     }
@@ -385,7 +385,7 @@ function TokenDetail() {
       market.collateral,
       address || '0x0000000000000000000000000000000000000000',
       Number(collateralAllowance) /
-      Math.pow(10, tokenDecimalsMap[market.collateral]),
+        Math.pow(10, tokenDecimalsMap[market.collateral]),
       collateralAmount,
       bgIntAmount,
       writeContractAsync,
@@ -473,38 +473,38 @@ function TokenDetail() {
   const supplies = [
     {
       name: 'Reserves',
-      value: formatNumber(totalLiquidityToken, 4),
+      value: formatNumber(totalLiquidityToken, 4, true),
     },
     {
       name: 'Asset Price',
-      value: `$${formatNumber(assetUsdPrice, 2)}`,
+      value: `$${formatNumber(assetUsdPrice, 2, true)}`,
     },
     {
       name: 'Collateral Price',
-      value: `$${formatNumber(collateralUsdPrice, 2)}`,
+      value: `$${formatNumber(collateralUsdPrice, 2, true)}`,
     },
     {
       name: 'Liquidity',
-      value: `$${formatNumber(totalLiquidityToken * assetUsdPrice, 2)}`,
+      value: `$${formatNumber(totalLiquidityToken * assetUsdPrice, 2, true)}`,
     },
     {
       name: 'Utilization rate',
-      value: `${totalSuppliedTokens > 0 ? formatNumber((totalBorrowedTokens / totalSuppliedTokens) * 100, 2) : 0}%`,
+      value: `${totalSuppliedTokens > 0 ? formatNumber((totalBorrowedTokens / totalSuppliedTokens) * 100, 2, true) : 0}%`,
     },
   ];
 
   const supplyInfos = [
     {
       name: `Total supply (${market.assetSymbol})`,
-      value: `${formatNumber(totalSuppliedTokens, 2)}`,
+      value: `${formatNumber(totalSuppliedTokens, 2, true)}`,
     },
     {
       name: 'Total supply (USD)',
-      value: `$${formatNumber(totalSuppliedTokens * assetUsdPrice, 2)}`,
+      value: `$${formatNumber(totalSuppliedTokens * assetUsdPrice, 2, true)}`,
     },
     {
       name: 'APY',
-      value: `${formatNumber(interestRateDataMap.supply, 2)}%`,
+      value: `${formatNumber(interestRateDataMap.supply, 2, true)}%`,
     },
     {
       name: 'LTV',
@@ -515,15 +515,15 @@ function TokenDetail() {
   const borrowInfos = [
     {
       name: `Total borrrow (${market.assetSymbol})`,
-      value: `${formatNumber(totalBorrowedTokens, 2)}`,
+      value: `${formatNumber(totalBorrowedTokens, 2, true)}`,
     },
     {
       name: 'Total borrrow (USD)',
-      value: `$${formatNumber(totalBorrowedTokens * assetUsdPrice, 2)}`,
+      value: `$${formatNumber(totalBorrowedTokens * assetUsdPrice, 2, true)}`,
     },
     {
       name: 'APY',
-      value: `${formatNumber(interestRateDataMap.borrow, 2)}%`,
+      value: `${formatNumber(interestRateDataMap.borrow, 2, true)}%`,
     },
     {
       name: 'Liquidation Threshold',
@@ -834,8 +834,13 @@ function TokenDetail() {
                       value={collateralAmount}
                       onChange={(e) => {
                         setCollateralAmount(
-                          Number(e.target.value) >= collateralAvailableAmount
-                            ? collateralAvailableAmount
+                          Number(e.target.value) >=
+                            (collateralAction == 'add'
+                              ? collateralAvailableAmount
+                              : collateralWithdrawableAmount)
+                            ? collateralAction == 'add'
+                              ? collateralAvailableAmount
+                              : collateralWithdrawableAmount
                             : Number(e.target.value),
                         );
                       }}
@@ -873,15 +878,15 @@ function TokenDetail() {
                   <p className='text-base font-lufga text-[#CAEAE5]'>
                     {collateralAction == 'add'
                       ? formatNumber(
-                        Number(collateralAvailableAmount),
-                        getTokenPrecision(market.collateral, priceDataMap),
-                        true,
-                      )
+                          Number(collateralAvailableAmount),
+                          getTokenPrecision(market.collateral, priceDataMap),
+                          true,
+                        )
                       : formatNumber(
-                        Number(collateralWithdrawableAmount),
-                        getTokenPrecision(market.collateral, priceDataMap),
-                        true,
-                      )}{' '}
+                          Number(collateralWithdrawableAmount),
+                          getTokenPrecision(market.collateral, priceDataMap),
+                          true,
+                        )}{' '}
                     {market.collateralSymbol}
                   </p>
                 </div>

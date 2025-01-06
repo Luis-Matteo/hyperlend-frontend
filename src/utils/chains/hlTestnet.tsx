@@ -19,7 +19,7 @@ const contracts: any = {
   },
   //isolated pools
   isolatedPairRegistry: '0x274396Ec36D17dAbC018d9437D5a4C0D0fD503D0',
-  uiDataProviderIsolated: '0x193ad71bc52548c65bA1c30a34E3092F58a1C5AD',
+  uiDataProviderIsolated: '0x2dAF4F21701615b2012Fdcd52B0B7E9E1fE5d07B',
 };
 
 const tokenFullNameMap: any = {

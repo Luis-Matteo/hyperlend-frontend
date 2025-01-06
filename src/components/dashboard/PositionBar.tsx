@@ -22,7 +22,7 @@ function PositionBar({ total, available }: PositionBarProps) {
       <div className='mt-1 flex justify-between text-center'>
         {new Array(5).fill(0).map((_, index) => (
           <span className='text-white text-sm' key={index}>
-            {formatUnit((total * index) / 4, 1)}
+            {formatUnit((total * index) / 4, 1, false)}
           </span>
         ))}
       </div>

@@ -2,24 +2,27 @@ import { useState, useEffect, useRef } from 'react';
 import {
   useSwitchChain,
   useAccount,
-  useWriteContract,
   useBlockNumber,
+  useWriteContract,
 } from 'wagmi';
 import ReactGA from 'react-ga4';
+import { useName } from '@paperclip-labs/whisk-sdk/identity';
 
 import Modal from '../../components/common/Modal';
 import Navbar from '../../layouts/Navbar';
+import Hero from '../../components/dashboard/Hero';
 
 import { ModalType } from '../../utils/types';
-import { contracts, abis, networkChainId } from '../../utils/config';
-// import { useUserPositionsData } from '../../utils/user/core/positions';
-// import { useNavigate } from 'react-router-dom';
+import { networkChainId } from '../../utils/config';
 import { useConfirm } from '../../provider/ConfirmProvider';
 import { motion } from 'framer-motion';
-import Hero from '../../components/dashboard/Hero';
 import { HeroSidebar } from '../../components';
+import { contracts, abis } from '../../utils/config';
 
-import DashboardTransactions from './DashboardTransactions';
+import DashboardPositions from './DashboardPositions';
+import { useUserPositionsData } from '../../utils/user/core/positions';
+import { getUserPoints } from '../../utils/user/points';
+import { useFetchPrimaryHlName } from '../../utils/protocol/hlNames';
 
 function Dashboard() {
   ReactGA.send({ hitType: 'pageview', page: '/dashboard' });
@@ -28,28 +31,35 @@ function Dashboard() {
     guided,
     //, closeGuide, nextStep
   } = useConfirm();
-  // const navigate = useNavigate();
-  const { data: hash, writeContractAsync } = useWriteContract();
   const { switchChain } = useSwitchChain();
-  const {
-    //address,
-    chainId,
-    isConnected,
-  } = useAccount();
   const { error: blockNumberError } = useBlockNumber();
+  const { data: hash, writeContractAsync } = useWriteContract();
+  const { chainId, isConnected, address } = useAccount();
+  const { data: paperclipName } = useName({
+    address: address || '0x0000000000000000000000000000000000000000',
+  });
 
   const [modalStatus, setModalStatus] = useState<boolean>(false);
-  const [
-    modalToken,
-    //,setModalToken
-  ] = useState<string>('');
-  const [
-    modalType,
-    //,setModalType
-  ] = useState<ModalType>('supply');
+  const [modalToken, setModalToken] = useState<string>('');
+  const [modalType, setModalType] = useState<ModalType>('supply');
   const closeModal = () => setModalStatus(false);
 
+  const [name, setName] = useState<string>('HyperLend user');
   const [isNetworkDown, setIsNetworkDown] = useState(false);
+
+  const userPositions = useUserPositionsData(isConnected, address);
+  const userPoints = getUserPoints();
+  const hlName = useFetchPrimaryHlName(address);
+
+  const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {
+    writeContractAsync({
+      address: contracts.pool,
+      abi: abis.pool,
+      functionName: 'setUserUseReserveAsCollateral',
+      args: [asset, !isEnabled],
+    });
+    console.log(hash);
+  };
 
   useEffect(() => {
     if (blockNumberError) {
@@ -64,20 +74,13 @@ function Dashboard() {
     }
   }, [isConnected, chainId]);
 
-  // const {
-  //   supplied,
-  //   borrowed,
-  // } = useUserPositionsData(isConnected, address);
-
-  const sendToggleCollateralTx = (asset: string, isEnabled: boolean) => {
-    writeContractAsync({
-      address: contracts.pool,
-      abi: abis.pool,
-      functionName: 'setUserUseReserveAsCollateral',
-      args: [asset, !isEnabled],
-    });
-    console.log(hash);
-  };
+  useEffect(() => {
+    if (hlName.data != name && hlName.data && hlName.error == null) {
+      setName(hlName.data);
+    } else if (paperclipName) {
+      setName(paperclipName);
+    }
+  }, [hlName, paperclipName]);
 
   const divRefs = [
     useRef<HTMLDivElement>(null),
@@ -86,7 +89,7 @@ function Dashboard() {
     useRef<HTMLDivElement>(null),
   ];
 
-  const [divDimensions, setDivDimensions] = useState<
+  const [, /*divDimensions*/ setDivDimensions] = useState<
     { width: number; height: number }[]
   >([
     { width: 0, height: 0 },
@@ -94,8 +97,6 @@ function Dashboard() {
     { width: 0, height: 0 },
     { width: 0, height: 0 },
   ]);
-  console.log(divDimensions);
-  console.log(sendToggleCollateralTx);
   // Update widths and heights
   const updateDimensions = () => {
     const newDimensions = divRefs.map((ref) => ({
@@ -145,11 +146,21 @@ function Dashboard() {
             className='flex flex-col md:flex-row gap-4 justify-between'
           >
             <div className='flex gap-4 flex-col lg:flex-col xl:flex-row w-[100%] py-3 justify-start'>
-              <Hero />
-              <HeroSidebar />
+              <Hero
+                name={name}
+                userPositionsData={userPositions}
+                userPointsData={userPoints}
+              />
+              <HeroSidebar userPositionsData={userPositions} />
             </div>
           </motion.div>
-          <DashboardTransactions />
+          <DashboardPositions
+            setModalToken={setModalToken}
+            setModalStatus={setModalStatus}
+            setModalType={setModalType}
+            userPositions={userPositions}
+            sendToggleCollateralTx={sendToggleCollateralTx}
+          />
           <motion.div
             ref={divRefs[3]}
             initial={{ y: 20, opacity: 0 }}

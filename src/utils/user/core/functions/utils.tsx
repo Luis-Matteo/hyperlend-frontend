@@ -27,6 +27,7 @@ export function calculateAvailableBalance(
   actionType: string,
 ): any {
   if (!userAccountData) userAccountData = [0, 0, 0, 0, 0];
+  if (!reserveDataMap[token]) return 0;
 
   const params = {
     token: token,
@@ -99,6 +100,11 @@ function getAvailableWithdraw(params: any) {
   const userBalanceValueUsd = userBalanceToken * tokenPriceUsd;
 
   if (!userBalanceToken || userBalanceToken == 0) return 0;
+
+  //is user is not borrowing, return token amount
+  if (totalDebtBase == 0) {
+    return userBalanceToken;
+  }
 
   const maxWithdrawableUsd =
     (Number(totalCollateralBase) -

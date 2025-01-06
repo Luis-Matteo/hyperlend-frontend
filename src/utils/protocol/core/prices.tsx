@@ -36,6 +36,7 @@ export function useProtocolPriceData() {
         } else {
           console.log(result);
           console.error(`Failed to get price data for asset: ${asset}`);
+          acc[asset] = 0n;
         }
         return acc;
       },

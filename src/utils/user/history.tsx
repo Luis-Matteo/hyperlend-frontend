@@ -6,6 +6,8 @@ import { chainName } from '../config';
 interface IUserBalanceHistory {
   totalBalanceChange: number;
   totalBalanceChangePercentage: number;
+  apyChange: number;
+  apyChangePercentage: number;
 }
 
 interface IUserPortfolioHistory {
@@ -16,6 +18,8 @@ export function useGetUserBalanceHistory(address: `0x${string}` | undefined) {
   const [data, setData] = useState<IUserBalanceHistory>({
     totalBalanceChange: 0,
     totalBalanceChangePercentage: 0,
+    apyChange: 0,
+    apyChangePercentage: 0,
   });
 
   useEffect(() => {
@@ -30,6 +34,8 @@ export function useGetUserBalanceHistory(address: `0x${string}` | undefined) {
         setData({
           totalBalanceChange: json?.totalBalanceChange || 0,
           totalBalanceChangePercentage: json?.totalBalanceChangePercentage || 0,
+          apyChange: json?.apyChange || 0,
+          apyChangePercentage: json?.apyChangePercentage || 0,
         });
       })
       .catch((error) => console.error(error));

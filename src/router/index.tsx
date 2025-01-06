@@ -57,7 +57,7 @@ function MainContent() {
                 <Route path=':pairAddress' element={<IsolatedTokenDetails />} />
               </Route>
             </Route>
-            <Route path='hypervault' element={<Hypervault />} >
+            <Route path='hypervault' element={<Hypervault />}>
               <Route path='' element={<HypervaultOverview />} />
               <Route path=':vaultId' element={<HypervaultDetails />} />
             </Route>
@@ -77,7 +77,7 @@ function MainContent() {
           className={`absolute top-0 right-0 w-full h-screen -z-10 ${guided > 0 ? 'lg:blur-[8px]' : ''}`}
         >
           {location.pathname.match(/^\/markets\/[^/]+$/) &&
-            !location.pathname.match(/^\/markets\/isolated\/?$/) ? (
+          !location.pathname.match(/^\/markets\/isolated\/?$/) ? (
             <img
               className='w-full'
               src={

@@ -18,13 +18,11 @@ const HeroSideCardMobile = ({
   title,
   amount,
   amountIncreased,
-  percentageIncreased,
   infoItem,
   percentage,
   titleOne,
   amountOne,
   amountIncreasedOne,
-  percentageIncreasedOne,
   infoItemOne,
   percentageOne,
 }: HeroSideCardProps) => (
@@ -45,8 +43,14 @@ const HeroSideCardMobile = ({
           {percentage}
         </span>
       )}
-      <span className='text-[#2DC24E] font-lufga font-normal text-[14px]'>
-        {amountIncreased}({percentageIncreased})
+      <span
+        className={
+          amountIncreased?.includes('-')
+            ? 'text-[#C22E2E] font-lufga font-normal text-[14px]'
+            : 'text-[#2DC24E] font-lufga font-normal text-[14px]'
+        }
+      >
+        {amountIncreased}
       </span>
     </div>
     <div className='rounded-lg bg-[#071311] flex flex-col justify-center items-start'>
@@ -65,8 +69,14 @@ const HeroSideCardMobile = ({
           {percentageOne}
         </span>
       )}
-      <span className='text-[#2DC24E] font-lufga font-normal text-[14px]'>
-        {amountIncreasedOne}({percentageIncreasedOne})
+      <span
+        className={
+          amountIncreased?.includes('-')
+            ? 'text-[#C22E2E] font-lufga font-normal text-[14px]'
+            : 'text-[#2DC24E] font-lufga font-normal text-[14px]'
+        }
+      >
+        {amountIncreasedOne}
       </span>
     </div>
   </div>

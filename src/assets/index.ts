@@ -21,6 +21,7 @@ export { default as lendArrowIcon } from './icons/lend-borrow-icon.svg'
 export { default as healthFactorImage}  from "./img/share-img/health-factor.svg"
 export {default as logoTrans} from "./icons/logo-trans.svg"
 export {default as claimCardBg} from "./icons/claim-card-bg.svg"
+export {default as balanceEyeIcon} from "./icons/balance-eye.svg"
 
 // tier icons
 export {default as bronzeIcon} from "./icons/bronze.svg"

@@ -27,8 +27,12 @@ export function useUserPositionsData(
 ): UserPositionsData {
   const { reserveDataMap } = useProtocolReservesData();
   const { priceDataMap } = useProtocolPriceData();
-  const { totalBalanceChange, totalBalanceChangePercentage } =
-    useGetUserBalanceHistory(address);
+  const {
+    totalBalanceChange,
+    totalBalanceChangePercentage,
+    apyChange,
+    apyChangePercentage,
+  } = useGetUserBalanceHistory(address);
   const { data: userReservesData } = useReadContract({
     abi: abis.uiPoolDataProvider,
     address: contracts.uiPoolDataProvider,
@@ -42,11 +46,11 @@ export function useUserPositionsData(
     },
   });
 
-  if (!isConnected || !address) {
+  // Early return if we aren’t connected or we don’t have a valid address
+  if (!isConnected || !address || !reserveDataMap) {
     return {
       supplied: [],
       borrowed: [],
-
       totalSupplyUsd: 0,
       totalBorrowUsd: 0,
       totalBalanceUsd: 0,
@@ -54,25 +58,69 @@ export function useUserPositionsData(
       healthFactor: 0,
       netApy: 0,
       totalLiquidationThreshold: 0,
-
       totalBalanceChange: 0,
       totalBalanceChangePercentage: 0,
+      apyChange: 0,
+      apyChangePercentage: 0,
+      supplyInterestDaily: 0,
+      borrowInterestDaily: 0,
     };
   }
+
+  // --- Helpers to safely read BigInt values and convert to floating numbers ---
+  const toBigIntSafe = (value: string | number | bigint | undefined) =>
+    value ? BigInt(value) : 0n;
+
+  const powerOfTen = (exp: number) => 10n ** BigInt(exp);
+
+  /**
+   * Example usage:
+   *   bigIntToFloat(123456789n, 8) => 1.23456789
+   */
+  const bigIntToFloat = (value: bigint, decimals: number) =>
+    Number(value) / Number(powerOfTen(decimals));
 
   const supplied: UserPositionData[] = userReservesData
     ? (userReservesData as any)['0']
         .map((e: UserReserveData) => {
-          const balanceNormalized =
-            Number(e.scaledATokenBalance) /
-            Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
-          const priceUsd =
-            Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
-          const valueUsd = priceUsd * balanceNormalized;
-          const apr = calculateApy(
-            reserveDataMap[e.underlyingAsset]?.currentLiquidityRate ||
-              BigInt(0),
+          const reserveData = reserveDataMap[e.underlyingAsset];
+
+          if (!reserveData) {
+            return {
+              underlyingAsset: e.underlyingAsset,
+              assetName: tokenNameMap[e.underlyingAsset],
+              balance: 0,
+              value: 0,
+              price: 0,
+              apr: 0,
+              icon: iconsMap[tokenNameMap[e.underlyingAsset]],
+              isCollateralEnabled: e.usageAsCollateralEnabledOnUser,
+            };
+          }
+
+          // Convert scaledATokenBalance to BigInt
+          const balanceBn =
+            (e.scaledATokenBalance * reserveData.liquidityIndex) /
+            1000000000000000000000000000n;
+          const decimals = tokenDecimalsMap[e.underlyingAsset] ?? 0;
+
+          // Normalize the user’s supply position into a floating number
+          const balanceNormalized = bigIntToFloat(balanceBn, decimals);
+
+          // Price data (stored on-chain or from an oracle) also read as BigInt
+          const rawPriceBn = toBigIntSafe(
+            (priceDataMap as any)[e.underlyingAsset],
           );
+          // Price in USD (often 8 decimals or sometimes 6, depends on your oracle)
+          const priceUsd = bigIntToFloat(rawPriceBn, 8);
+
+          // Final USD value = normalized balance * price
+          const valueUsd = balanceNormalized * priceUsd;
+
+          // APY uses reserveData’s currentLiquidityRate (already a BigInt)
+          const liquidityRateBn =
+            reserveDataMap[e.underlyingAsset]?.currentLiquidityRate || 0n;
+          const apr = calculateApy(liquidityRateBn);
 
           return {
             underlyingAsset: e.underlyingAsset,
@@ -80,7 +128,7 @@ export function useUserPositionsData(
             balance: balanceNormalized,
             value: valueUsd,
             price: priceUsd,
-            apr: apr,
+            apr,
             icon: iconsMap[tokenNameMap[e.underlyingAsset]],
             isCollateralEnabled: e.usageAsCollateralEnabledOnUser,
           };
@@ -91,77 +139,105 @@ export function useUserPositionsData(
   const borrowed: UserPositionData[] = userReservesData
     ? (userReservesData as any)['0']
         .map((e: UserReserveData) => {
-          const balanceNormalized =
-            Number(e.scaledVariableDebt) /
-            Math.pow(10, tokenDecimalsMap[e.underlyingAsset]);
-          const priceUsd =
-            Number((priceDataMap as any)[e.underlyingAsset]) / Math.pow(10, 8);
-          const valueUsd = priceUsd * balanceNormalized;
-          const apr = calculateApy(
-            reserveDataMap[e.underlyingAsset]?.currentVariableBorrowRate ||
-              BigInt(0),
+          const reserveData = reserveDataMap[e.underlyingAsset];
+
+          if (!reserveData) {
+            return {
+              underlyingAsset: e.underlyingAsset,
+              assetName: tokenNameMap[e.underlyingAsset],
+              balance: 0,
+              value: 0,
+              apr: 0,
+              icon: iconsMap[tokenNameMap[e.underlyingAsset]],
+              isCollateralEnabled: null,
+            };
+          }
+
+          // Convert scaledVariableDebt to BigInt
+          const balanceBn =
+            (e.scaledVariableDebt * reserveData.variableBorrowIndex) /
+            1000000000000000000000000000n;
+          const debtBn = toBigIntSafe(balanceBn);
+          const decimals = tokenDecimalsMap[e.underlyingAsset] ?? 0;
+
+          // Normalize the user’s borrow position into a floating number
+          const balanceNormalized = bigIntToFloat(debtBn, decimals);
+
+          // Price data
+          const rawPriceBn = toBigIntSafe(
+            (priceDataMap as any)[e.underlyingAsset],
           );
+          const priceUsd = bigIntToFloat(rawPriceBn, 8);
+
+          // Final USD value = normalized balance * price
+          const valueUsd = balanceNormalized * priceUsd;
+
+          // APY uses reserveData’s currentVariableBorrowRate (already BigInt)
+          const variableBorrowRateBn =
+            reserveDataMap[e.underlyingAsset]?.currentVariableBorrowRate || 0n;
+          const apr = calculateApy(variableBorrowRateBn);
 
           return {
             underlyingAsset: e.underlyingAsset,
             assetName: tokenNameMap[e.underlyingAsset],
             balance: balanceNormalized,
             value: valueUsd,
-            apr: apr,
+            apr,
             icon: iconsMap[tokenNameMap[e.underlyingAsset]],
             isCollateralEnabled: null,
+            pool: 'Core',
           };
         })
         .filter((item: UserPositionData) => item.balance > 0)
     : [];
 
-  const totalSupply = supplied.reduce(
-    (partialSum: number, a: any) => partialSum + a.value,
-    0,
-  );
-  const totalBorrow = borrowed.reduce(
-    (partialSum: number, a: any) => partialSum + a.value,
-    0,
-  );
+  // --- Aggregations ---
+  const totalSupply = supplied.reduce((acc, item) => acc + item.value, 0);
+  const totalBorrow = borrowed.reduce((acc, item) => acc + item.value, 0);
   const totalBorrowAvailable = supplied.reduce(
-    (partialSum: number, a: any) =>
-      partialSum + a.value * ltvMap[a.underlyingAsset],
+    (acc, item) => acc + item.value * (ltvMap[item.underlyingAsset] ?? 0),
     0,
   );
   const totalLiquidationThreshold = supplied.reduce(
-    (partialSum: number, a: any) =>
-      partialSum + a.value * liqMap[a.underlyingAsset],
+    (acc, item) => acc + item.value * (liqMap[item.underlyingAsset] ?? 0),
     0,
   );
 
   const supplyInterestEarned = supplied.reduce(
-    (partialSum: number, a: any) => partialSum + (a.apr / 100) * a.value,
+    (acc, item) => acc + (item.apr / 100) * item.value,
     0,
   );
   const borrowInterestEarned = borrowed.reduce(
-    (partialSum: number, a: any) => partialSum + (a.apr / 100) * a.value,
+    (acc, item) => acc + (item.apr / 100) * item.value,
     0,
   );
 
+  // Net APY in percentage
   const netApy =
     ((supplyInterestEarned - borrowInterestEarned) /
-      (totalSupply - totalBorrow)) *
+      (totalSupply - totalBorrow || 1)) *
     100;
 
   return {
-    supplied: supplied,
-    borrowed: borrowed,
+    supplied,
+    borrowed,
 
     totalSupplyUsd: totalSupply,
     totalBorrowUsd: totalBorrow,
     totalBalanceUsd: totalSupply - totalBorrow,
     totalBorrowLimit: totalBorrowAvailable,
-    healthFactor: totalLiquidationThreshold / totalBorrow,
+    healthFactor: totalBorrow ? totalLiquidationThreshold / totalBorrow : 0,
     netApy: isNaN(netApy) ? 0 : netApy,
-    totalLiquidationThreshold: totalLiquidationThreshold,
+    totalLiquidationThreshold,
 
-    totalBalanceChange: totalBalanceChange,
-    totalBalanceChangePercentage: totalBalanceChangePercentage,
+    totalBalanceChange,
+    totalBalanceChangePercentage,
+
+    apyChange,
+    apyChangePercentage,
+
+    supplyInterestDaily: supplyInterestEarned / 365,
+    borrowInterestDaily: borrowInterestEarned / 365,
   };
 }
 

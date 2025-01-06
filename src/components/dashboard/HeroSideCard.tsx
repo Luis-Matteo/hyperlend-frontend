@@ -1,4 +1,3 @@
-
 import { borrowIcon, depositIcon } from '../../assets';
 import CustomIcon from '../common/CustomIcon';
 import CustomTitle from '../common/CustomTitle';
@@ -15,11 +14,10 @@ const HeroSideCard = ({
   title,
   amount,
   amountIncreased,
-  percentageIncreased,
   infoItem,
   percentage,
 }: HeroSideCardProps) => (
-  <div className='sm:w-[100%] lg:w[100%] xl:w-[270px] flex justify-between gap-2 rounded-lg items-center border border-1 border-[#CAEAE54D] py-4 px-5'>
+  <div className='sm:w-[100%] lg:w[100%] xl:w-[280px] flex justify-between gap-4 rounded-lg items-center border border-1 border-[#CAEAE54D] py-4 px-4'>
     <div className='rounded-lg bg-[#071311] flex flex-col justify-center items-start'>
       <CustomTitle
         title={title}
@@ -36,8 +34,14 @@ const HeroSideCard = ({
           {percentage}
         </span>
       )}
-      <span className='text-[#2DC24E] font-lufga font-normal text-[14px]'>
-        {amountIncreased}({percentageIncreased})
+      <span
+        className={
+          amountIncreased?.includes('-')
+            ? 'text-[#C22E2E] font-lufga font-normal text-[14px]'
+            : 'text-[#2DC24E] font-lufga font-normal text-[14px]'
+        }
+      >
+        {amountIncreased}
       </span>
     </div>
 

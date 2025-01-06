@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { defineChain } from 'viem';
 
+import { WhiskSdkProvider } from '@paperclip-labs/whisk-sdk';
+
 // 0. Setup queryClient
 const queryClient = new QueryClient();
 
@@ -16,12 +18,14 @@ const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
 const metadata = {
   name: 'Hyperlend',
   description: 'Hyperlend',
-  url: 'https://hyperlend.com',
+  url: 'https://hyperlend.finance',
   icons: ['https://www.hyperlend.finance/assets/logo-text-BcZCnvTH.svg'],
 };
 
 const hyperEvmTestnet = defineChain({
   id: 998,
+  caipNetworkId: 'eip155:998',
+  chainNamespace: 'eip155',
   name: 'HyperEVM Testnet',
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
@@ -84,8 +88,26 @@ createAppKit({
 
 export function AppKitProvider({ children }: { children: ReactNode }) {
   return (
-    <WagmiProvider config={wagmiAdapter.wagmiConfig}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </WagmiProvider>
+    <WhiskSdkProvider
+      config={{
+        identity: {
+          resolvers: [
+            'ens',
+            'base',
+            'farcaster',
+            'nns',
+            'uni',
+            'lens',
+            'world',
+          ],
+        },
+      }}
+    >
+      <WagmiProvider config={wagmiAdapter.wagmiConfig}>
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
+      </WagmiProvider>
+    </WhiskSdkProvider>
   );
 }

@@ -1,4 +1,12 @@
-export function getUserPoints() {
+export interface IPoints {
+  totalPoints: number;
+  pointsIncrease: number;
+  pointsPercentIncrease: number;
+  level: number;
+  progress: number;
+}
+
+export function getUserPoints(): IPoints {
   return {
     totalPoints: 0,
     pointsIncrease: 0,

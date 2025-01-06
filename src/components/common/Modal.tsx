@@ -11,6 +11,7 @@ import {
   usePublicClient,
   useWaitForTransactionReceipt,
 } from 'wagmi';
+import Big from 'big.js';
 
 import { ModalProps } from '../../utils/types';
 import {
@@ -50,6 +51,7 @@ import { useProtocolReservesData } from '../../utils/protocol/core/reserves';
 import AnimateModal, {
   AnimateModalProps,
 } from '../../components/markets/AnimateModal';
+import { parseUnits } from 'viem';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };
@@ -102,11 +104,16 @@ function Modal({ token, modalType, onClose }: ModalProps) {
     });
   };
 
+  //wagmi hooks
   const publicClient = usePublicClient();
   const { address, isConnected } = useAccount();
   const { data: hash, writeContractAsync, error } = useWriteContract();
   const { data: userEthBalance } = useBalance({ address: address });
+  const txReceiptResult = useWaitForTransactionReceipt({
+    hash: hash,
+  });
 
+  //custom hooks
   const { data: userWalletTokenBalance } = useUserTokenBalance(
     isConnected,
     token,
@@ -133,10 +140,6 @@ function Modal({ token, modalType, onClose }: ModalProps) {
 
   const userPositionsData = useUserPositionsData(isConnected, address);
   const assetReserveData = useProtocolAssetReserveData(token);
-
-  const txReceiptResult = useWaitForTransactionReceipt({
-    hash: hash,
-  });
 
   const updateAvailableAmount = () => {
     const avBalance = calculateAvailableBalance(
@@ -296,13 +299,10 @@ function Modal({ token, modalType, onClose }: ModalProps) {
   };
 
   const sendTransaction = async () => {
-    const bgIntAmount = parseFloat(
-      (amount * Math.pow(10, tokenDecimalsMap[token])).toString(),
-    )
-      .toFixed(0)
-      .toString() as any as bigint;
+    let fixedAmount = Big(amount.toString()).toFixed(tokenDecimalsMap[token]);
+    let bgIntAmount = parseUnits(fixedAmount, tokenDecimalsMap[token]);
 
-    if (amount == 0) {
+    if (bgIntAmount == 0n) {
       setErrorMsg('Amount should be greater than 0');
       return;
     }

@@ -32,6 +32,8 @@ import { getTokenPrecision } from '../../utils/user/core/functions/utils';
 import { useProtocolPriceData } from '../../utils/protocol/core/prices';
 
 import AnimateModal, { AnimateModalProps } from './AnimateModal';
+import { parseUnits } from 'viem';
+import Big from 'big.js';
 type AnimateModalStatus = AnimateModalProps & {
   isOpen: boolean;
 };
@@ -160,6 +162,21 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   function parseErrorMsg(errorMessage: string) {
     if (!errorMessage) return '';
 
+    if (
+      errorMessage.includes('Contract Call') &&
+      getErrorMessage(errorMessage.split('Request Arguments')[0]) !=
+        'ERROR_MESSAGE_NOT_FOUND'
+    ) {
+      let err = errorMessage.split('Request Arguments')[0] as unknown as string;
+      if (
+        err.includes(
+          'The amount of gas provided for the transaction exceeds the limit allowed for the block.',
+        )
+      ) {
+        return 'The amount of gas provided for the transaction exceeds the limit allowed for the block. Please try again shortly.';
+      }
+    }
+
     return errorMessage.includes('Contract Call')
       ? errorMessage.split('Contract Call')[0] +
           (errorMessage
@@ -270,12 +287,10 @@ const TokenActions: React.FC<TokenActionsProps> = ({
   }, [txReceiptResult]);
 
   const sendTransaction = async () => {
-    let bgIntAmount = BigInt(
-      Number(parseFloat(amount.toString()).toFixed(0)) *
-        Math.pow(10, tokenDecimalsMap[token]),
-    );
+    let fixedAmount = Big(amount.toString()).toFixed(tokenDecimalsMap[token]);
+    let bgIntAmount = parseUnits(fixedAmount, tokenDecimalsMap[token]);
 
-    if (amount == 0) {
+    if (bgIntAmount == 0n) {
       setErrorMsg('Amount should be greater than 0');
       return;
     }
