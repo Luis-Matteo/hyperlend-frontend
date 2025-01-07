@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/table';
 import { Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import EditNameModal from './EditNameModal';
+import EditNameModal from '../../components/common/EditNameModal';
 import LeaderboardRow from './LeaderboardRow';
 import LeaderboardRowMobile from './LeaderboardRowMobile';
 
