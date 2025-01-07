@@ -40,8 +40,7 @@ const HeroCard = ({
             <img src={healthFactorImage} alt='' />
           </div>
           <span className='text-[#E1E1E1] font-lufga font-medium text-lg mt-[-20px]'>
-            {/* {formatUnit(Number(healthFactor), 1)} */}
-            {formatUnit(10000000000, 1)}
+            {formatUnit(Number(healthFactor), 1)}
           </span>
         </div>
       )}
