@@ -1,3 +1,4 @@
+import { formatUnit } from '@/utils/functions';
 import { healthFactorImage } from '../../assets';
 import CustomTitle from '../common/CustomTitle';
 
@@ -34,12 +35,13 @@ const HeroCard = ({
       className={`flex flex-col justify-center ${title === 'Health Factor' ? 'items-center' : 'items-start'} px-0`}
     >
       {title === 'Health Factor' && (
-        <div className='flex flex-col justify-center items-center w-full p-0'>
+        <div className='flex flex-col justify-center items-center w-full p-0 '>
           <div className='w-[91px] h-[46px] relative'>
             <img src={healthFactorImage} alt='' />
           </div>
-          <span className='text-[#E1E1E1] font-lufga font-medium text-[28px] mt-[-20px]'>
-            {healthFactor}
+          <span className='text-[#E1E1E1] font-lufga font-medium text-lg mt-[-20px]'>
+            {/* {formatUnit(Number(healthFactor), 1)} */}
+            {formatUnit(10000000000, 1)}
           </span>
         </div>
       )}
