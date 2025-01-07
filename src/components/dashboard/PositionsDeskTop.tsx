@@ -80,7 +80,7 @@ const PositionsDeskTop: FC<PositionsProps> = ({
           transition={{ delay: 0.6 }}
           className={`lg:flex lg:flex-col xl:flex-row gap-5 justify-between`}
         >
-          <CardItem className='pt-4 h-auto lg:pt-6 flex-1 mb-4 lg:mb-0'>
+          <CardItem className='pt-4 h-fit lg:pt-6 flex-1 mb-4 lg:mb-0'>
             <div className=''>
               <div className='flex justify-start align-middle items-center gap-4 py-2 mb-5 px-7'>
                 <CustomIcon
@@ -103,7 +103,7 @@ const PositionsDeskTop: FC<PositionsProps> = ({
                     />
                   ))}
                 </div>
-                <div className='h-[100%] pb-10 bg-primary-hover rounded-b-2xl'>
+                <div className='h-[100%] pb-4 bg-primary-hover rounded-b-2xl'>
                   {(userPositions.supplied || []).map((item: any) => (
                     <button
                       className='w-full grid grid-cols-6 py-[14px] px-2 justify-start border-b-[1px] border-[#071311] items-center bg-[#111E1C] hover:bg-primary-hover'
@@ -164,7 +164,7 @@ const PositionsDeskTop: FC<PositionsProps> = ({
               </div>
             </div>
           </CardItem>
-          <CardItem className='pt-4 h-auto lg:pt-6   flex-1 mb-4 lg:mb-0'>
+          <CardItem className='pt-4 h-fit lg:pt-6   flex-1 mb-4 lg:mb-0'>
             <div className=''>
               <div className='flex justify-start align-middle items-center gap-4 py-2 mb-5 px-7'>
                 <CustomIcon
@@ -188,7 +188,7 @@ const PositionsDeskTop: FC<PositionsProps> = ({
                     />
                   ))}
                 </div>
-                <div className='h-[100%] pb-10 bg-primary-hover rounded-b-2xl'>
+                <div className='h-[100%] pb-4 bg-primary-hover rounded-b-2xl'>
                   {(userPositions.borrowed || []).map(
                     (item: any, index: any) => (
                       <button
